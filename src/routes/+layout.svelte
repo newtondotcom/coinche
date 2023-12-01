@@ -7,7 +7,7 @@
       <div class="flex h-16 items-center justify-between">
         <div class="md:flex md:items-center md:gap-12">
           <a class="block text-teal-600" href="/">
-              Belote Moi Ca La
+              Coinche Moi Ca La
           </a>
         </div>
   
