@@ -1,50 +1,51 @@
 <script lang="ts">
-    import Deck from "$lib/cards/deck.svelte";
-    import Fake from "$lib/cards/fake.svelte";
-    import River from "$lib/cards/river.svelte";
-    import Annonce from "$lib/ui/annonce.svelte";
+    import Modal from "$lib/ui/Modal.svelte";
+    import Subtitle from "$lib/ui/Subtitle.svelte";
 
-
-    let showModal = false
-    const handleToggleModal = () => {
-        showModal = !showModal
+    let showModalCreate = false
+    const handleToggleModalCreate = () => {
+        showModalCreate = !showModalCreate
     }
-
-    function generateRandomDeck(): IPlayCard[] {
-        const suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades'];
-        const values: CardValue[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-        const deck: IPlayCard[] = [];
-
-        while (deck.length < 8) {
-            const randomSuite: CardSuite = suites[Math.floor(Math.random() * suites.length)];
-            const randomValue: CardValue = values[Math.floor(Math.random() * values.length)];
-            const key: string = Math.random().toString();
-            const valueNum: number = values.indexOf(randomValue) + 1;
-            const isDuplicate = deck.some((card) => card.suite === randomSuite && card.value === randomValue);
-            if (!isDuplicate) {
-                deck.push({ suite: randomSuite, value: randomValue, key, valueNum });
-            }
-        }
-        return deck;
+    let showModalJoin = false
+    const handleToggleModalJoin = () => {
+        showModalJoin = !showModalJoin
     }
-    let hand = generateRandomDeck();
 </script>
 
-<Deck {hand} />
-<Fake side="top" qqty={8} />
-<Fake side="left" qqty={8} />
-<Fake side="right" qqty={8} />
-<River {hand} />
+<div class="h-full flex flex-col align-middle gap-4  w-full">
+    <Subtitle title="Coinche moi la" subtitle="beaucoup" />
+    <div class="sm:flex sm:gap-4 flex-row align-middle justify-center items-center gap-4  w-full">
+        <button
+        class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+        on:click={() => handleToggleModalCreate()}
+        >
+        Créer une partie
+        </button>
+        <button
+        class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block"
+        on:click={() => handleToggleModalJoin()}
+        >
+        Rejoindre une partie
+        </button>
+    </div>
+</div>
 
-
-
-<button on:click={() => handleToggleModal()}>Open modal</button>
-<Annonce
+<Modal
   title="Edit your details"
-  open={showModal}
-  on:close={() => handleToggleModal()}
+  open={showModalCreate}
+  on:close={() => handleToggleModalCreate()}
 >
   <svelte:fragment slot="body">
     This is content inside my modal! 👋
   </svelte:fragment>
-</Annonce>
+</Modal>
+
+<Modal
+  title="Edit your details"
+  open={showModalJoin}
+  on:close={() => handleToggleModalJoin()}
+>
+  <svelte:fragment slot="body">
+    This is content inside my modal! 👋
+  </svelte:fragment>
+</Modal>
