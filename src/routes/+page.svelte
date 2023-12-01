@@ -2,6 +2,13 @@
     import Deck from "$lib/cards/deck.svelte";
     import Fake from "$lib/cards/fake.svelte";
     import River from "$lib/cards/river.svelte";
+    import Annonce from "$lib/ui/annonce.svelte";
+
+
+    let showModal = false
+    const handleToggleModal = () => {
+        showModal = !showModal
+    }
 
     function generateRandomDeck(): IPlayCard[] {
         const suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades'];
@@ -29,3 +36,15 @@
 <Fake side="right" qqty={8} />
 <River {hand} />
 
+
+
+<button on:click={() => handleToggleModal()}>Open modal</button>
+<Annonce
+  title="Edit your details"
+  open={showModal}
+  on:close={() => handleToggleModal()}
+>
+  <svelte:fragment slot="body">
+    This is content inside my modal! 👋
+  </svelte:fragment>
+</Annonce>

@@ -2,7 +2,7 @@
     import "../app.css";
   </script>
   
-  <header class="bg-white">
+  <header class="bg-white z-auto">
     <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between">
         <div class="md:flex md:items-center md:gap-12">
@@ -106,4 +106,6 @@
     </div>
   </header>
 
+  <div class="bg-slate-200">
   <slot />
+  </div>

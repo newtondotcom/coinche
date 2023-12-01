@@ -14,7 +14,7 @@
 </script>
 
 <div
-	class="{side === 'left' ? 'flex flex-col absolute left-0 h-full justify-center items-center' : side === 'right' ? 'flex flex-col absolute right-0 h-full justify-center items-center' : 'flex flex-row absolute top-20 justify-center w-full shrink'}"
+	class="{side === 'left' ? 'flex flex-col absolute -left-20 h-full justify-center items-center' : side === 'right' ? 'flex flex-col absolute -right-20 h-full justify-center items-center' : 'flex flex-row absolute top-20 justify-center w-full shrink'}"
 >
 {#each tabGen(qqty) as i}
 	<img
