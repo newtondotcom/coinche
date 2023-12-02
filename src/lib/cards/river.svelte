@@ -1,6 +1,6 @@
 <script lang="ts">
     import Card from "$lib/cards/card.svelte";
-    export let hand: IPlayCard[];
+    export let hand : IPlayCard[];
 </script>
 
 <div class="flex flex-row justify-center items-center h-screen w-screen">
