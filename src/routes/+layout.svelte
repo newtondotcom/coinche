@@ -1,77 +1,20 @@
 <script>
     import TopRight from "$lib/ui/TopRight.svelte";
-import "../app.css";
+    import "../app.css";
+    import Score from "$lib/ui/Score.svelte";
   </script>
   
   <header class="bg-white z-auto">
     <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between">
-        <div class="md:flex md:items-center md:gap-12">
+        <div class="md:flex md:items-center md:gap-12 mr-8">
           <a class="block text-teal-600" href="/">
               Coinche Moi Ca La
           </a>
         </div>
   
-        <div class="hidden md:block">
-          <nav aria-label="Global">
-            <ul class="flex items-center gap-6 text-sm">
-              <li>
-                <a
-                  class="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  About
-                </a>
-              </li>
-  
-              <li>
-                <a
-                  class="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  Careers
-                </a>
-              </li>
-  
-              <li>
-                <a
-                  class="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  History
-                </a>
-              </li>
-  
-              <li>
-                <a
-                  class="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  Services
-                </a>
-              </li>
-  
-              <li>
-                <a
-                  class="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  Projects
-                </a>
-              </li>
-  
-              <li>
-                <a
-                  class="text-gray-500 transition hover:text-gray-500/75"
-                  href="/"
-                >
-                  Blog
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-  
+        <Score />
+
         <div class="flex items-center gap-4">
           <TopRight />
   
