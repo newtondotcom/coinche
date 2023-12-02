@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Deck from "$lib/cards/deck.svelte";
-    import Fake from "$lib/cards/fake.svelte";
-    import River from "$lib/cards/river.svelte";
+    import Deck from "$lib/cards/Deck.svelte";
+    import Fake from "$lib/cards/Fake.svelte";
+    import River from "$lib/cards/River.svelte";
     import Filter from "$lib/ui/Filter.svelte";
     import { generateRandomDeck, generateRiver } from "$lib/utils/deck";
 
