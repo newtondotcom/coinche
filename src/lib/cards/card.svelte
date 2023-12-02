@@ -20,5 +20,7 @@
 	<img
 		src={cardSvgPath}
 		alt={`${value} of ${suite} card.`}
-		style="max-width:{maxCardWidth}px; height: auto;" />
+		style="max-width:{maxCardWidth}px; height: auto;"
+		class="hover:scale-125"
+		/>
 </div>

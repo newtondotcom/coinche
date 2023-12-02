@@ -21,7 +21,7 @@
 		src="/dos.webp"
 		alt="dos"
 		style="max-width:{maxCardWidth + 20}px; height: auto;"
-		class="{side === 'top' ? '-rotate-90' : ''}"
+		class="{side === 'top' ? '-rotate-90' : ''} pointer-events-none"
 	/>
 {/each}
 </div>
