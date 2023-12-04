@@ -10,35 +10,35 @@
           <div
             class="transition hover:text-gray-500/75 w-24 bg-teal-400 rounded-xl px-4 py-2 text-white"
           >
-            Atout <span class="text-teal-600">♥</span>
+            Atout <br> <span class="text-teal-600">♥</span>
         </div>
         </li>
         <li>
           <div
             class="text-gray-500 transition hover:text-gray-500/75"
           >
-            Dernier pli <span class="text-teal-600">9♥ J♥ 10♥ 7♥</span>
+            Dernier pli <br> <span class="text-teal-600">9♥ J♥ 10♥ 7♥</span>
         </div>
         </li>
         <li>
           <div
             class="text-gray-500 transition hover:text-gray-500/75"
           >
-            Annonce <span class="text-teal-600">100♥</span>
+            Annonce <br> <span class="text-teal-600">100♥</span>
         </div>
         </li>
         <li>
           <div
             class="text-gray-500 transition hover:text-gray-500/75"
           >
-            Points de ta team <span class="text-teal-600">9♥ J♥ 10♥ 7♥</span>
+            Points de ta team <br> <span class="text-teal-600">320</span>
         </div>
         </li>
         <li>
           <div
             class="text-gray-500 transition hover:text-gray-500/75"
           >
-          Points adverses <span class="text-teal-600">9♥ J♥ 10♥ 7♥</span>
+          Points adverses <br> <span class="text-teal-600">280</span>
         </div>
         </li>
         <li>

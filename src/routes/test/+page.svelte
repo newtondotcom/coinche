@@ -1,5 +1,5 @@
-<script>
-    import Filter from "$lib/ui/Filter.svelte";
-
+<script lang="ts">
+import Annonce from "$lib/ui/Annonce.svelte";
 </script>
-<Filter />
+
+<Annonce />
