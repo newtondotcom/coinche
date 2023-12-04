@@ -16,6 +16,6 @@
   <Fake side="top" qqty={8} />
   <Fake side="left" qqty={8} />
   <Fake side="right" qqty={8} />
-  <River {hand} />
+  <River {river} />
   <Filter ordreAtout={true} ordreValeur={true} />
 </div>
