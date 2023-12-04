@@ -1,7 +1,5 @@
-<script>
-    import Turn from "$lib/ui/Turn.svelte";
+<script lang="ts">
+import Annonce from "$lib/ui/Annonce.svelte";
 </script>
-<Turn side={"top"}/>
-<Turn side={"left"}/>
-<Turn side={"right"}/>
-<Turn side={"down"}/>
+
+<Annonce />
