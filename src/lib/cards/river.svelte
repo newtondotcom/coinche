@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Card from "$lib/cards/Card.svelte";
+    import Card from "$lib/cards/card.svelte";
     export let river : IPlayCard[];
 </script>
 
