@@ -99,19 +99,14 @@ export const generateCardAssortment = (targetSum?: number) => {
 	// generate card grid data
 	const suites: Array<CardSuite> = ['diamonds', 'clubs', 'hearts', 'spades'];
 	let indexes: Array<CardValue> = [
-		'A', // 1
-		'2',
-		'3',
-		'4',
-		'5',
-		'6',
 		'7',
 		'8',
 		'9',
+		'J',
+		'Q', 
+		'K', 
 		'10',
-		// 'J', // 10, kept out of use
-		// 'Q', // 10, kept out of use
-		// 'K', // 10, kept out of use
+		'A', 
 	];
 	indexes.splice(targetSum - 1);
 	const cards: IPlayCard[] = [];
