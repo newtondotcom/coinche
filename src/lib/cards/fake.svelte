@@ -20,7 +20,7 @@
 	  <img
 		src="/dos.webp"
 		alt="dos"
-		style="max-width:{maxCardWidth + 20}px; height: auto; transform: translateY({side === 'left' ? -i * 20 : side === 'right' ? -i * 20 : 0}px) translateX({side === 'top' ? -i * 20 : 0}px);"
+		style="max-width:{maxCardWidth + 20}px; height: auto; transform: translateY({side === 'left' ? -i * 20 : side === 'right' ? -i * 20 : side === 'top' ? -20 : 0}px) translateX({side === 'top' ? -i * 20 : 0}px);z-index:1;"
 		class="{side === 'top' ? '-rotate-90' : ''} pointer-events-none"
 	  />
 	{/each}
