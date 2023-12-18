@@ -1,12 +1,17 @@
 <script lang="ts">
-    export let ordreValeur:boolean
-    export let ordreAtout:boolean
+    export let hand : IPlayCard[];
+    import {orderCards} from "$lib/utils/deck";
+
+    let ordreAtout: boolean;
+    let ordreValeur: boolean;
 
     const handleToggleValeur = () => {
         ordreValeur = !ordreValeur
+        hand = orderCards(hand, ordreValeur, ordreAtout)
     }
     const handleToggleAtout = () => {
         ordreAtout = !ordreAtout
+        hand = orderCards(hand, ordreValeur, ordreAtout)
     }
 </script>
 
@@ -27,7 +32,7 @@
     class="flex flex-row bg-teal-400 mx-3 px-2 py-3 rounded-lg"
     on:click={handleToggleAtout}
     >
-        Atout
+        Tri
         {#if ordreAtout}
         <svg class="ml-2" viewBox="0 0 20 20" height="24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="0" fill="none" width="20" height="20"></rect> <g> <path d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-.615 12.66h-1.34l-3.24-4.54 1.34-1.25 2.57 2.4 5.14-5.93 1.34.94-5.81 8.38z"></path> </g> </g></svg>
         {:else}
