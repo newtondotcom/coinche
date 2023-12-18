@@ -4,7 +4,7 @@
     import Score from "$lib/ui/Score.svelte";
   </script>
   
-  <header class="bg-white z-auto">
+  <header class="bg-white z-10">
     <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between">
         <div class="md:flex md:items-center md:gap-12 mr-8">
