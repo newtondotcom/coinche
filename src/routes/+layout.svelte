@@ -43,6 +43,6 @@
     </div>
   </header>
 
-  <div class="bg-slate-200">
+  <div class="bg-slate-200 overflow-hidden">
   <slot />
   </div>
