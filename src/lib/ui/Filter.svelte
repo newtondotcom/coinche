@@ -15,10 +15,10 @@
     }
 </script>
 
-<div id="main" class="flex flex-row justify-center align-middle items-center">
+<div id="main" class="flex flex-col justify-center align-middle items-center">
     <div>Trier par : </div>
     <button 
-    class="flex flex-row bg-teal-400 mx-3 px-2 py-3 rounded-lg"
+    class="flex flex-row bg-teal-400 mx-3 px-2 py-3 rounded-lg mt-3"
     on:click={handleToggleValeur}
     >
         Valeur
@@ -29,7 +29,7 @@
         {/if}
     </button>
     <button 
-    class="flex flex-row bg-teal-400 mx-3 px-2 py-3 rounded-lg"
+    class="flex flex-row bg-teal-400 mx-3 px-2 py-3 rounded-lg mt-3"
     on:click={handleToggleAtout}
     >
         Tri
@@ -44,8 +44,8 @@
 <style>
 #main {
     position: absolute;
-    top: 75%; 
-    left: 50%;
+    top: 50%; 
+    left: 8%;
     transform: translate(-50%, -50%); 
 }
 
