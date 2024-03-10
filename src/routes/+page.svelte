@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import Modal from "$lib/ui/Modal.svelte";
     import Subtitle from "$lib/ui/Subtitle.svelte";
 
@@ -31,6 +32,7 @@
         handleToggleLoading()
         await new Promise(r => setTimeout(r, 2000));
         handleToggleLoading()
+        goto(`/game?id=${code}`)
     }
 
 </script>
@@ -147,7 +149,7 @@
         >
           <span class="sr-only">GitHub</span>
           <svg
-            class="lg:h-7 lg:w-7 sm:w-20 sm:h-20"
+            class="lg:h-7 lg:w-7 sm:w-10 sm:h-10"
             fill="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
@@ -170,7 +172,7 @@
         >
           <span class="sr-only">Instagram</span>
           <svg
-            class="lg:h-7 lg:w-7 sm:w-20 sm:h-20"
+            class="lg:h-7 lg:w-7 sm:w-10 sm:h-10"
             fill="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
