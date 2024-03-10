@@ -6,10 +6,10 @@
   
   <header class="bg-white z-10">
     <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
+      <div class="flex h-18 items-center justify-between">
         <div class="md:flex md:items-center md:gap-12 mr-8">
-          <a class="block text-teal-600" href="/">
-              Coinche Moi Ca La
+          <a class="block text-teal-600 text-sm" href="/">
+              Coinche
           </a>
         </div>
   
