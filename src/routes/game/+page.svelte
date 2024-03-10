@@ -13,7 +13,9 @@
 <div id="main">
   <Deck {hand} />
   <Turn side="down" />
+  <!--
   <Fake side="left" qqty={4} />
+  -->
   <Fake side="right" qqty={4} />
   <River {river} />
   <Filter bind:hand/>
