@@ -15,7 +15,7 @@
         </li>
         <li>
           <div
-            class="text-gray-500 transition hover:text-gray-500/75 text-center"
+            class="text-gray-500 transition hover:text-gray-500/75 text-center w-28"
           >
             Dernier pli <br> <span class="text-teal-600">9♥ J♥ 10♥ 7♥</span>
         </div>
@@ -29,16 +29,16 @@
         </li>
         <li>
           <div
-            class="text-gray-500 transition hover:text-gray-500/75 text-center"
+            class="text-gray-500 transition hover:text-gray-500/75 text-center w-20"
           >
-            Points de ta team <br> <span class="text-teal-600">320</span>
+            Ta team <br> <span class="text-teal-600">320</span>
         </div>
         </li>
         <li>
           <div
-            class="text-gray-500 transition hover:text-gray-500/75 text-center"
+            class="text-gray-500 transition hover:text-gray-500/75 text-center w-20"
           >
-          Points adverses <br> <span class="text-teal-600">280</span>
+          Les autres <br> <span class="text-teal-600">280</span>
         </div>
         </li>
         <li>

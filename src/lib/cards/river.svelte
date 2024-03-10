@@ -3,7 +3,7 @@
     export let river : IPlayCard[];
 </script>
 
-<div class="flex flex-row justify-center items-center h-screen w-screen">
+<div class="flex flex-row justify-center items-center h-screen w-screen pb-[150px]">
     {#each river as card}
         <Card suite={card.suite} value={card.value} />
     {/each}

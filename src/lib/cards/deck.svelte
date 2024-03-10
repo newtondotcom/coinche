@@ -3,7 +3,7 @@
     export let hand : IPlayCard[];
 </script>
 
-<div class="flex flex-row absolute bottom-0 justify-center w-full">
+<div class="flex flex-row absolute -bottom-14 justify-center w-full">
 {#each hand as card}
     <Card suite={card.suite} value={card.value} />
 {/each}
