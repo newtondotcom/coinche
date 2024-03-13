@@ -6,10 +6,10 @@ WORKDIR /app
 
 COPY --chown=node:node . .
 
-RUN yarn
-RUN yarn build
+RUN pnpm install
+RUN pnpm build
 
-RUN rm -rf src/ static/ Dockerfile
+RUN rm -rf src/ static/
 
 USER node:node
 
