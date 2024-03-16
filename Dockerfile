@@ -6,6 +6,7 @@ WORKDIR /app
 
 COPY --chown=node:node . .
 
+RUN npm install -g pnpm
 RUN pnpm install
 RUN pnpm build
 
