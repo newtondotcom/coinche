@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { maxCardWidth } from '$lib/constants';
-	import { spaceJoin } from '$lib/utils';
+	import { spaceJoin } from '$lib/utils/cards';
   
 	// Define types CardSuite and CardValue if not already defined
   
