@@ -7,6 +7,7 @@
     import Annonce from "$lib/ui/Annonce.svelte";
     import { generateRandomDeck, generateRiver} from "$lib/utils/deck";
     import Coinched from "$lib/ui/Coinched.svelte";
+    import ActionCoinche from "$lib/ui/ActionCoinche.svelte";
 
     let hand = generateRandomDeck();
     let river = generateRiver();
@@ -20,10 +21,9 @@
 <div id="main">
   <Deck {hand} />
   <Turn side={turn} />
-  <!--
   <Fake side="left" qqty={4} />
-  -->
   <Fake side="right" qqty={4} />
+  <Fake side="top" qqty={4} />
 
   {#if !annonceOuverte}
   <Filter bind:hand/>
@@ -34,12 +34,7 @@
   <Annonce bind:annonceOuverte/>
   {:else}
   <div class="flex flex-row justify-center items-center h-screen w-screen pb-[150px]">
-  <button
-  class="flex rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow text-center"
-  on:click={() => {}}
-  >
-  Coincher
-  </button>
+    <ActionCoinche />
 </div>
   {/if}
   {:else}
