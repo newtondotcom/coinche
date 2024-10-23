@@ -1,4 +1,3 @@
 # coinche
 
-
-```npm run dev``` to see the app running
+`npm run dev` to see the app running
