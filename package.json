@@ -22,6 +22,7 @@
         "prettier": "3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.8",
         "pretty-quick": "^4.0.0",
+        "prisma": "^5.21.1",
         "svelte": "^5.0.5",
         "svelte-check": "^4.0.5",
         "tailwind-merge": "^2.5.4",
@@ -33,6 +34,7 @@
     },
     "type": "module",
     "dependencies": {
+        "@prisma/client": "5.21.1",
         "@sveltejs/adapter-node": "^5.2.8",
         "@sveltejs/adapter-vercel": "^5.4.5",
         "localforage": "^1.10.0",
