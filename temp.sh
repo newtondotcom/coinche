@@ -1,1 +1,0 @@
-bun i -d husky pretty-quick @ianvs/prettier-plugin-sort-imports prettier prettier-plugin-tailwindcss

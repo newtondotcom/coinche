@@ -1,24 +1,33 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "@nuxtjs/tailwindcss": "^6.12.2",
-    "lucide-vue-next": "^0.453.0",
-    "nuxt": "^3.13.2",
-    "shadcn-nuxt": "^0.10.4",
-    "vue": "latest",
-    "vue-router": "latest"
-  },
-  "devDependencies": {
-    "prisma": "^5.21.1",
-    "tailwindcss-animate": "^1.0.7"
-  }
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "prepare": "husky",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "@nuxtjs/tailwindcss": "^6.12.2",
+        "lucide-vue-next": "^0.453.0",
+        "nuxt": "^3.13.2",
+        "shadcn-nuxt": "^0.10.4",
+        "vue": "latest",
+        "vue-router": "latest"
+    },
+    "devDependencies": {
+        "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+        "clsx": "^2.1.1",
+        "husky": "^9.1.6",
+        "prettier": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.8",
+        "pretty-quick": "^4.0.0",
+        "prisma": "^5.21.1",
+        "tailwind-merge": "^2.5.4",
+        "tailwindcss-animate": "^1.0.7"
+    }
 }
