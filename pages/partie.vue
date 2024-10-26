@@ -13,7 +13,10 @@
 </template>
 
 <script setup lang="ts">
+    import { useToast } from '@/components/ui/toast/use-toast';
     import { generateRandomDeck } from '@/lib/utils/deck';
+
+    const { toast } = useToast();
 
     let hand = ref<IPlayCard[]>(generateRandomDeck());
     let pli = ref<IPlayCard[]>([]);
@@ -21,7 +24,19 @@
     let atout = ref<CardSuite>();
     let turn = ref<boolean>(true);
 
+    const colorAsked = computed(() => (pli.value.length > 0 ? pli.value[0].suite : undefined));
+
+    const hasAtout = computed(() => hand.value.some((card) => card.suite === atout.value));
+
+    const hasAskedColor = computed(() =>
+        hand.value.some((card) => card.suite === colorAsked.value),
+    );
+
+    const atoutIsAsked = computed(() => colorAsked.value === atout.value);
+
     async function cardPressed(suite: CardSuite, value: CardValue) {
+        // check that card can be played
+
         const selectedCardIndex = hand.value.findIndex(
             (card) => card.suite === suite && card.value === value,
         );
@@ -30,5 +45,10 @@
             pli.value = [...pli.value, selectedCard]; // Add the selected card to `pli`
         }
         hand.value = hand.value.filter((card) => card.suite !== suite || card.value !== value);
+
+        console.log('has atout ', hasAtout.value);
+        console.log('color Asked ', colorAsked.value);
+        console.log('atoutIsAsked  ', atoutIsAsked.value);
+        console.log('hasAskedColor ', hasAskedColor.value);
     }
 </script>
