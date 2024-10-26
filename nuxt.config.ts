@@ -15,4 +15,5 @@ export default defineNuxtConfig({
     },
     viewer: false,
 },
+  ssr: false,
 })
