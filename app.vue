@@ -6,7 +6,7 @@
             >
                 Coinche.xyz
             </h1>
-            <CoincheColorMode />
+            <CoincheInterfaceColorMode />
         </header>
         <NuxtPage />
         <footer></footer>
