@@ -5,5 +5,5 @@
 
 <script setup lang="ts">
 import {generateRandomDeck} from "@/lib/utils/deck";
-let hand = generateRandomDeck();
+let hand : IPlayCard[] = ref(generateRandomDeck());
 </script>

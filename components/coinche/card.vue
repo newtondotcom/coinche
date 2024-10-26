@@ -2,7 +2,6 @@
 import {maxCardWidth} from "@/lib/constants";
 import { spaceJoin } from '@/lib/utils/cards';
 
-// Define props
 interface Props {
   suite: CardSuite;
   value: CardValue;

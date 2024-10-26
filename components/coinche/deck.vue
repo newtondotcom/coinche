@@ -2,11 +2,12 @@
     import Card from "@/components/coinche/card.vue";
     interface Props {
     }
-const props = defineProps<Props>();
+    const props = defineProps<Props>();
     const hand: IPlayCard[] = defineModel('hand');
 
 async function cardPressed (suite : CardSuite, value : CardValue){
     console.log("Card pressed", suite, value);
+    hand.value = hand.value.filter(card => card.suite !== suite || card.value !== value);
 }
 </script>
 
