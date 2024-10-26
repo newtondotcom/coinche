@@ -1,22 +1,15 @@
 <script setup lang="ts">
-    import Card from "@/components/coinche/card.vue";
+    import Card from '@/components/coinche/card.vue';
+
     interface Props {
+        pressed: (suite: CardSuite, value: CardValue) => void;
+        hand: IPlayCard[];
     }
     const props = defineProps<Props>();
-    const hand: IPlayCard[] = defineModel('hand');
-
-async function cardPressed (suite : CardSuite, value : CardValue){
-    console.log("Card pressed", suite, value);
-    hand.value = hand.value.filter(card => card.suite !== suite || card.value !== value);
-}
 </script>
 
 <template>
-<div class="flex flex-row absolute bottom-0 justify-center w-full">
-    <Card v-for="card in hand" 
-    :suite="card.suite" 
-    :value="card.value" 
-    :pressed="cardPressed"
-    />
-</div>
+    <div class="flex flex-row absolute bottom-0 justify-center w-full">
+        <Card v-for="card in hand" :suite="card.suite" :value="card.value" :pressed="pressed" />
+    </div>
 </template>
