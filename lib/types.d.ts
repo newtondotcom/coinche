@@ -1,22 +1,10 @@
-type CardSuite = 'diamonds' | 'clubs' | 'hearts' | 'spades';
+type CardSuite = 'diamonds' | 'clubs' | 'hearts' | 'spades' | 'tout-atout' | 'sans-atout';
 type CardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
 
 interface ICard {
     suite: CardSuite;
     value: CardValue;
     valueNum: number;
-}
-
-interface IPlayCard extends ICard {
-    key: string;
-    selected?: boolean;
-}
-
-interface IPlayCardWithPos {
-    card: IPlayCard;
-    row: number;
-    stack: number;
-    index: number;
 }
 
 type GameStatus = 'new' | 'paused' | 'active' | 'complete';

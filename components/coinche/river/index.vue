@@ -32,7 +32,7 @@
     import { cn } from '@/lib/utils';
 
     interface Props {
-        pli: IPlayCard[];
+        pli: ICard[];
     }
     const props = defineProps<Props>();
 </script>

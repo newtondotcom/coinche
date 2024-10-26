@@ -1,9 +1,3 @@
-//import { quintOut } from 'svelte/easing';
-// import { get } from 'svelte/store';
-// import { crossfade } from 'svelte/transition';
-
-import { cardValueMap } from '../constants';
-
 /**
  * Randomly shuffle array *in-place*
  * @param array Array to shuffle
@@ -89,13 +83,12 @@ export const generateCardAssortment = (targetSum?: number) => {
     const suites: Array<CardSuite> = ['diamonds', 'clubs', 'hearts', 'spades'];
     let indexes: Array<CardValue> = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
     indexes.splice(targetSum - 1);
-    const cards: IPlayCard[] = [];
+    const cards: ICard[] = [];
     suites.forEach((s) => {
         indexes.forEach((i) => {
             cards.push({
-                key: `${i}${s}`,
                 value: i,
-                valueNum: cardValueMap[i],
+                valueNum: 0,
                 suite: s,
             });
         });
@@ -122,7 +115,7 @@ export const generateCardAssortment = (targetSum?: number) => {
     shuffleArr(cards);
 
     // Split into stacks of x (example, std 10, stackDepth = 3)
-    const stacks: Array<Array<IPlayCard>> = chunkArr(cards, stackDepth);
+    const stacks: Array<Array<ICard>> = chunkArr(cards, stackDepth);
 
     // Group by rows (example, std 10, x = 4)
     let yHeight = getMedianDivisor(stackCount);
@@ -133,12 +126,12 @@ export const generateCardAssortment = (targetSum?: number) => {
         rowLength = 4;
     }
 
-    const rows: Array<Array<Array<IPlayCard>>> = chunkArr(stacks, rowLength, true);
+    const rows: Array<Array<Array<ICard>>> = chunkArr(stacks, rowLength, true);
 
     return { stacks, rows, cards };
 };
 
-export const getCardByKey = (key: string, rows: IPlayCard[][][]) => {
+export const getCardByKey = (key: string, rows: ICard[][][]) => {
     for (let r = 0; r < rows.length; r++) {
         const row = rows[r];
         for (let s = 0; s < row.length; s++) {
