@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-row">
+    <div class="absolute top-[50%] left-[50%] -translate-x-[50%] flex flex-row">
         <div
             v-for="i in 4"
             :key="i"

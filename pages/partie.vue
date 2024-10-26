@@ -1,10 +1,19 @@
 <template>
     <CoincheDeck :hand="hand" :pressed="cardPressed" :atout="atout" :turn="turn" />
     <CoincheRiver :pli="pli" />
+
+    <div class="flex flex-row justify-between">
+        <div class="flex flex-col">
+            <CoincheInterfaceSavedAnnonce />
+            <CoincheInterfacePoints />
+        </div>
+
+        <CoincheInterfaceTurn />
+    </div>
 </template>
 
 <script setup lang="ts">
-    import { generateRandomDeck, generateRiver } from '@/lib/utils/deck';
+    import { generateRandomDeck } from '@/lib/utils/deck';
 
     let hand = ref<IPlayCard[]>(generateRandomDeck());
     let pli = ref<IPlayCard[]>([]);
