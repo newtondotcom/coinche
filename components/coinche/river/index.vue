@@ -15,6 +15,8 @@
                     :suite="pli[i - 1].suite"
                     :value="pli[i - 1].value"
                     classStr="my-1"
+                    :inDeck="false"
+                    :canBePlayed="false"
                 />
                 <div
                     :style="{ width: `${maxCardWidth}px`, height: `${maxCardHeight}px` }"

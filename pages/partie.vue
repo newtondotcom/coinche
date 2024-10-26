@@ -1,5 +1,5 @@
 <template>
-    <CoincheDeck :hand="hand" :pressed="cardPressed" />
+    <CoincheDeck :hand="hand" :pressed="cardPressed" :atout="atout" :turn="turn" />
     <CoincheRiver :pli="pli" />
 </template>
 
@@ -9,8 +9,10 @@
     let hand = ref<IPlayCard[]>(generateRandomDeck());
     let pli = ref<IPlayCard[]>([]);
 
+    let atout = ref<CardSuite>();
+    let turn = ref<boolean>(true);
+
     async function cardPressed(suite: CardSuite, value: CardValue) {
-        console.log('Card pressed', suite, value);
         const selectedCardIndex = hand.value.findIndex(
             (card) => card.suite === suite && card.value === value,
         );
