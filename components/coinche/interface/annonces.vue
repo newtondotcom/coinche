@@ -3,54 +3,96 @@
         <Card>
             <CardHeader>
                 <CardTitle>Annonces</CardTitle>
-                <CardDescription>Annonce actuelle : 100 coeur</CardDescription>
+                <CardDescription>
+                    Annonce actuelle
+                    <Badge variant="secondary">
+                        {{ annonceActuelle.annonce }}
+                        {{ annonceActuelle.suite == 'diamonds' ? '♦️' : '' }}
+                        {{ annonceActuelle.suite == 'hearts' ? '♥️' : '' }}
+                        {{ annonceActuelle.suite == 'clubs' ? '♣️' : '' }}
+                        {{ annonceActuelle.suite == 'spades' ? '♠️' : '' }}
+                        {{ annonceActuelle.suite == 'tout-atout' ? 'TA' : '' }}
+                        {{ annonceActuelle.suite == 'sans-atout' ? 'SA' : '' }}
+                    </Badge>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <div class="flex flex-row align-middle justify-center">
-                    <div class="grid grid-cols-4 gap-4">
-                        <div
+                    <div
+                        class="grid grid-cols-4 gap-2 border-2 border-neutral-200 rounded-lg px-1 mx-1"
+                    >
+                        <Button
                             v-for="annonce in annonces"
-                            class="w-full h-full rounded-md border-gray-500 px-5 py-2.5 shadow-sm sm:text-sm place-content-center items-center text-black"
+                            :disabled="canAnnonceNumber(annonce)"
+                            @click="annonceEnCours = { ...annonceEnCours, annonce }"
+                            :variant="annonceEnCours.annonce === annonce ? 'outline' : 'ghost'"
+                            aria-label="Valeur de {{ annonce }}"
                         >
                             {{ annonce }}
-                        </div>
+                        </Button>
                     </div>
-                    <div class="grid-cols-4 gap-4">
-                        <div
-                            v-for="annonce in suites"
-                            class="w-full rounded-md border-gray-500 px-5 py-2.5 shadow-sm sm:text-sm place-content-center items-center text-black"
+                    <div
+                        class="grid grid-cols-4 gap-2 border-2 border-neutral-200 rounded-lg px-1 mx-1"
+                    >
+                        <Button
+                            v-for="suite in suites"
+                            @click="annonceEnCours = { ...annonceEnCours, suite }"
+                            :variant="annonceEnCours.suite === suite ? 'outline' : 'ghost'"
+                            aria-label="Suite de {{ annonce }}"
                         >
-                            {{ annonce }}
-                        </div>
+                            {{ suite == 'diamonds' ? '♦️' : '' }}
+                            {{ suite == 'hearts' ? '♥️' : '' }}
+                            {{ suite == 'clubs' ? '♣️' : '' }}
+                            {{ suite == 'spades' ? '♠️' : '' }}
+                            {{ suite == 'tout-atout' ? 'TA' : '' }}
+                            {{ suite == 'sans-atout' ? 'SA' : '' }}
+                        </Button>
                     </div>
 
-                    <div class="flex flex-col">
-                        <div>Annonce actuelle : 100 coeur</div>
-                        <button
-                            class="flex rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow text-center"
-                            @click="{()"
-                            =""
-                        >
-                            joinParty()} > Passer
-                        </button>
-                        <button
-                            class="flex rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow text-center"
-                            @click="{()"
-                            =""
-                        >
-                            joinParty()} > Coincher
-                        </button>
+                    <div class="flex flex-col space-y-2 justify-center px-1 mx-1">
+                        <Button>Passer</Button>
+                        <Button :disabled="canCoincher">Coincher</Button>
                     </div>
                 </div>
             </CardContent>
-            <CardFooter class="flex justify-between px-6 pb-6">
-                <Button variant="outline">Cancel</Button>
-            </CardFooter>
         </Card>
     </div>
 </template>
 
 <script setup lang="ts">
-    let annonces = [80, 90, 100, 110, 120, 130, 140, 150, 160];
-    let suites = ['♠️', '♥️', '♦️', '♣️'];
+    let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
+    let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
+
+    let canCoincher = ref<boolean>(false);
+
+    interface Props {
+        annonceActuelle: IAnnonce;
+        emitAnnonce: (annonce: IAnnonce) => void;
+    }
+    const props = defineProps<Props>();
+
+    let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA' });
+
+    watch(props.annonceActuelle, () => {
+        canCoincher.value = canCoincherAnnonce(props.annonceActuelle.annonce);
+    });
+
+    watch(annonceEnCours, () => {
+        if (annonceEnCours.value.annonce !== 0 && annonceEnCours.value.suite !== 'NA') {
+            console.log('Annonce : ', annonceEnCours.value.annonce);
+            console.log('Suite : ', annonceEnCours.value.suite);
+            props.emitAnnonce(annonceEnCours.value);
+            annonceEnCours.value = { annonce: 0, suite: 'NA' };
+        }
+    });
+
+    function canCoincherAnnonce(annonce: Annonce) {
+        let nombreAnnonceActuelle = props.annonceActuelle.annonce;
+        return nombreAnnonceActuelle > annonce;
+    }
+
+    function canAnnonceNumber(annonce: Annonce) {
+        let nombreAnnonceActuelle = props.annonceActuelle.annonce;
+        return !(nombreAnnonceActuelle < annonce);
+    }
 </script>

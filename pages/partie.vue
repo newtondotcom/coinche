@@ -9,7 +9,7 @@
         :highestAtoutInPli="highestAtoutInPli"
     />
     <CoincheRiver :pli="pli" />
-    <CoincheInterfaceAnnonces />
+    <CoincheInterfaceAnnonces :annonceActuelle="annonceActuelle" :emitAnnonce="emitAnnonce" />
 
     <div class="flex flex-row justify-between">
         <div class="flex flex-col">
@@ -29,6 +29,8 @@
 
     let hand = ref<ICard[]>(generateRandomDeck());
     let pli = ref<ICard[]>([]);
+
+    let annonceActuelle = ref<IAnnonce>({ annonce: 0, suite: 'NA' });
 
     let atout = ref<CardSuite>('spades');
     watch(atout, () => {});
@@ -72,5 +74,10 @@
         console.log('atoutIsAsked  : ', atoutIsAsked.value);
         console.log('hasAskedColor : ', hasAskedColor.value);
         console.log('highestAtoutInPli : ', highestAtoutInPli.value);
+    }
+
+    async function emitAnnonce(ann: IAnnonce) {
+        annonceActuelle.value = ann;
+        console.log('Annonce faite : ', annonceActuelle.value.annonce);
     }
 </script>
