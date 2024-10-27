@@ -24,7 +24,6 @@
         atoutIsAsked: boolean;
         highestAtoutInPli: number;
     }
-
     const props = defineProps<Props>();
 
     const computeCanBePlayed = (card: ICard) => {
