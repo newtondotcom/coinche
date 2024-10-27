@@ -6,6 +6,7 @@
             >
                 Coinche.xyz
             </h1>
+            <div>Classement</div>
             <CoincheInterfaceColorMode />
         </header>
         <NuxtPage />
