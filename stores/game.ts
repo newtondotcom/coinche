@@ -4,6 +4,14 @@ export const useGameStore = defineStore('game', () => {
         current_player_position: 0,
         current_player_id: '0',
         status: 'new',
+        pli_number: 0,
+        team1_point_current_pli: 0,
+        team2_point_current_pli: 0,
+        last_annonce: {
+            annonce: 80,
+            suite: 'spades',
+            playerId: '0',
+        },
     });
 
     function setGame(newGame: IGame) {

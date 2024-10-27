@@ -6,13 +6,13 @@
                 <CardDescription>
                     Annonce actuelle
                     <Badge variant="secondary">
-                        {{ annonceActuelle.annonce }}
-                        {{ annonceActuelle.suite == 'diamonds' ? '♦️' : '' }}
-                        {{ annonceActuelle.suite == 'hearts' ? '♥️' : '' }}
-                        {{ annonceActuelle.suite == 'clubs' ? '♣️' : '' }}
-                        {{ annonceActuelle.suite == 'spades' ? '♠️' : '' }}
-                        {{ annonceActuelle.suite == 'tout-atout' ? 'TA' : '' }}
-                        {{ annonceActuelle.suite == 'sans-atout' ? 'SA' : '' }}
+                        {{ storeGame.game.last_annonce.annonce }}
+                        {{ storeGame.game.last_annonce.suite == 'diamonds' ? '♦️' : '' }}
+                        {{ storeGame.game.last_annonce.suite == 'hearts' ? '♥️' : '' }}
+                        {{ storeGame.game.last_annonce.suite == 'clubs' ? '♣️' : '' }}
+                        {{ storeGame.game.last_annonce.suite == 'spades' ? '♠️' : '' }}
+                        {{ storeGame.game.last_annonce.suite == 'tout-atout' ? 'TA' : '' }}
+                        {{ storeGame.game.last_annonce.suite == 'sans-atout' ? 'SA' : '' }}
                     </Badge>
                 </CardDescription>
             </CardHeader>
@@ -60,21 +60,22 @@
 </template>
 
 <script setup lang="ts">
+    const storeGame = useGameStore();
+
     let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
     let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
 
     let canCoincher = ref<boolean>(false);
 
     interface Props {
-        annonceActuelle: IAnnonce;
         emitAnnonce: (annonce: IAnnonce) => void;
     }
     const props = defineProps<Props>();
 
-    let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA' });
+    let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: 'NA' });
 
-    watch(props.annonceActuelle, () => {
-        canCoincher.value = canCoincherAnnonce(props.annonceActuelle.annonce);
+    watch(storeGame.game.last_annonce, () => {
+        canCoincher.value = canCoincherAnnonce(storeGame.game.last_annonce.annonce);
     });
 
     watch(annonceEnCours, () => {
@@ -82,17 +83,15 @@
             console.log('Annonce : ', annonceEnCours.value.annonce);
             console.log('Suite : ', annonceEnCours.value.suite);
             props.emitAnnonce(annonceEnCours.value);
-            annonceEnCours.value = { annonce: 0, suite: 'NA' };
+            annonceEnCours.value = { annonce: 0, suite: 'NA', playerId: 'NA' };
         }
     });
 
     function canCoincherAnnonce(annonce: Annonce) {
-        let nombreAnnonceActuelle = props.annonceActuelle.annonce;
-        return nombreAnnonceActuelle > annonce;
+        return storeGame.game.last_annonce.annonce > annonce;
     }
 
     function canAnnonceNumber(annonce: Annonce) {
-        let nombreAnnonceActuelle = props.annonceActuelle.annonce;
-        return !(nombreAnnonceActuelle < annonce);
+        return !(storeGame.game.last_annonce.annonce < annonce);
     }
 </script>

@@ -1,6 +1,6 @@
 type CardSuite = 'diamonds' | 'clubs' | 'hearts' | 'spades' | 'tout-atout' | 'sans-atout' | 'NA';
 type CardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
-type Annonce = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0;
+type Annonce = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 'capot' | 'generale';
 type PlayerPosition = 0 | 1 | 2 | 3;
 type PlayerId = string;
 type PlayerSurname = string;
@@ -14,6 +14,7 @@ interface ICard {
 interface IAnnonce {
     suite: CardSuite;
     annonce: Annonce;
+    playerId: PlayerId;
 }
 
 interface IPlayer {
@@ -30,6 +31,10 @@ interface IGame {
     current_player_position: PlayerPosition;
     current_player_id: PlayerId;
     status: GameStatus;
+    pli_number: number;
+    team1_point_current_pli: number;
+    team2_point_current_pli: number;
+    last_annonce: IAnnonce;
 }
 
 type EventType =
