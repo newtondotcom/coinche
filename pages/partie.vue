@@ -9,6 +9,7 @@
         :highestAtoutInPli="highestAtoutInPli"
     />
     <CoincheRiver :pli="pli" />
+    <CoincheInterfaceAnnonces />
 
     <div class="flex flex-row justify-between">
         <div class="flex flex-col">
