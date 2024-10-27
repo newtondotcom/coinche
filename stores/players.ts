@@ -55,5 +55,12 @@ export const usePlayersStore = defineStore('players', () => {
         }
     }
 
-    return { players, setHands, setScore, setPosition };
+    const team1 = computed<IPlayer[]>(() =>
+        players.value.filter((p) => p.position === 0 || p.position === 2),
+    );
+    const team2 = computed<IPlayer[]>(() =>
+        players.value.filter((p) => p.position === 1 || p.position === 3),
+    );
+
+    return { players, team1, team2, setHands, setScore, setPosition };
 });

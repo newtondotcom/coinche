@@ -7,7 +7,7 @@
             <div class="flex items-center justify-between space-x-4">
                 <div class="flex items-center space-x-4">
                     <Avatar>
-                        <AvatarFallback>{{ team1[0].score }}</AvatarFallback>
+                        <AvatarFallback>{{ storePlayers.team1[0].score }}</AvatarFallback>
                     </Avatar>
                     <div>
                         <p class="text-sm font-medium leading-none">
@@ -24,7 +24,7 @@
             <div class="flex items-center justify-between space-x-4">
                 <div class="flex items-center space-x-4">
                     <Avatar>
-                        <AvatarFallback>{{ team1[1].score }}</AvatarFallback>
+                        <AvatarFallback>{{ storePlayers.team2[1].score }}</AvatarFallback>
                     </Avatar>
                     <div>
                         <p class="text-sm font-medium leading-none">
@@ -73,15 +73,5 @@
 </template>
 
 <script setup lang="ts">
-    const storePlayers = usePlayersstorePlayers();
-
-    const team1 = computed<IPlayer[]>(() =>
-        storePlayers.players.filter((p) => p.position === 0 || p.position === 2),
-    );
-    const team2 = computed<IPlayer[]>(() =>
-        storePlayers.players.filter((p) => p.position === 1 || p.position === 3),
-    );
-
-    console.log(team1.value[0].score);
-    console.log(team2.value);
+    const storePlayers = usePlayersStore();
 </script>
