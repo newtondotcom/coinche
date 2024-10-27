@@ -1,13 +1,23 @@
+import { useToast } from '@/components/ui/toast/use-toast';
+
+const storePlayers = usePlayersStore();
+const storeGame = useGameStore();
+
+const { toast } = useToast();
+
 export function translateAnnonce(event: EventShared) {
     const value = event.value as IAnnonce;
+    storeGame.setLastAnnonce(value);
     return `${event.value} annonce ${value.annonce}`;
 }
 export function translateCoinche(event: EventShared) {
     const value = event.value as IAnnonce;
+    storeGame.setCoinched(true);
     return `${value} coinche`;
 }
 export function translateSurcoinche(event: EventShared) {
     const value = event.value as IAnnonce;
+    storeGame.setSurcoinched(true);
     return `${value} surcoinche`;
 }
 
@@ -21,23 +31,37 @@ export function translatePass(event: EventShared) {
 }
 
 export function translateJoin(event: EventShared) {
+    const { player, surname } = event.value;
     return `${event.playerId} join`;
 }
 export function translateLeave(event: EventShared) {
+    const { player, surname } = event.value;
     return `${event.playerId} leave`;
 }
 
 export function translateStart(event: EventShared) {
+    storeGame.setStatus('active');
     return `${event.value} start`;
 }
 export function translateEnd(event: EventShared) {
+    storeGame.setStatus('complete');
     return `${event.value} end`;
 }
 
 export function translateStartPli(event: EventShared) {
+    storeGame.setNewPli();
     return `${event.value} start pli`;
 }
 export function translateEndPli(event: EventShared) {
+    storeGame.setCurrentPli([]);
+    storePlayers.addScore(storeGame.game.team1_point_current_pli, storePlayers.players[0].id);
+    storePlayers.addScore(storeGame.game.team1_point_current_pli, storePlayers.players[2].id);
+    storePlayers.addScore(storeGame.game.team2_point_current_pli, storePlayers.players[1].id);
+    storePlayers.addScore(storeGame.game.team2_point_current_pli, storePlayers.players[3].id);
+    toast({
+        title: 'Fin du pli',
+        description: `Team 1: ${storeGame.game.team1_point_current_pli} points\nTeam 2: ${storeGame.game.team2_point_current_pli} points`,
+    });
     return `${event.value} end pli`;
 }
 

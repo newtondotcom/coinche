@@ -35,6 +35,8 @@ interface IGame {
     team1_point_current_pli: number;
     team2_point_current_pli: number;
     last_annonce: IAnnonce;
+    coinched: boolean;
+    surcoinched: boolean;
 }
 
 type EventType =
@@ -62,5 +64,5 @@ interface EventShared {
     timestamp: number;
     playerId: PlayerId;
     type: EventType;
-    value: PlayerId | ICard | IAnnonce;
+    value: { player: PlayerId; surname: string } | ICard | IAnnonce;
 }
