@@ -41,10 +41,10 @@ export const usePlayersStore = defineStore('players', () => {
         }
     }
 
-    function setScore(score: number, playerId: string) {
+    function addScore(score: number, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
         if (player) {
-            player.score = score;
+            player.score += score;
         }
     }
 
@@ -62,5 +62,5 @@ export const usePlayersStore = defineStore('players', () => {
         players.value.filter((p) => p.position === 1 || p.position === 3),
     );
 
-    return { players, team1, team2, setHands, setScore, setPosition };
+    return { players, team1, team2, setHands, addScore, setPosition };
 });
