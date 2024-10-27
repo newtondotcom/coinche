@@ -12,6 +12,8 @@ export const useGameStore = defineStore('game', () => {
             suite: 'spades',
             playerId: '0',
         },
+        coinched: false,
+        surcoinched: false,
     });
 
     function setGame(newGame: IGame) {
@@ -31,11 +33,34 @@ export const useGameStore = defineStore('game', () => {
         game.value.status = status;
     }
 
+    function setLastAnnonce(annonce: IAnnonce) {
+        game.value.last_annonce = annonce;
+    }
+
+    function setCoinched(coinched: boolean) {
+        game.value.coinched = coinched;
+    }
+
+    function setSurcoinched(surcoinched: boolean) {
+        game.value.surcoinched = surcoinched;
+    }
+
+    function setNewPli() {
+        game.value.current_pli = [];
+        game.value.pli_number += 1;
+        game.value.team1_point_current_pli = 0;
+        game.value.team2_point_current_pli = 0;
+    }
+
     return {
         game,
         setGame,
         setCurrentPli,
         setCurrentPlayerPosition,
         setStatus,
+        setLastAnnonce,
+        setCoinched,
+        setSurcoinched,
+        setNewPli,
     };
 });
