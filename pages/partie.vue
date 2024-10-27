@@ -9,7 +9,11 @@
         :highestAtoutInPli="highestAtoutInPli"
     />
     <CoincheRiver :pli="pli" />
-    <CoincheInterfaceAnnonces :annonceActuelle="annonceActuelle" :emitAnnonce="emitAnnonce" />
+    <CoincheInterfaceAnnonces
+        v-if="timeToAnnonce"
+        :annonceActuelle="annonceActuelle"
+        :emitAnnonce="emitAnnonce"
+    />
 
     <div class="flex flex-row justify-between">
         <div class="flex flex-col">
@@ -30,13 +34,15 @@
     let hand = ref<ICard[]>(generateRandomDeck());
     let pli = ref<ICard[]>([]);
 
-    let annonceActuelle = ref<IAnnonce>({ annonce: 0, suite: 'NA' });
+    let annonceActuelle = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: 'NA' });
 
     let atout = ref<CardSuite>('spades');
     watch(atout, () => {});
 
     let turn = ref<boolean>(true);
     watch(turn, () => {});
+
+    let timeToAnnonce = ref<boolean>(false);
 
     const colorAsked: ComputedRef<CardSuite | undefined> = computed(() =>
         pli.value.length > 0 ? pli.value[0].suite : undefined,
