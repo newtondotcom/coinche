@@ -97,7 +97,8 @@ export async function join() {
         }
         const messageStarted = data[0];
         storeGame.setStatus('active');
-        storeGame.setPlayerStartingId(messageStarted.value as string);
+        storeGame.setCurrentPlayerId(messageStarted.value as PlayerId);
+        storeGame.setPlayerStartingId(messageStarted.value as PlayerId);
         storeAbout.setTimeToAnnonce(true);
     }
 }
