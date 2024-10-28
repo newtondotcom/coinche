@@ -52,6 +52,7 @@
                     <div class="flex flex-col space-y-2 justify-center px-1 mx-1">
                         <Button>Passer</Button>
                         <Button :disabled="canCoincher">Coincher</Button>
+                        <Button :disabled="canSurcoincher">Surcoincher</Button>
                     </div>
                 </div>
             </CardContent>
@@ -66,6 +67,7 @@
     let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
 
     let canCoincher = ref<boolean>(false);
+    let canSurcoincher = ref<boolean>(false);
 
     interface Props {
         emitAnnonce: (annonce: IAnnonce) => void;
