@@ -61,6 +61,8 @@
 </template>
 
 <script setup lang="ts">
+    import emitAnnonce from '@/lib/supabase/annonce';
+
     const storeGame = useGameStore();
 
     let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
@@ -69,23 +71,23 @@
     let canCoincher = ref<boolean>(false);
     let canSurcoincher = ref<boolean>(false);
 
-    interface Props {
-        emitAnnonce: (annonce: IAnnonce) => void;
-    }
-    const props = defineProps<Props>();
-
     let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: 'NA' });
 
     watch(storeGame.game.last_annonce, () => {
         canCoincher.value = canCoincherAnnonce(storeGame.game.last_annonce.annonce);
     });
 
-    watch(annonceEnCours, () => {
+    watch(annonceEnCours, async () => {
         if (annonceEnCours.value.annonce !== 0 && annonceEnCours.value.suite !== 'NA') {
-            console.log('Annonce : ', annonceEnCours.value.annonce);
-            console.log('Suite : ', annonceEnCours.value.suite);
-            props.emitAnnonce(annonceEnCours.value);
+            await emitAnnonce(annonceEnCours.value);
+            console.log('Annonce envoyée');
             annonceEnCours.value = { annonce: 0, suite: 'NA', playerId: 'NA' };
+            console.log(
+                'Annonce envoyée : ',
+                annonceEnCours.value.annonce,
+                ' ',
+                annonceEnCours.value.suite,
+            );
         }
     });
 
