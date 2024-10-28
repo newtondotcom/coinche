@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
     import { useToast } from '@/components/ui/toast/use-toast';
+    import { join, leave } from '@/lib/supabase/io';
     import { createClient } from '@supabase/supabase-js';
 
     const { toast } = useToast();
@@ -68,17 +69,11 @@
 
     onMounted(async () => {
         startListening();
-        await $fetch('/api/io/join', {
-            method: 'POST',
-            query: { id, gameId, surname },
-        });
+        join();
     });
 
     onBeforeUnmount(async () => {
-        await $fetch('/api/io/leave', {
-            method: 'POST',
-            query: { id, gameId },
-        });
+        leave();
     });
 
     async function startListening() {
