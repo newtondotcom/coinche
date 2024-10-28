@@ -1,17 +1,13 @@
 export const useGameStore = defineStore('game', () => {
     const game = ref<IGame>({
         current_pli: [],
+        current_player_id: '',
         current_player_position: 0,
-        current_player_id: '0',
         status: 'new',
         pli_number: 0,
         team1_point_current_pli: 0,
         team2_point_current_pli: 0,
-        last_annonce: {
-            annonce: 80,
-            suite: 'spades',
-            playerId: '0',
-        },
+        last_annonce: { suite: 'NA', annonce: 0, playerId: '0' },
         coinched: false,
         surcoinched: false,
     });
