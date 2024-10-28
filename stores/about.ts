@@ -5,6 +5,7 @@ export const useAboutStore = defineStore('about', () => {
     const mySurname = ref<string>('player1');
     const gameId = ref<string>('0');
     const isCreator = ref<boolean>(false);
+    const timeToAnnonce = ref<boolean>(false);
 
     const atout = computed(() => storeGame.game.last_annonce.suite);
 
@@ -56,6 +57,10 @@ export const useAboutStore = defineStore('about', () => {
         gameId.value = id;
     }
 
+    function setTimeToAnnonce(time: boolean) {
+        timeToAnnonce.value = time;
+    }
+
     return {
         myId,
         mySurname,
@@ -72,5 +77,8 @@ export const useAboutStore = defineStore('about', () => {
         pli,
         setGameId,
         gameId,
+        isCreator,
+        setTimeToAnnonce,
+        timeToAnnonce,
     };
 });
