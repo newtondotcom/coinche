@@ -11,12 +11,25 @@ const { toast } = useToast();
 
 export function translateAnnonce(event: EventShared) {
     const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
-    s;
-    const value = deformatAnnonce(event.value as string, event.playerId);
-    console.log('annonce', value);
-    storeGame.setLastAnnonce(value);
-    return `${event.value} annonce ${value.annonce}`;
+    const storePlayers = usePlayersStore();
+    const annonce = deformatAnnonce(event.value as string, event.playerId);
+    storePlayers.setLastAnnonce(annonce, event.playerId);
+    const nextPlayerIndex =
+        storePlayers.players.findIndex((player) => player.id === event.playerId) + 1;
+    const nextPlayer = storePlayers.players[nextPlayerIndex % 4];
+    storeGame.setCurrentPlayerId(nextPlayer.id);
+    if (annonce.annonce === 0) {
+        const playerName = storePlayers.players.find(
+            (player) => player.id === event.playerId,
+        )?.surname;
+        toast({
+            title: 'Passe',
+            description: `${playerName} passe à ${storeGame.game.last_annonce.annonce} ${storeGame.game.last_annonce.suite}`,
+        });
+        return `${event.value} annonce ${annonce.annonce}`;
+    }
+    storeGame.setLastAnnonce(annonce);
+    return `${event.value} annonce ${annonce}`;
 }
 export function translateCoinche(event: EventShared) {
     const storePlayers = usePlayersStore();
@@ -56,7 +69,6 @@ export async function translateJoin(event: EventShared) {
             id: event.playerId,
             surname: event.value as string,
             position: storePlayers.players.length as PlayerPosition,
-            score: 0,
             hands: [],
             classement: 0,
         };
@@ -90,9 +102,11 @@ export function translateLeave(event: EventShared) {
 export function translateStart(event: EventShared) {
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
-    console.log('start game', event);
+    // same logic applied in the io.ts file - to duplicate / refactor
     storeGame.setStatus('active');
+    storeGame.setPlayerStartingId(event.value as string);
     storeAbout.setTimeToAnnonce(true);
+
     return `${event.value} start`;
 }
 export function translateEnd(event: EventShared) {

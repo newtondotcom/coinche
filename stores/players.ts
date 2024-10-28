@@ -12,6 +12,17 @@ export const usePlayersStore = defineStore('players', () => {
         players.value.push(player);
     }
 
+    function setPlayers(newPlayers: IPlayer[]) {
+        players.value = newPlayers;
+    }
+
+    function setLastAnnonce(annonce: IAnnonce, playerId: string) {
+        const player = players.value.find((player) => player.id === playerId);
+        if (player) {
+            player.last_annonce = annonce;
+        }
+    }
+
     function setPosition(position: PlayerPosition, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
         if (player) {
@@ -26,5 +37,5 @@ export const usePlayersStore = defineStore('players', () => {
         players.value.filter((p) => p.position === 1 || p.position === 3),
     );
 
-    return { players, team1, team2, setHands, setPosition, addPlayer };
+    return { players, team1, team2, setHands, setPosition, addPlayer, setPlayers, setLastAnnonce };
 });
