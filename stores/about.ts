@@ -3,6 +3,7 @@ export const useAboutStore = defineStore('about', () => {
     const storePlayers = usePlayersStore();
     const myId = ref<string>('0');
     const mySurname = ref<string>('player1');
+    const gameId = ref<string>('0');
     const isCreator = ref<boolean>(false);
 
     const atout = computed(() => storeGame.game.last_annonce.suite);
@@ -51,6 +52,10 @@ export const useAboutStore = defineStore('about', () => {
         isCreator.value = creator;
     }
 
+    function setGameId(id: string) {
+        gameId.value = id;
+    }
+
     return {
         myId,
         mySurname,
@@ -65,5 +70,7 @@ export const useAboutStore = defineStore('about', () => {
         atout,
         hand,
         pli,
+        setGameId,
+        gameId,
     };
 });
