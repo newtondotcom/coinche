@@ -11,9 +11,9 @@
                 :class="cn(`min-w-[${maxCardWidth}]`, `min-h-[${maxCardHeight}]`)"
             >
                 <CoincheCard
-                    v-if="pli.length >= i"
-                    :suite="pli[i - 1].suite"
-                    :value="pli[i - 1].value"
+                    v-if="storeAbout.pli.length >= i"
+                    :suite="storeAbout.pli[i - 1].suite"
+                    :value="storeAbout.pli[i - 1].value"
                     classStr="my-1"
                     :inDeck="false"
                     :canBePlayed="false"
@@ -32,5 +32,5 @@
     import { cn } from '@/lib/utils';
 
     const storeGame = useGameStore();
-    const pli: Ref<ICard[]> = computed(() => storeGame.game.current_pli);
+    const storeAbout = useAboutStore();
 </script>
