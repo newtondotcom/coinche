@@ -1,14 +1,18 @@
 export const useGameStore = defineStore('game', () => {
     const current_pli = ref<ICard[]>([]);
-    const current_player_id = ref<PlayerId>('');
-    const status = ref<GameStatus>('new');
     const pli_number = ref<number>(0);
     const team1_point_current_pli = ref<number>(0);
     const team2_point_current_pli = ref<number>(0);
+
+    const current_player_id = ref<PlayerId>('');
+    const player_starting_id = ref<PlayerId>('0');
+
+    const status = ref<GameStatus>('new');
+
     const last_annonce = ref<IAnnonce>({ suite: 'NA', annonce: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
-    const player_starting_id = ref<PlayerId>('0');
+
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
 
@@ -44,6 +48,7 @@ export const useGameStore = defineStore('game', () => {
     }
 
     function setPlayerStartingId(playerId: PlayerId) {
+        console.log('Setting player starting id', playerId);
         player_starting_id.value = playerId;
     }
 
