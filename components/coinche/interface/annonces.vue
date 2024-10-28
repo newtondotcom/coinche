@@ -14,6 +14,12 @@
                         {{ storeGame.game.last_annonce.suite == 'tout-atout' ? 'TA' : '' }}
                         {{ storeGame.game.last_annonce.suite == 'sans-atout' ? 'SA' : '' }}
                     </Badge>
+                    par
+                    {{
+                        storePlayers.players.find(
+                            (player: IPlayer) => player.id === storeGame.game.last_annonce.playerId,
+                        )?.surname
+                    }}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -23,7 +29,7 @@
                     >
                         <Button
                             v-for="annonce in annonces"
-                            :disabled="canAnnonceNumber(annonce)"
+                            :disabled="canAnnonceNumber(annonce) || !canAnnoncer"
                             @click="annonceEnCours = { ...annonceEnCours, annonce }"
                             :variant="annonceEnCours.annonce === annonce ? 'outline' : 'ghost'"
                             aria-label="Valeur de {{ annonce }}"
@@ -38,6 +44,7 @@
                             v-for="suite in suites"
                             @click="annonceEnCours = { ...annonceEnCours, suite }"
                             :variant="annonceEnCours.suite === suite ? 'outline' : 'ghost'"
+                            :disabled="!canAnnoncer"
                             aria-label="Suite de {{ annonce }}"
                         >
                             {{ suite == 'diamonds' ? '♦️' : '' }}
@@ -50,7 +57,7 @@
                     </div>
 
                     <div class="flex flex-col space-y-2 justify-center px-1 mx-1">
-                        <Button>Passer</Button>
+                        <Button @click="passer" :disabled="!canAnnoncer">Passer</Button>
                         <Button :disabled="canCoincher">Coincher</Button>
                         <Button :disabled="canSurcoincher">Surcoincher</Button>
                     </div>
@@ -64,38 +71,58 @@
     import emitAnnonce from '@/lib/supabase/annonce';
 
     const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
+    const storePlayers = usePlayersStore();
 
     let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
     let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
 
-    let canCoincher = ref<boolean>(false);
-    let canSurcoincher = ref<boolean>(false);
+    let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.game.last_annonce));
+    let canSurcoincher = computed<boolean>(() =>
+        canSurcoincherAnnonce(storeGame.game.last_annonce),
+    );
 
-    let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: 'NA' });
-
-    watch(storeGame.game.last_annonce, () => {
-        canCoincher.value = canCoincherAnnonce(storeGame.game.last_annonce.annonce);
+    let canAnnoncer = computed<boolean>(() => storeGame.game.current_player_id === storeAbout.myId);
+    watch(canAnnoncer, () => {
+        console.log(canAnnoncer.value);
     });
+    console.log(storeGame.game.current_player_id);
+
+    let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
 
     watch(annonceEnCours, async () => {
         if (annonceEnCours.value.annonce !== 0 && annonceEnCours.value.suite !== 'NA') {
             await emitAnnonce(annonceEnCours.value);
-            console.log('Annonce envoyée');
             annonceEnCours.value = { annonce: 0, suite: 'NA', playerId: 'NA' };
-            console.log(
-                'Annonce envoyée : ',
-                annonceEnCours.value.annonce,
-                ' ',
-                annonceEnCours.value.suite,
-            );
         }
     });
 
-    function canCoincherAnnonce(annonce: Annonce) {
-        return storeGame.game.last_annonce.annonce > annonce;
+    function canCoincherAnnonce(annonce: IAnnonce) {
+        const myIndex = storePlayers.players.findIndex(
+            (player: IPlayer) => player.id === storeAbout.myId,
+        );
+        const adversaries: IPlayer[] = [
+            storePlayers.players[(myIndex + 1) % 4],
+            storePlayers.players[(myIndex + 3) % 4],
+        ];
+        const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
+        return adversaries_ids.includes(annonce.playerId);
+    }
+
+    function canSurcoincherAnnonce(annonce: IAnnonce) {
+        const myIndex = storePlayers.players.findIndex(
+            (player: IPlayer) => player.id === storeAbout.myId,
+        );
+        const partner = storePlayers.players[(myIndex + 2) % 4];
+        const team_ids = [storeAbout.myId, partner.id];
+        return storeGame.game.coinched && team_ids.includes(annonce.playerId);
     }
 
     function canAnnonceNumber(annonce: Annonce) {
         return !(storeGame.game.last_annonce.annonce < annonce);
+    }
+
+    async function passer() {
+        await emitAnnonce({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
     }
 </script>

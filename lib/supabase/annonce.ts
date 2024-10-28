@@ -7,7 +7,6 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 
 export default async function emitAnnonce(annonce: IAnnonce) {
     const storeAbout = useAboutStore();
-    const storeGame = useGameStore();
     const gameId = storeAbout.gameId;
     await supabase.from('Events').insert([
         {
