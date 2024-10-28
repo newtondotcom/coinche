@@ -31,6 +31,5 @@
     import { maxCardHeight, maxCardWidth } from '@/lib/constants';
     import { cn } from '@/lib/utils';
 
-    const storeGame = useGameStore();
     const storeAbout = useAboutStore();
 </script>

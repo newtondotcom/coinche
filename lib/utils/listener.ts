@@ -1,21 +1,35 @@
 import { useToast } from '@/components/ui/toast/use-toast';
+import genIdCuid from '@/lib/supabase/gen';
+import { createClient } from '@supabase/supabase-js';
 
-const storePlayers = usePlayersStore();
-const storeGame = useGameStore();
+import { deformatAnnonce } from '../supabase/annonce';
+
+const config = useRuntimeConfig();
+const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
 
 const { toast } = useToast();
 
 export function translateAnnonce(event: EventShared) {
-    const value = event.value as IAnnonce;
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
+    s;
+    const value = deformatAnnonce(event.value as string, event.playerId);
+    console.log('annonce', value);
     storeGame.setLastAnnonce(value);
     return `${event.value} annonce ${value.annonce}`;
 }
 export function translateCoinche(event: EventShared) {
+    const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
     const value = event.value as IAnnonce;
     storeGame.setCoinched(true);
     return `${value} coinche`;
 }
 export function translateSurcoinche(event: EventShared) {
+    const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
     const value = event.value as IAnnonce;
     storeGame.setSurcoinched(true);
     return `${value} surcoinche`;
@@ -30,34 +44,79 @@ export function translatePass(event: EventShared) {
     return `${event.playerId} pass`;
 }
 
-export function translateJoin(event: EventShared) {
-    const { player, surname } = event.value;
+export async function translateJoin(event: EventShared) {
+    const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
+    if (storePlayers.players.find((player) => player.id === event.playerId)) {
+        console.log('Player already in the game');
+        return '';
+    } else {
+        const local: IPlayer = {
+            id: event.playerId,
+            surname: event.value as string,
+            position: storePlayers.players.length as PlayerPosition,
+            score: 0,
+            hands: [],
+            classement: 0,
+        };
+        storePlayers.addPlayer(local);
+        console.log('Addded player', local);
+        if (storePlayers.players.length === 4) {
+            storeGame.setStatus('active');
+            if (storeAbout.isCreator) {
+                const idPlayerStarting = storePlayers.players[0].id;
+                storeGame.setPlayerStartingId(idPlayerStarting);
+                await supabase.from('Events').insert([
+                    {
+                        id: await genIdCuid(),
+                        type: 'start_game',
+                        playerId: storeAbout.myId,
+                        gameId: storeAbout.gameId,
+                        value: idPlayerStarting, // value is the name of the player starting
+                    },
+                ]);
+            }
+        }
+    }
     return `${event.playerId} join`;
 }
 export function translateLeave(event: EventShared) {
-    const { player, surname } = event.value;
+    const storePlayers = usePlayersStore();
+    storePlayers.players = storePlayers.players.filter((player) => player.id !== event.playerId);
     return `${event.playerId} leave`;
 }
 
 export function translateStart(event: EventShared) {
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
+    console.log('start game', event);
     storeGame.setStatus('active');
+    storeAbout.setTimeToAnnonce(true);
     return `${event.value} start`;
 }
 export function translateEnd(event: EventShared) {
+    const storeGame = useGameStore();
     storeGame.setStatus('complete');
     return `${event.value} end`;
 }
 
 export function translateStartPli(event: EventShared) {
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
+    console.log('start pli', event);
+    storeAbout.setTimeToAnnonce(false);
+    // update the ui to show the pli empty
     storeGame.setNewPli();
     return `${event.value} start pli`;
 }
 export function translateEndPli(event: EventShared) {
+    const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
     storeGame.setCurrentPli([]);
-    storePlayers.addScore(storeGame.game.team1_point_current_pli, storePlayers.players[0].id);
-    storePlayers.addScore(storeGame.game.team1_point_current_pli, storePlayers.players[2].id);
-    storePlayers.addScore(storeGame.game.team2_point_current_pli, storePlayers.players[1].id);
-    storePlayers.addScore(storeGame.game.team2_point_current_pli, storePlayers.players[3].id);
+    storeGame.setTeam1Score(storeGame.game.team1_score + storeGame.game.team1_point_current_pli);
+    storeGame.setTeam2Score(storeGame.game.team2_score + storeGame.game.team2_point_current_pli);
     toast({
         title: 'Fin du pli',
         description: `Team 1: ${storeGame.game.team1_point_current_pli} points\nTeam 2: ${storeGame.game.team2_point_current_pli} points`,
@@ -80,7 +139,7 @@ export function translateDistribution(event: EventShared) {
     return `${event.value} distribution`;
 }
 
-export function translateEvent(event: EventShared) {
+export default function translateEvent(event: EventShared) {
     switch (event.type) {
         case 'annonce':
             return translateAnnonce(event);
@@ -97,9 +156,9 @@ export function translateEvent(event: EventShared) {
         case 'start_game':
             return translateStart(event);
         case 'end_pli':
-            return translateEnd(event);
+            return translateEndPli(event);
         case 'start_pli':
-            return translateStart(event);
+            return translateStartPli(event);
         case 'leave':
             return translateLeave(event);
         case 'join':
