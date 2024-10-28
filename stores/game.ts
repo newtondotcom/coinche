@@ -10,6 +10,9 @@ export const useGameStore = defineStore('game', () => {
         last_annonce: { suite: 'NA', annonce: 0, playerId: '0' },
         coinched: false,
         surcoinched: false,
+        player_starting_id: '0',
+        team1_score: 0,
+        team2_score: 0,
     });
 
     function setGame(newGame: IGame) {
@@ -48,6 +51,17 @@ export const useGameStore = defineStore('game', () => {
         game.value.team2_point_current_pli = 0;
     }
 
+    function setPlayerStartingId(playerId: PlayerId) {
+        game.value.player_starting_id = playerId;
+    }
+
+    function setTeam1Score(score: number) {
+        game.value.team1_score = score;
+    }
+    function setTeam2Score(score: number) {
+        game.value.team2_score = score;
+    }
+
     return {
         game,
         setGame,
@@ -58,5 +72,8 @@ export const useGameStore = defineStore('game', () => {
         setCoinched,
         setSurcoinched,
         setNewPli,
+        setPlayerStartingId,
+        setTeam1Score,
+        setTeam2Score,
     };
 });
