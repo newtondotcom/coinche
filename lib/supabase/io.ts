@@ -10,15 +10,65 @@ export async function join() {
     const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
     const gameId = storeAbout.gameId;
-    const { data, error } = await supabase.from('Events').select('*').eq('gameId', gameId);
-    if (data?.length == 0 && data?.length == storePlayers.players.length) {
-        // if no other players are present, we are the creator
+
+    // Check if there are any events for this gameId
+    const { data: existingEvents, error: selectError } = await supabase
+        .from('Events')
+        .select('*')
+        .eq('gameId', gameId)
+        .eq('type', 'join');
+
+    if (selectError) {
+        console.error('Error fetching events:', selectError);
+        return;
+    }
+
+    if (existingEvents?.length === 0) {
+        // If no other players are present, we are the creator
         storeAbout.setCreator(true);
         console.log('You are the creator');
-        // we will be automatically added to the store by the listener
+        // Automatic addition by listener expected
+    }
+
+    // Check if the current player is already registered in the game
+    const playerExists = existingEvents?.some((event) => event.playerId === storeAbout.myId);
+
+    if (playerExists) {
+        console.log('You are already registered in the database for this game');
     } else {
-        // if others players are present, we need to add them to the store
-        const otherPlayers = data.filter((event) => event.type == 'join');
+        // Insert new event to register this player
+        const { error: insertError } = await supabase.from('Events').insert([
+            {
+                id: await genIdCuid(),
+                type: 'join',
+                playerId: storeAbout.myId,
+                gameId: gameId,
+                value: storeAbout.mySurname,
+            },
+        ]);
+
+        if (insertError) {
+            console.error('Error inserting join event:', insertError);
+            return;
+        }
+    }
+
+    // Fetch events again to update player list
+    const { data: updatedEvents, error: updatedSelectError } = await supabase
+        .from('Events')
+        .select('*')
+        .eq('gameId', gameId)
+        .eq('type', 'join');
+
+    if (updatedSelectError) {
+        console.error('Error fetching updated events:', updatedSelectError);
+        return;
+    }
+
+    if (updatedEvents && updatedEvents.length !== storePlayers.players.length) {
+        const buildPlayers: IPlayer[] = [];
+        const otherPlayers = updatedEvents.filter((event) => event.type === 'join');
+
         otherPlayers.forEach((player, index) => {
             const local: IPlayer = {
                 id: player.playerId,
@@ -27,26 +77,14 @@ export async function join() {
                 hands: [],
                 classement: 0,
             };
-            storePlayers.addPlayer(local);
+            buildPlayers.push(local);
         });
-        console.log(otherPlayers);
-    }
-    // we need to add ourselves to the db
-    if (data?.some((event) => event.playerId == storeAbout.myId)) {
-        console.log('You are in the game');
-        return;
-    }
-    await supabase.from('Events').insert([
-        {
-            id: await genIdCuid(),
-            type: 'join',
-            playerId: storeAbout.myId,
-            gameId: gameId,
-            value: storeAbout.mySurname,
-        },
-    ]);
 
-    // we need to set the game status to active
+        storePlayers.setPlayers(buildPlayers);
+        console.log(`Game has ${storePlayers.players.length} players`);
+    }
+
+    // Set the game status to active
     storeGame.setStatus('new');
 }
 
@@ -57,15 +95,12 @@ export async function leave() {
     const gameId = storeAbout.gameId;
 
     // we need to add ourselves to the db
-    await supabase.from('Events').insert([
-        {
-            id: await genIdCuid(),
-            type: 'leave',
-            playerId: storeAbout.myId,
-            gameId: gameId,
-            value: storeAbout.mySurname,
-        },
-    ]);
+    await supabase
+        .from('Events')
+        .delete()
+        .eq('playerId', storeAbout.myId)
+        .eq('gameId', gameId)
+        .eq('type', 'join');
 
     //await supabase.from('Events').delete().not('id', 'is', null);
 }
