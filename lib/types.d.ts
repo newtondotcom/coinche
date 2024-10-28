@@ -21,7 +21,6 @@ interface IPlayer {
     id: PlayerId;
     surname: PlayerSurname;
     position: PlayerPosition;
-    score: number;
     hands: ICard[];
     classement: number;
 }
@@ -32,8 +31,11 @@ interface IGame {
     current_player_id: PlayerId;
     status: GameStatus;
     pli_number: number;
+    player_starting_id: PlayerId;
     team1_point_current_pli: number;
     team2_point_current_pli: number;
+    team1_score: number;
+    team2_score: number;
     last_annonce: IAnnonce;
     coinched: boolean;
     surcoinched: boolean;
@@ -64,5 +66,6 @@ interface EventShared {
     timestamp: number;
     playerId: PlayerId;
     type: EventType;
-    value: { player: PlayerId; surname: string } | ICard | IAnnonce;
+    value: string | ICard | IAnnonce;
+    gameId: string;
 }
