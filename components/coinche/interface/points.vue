@@ -8,7 +8,7 @@
                 <div class="flex items-center space-x-4">
                     <Avatar>
                         <AvatarFallback>
-                            {{ storeGame.game.team1_point_current_pli }}
+                            {{ storeGame.team1_point_current_pli }}
                         </AvatarFallback>
                     </Avatar>
                     <div>
@@ -27,7 +27,7 @@
                 <div class="flex items-center space-x-4">
                     <Avatar>
                         <AvatarFallback>
-                            {{ storeGame.game.team2_point_current_pli }}
+                            {{ storeGame.team2_point_current_pli }}
                         </AvatarFallback>
                     </Avatar>
                     <div>

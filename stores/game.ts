@@ -1,72 +1,75 @@
 export const useGameStore = defineStore('game', () => {
-    const game = ref<IGame>({
-        current_pli: [],
-        current_player_id: '',
-        current_player_position: 0,
-        status: 'new',
-        pli_number: 0,
-        team1_point_current_pli: 0,
-        team2_point_current_pli: 0,
-        last_annonce: { suite: 'NA', annonce: 0, playerId: '0' },
-        coinched: false,
-        surcoinched: false,
-        player_starting_id: '0',
-        team1_score: 0,
-        team2_score: 0,
-    });
-
-    function setGame(newGame: IGame) {
-        game.value = newGame;
-    }
+    const current_pli = ref<ICard[]>([]);
+    const current_player_id = ref<PlayerId>('');
+    const status = ref<GameStatus>('new');
+    const pli_number = ref<number>(0);
+    const team1_point_current_pli = ref<number>(0);
+    const team2_point_current_pli = ref<number>(0);
+    const last_annonce = ref<IAnnonce>({ suite: 'NA', annonce: 0, playerId: '0' });
+    const coinched = ref<boolean>(false);
+    const surcoinched = ref<boolean>(false);
+    const player_starting_id = ref<PlayerId>('0');
+    const team1_score = ref<number>(0);
+    const team2_score = ref<number>(0);
 
     function setCurrentPli(currentPli: ICard[]) {
-        game.value.current_pli = currentPli;
+        current_pli.value = currentPli;
     }
 
-    function setCurrentPlayerPosition(currentPlayerPosition: PlayerPosition, playerId: PlayerId) {
-        game.value.current_player_position = currentPlayerPosition;
-        game.value.current_player_id = playerId;
+    function setCurrentPlayerId(playerId: PlayerId) {
+        current_player_id.value = playerId;
     }
 
-    function setStatus(status: GameStatus) {
-        game.value.status = status;
+    function setStatus(newStatus: GameStatus) {
+        status.value = newStatus;
     }
 
     function setLastAnnonce(annonce: IAnnonce) {
-        game.value.last_annonce = annonce;
+        last_annonce.value = annonce;
     }
 
-    function setCoinched(coinched: boolean) {
-        game.value.coinched = coinched;
+    function setCoinched(newCoinched: boolean) {
+        coinched.value = newCoinched;
     }
 
-    function setSurcoinched(surcoinched: boolean) {
-        game.value.surcoinched = surcoinched;
+    function setSurcoinched(newSurcoinched: boolean) {
+        surcoinched.value = newSurcoinched;
     }
 
     function setNewPli() {
-        game.value.current_pli = [];
-        game.value.pli_number += 1;
-        game.value.team1_point_current_pli = 0;
-        game.value.team2_point_current_pli = 0;
+        current_pli.value = [];
+        pli_number.value += 1;
+        team1_point_current_pli.value = 0;
+        team2_point_current_pli.value = 0;
     }
 
     function setPlayerStartingId(playerId: PlayerId) {
-        game.value.player_starting_id = playerId;
+        player_starting_id.value = playerId;
     }
 
     function setTeam1Score(score: number) {
-        game.value.team1_score = score;
+        team1_score.value = score;
     }
+
     function setTeam2Score(score: number) {
-        game.value.team2_score = score;
+        team2_score.value = score;
     }
 
     return {
-        game,
-        setGame,
+        current_pli,
+        current_player_id,
+        status,
+        pli_number,
+        team1_point_current_pli,
+        team2_point_current_pli,
+        last_annonce,
+        coinched,
+        surcoinched,
+        player_starting_id,
+        team1_score,
+        team2_score,
         setCurrentPli,
-        setCurrentPlayerPosition,
+        setCurrentPlayerId,
         setStatus,
         setLastAnnonce,
         setCoinched,

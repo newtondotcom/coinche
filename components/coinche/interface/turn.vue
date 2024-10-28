@@ -64,5 +64,5 @@
     const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
 
-    const playerIdTurn = computed(() => storeGame.game.current_player_id);
+    const playerIdTurn = computed(() => storeGame.current_player_id);
 </script>

@@ -24,7 +24,7 @@ export function translateAnnonce(event: EventShared) {
         )?.surname;
         toast({
             title: 'Passe',
-            description: `${playerName} passe à ${storeGame.game.last_annonce.annonce} ${storeGame.game.last_annonce.suite}`,
+            description: `${playerName} passe à ${storeGame.last_annonce.annonce} ${storeGame.last_annonce.suite}`,
         });
         return `${event.value} annonce ${annonce.annonce}`;
     }
@@ -129,11 +129,11 @@ export function translateEndPli(event: EventShared) {
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
     storeGame.setCurrentPli([]);
-    storeGame.setTeam1Score(storeGame.game.team1_score + storeGame.game.team1_point_current_pli);
-    storeGame.setTeam2Score(storeGame.game.team2_score + storeGame.game.team2_point_current_pli);
+    storeGame.setTeam1Score(storeGame.team1_score + storeGame.team1_point_current_pli);
+    storeGame.setTeam2Score(storeGame.team2_score + storeGame.team2_point_current_pli);
     toast({
         title: 'Fin du pli',
-        description: `Team 1: ${storeGame.game.team1_point_current_pli} points\nTeam 2: ${storeGame.game.team2_point_current_pli} points`,
+        description: `Team 1: ${storeGame.team1_point_current_pli} points\nTeam 2: ${storeGame.team2_point_current_pli} points`,
     });
     return `${event.value} end pli`;
 }

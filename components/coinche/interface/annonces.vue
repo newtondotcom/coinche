@@ -6,18 +6,18 @@
                 <CardDescription>
                     Annonce actuelle
                     <Badge variant="secondary">
-                        {{ storeGame.game.last_annonce.annonce }}
-                        {{ storeGame.game.last_annonce.suite == 'diamonds' ? '♦️' : '' }}
-                        {{ storeGame.game.last_annonce.suite == 'hearts' ? '♥️' : '' }}
-                        {{ storeGame.game.last_annonce.suite == 'clubs' ? '♣️' : '' }}
-                        {{ storeGame.game.last_annonce.suite == 'spades' ? '♠️' : '' }}
-                        {{ storeGame.game.last_annonce.suite == 'tout-atout' ? 'TA' : '' }}
-                        {{ storeGame.game.last_annonce.suite == 'sans-atout' ? 'SA' : '' }}
+                        {{ storeGame.last_annonce.annonce }}
+                        {{ storeGame.last_annonce.suite == 'diamonds' ? '♦️' : '' }}
+                        {{ storeGame.last_annonce.suite == 'hearts' ? '♥️' : '' }}
+                        {{ storeGame.last_annonce.suite == 'clubs' ? '♣️' : '' }}
+                        {{ storeGame.last_annonce.suite == 'spades' ? '♠️' : '' }}
+                        {{ storeGame.last_annonce.suite == 'tout-atout' ? 'TA' : '' }}
+                        {{ storeGame.last_annonce.suite == 'sans-atout' ? 'SA' : '' }}
                     </Badge>
                     par
                     {{
                         storePlayers.players.find(
-                            (player: IPlayer) => player.id === storeGame.game.last_annonce.playerId,
+                            (player: IPlayer) => player.id === storeGame.last_annonce.playerId,
                         )?.surname
                     }}
                 </CardDescription>
@@ -77,16 +77,14 @@
     let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
     let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
 
-    let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.game.last_annonce));
-    let canSurcoincher = computed<boolean>(() =>
-        canSurcoincherAnnonce(storeGame.game.last_annonce),
-    );
+    let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.last_annonce));
+    let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.last_annonce));
 
-    let canAnnoncer = computed<boolean>(() => storeGame.game.current_player_id === storeAbout.myId);
+    let canAnnoncer = computed<boolean>(() => storeGame.current_player_id === storeAbout.myId);
     watch(canAnnoncer, () => {
         console.log(canAnnoncer.value);
     });
-    console.log(storeGame.game.current_player_id);
+    console.log(storeGame.current_player_id);
 
     let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
 
@@ -115,11 +113,11 @@
         );
         const partner = storePlayers.players[(myIndex + 2) % 4];
         const team_ids = [storeAbout.myId, partner.id];
-        return storeGame.game.coinched && team_ids.includes(annonce.playerId);
+        return storeGame.coinched && team_ids.includes(annonce.playerId);
     }
 
     function canAnnonceNumber(annonce: Annonce) {
-        return !(storeGame.game.last_annonce.annonce < annonce);
+        return !(storeGame.last_annonce.annonce < annonce);
     }
 
     async function passer() {

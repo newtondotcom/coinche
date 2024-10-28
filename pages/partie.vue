@@ -10,7 +10,7 @@
         <CoincheInterfaceTurn />
     </div>
 
-    <CoincheInterfaceSavedAnnonce v-if="storeGame.game.last_annonce.suite != 'NA'" />
+    <CoincheInterfaceSavedAnnonce v-if="storeGame.last_annonce.suite != 'NA'" />
 
     <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
 </template>

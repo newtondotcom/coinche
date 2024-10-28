@@ -7,21 +7,20 @@ export const useAboutStore = defineStore('about', () => {
     const isCreator = ref<boolean>(false);
     const timeToAnnonce = ref<boolean>(false);
 
-    const atout = computed(() => storeGame.game.last_annonce.suite);
+    const atout = computed(() => storeGame.last_annonce.suite);
 
     const hand: ICard[] = storePlayers.players.find((p) => p.id === myId.value)?.hands || [];
-    const pli: Ref<ICard[]> = computed(() => storeGame.game.current_pli);
+    const pli: Ref<ICard[]> = computed(() => storeGame.current_pli);
 
     const colorAsked: ComputedRef<CardSuite | undefined> = computed(() =>
-        storeGame.game.current_pli.length > 0 ? storeGame.game.current_pli[0].suite : undefined,
+        storeGame.current_pli.length > 0 ? storeGame.current_pli[0].suite : undefined,
     );
 
     const hasAtout: ComputedRef<boolean> = computed(
         () =>
             storePlayers.players
                 .find((player) => player.id == myId.value)
-                ?.hands.some((card: ICard) => card.suite === storeGame.game.last_annonce.suite) ||
-            false,
+                ?.hands.some((card: ICard) => card.suite === storeGame.last_annonce.suite) || false,
     );
 
     const hasAskedColor: ComputedRef<boolean> = computed(
@@ -32,14 +31,14 @@ export const useAboutStore = defineStore('about', () => {
     );
 
     const highestAtoutInPli: ComputedRef<number> = computed(() => {
-        const atoutsInPli = storeGame.game.current_pli.filter(
-            (c) => c.suite === storeGame.game.last_annonce.suite,
+        const atoutsInPli = storeGame.current_pli.filter(
+            (c) => c.suite === storeGame.last_annonce.suite,
         );
         if (atoutsInPli.length === 0) return NaN;
         return atoutsInPli.sort((a, b) => b.valueNum - a.valueNum)[0].valueNum;
     });
 
-    const atoutIsAsked = computed(() => colorAsked.value === storeGame.game.last_annonce.suite);
+    const atoutIsAsked = computed(() => colorAsked.value === storeGame.last_annonce.suite);
 
     function setMyId(id: string) {
         myId.value = id;
