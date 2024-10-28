@@ -29,9 +29,16 @@
     import { useToast } from '@/components/ui/toast/use-toast';
     import { generateRandomDeck } from '@/lib/utils/deck';
 
+    const storeAbout = useAboutStore();
+    const route = useRoute();
+    const id = route.query.id as string;
+    const surname = route.query.surname as string;
+    storeAbout.setMyId(id);
+    storeAbout.setMySurname(surname);
+
     const { toast } = useToast();
 
-    let hand = ref<ICard[]>(generateRandomDeck());
+    let hand = ref<ICard[]>([]);
     let pli = ref<ICard[]>([]);
 
     let annonceActuelle = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: 'NA' });
