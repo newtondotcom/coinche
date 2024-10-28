@@ -20,7 +20,15 @@
                     <div></div>
                     <div>
                         {{
-                            storePlayers.players.length > 0
+                            storePlayers.players.length > 3
+                                ? storePlayers.players[3].surname
+                                : 'en attente'
+                        }}
+                    </div>
+                    <div></div>
+                    <div>
+                        {{
+                            storePlayers.players.length > 1
                                 ? storePlayers.players[1].surname
                                 : 'en attente'
                         }}
@@ -28,16 +36,8 @@
                     <div></div>
                     <div>
                         {{
-                            storePlayers.players.length > 0
+                            storePlayers.players.length > 2
                                 ? storePlayers.players[2].surname
-                                : 'en attente'
-                        }}
-                    </div>
-                    <div></div>
-                    <div>
-                        {{
-                            storePlayers.players.length > 0
-                                ? storePlayers.players[3].surname
                                 : 'en attente'
                         }}
                     </div>
