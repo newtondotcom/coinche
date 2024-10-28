@@ -31,8 +31,6 @@
     import { maxCardHeight, maxCardWidth } from '@/lib/constants';
     import { cn } from '@/lib/utils';
 
-    interface Props {
-        pli: ICard[];
-    }
-    const props = defineProps<Props>();
+    const storeGame = useGameStore();
+    const pli: Ref<ICard[]> = computed(() => storeGame.game.current_pli);
 </script>
