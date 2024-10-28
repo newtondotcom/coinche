@@ -83,9 +83,23 @@ export async function join() {
         storePlayers.setPlayers(buildPlayers);
         console.log(`Game has ${storePlayers.players.length} players`);
     }
-
-    // Set the game status to active
-    storeGame.setStatus('new');
+    if (storePlayers.players.length === 4) {
+        // same logic as in listener for game_start
+        const { data, error } = await supabase
+            .from('Events')
+            .select('*')
+            .eq('gameId', gameId)
+            .eq('type', 'start_game');
+        const storeGame = useGameStore();
+        if (error) {
+            console.error('Game has not started:', error);
+            return;
+        }
+        const messageStarted = data[0];
+        storeGame.setStatus('active');
+        storeGame.setPlayerStartingId(messageStarted.value as string);
+        storeAbout.setTimeToAnnonce(true);
+    }
 }
 
 export async function leave() {
@@ -95,12 +109,14 @@ export async function leave() {
     const gameId = storeAbout.gameId;
 
     // we need to add ourselves to the db
+    /*
     await supabase
         .from('Events')
         .delete()
         .eq('playerId', storeAbout.myId)
         .eq('gameId', gameId)
         .eq('type', 'join');
+    */
 
     //await supabase.from('Events').delete().not('id', 'is', null);
 }
