@@ -23,11 +23,11 @@ interface IPlayer {
     position: PlayerPosition;
     hands: ICard[];
     classement: number;
+    last_annonce?: IAnnonce;
 }
 
 interface IGame {
     current_pli: ICard[];
-    current_player_position: PlayerPosition;
     current_player_id: PlayerId;
     status: GameStatus;
     pli_number: number;
