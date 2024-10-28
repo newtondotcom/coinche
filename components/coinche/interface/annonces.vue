@@ -82,9 +82,8 @@
 
     let canAnnoncer = computed<boolean>(() => storeGame.current_player_id === storeAbout.myId);
     watch(canAnnoncer, () => {
-        console.log(canAnnoncer.value);
+        console.log('canAnnoncer : ', canAnnoncer.value);
     });
-    console.log(storeGame.current_player_id);
 
     let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
 
@@ -104,7 +103,7 @@
             storePlayers.players[(myIndex + 3) % 4],
         ];
         const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
-        return adversaries_ids.includes(annonce.playerId);
+        return adversaries_ids.includes(annonce.playerId) && annonce.suite !== 'NA';
     }
 
     function canSurcoincherAnnonce(annonce: IAnnonce) {
