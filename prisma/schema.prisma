@@ -19,7 +19,9 @@ model Game {
 
 model Events {
   id         String   @id @default(cuid())
+  timestamp  DateTime @default(now())
   gameId     String
-  data       String
-  author     String
+  type       String
+  playerId     String
+  value     String
 }
