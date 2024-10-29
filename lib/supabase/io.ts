@@ -1,14 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
+import { deformatAnnonce, setNextPlayerTurn } from './annonce';
 import genIdCuid from './gen';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
 
 export async function join() {
-    const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
+    const storeGame = useGameStore();
     const gameId = storeAbout.gameId;
 
     // Check if there are any events for this gameId
@@ -90,9 +91,8 @@ export async function join() {
             .select('*')
             .eq('gameId', gameId)
             .eq('type', 'start_game');
-        const storeGame = useGameStore();
-        if (error) {
-            console.error('Game has not started:', error);
+        if (data?.length == 0) {
+            console.error('Game has not started');
             return;
         }
         const messageStarted = data[0];
@@ -100,6 +100,39 @@ export async function join() {
         storeGame.setCurrentPlayerId(messageStarted.value as PlayerId);
         storeGame.setPlayerStartingId(messageStarted.value as PlayerId);
         storeAbout.setTimeToAnnonce(true);
+
+        // check if announces have been made
+        const { data: annonces, error: annoncesError } = await supabase
+            .from('Events')
+            .select('*')
+            .eq('gameId', gameId)
+            .eq('type', 'annonce');
+        if (annoncesError) {
+            console.error('Error fetching annonces:', annoncesError);
+            return;
+        }
+        if (annonces.length > 0) {
+            // pli has started
+            annonces.forEach((annonce) => {
+                const annonceParsed: IAnnonce = deformatAnnonce(
+                    annonce.value as string,
+                    annonce.playerId,
+                );
+                if (!storeGame.annonces_pli.includes(annonceParsed)) {
+                    storeGame.addAnnonceToPli(annonceParsed);
+                    if (annonceParsed.annonce !== 0) {
+                        storeGame.setLastAnnonce(annonceParsed);
+                    }
+
+                    console.log('Added annonce to pli', annonceParsed);
+                }
+            });
+            const nextPlayerId = setNextPlayerTurn(annonces[annonces.length - 1].playerId);
+            storeGame.setCurrentPlayerId(nextPlayerId);
+            console.log('Setting current player id', nextPlayerId);
+        }
+
+        // check if pli has started
     }
 }
 
