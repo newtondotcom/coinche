@@ -20,6 +20,8 @@
                             (player: IPlayer) => player.id === storeGame.last_annonce.playerId,
                         )?.surname
                     }}
+                    <Badge v-if="storeGame.coinched">Coinché</Badge>
+                    <Badge v-if="storeGame.surcoinched">Coinché</Badge>
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -58,8 +60,8 @@
 
                     <div class="flex flex-col space-y-2 justify-center px-1 mx-1">
                         <Button @click="passer" :disabled="!canAnnoncer">Passer</Button>
-                        <Button :disabled="canCoincher">Coincher</Button>
-                        <Button :disabled="canSurcoincher">Surcoincher</Button>
+                        <Button :disabled="!canCoincher">Coincher</Button>
+                        <Button :disabled="!canSurcoincher">Surcoincher</Button>
                     </div>
                 </div>
             </CardContent>
@@ -77,13 +79,10 @@
     let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
     let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
 
-    let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.last_annonce));
-    let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.last_annonce));
+    let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.annonces_pli));
+    let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.annonces_pli));
 
     let canAnnoncer = computed<boolean>(() => storeGame.current_player_id === storeAbout.myId);
-    watch(canAnnoncer, () => {
-        console.log('canAnnoncer : ', canAnnoncer.value);
-    });
 
     let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
 
@@ -94,7 +93,18 @@
         }
     });
 
-    function canCoincherAnnonce(annonce: IAnnonce) {
+    function canCoincherAnnonce(annonces: IAnnonce[]) {
+        // If no annonce has been made, we can't coinche
+        if (annonces.length === 0) {
+            return false;
+        }
+        // If no accounce have been made othern than pass, we can't coinche
+        const announceDiffThanPass = annonces.filter((annonce: IAnnonce) => annonce.annonce !== 0);
+        if (announceDiffThanPass.length === 0) {
+            return false;
+        }
+        // Check if others announces have been made for opponents
+        const annonce = annonces[annonces.length - 1];
         const myIndex = storePlayers.players.findIndex(
             (player: IPlayer) => player.id === storeAbout.myId,
         );
@@ -103,16 +113,31 @@
             storePlayers.players[(myIndex + 3) % 4],
         ];
         const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
-        return adversaries_ids.includes(annonce.playerId) && annonce.suite !== 'NA';
+        return adversaries_ids.includes(annonce.playerId);
     }
 
-    function canSurcoincherAnnonce(annonce: IAnnonce) {
+    function canSurcoincherAnnonce(annonces: IAnnonce[]) {
+        // If no annonce has been made, we can't coinche
+        if (annonces.length === 0) {
+            return false;
+        }
+        // Check if the announce have been coinched
+        if (!storeGame.coinched) {
+            return false;
+        }
+        // If no accounce have been made othern than pass, we can't coinche
+        const announceDiffThanPass = annonces.filter((annonce: IAnnonce) => annonce.annonce !== 0);
+        if (announceDiffThanPass.length === 0) {
+            return false;
+        }
+        // Check if the announce coinched is from the partner
+        const annonce = annonces[annonces.length - 1];
         const myIndex = storePlayers.players.findIndex(
             (player: IPlayer) => player.id === storeAbout.myId,
         );
         const partner = storePlayers.players[(myIndex + 2) % 4];
         const team_ids = [storeAbout.myId, partner.id];
-        return storeGame.coinched && team_ids.includes(annonce.playerId);
+        return team_ids.includes(annonce.playerId);
     }
 
     function canAnnonceNumber(annonce: Annonce) {
