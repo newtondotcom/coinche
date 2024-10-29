@@ -9,7 +9,7 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 
 const { toast } = useToast();
 
-export function translateAnnonce(event: EventShared) {
+export async function translateAnnonce(event: EventShared) {
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
     const annonce = deformatAnnonce(event.value as string, event.playerId);
@@ -18,18 +18,21 @@ export function translateAnnonce(event: EventShared) {
         storePlayers.players.findIndex((player) => player.id === event.playerId) + 1;
     const nextPlayer = storePlayers.players[nextPlayerIndex % 4];
     storeGame.setCurrentPlayerId(nextPlayer.id);
+    const playerName = storePlayers.players.find((player) => player.id === event.playerId)?.surname;
     if (annonce.annonce === 0) {
-        const playerName = storePlayers.players.find(
-            (player) => player.id === event.playerId,
-        )?.surname;
         toast({
             title: 'Passe',
             description: `${playerName} passe à ${storeGame.last_annonce.annonce} ${storeGame.last_annonce.suite}`,
         });
-        return `${event.value} annonce ${annonce.annonce}`;
+    } else {
+        toast({
+            title: 'Annonce',
+            description: `${playerName} annonce ${annonce.annonce} ${annonce.suite}`,
+        });
+        storeGame.setLastAnnonce(annonce);
     }
-    storeGame.setLastAnnonce(annonce);
-    return `${event.value} annonce ${annonce}`;
+    storeGame.addAnnonceToPli(annonce);
+    return;
 }
 export function translateCoinche(event: EventShared) {
     const storePlayers = usePlayersStore();
@@ -115,13 +118,29 @@ export function translateEnd(event: EventShared) {
     return `${event.value} end`;
 }
 
-export function translateStartPli(event: EventShared) {
+export async function translateStartPli(event: EventShared) {
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
+    const { data, error } = await supabase
+        .from('Events')
+        .select('*')
+        .eq('gameId', storeAbout.gameId)
+        .eq('type', 'annonce');
+    if (error) {
+        console.error('Game has not started:', error);
+        return;
+    }
+    const lastAnnounceNotPassed = data.find((event) => event.value.annonce !== 0);
+    console.log('lastAnnounceNotPassed', lastAnnounceNotPassed);
+    const annonceChosen: IAnnonce = deformatAnnonce(
+        lastAnnounceNotPassed.value,
+        lastAnnounceNotPassed.playerId,
+    );
+    storeGame.setLastAnnonce(annonceChosen);
     console.log('start pli', event);
     storeAbout.setTimeToAnnonce(false);
-    // update the ui to show the pli empty
     storeGame.setNewPli();
+    // coinche and not coinched
     return `${event.value} start pli`;
 }
 export function translateEndPli(event: EventShared) {
