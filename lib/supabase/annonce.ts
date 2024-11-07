@@ -34,7 +34,7 @@ export default async function emitAnnonce(annonce: IAnnonce) {
                     type: 'start_pli',
                     playerId: storeAbout.myId,
                     gameId: storeAbout.gameId,
-                    value: storeGame.player_starting_id, // value is the name of the player starting the pli
+                    value: storeGame.player_starting_id, // value is the id of the player starting the pli
                 },
             ]);
             console.log('Starting pli because of 3 passes');
