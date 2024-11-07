@@ -7,6 +7,8 @@ export const useGameStore = defineStore('game', () => {
     const current_player_id = ref<PlayerId>('');
     const player_starting_id = ref<PlayerId>('0');
 
+    const deck = ref<ICard[]>([]);
+
     const status = ref<GameStatus>('new');
 
     const last_annonce = ref<IAnnonce>({ suite: 'NA', annonce: 0, playerId: '0' });
@@ -66,6 +68,10 @@ export const useGameStore = defineStore('game', () => {
         annonces_pli.value.push(annonce);
     }
 
+    function setDeck(deck: ICard[]) {
+        deck.value = deck;
+    }
+
     return {
         current_pli,
         current_player_id,
@@ -91,5 +97,7 @@ export const useGameStore = defineStore('game', () => {
         setTeam2Score,
         annonces_pli,
         addAnnonceToPli,
+        deck,
+        setDeck,
     };
 });
