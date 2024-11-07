@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 import { deformatAnnonce, setNextPlayerTurn } from './annonce';
+import { deformatCarteToDistribute } from './distribution';
 import genIdCuid from './gen';
 
 const config = useRuntimeConfig();
@@ -100,6 +101,33 @@ export async function join() {
         storeGame.setCurrentPlayerId(messageStarted.value as PlayerId);
         storeGame.setPlayerStartingId(messageStarted.value as PlayerId);
         storeAbout.setTimeToAnnonce(true);
+
+        // check if cards have been distributed for pli number 1
+        const { data: distributions, error: distributionsError } = await supabase
+            .from('Events')
+            .select('*')
+            .eq('gameId', gameId)
+            .eq('type', 'distribution');
+        if (distributionsError) {
+            console.error('Error fetching distributions:', distributionsError);
+            return;
+        }
+        const distributionsPli1 = distributions.filter(
+            (distribution) => deformatCarteToDistribute(distribution.value).pli_number === 1,
+        );
+        if (distributionsPli1.length === 32) {
+            storeGame.setNewPli();
+            console.log('Starting pli because of 3 passes');
+            distributionsPli1.forEach((distribution) => {
+                const card = deformatCarteToDistribute(distribution.value).card;
+                const player = storePlayers.players.find((p) => p.id === distribution.playerId);
+                if (player) {
+                    player.hands.push(card);
+                } else {
+                    console.error('Player not found');
+                }
+            });
+        }
 
         // check if announces have been made
         const { data: annonces, error: annoncesError } = await supabase
