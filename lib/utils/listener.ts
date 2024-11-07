@@ -3,6 +3,7 @@ import genIdCuid from '@/lib/supabase/gen';
 import { createClient } from '@supabase/supabase-js';
 
 import { deformatAnnonce } from '../supabase/annonce';
+import { deformatCarteToDistribute } from '../supabase/distribution';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -169,6 +170,17 @@ export function translateWinGame(event: EventShared) {
 }
 
 export function translateDistribution(event: EventShared) {
+    const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
+    const { pli_number, card } = deformatCarteToDistribute(event.value as string);
+    const player_id = event.playerId;
+    const player = storePlayers.players.find((p) => p.id === player_id);
+    if (player) {
+        player.hands.push(card);
+    } else {
+        console.error('Player not found');
+    }
+
     return `${event.value} distribution`;
 }
 
