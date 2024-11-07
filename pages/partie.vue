@@ -1,4 +1,5 @@
 <template>
+    <CoincheInterfaceDebug />
     <CoincheDeck :pressed="cardPressed" />
 
     <CoincheRiver />
