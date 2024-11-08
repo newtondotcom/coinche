@@ -17,6 +17,11 @@ interface IAnnonce {
     playerId: PlayerId;
 }
 
+interface IPlay {
+    card: ICard;
+    playerId: PlayerId;
+}
+
 interface IPlayer {
     id: PlayerId;
     surname: PlayerSurname;
