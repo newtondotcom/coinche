@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 import genIdCuid from './gen';
+import { startPli } from './pli';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -25,20 +26,9 @@ export default async function emitAnnonce(annonce: IAnnonce) {
         const annoncesPassed = storeGame.annonces_pli.filter((annonce) => annonce.annonce === 0);
         if (annoncesPassed.length === 2) {
             // only 2 because the current annonce is passed
-            storeGame.setNewPli();
-            storeGame.setCurrentPlayerId(storeGame.player_starting_id);
-            // launch game
-            await supabase.from('Events').insert([
-                {
-                    id: await genIdCuid(),
-                    type: 'start_pli',
-                    playerId: storeAbout.myId,
-                    gameId: storeAbout.gameId,
-                    value: storeGame.player_starting_id, // value is the id of the player starting the pli
-                },
-            ]);
+            await startPli();
             console.log('Starting pli because of 3 passes');
-            return 'Pli terminé';
+            return;
         } else {
             console.log(annoncesPassed.length, 'passes');
         }
