@@ -50,10 +50,11 @@ export function deformatAnnonce(annonce: string, playerId: string): IAnnonce {
 
 export function setNextPlayerTurn(playerId: string) {
     const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
     const currentPlayerIndex = storePlayers.players.findIndex(
         (player: IPlayer) => player.id === playerId,
     );
     const nextPlayerIndex = (currentPlayerIndex + 1) % storePlayers.players.length;
     const nextPlayerId = storePlayers.players[nextPlayerIndex].id;
-    return nextPlayerId;
+    storeGame.setCurrentPlayerId(nextPlayerId);
 }
