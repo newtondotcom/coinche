@@ -6,6 +6,7 @@ import { deformatAnnonce, setNextPlayerTurn } from '../supabase/annonce';
 import { deformatCarteToDistribute } from '../supabase/distribution';
 import { deformatTeam, fetchLastPliEvents, sumPointsPli } from '../supabase/pli';
 import { formatPoints, unformatPoints } from '../supabase/points';
+import { assertPliNumber } from './utils';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -69,19 +70,14 @@ function translateSurcoinche(event: EventShared) {
 }
 
 function translatePlay(event: EventShared) {
+    const storeGame = useGameStore();
     const def = deformatCarteToDistribute(event.value as string);
     const card = def.card;
     const pli_number = def.pli_number;
+    assertPliNumber(pli_number, storeGame.pli_number);
     const player_id = event.playerId;
-    const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
-    const storeAbout = useAboutStore();
-    storeGame.addCardToPli(card, player_id);
+    storeGame.addCardToPliAndRemove(card, player_id);
     setNextPlayerTurn(player_id);
-    return;
-}
-
-function translatePass(event: EventShared) {
     return;
 }
 
@@ -127,12 +123,23 @@ function translateLeave(event: EventShared) {
     return;
 }
 
-function translateStart(event: EventShared) {
+async function translateStart(event: EventShared) {
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
     // same logic applied in the io.ts file - to duplicate / refactor
     storeGame.setStatus('active');
     storeGame.setPlayerStartingId(event.value as string);
+    if (storeAbout.isCreator) {
+        await supabase.from('Events').insert([
+            {
+                id: await genIdCuid(),
+                type: 'start_distribution',
+                playerId: storeAbout.myId,
+                gameId: storeAbout.gameId,
+                value: 'idPlayerStarting',
+            },
+        ]);
+    }
     return;
 }
 function translateEnd(event: EventShared) {
@@ -237,49 +244,52 @@ async function translatePoints(event: EventShared) {
     return;
 }
 
-async function translateStartDistribution(event: EventShared) {}
+async function translateStartDistribution(event: EventShared) {
+    console.log('start distribution', event);
+    const storeAbout = useAboutStore();
+    storeAbout.setTimeDistrib(true);
+}
 
 async function translateEndDistribution(event: EventShared) {
     const storeAbout = useAboutStore();
+    storeAbout.setTimeDistrib(true);
     storeAbout.setTimeToAnnonce(true);
 }
 
-export default function translateEvent(event: EventShared) {
+export default async function translateEvent(event: EventShared) {
     switch (event.type) {
         case 'annonce':
-            return translateAnnonce(event);
+            return await translateAnnonce(event);
         case 'coinche':
-            return translateCoinche(event);
+            return await translateCoinche(event);
         case 'surcoinche':
-            return translateSurcoinche(event);
+            return await translateSurcoinche(event);
         case 'play':
-            return translatePlay(event);
-        case 'pass':
-            return translatePass(event);
+            return await translatePlay(event);
         case 'end_game':
-            return translateEnd(event);
+            return await translateEnd(event);
         case 'start_game':
-            return translateStart(event);
+            return await translateStart(event);
         case 'start_pli':
-            return translateStartPli(event);
+            return await translateStartPli(event);
         case 'leave':
-            return translateLeave(event);
+            return await translateLeave(event);
         case 'join':
-            return translateJoin(event);
+            return await translateJoin(event);
         case 'error':
-            return translateError(event);
+            return await translateError(event);
         case 'win_pli':
-            return translateWinPli(event);
+            return await translateWinPli(event);
         case 'win_game':
-            return translateWinGame(event);
+            return await translateWinGame(event);
         case 'distribution':
-            return translateDistribution(event);
+            return await translateDistribution(event);
         case 'score':
-            return translatePoints(event);
+            return await translatePoints(event);
         case 'start_distribution':
-            return translateStartDistribution(event);
-        case 'end_distribution':
-            return translateEndDistribution(event);
+            return await translateStartDistribution(event);
+        case 'start_annonce':
+            return await translateEndDistribution(event);
         default:
             return '';
     }
