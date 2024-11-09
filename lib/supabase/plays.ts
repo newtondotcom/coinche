@@ -10,11 +10,10 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 export async function emitCardPlay(card: ICard) {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
     await supabase.from('Events').insert([
         {
             id: await genIdCuid(),
-            type: 'score',
+            type: 'play',
             playerId: storeAbout.myId,
             gameId: storeAbout.gameId,
             value: formatCarteToDistribute(card, storeGame.pli_number),
