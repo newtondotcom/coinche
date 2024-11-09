@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { deformatAnnonce, setNextPlayerTurn } from './annonce';
 import { deformatCarteToDistribute } from './distribution';
 import genIdCuid from './gen';
+import { formatPoints } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -29,6 +30,28 @@ export async function join() {
         // If no other players are present, we are the creator
         storeAbout.setCreator(true);
         console.log('You are the creator');
+
+        // create the score record
+        const { data: existingEvents, error: selectError } = await supabase
+            .from('Events')
+            .select('*')
+            .eq('gameId', gameId)
+            .eq('type', 'score');
+        if (selectError) {
+            console.error('Error fetching events:', selectError);
+            return;
+        }
+        if (existingEvents?.length === 0) {
+            await supabase.from('Events').insert([
+                {
+                    id: await genIdCuid(),
+                    type: 'annonce',
+                    playerId: storeAbout.myId,
+                    gameId: gameId,
+                    value: formatPoints(0, 0),
+                },
+            ]);
+        }
         // Automatic addition by listener expected
     }
 
@@ -151,7 +174,6 @@ export async function join() {
                     if (annonceParsed.annonce !== 0) {
                         storeGame.setLastAnnonce(annonceParsed);
                     }
-
                     console.log('Added annonce to pli', annonceParsed);
                 }
             });
@@ -165,10 +187,7 @@ export async function join() {
 }
 
 export async function leave() {
-    const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
-    const gameId = storeAbout.gameId;
 
     // we need to add ourselves to the db
     /*
