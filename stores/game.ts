@@ -1,4 +1,5 @@
 export const useGameStore = defineStore('game', () => {
+    const storePlayers = usePlayersStore();
     const current_pli = ref<ICard[]>([]);
     const pli_number = ref<number>(0);
     const team1_point_current_pli = ref<number>(0);
@@ -16,8 +17,9 @@ export const useGameStore = defineStore('game', () => {
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
 
-    function setCurrentPli(currentPli: ICard[]) {
-        current_pli.value = currentPli;
+    function addCardToPli(card: ICard, playerId: PlayerId) {
+        current_pli.value.push(card);
+        storePlayers.removeCard(card, playerId);
     }
 
     function setCurrentPlayerId(playerId: PlayerId) {

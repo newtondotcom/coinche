@@ -47,8 +47,7 @@
         );
         if (selectedCardIndex !== -1) {
             const [selectedCard] = storeAbout.hand.splice(selectedCardIndex, 1);
-            const pli: ICard[] = [...storeAbout.pli, selectedCard];
-            storeGame.setCurrentPli(pli);
+            // update the pli using emitter
         }
         storeAbout.hand = storeAbout.hand.filter(
             (card: ICard) => card.suite !== suite || card.value !== value,

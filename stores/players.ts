@@ -1,10 +1,10 @@
 export const usePlayersStore = defineStore('players', () => {
     const players = ref<IPlayer[]>([]);
 
-    function setHands(hands: ICard[], playerId: string) {
+    function removeCard(card: ICard, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
         if (player) {
-            player.hands = hands;
+            player.hands = player.hands.filter((c) => c !== card);
         }
     }
 
@@ -37,5 +37,14 @@ export const usePlayersStore = defineStore('players', () => {
         players.value.filter((p) => p.position === 1 || p.position === 3),
     );
 
-    return { players, team1, team2, setHands, setPosition, addPlayer, setPlayers, setLastAnnonce };
+    return {
+        players,
+        team1,
+        team2,
+        removeCard,
+        setPosition,
+        addPlayer,
+        setPlayers,
+        setLastAnnonce,
+    };
 });
