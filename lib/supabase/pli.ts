@@ -9,7 +9,6 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 
 export async function closePli() {
     const storeAbout = useAboutStore();
-    const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
 
     // find the winner
@@ -28,11 +27,6 @@ export async function closePli() {
             value: formatTeam(storeAbout.myId, teamMatePlayerId),
         },
     ]);
-
-    // update scores
-    const scoreTeam1 = storeGame.team1_score + storeGame.team1_point_current_pli;
-    const scoreTeam2 = storeGame.team2_score + storeGame.team2_point_current_pli;
-    emitPoints(scoreTeam1, scoreTeam2);
     return;
 }
 

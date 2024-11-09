@@ -3,22 +3,18 @@ export const useGameStore = defineStore('game', () => {
     const pli_number = ref<number>(0);
     const team1_point_current_pli = ref<number>(0);
     const team2_point_current_pli = ref<number>(0);
-
-    const current_player_id = ref<PlayerId>('');
-    const player_starting_id = ref<PlayerId>('0');
-
-    const deck = ref<ICard[]>([]);
-
-    const status = ref<GameStatus>('new');
-
     const last_annonce = ref<IAnnonce>({ suite: 'NA', annonce: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
+    const deck = ref<ICard[]>([]);
+    const annonces_pli = ref<IAnnonce[]>([]);
+    const current_player_id = ref<PlayerId>('');
+    const player_starting_id = ref<PlayerId>('0');
+
+    const status = ref<GameStatus>('new');
 
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
-
-    const annonces_pli = ref<IAnnonce[]>([]);
 
     function setCurrentPli(currentPli: ICard[]) {
         current_pli.value = currentPli;
@@ -45,10 +41,15 @@ export const useGameStore = defineStore('game', () => {
     }
 
     function setNewPli() {
+        coinched.value = false;
+        surcoinched.value = false;
         current_pli.value = [];
         pli_number.value += 1;
         team1_point_current_pli.value = 0;
         team2_point_current_pli.value = 0;
+        annonces_pli.value = [];
+        deck.value = [];
+        last_annonce.value = { suite: 'NA', annonce: 0, playerId: '0' };
     }
 
     function setPlayerStartingId(playerId: PlayerId) {
