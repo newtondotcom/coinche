@@ -228,15 +228,13 @@ async function translateWinGame(event: EventShared) {
     const sum2 = pointsTeam2.reduce((a, b) => a + b, 0);
     const annonceMade = storeGame.last_annonce;
     const playerId = annonceMade.playerId;
-    const teamPlayerAnnounce = storePlayers.team1.find((player) => player.id === playerId);
-    const teamNumber = teamPlayerAnnounce ? 1 : 2;
+    const teamPlayerAnnounce = storePlayers.team1.find((player) => player.id === playerId) ? 1 : 2;
     if (annonceMade.annonce == 'capot') {
     }
     if (annonceMade.annonce == 'generale') {
     }
-    if (teamNumber === 1) {
+    if (teamPlayerAnnounce === 1) {
         if (sum1 > annonceMade.annonce) {
-          if (teamNumber === )
             // annonce validée
             // =+ points * pointsMultiplier
         } else {
@@ -244,10 +242,10 @@ async function translateWinGame(event: EventShared) {
         }
     } else {
     }
-    await emitPoints(scoreTeam1, scoreTeam2);
+    await emitPoints(sum1, sum2);
     toast({
         title: 'Fin de partie',
-        description: `Equipe 1: ${scoreDuringGame1} points marqués\nEquipe 2: ${scoreDuringGame2} points marqués`,
+        description: `Equipe 1: ${sum1} points marqués\nEquipe 2: ${sum2} points marqués`,
     });
     // shift the player starting and cut the deck
     await supabase.from('Events').insert([
