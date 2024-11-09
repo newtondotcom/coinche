@@ -54,6 +54,8 @@ type EventType =
     | 'pass'
     | 'end_pli'
     | 'start_pli'
+    | 'start_distribution'
+    | 'end_distribution'
     | 'start_game'
     | 'end_game'
     | 'pause'
@@ -63,6 +65,7 @@ type EventType =
     | 'error'
     | 'win_pli'
     | 'win_game'
+    | 'score'
     | 'distribution';
 type GameStatus = 'new' | 'paused' | 'active' | 'complete';
 
