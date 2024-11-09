@@ -141,8 +141,6 @@ async function translateStartPli(event: EventShared) {
     storeGame.setLastAnnonce(annonceChosen);
     console.log('start pli', event);
     storeAbout.setTimeToAnnonce(false);
-    storeGame.setNewPli();
-    // coinche and not coinched
     return;
 }
 
@@ -157,32 +155,37 @@ async function translateWinPli(event: EventShared) {
     const teamWinning: string[] = deformatTeam(event.value as string);
     const pastPlis: IPlay[] = await fetchLastPliEvents();
     const points: number = sumPointsPli(pastPlis);
+    const pointsMultiplier = storeGame.coinched ? 2 : storeGame.surcoinched ? 4 : 1;
     const teamWinningNumber = storePlayers.team1.find((player) => player.id === teamWinning[0])
         ? 1
         : 2;
-    const scoreTeam1CurrentPli = teamWinningNumber === 1 ? points : 0;
-    const scoreTeam2CurrentPli = teamWinningNumber === 2 ? points : 0;
-    // coinche and surcoinche
+    const scoreTeam1CurrentPli = teamWinningNumber === 1 ? points * pointsMultiplier : 0;
+    const scoreTeam2CurrentPli = teamWinningNumber === 2 ? points * pointsMultiplier : 0;
     const scoreTeam1Global = storeGame.team1_score + scoreTeam1CurrentPli;
     const scoreTeam2Global = storeGame.team2_score + scoreTeam2CurrentPli;
     await supabase.from('Events').insert([
         {
             id: await genIdCuid(),
-            type: 'annonce',
+            type: 'score',
             playerId: storeAbout.myId,
             gameId: storeAbout.gameId,
             value: formatPoints(scoreTeam1Global, scoreTeam2Global),
         },
     ]);
-    storeGame.setCurrentPli([]);
+    storeGame.setNewPli();
     toast({
         title: 'Fin du pli',
-        description: `Team 1: ${storeGame.team1_point_current_pli} points\nTeam 2: ${storeGame.team2_point_current_pli} points`,
+        description: `Equipe 1: ${storeGame.team1_point_current_pli} points\nEquipe 2: ${storeGame.team2_point_current_pli} points`,
     });
     return;
 }
 
 function translateWinGame(event: EventShared) {
+    const storeGame = useGameStore();
+    toast({
+        title: 'Fin de partie',
+        description: `Equipe 1: ${storeGame.team1_point_current_pli} points\nEquipe 2: ${storeGame.team2_point_current_pli} points`,
+    });
     return;
 }
 
