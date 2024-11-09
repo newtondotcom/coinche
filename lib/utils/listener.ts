@@ -3,9 +3,10 @@ import genIdCuid from '@/lib/supabase/gen';
 import { createClient } from '@supabase/supabase-js';
 
 import { deformatAnnonce, setNextPlayerTurn } from '../supabase/annonce';
-import { deformatCarteToDistribute } from '../supabase/distribution';
+import emitDistribution, { deformatCarteToDistribute } from '../supabase/distribution';
 import { deformatTeam, fetchLastPliEvents, sumPointsPli } from '../supabase/pli';
 import { formatPoints, unformatPoints } from '../supabase/points';
+import { generateDeckCards } from './deck';
 import { assertPliNumber } from './utils';
 
 const config = useRuntimeConfig();
@@ -139,7 +140,12 @@ async function translateStart(event: EventShared) {
                 value: 'idPlayerStarting',
             },
         ]);
+        storeGame.setDeck(generateDeckCards());
+        await emitDistribution(storeAbout.myId);
     }
+    toast({
+        title: 'Game has started',
+    });
     return;
 }
 function translateEnd(event: EventShared) {
@@ -168,6 +174,7 @@ async function translateStartPli(event: EventShared) {
     );
     storeGame.setLastAnnonce(annonceChosen);
     console.log('start pli', event);
+    // set cards value to atout
     storeAbout.setTimeToAnnonce(false);
     return;
 }
@@ -232,7 +239,6 @@ function translateDistribution(event: EventShared) {
     } else {
         console.error('Player not found');
     }
-
     return;
 }
 
@@ -251,8 +257,9 @@ async function translateStartDistribution(event: EventShared) {
 }
 
 async function translateEndDistribution(event: EventShared) {
+    console.log('end distribution', event);
     const storeAbout = useAboutStore();
-    storeAbout.setTimeDistrib(true);
+    storeAbout.setTimeDistrib(false);
     storeAbout.setTimeToAnnonce(true);
 }
 
