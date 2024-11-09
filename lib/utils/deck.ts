@@ -1,6 +1,19 @@
 const values: CardValue[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
-const valuesNum: number[] = [0, 0, 0, 2, 3, 4, 10, 11];
 const suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades'];
+
+export function generateDeckCards(): ICard[] {
+    const cards: ICard[] = [];
+    suites.forEach((s) => {
+        values.forEach((i) => {
+            cards.push({
+                value: i,
+                valueNum: 0,
+                suite: s,
+            });
+        });
+    });
+    return cards;
+}
 
 export function generateRandomDeck(): ICard[] {
     const deck: ICard[] = [];
