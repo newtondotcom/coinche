@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import { deformatCarteToDistribute } from './distribution';
 import genIdCuid from './gen';
+import { emitPoints } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -17,8 +18,7 @@ export async function closePli() {
     const myIndex = storePlayers.players.findIndex(
         (player: IPlayer) => player.id === winnerPlayerId,
     );
-    const partner = storePlayers.players[(myIndex + 2) % 4];
-    const teamMatePlayerId = partner.id;
+    const teamMatePlayerId = storePlayers.players[(myIndex + 2) % 4].id;
     await supabase.from('Events').insert([
         {
             id: await genIdCuid(),
@@ -28,6 +28,11 @@ export async function closePli() {
             value: formatTeam(storeAbout.myId, teamMatePlayerId),
         },
     ]);
+
+    // update scores
+    const scoreTeam1 = storeGame.team1_score + storeGame.team1_point_current_pli;
+    const scoreTeam2 = storeGame.team2_score + storeGame.team2_point_current_pli;
+    emitPoints(scoreTeam1, scoreTeam2);
     return;
 }
 
@@ -86,7 +91,6 @@ export function deformatTeam(team: string): string[] {
 export async function fetchLastPliEvents(): Promise<IPlay[]> {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
-    // fetch all the pli events
     const { data: existingEvents, error: selectError } = await supabase
         .from('Events')
         .select('*')
@@ -96,7 +100,6 @@ export async function fetchLastPliEvents(): Promise<IPlay[]> {
         console.error('Error fetching events', selectError);
         return [];
     }
-    // fetch the last pli event
     const lastPliId = storeGame.pli_number;
     const lastPliEvents = existingEvents.filter(
         (event) => deformatCarteToDistribute(event.value).pli_number === lastPliId,
