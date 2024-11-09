@@ -7,25 +7,40 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 
 export default async function emitDistribution(id_player_starting: PlayerId) {
     const storePlayers = usePlayersStore();
+    const storeAbout = useAboutStore();
 
     // distribute cards 3 per person, then 2, then 3
     const players = storePlayers.players;
+    const startIndex = players.findIndex((player) => player.id === id_player_starting);
+    if (startIndex === -1) {
+        console.error('Player with the given id_player_starting not found');
+    }
+    const shiftedPlayers = [...players.slice(startIndex), ...players.slice(0, startIndex)];
 
     for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < players.length; j++) {
-            distributeCard(players[j].id);
+        for (let j = 0; j < shiftedPlayers.length; j++) {
+            distributeCard(shiftedPlayers[j].id);
         }
     }
     for (let i = 0; i < 2; i++) {
-        for (let j = 0; j < players.length; j++) {
-            distributeCard(players[j].id);
+        for (let j = 0; j < shiftedPlayers.length; j++) {
+            distributeCard(shiftedPlayers[j].id);
         }
     }
     for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < players.length; j++) {
-            distributeCard(players[j].id);
+        for (let j = 0; j < shiftedPlayers.length; j++) {
+            distributeCard(shiftedPlayers[j].id);
         }
     }
+    await supabase.from('Events').insert([
+        {
+            id: await genIdCuid(),
+            type: 'start_annonce',
+            playerId: storeAbout.myId,
+            gameId: storeAbout.gameId,
+            value: '',
+        },
+    ]);
 }
 
 async function distributeCard(player_id: string) {
@@ -46,6 +61,7 @@ async function distributeCard(player_id: string) {
     const player = storePlayers.players.find((p) => p.id === player_id);
     if (player) {
         player.hands.push(card);
+        console.log('Card distributed to player', player_id);
     } else {
         console.error('Player not found');
     }
