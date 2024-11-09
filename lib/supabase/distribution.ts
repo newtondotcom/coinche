@@ -19,17 +19,17 @@ export default async function emitDistribution(id_player_starting: PlayerId) {
 
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < shiftedPlayers.length; j++) {
-            distributeCard(shiftedPlayers[j].id);
+            await distributeCard(shiftedPlayers[j].id);
         }
     }
     for (let i = 0; i < 2; i++) {
         for (let j = 0; j < shiftedPlayers.length; j++) {
-            distributeCard(shiftedPlayers[j].id);
+            await distributeCard(shiftedPlayers[j].id);
         }
     }
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < shiftedPlayers.length; j++) {
-            distributeCard(shiftedPlayers[j].id);
+            await distributeCard(shiftedPlayers[j].id);
         }
     }
     await supabase.from('Events').insert([
@@ -53,7 +53,7 @@ async function distributeCard(player_id: string) {
         {
             id: await genIdCuid(),
             type: 'distribution',
-            playerId: storeAbout.myId,
+            playerId: player_id,
             gameId: storeAbout.gameId,
             value: formatCarteToDistribute(card, storeGame.pli_number),
         },
