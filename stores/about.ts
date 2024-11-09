@@ -10,7 +10,9 @@ export const useAboutStore = defineStore('about', () => {
 
     const atout = computed(() => storeGame.last_annonce.suite);
 
-    const hand: ICard[] = storePlayers.players.find((p) => p.id === myId.value)?.hands || [];
+    const hand: ComputedRef<ICard[]> = computed(
+        () => storePlayers.players.find((p) => p.id === myId.value)?.hands || [],
+    );
     const pli: Ref<ICard[]> = computed(() => storeGame.current_pli);
 
     const colorAsked: ComputedRef<CardSuite | undefined> = computed(() =>
