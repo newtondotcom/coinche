@@ -2,7 +2,7 @@ import { useToast } from '@/components/ui/toast/use-toast';
 import genIdCuid from '@/lib/supabase/gen';
 import { createClient } from '@supabase/supabase-js';
 
-import { deformatAnnonce } from '../supabase/annonce';
+import { deformatAnnonce, setNextPlayerTurn } from '../supabase/annonce';
 import { deformatCarteToDistribute } from '../supabase/distribution';
 import { deformatTeam, fetchLastPliEvents, sumPointsPli } from '../supabase/pli';
 import { formatPoints, unformatPoints } from '../supabase/points';
@@ -55,7 +55,15 @@ function translateSurcoinche(event: EventShared) {
 }
 
 function translatePlay(event: EventShared) {
-    const value = event.value as ICard;
+    const def = deformatCarteToDistribute(event.value as string);
+    const card = def.card;
+    const pli_number = def.pli_number;
+    const player_id = event.playerId;
+    const storeGame = useGameStore();
+    const storePlayers = usePlayersStore();
+    const storeAbout = useAboutStore();
+    storeGame.addCardToPli(card, player_id);
+    setNextPlayerTurn(player_id);
     return;
 }
 
@@ -111,7 +119,6 @@ function translateStart(event: EventShared) {
     // same logic applied in the io.ts file - to duplicate / refactor
     storeGame.setStatus('active');
     storeGame.setPlayerStartingId(event.value as string);
-    storeAbout.setTimeToAnnonce(true);
     return;
 }
 function translateEnd(event: EventShared) {
@@ -219,7 +226,6 @@ async function translatePoints(event: EventShared) {
 async function translateStartDistribution(event: EventShared) {}
 
 async function translateEndDistribution(event: EventShared) {
-    const storeGame = useGameStore();
     const storeAbout = useAboutStore();
     storeAbout.setTimeToAnnonce(true);
 }

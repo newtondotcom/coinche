@@ -31,7 +31,7 @@ export async function join() {
         storeAbout.setCreator(true);
         console.log('You are the creator');
 
-        // create the score record
+        // create or update the score record
         const { data: existingEvents, error: selectError } = await supabase
             .from('Events')
             .select('*')
