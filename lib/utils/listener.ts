@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import { deformatAnnonce } from '../supabase/annonce';
 import { deformatCarteToDistribute } from '../supabase/distribution';
+import { deformatTeam, fetchLastPliEvents, sumPointsPli } from '../supabase/pli';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -162,8 +163,17 @@ export function translateError(event: EventShared) {
     return `${event.value} error`;
 }
 
-export function translateWinPli(event: EventShared) {
-    return `${event.value} win pli`;
+export async function translateWinPli(event: EventShared) {
+    const storeGame = useGameStore();
+    const storePlayers = usePlayersStore();
+    const teamWinning: string[] = deformatTeam(event.value);
+    const pastPlis: IPlay[] = await fetchLastPliEvents();
+    const points: number = sumPointsPli(pastPlis);
+    const teamWinningNumber = storePlayers.team1.find((player) => player.id === teamWinning[0])
+        ? 1
+        : 2;
+
+    return;
 }
 export function translateWinGame(event: EventShared) {
     return `${event.value} win game`;
