@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 import { deformatCarteToDistribute } from './distribution';
 import genIdCuid from './gen';
-import { emitPoints } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
