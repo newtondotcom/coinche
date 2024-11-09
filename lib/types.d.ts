@@ -55,7 +55,7 @@ type EventType =
     | 'end_pli'
     | 'start_pli'
     | 'start_distribution'
-    | 'end_distribution'
+    | 'start_annonce'
     | 'start_game'
     | 'end_game'
     | 'pause'
