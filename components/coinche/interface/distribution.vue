@@ -1,5 +1,8 @@
 <template>
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div
+        v-if="storeAbout.timeDistrib"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+    >
         <Card>
             <CardHeader>
                 <CardTitle>Distribution</CardTitle>
@@ -14,4 +17,6 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    const storeAbout = useStoreAbout();
+</script>
