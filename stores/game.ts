@@ -20,6 +20,7 @@ export const useGameStore = defineStore('game', () => {
     function addCardToPliAndRemove(card: ICard, playerId: PlayerId) {
         current_pli.value.push(card);
         storePlayers.removeCard(card, playerId);
+        deck.value.push(card);
     }
 
     function setCurrentPlayerId(playerId: PlayerId) {
@@ -71,8 +72,8 @@ export const useGameStore = defineStore('game', () => {
         annonces_pli.value.push(annonce);
     }
 
-    function setDeck(deck: ICard[]) {
-        deck.value = deck;
+    function setDeck(deckf: ICard[]) {
+        deck.value = deckf;
     }
 
     return {
