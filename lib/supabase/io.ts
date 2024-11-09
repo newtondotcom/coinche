@@ -123,8 +123,8 @@ export async function join() {
         storeGame.setStatus('active');
         storeGame.setCurrentPlayerId(messageStarted.value as PlayerId);
         storeGame.setPlayerStartingId(messageStarted.value as PlayerId);
-        storeAbout.setTimeToAnnonce(true);
 
+        /*
         // check if cards have been distributed for pli number 1
         const { data: distributions, error: distributionsError } = await supabase
             .from('Events')
@@ -183,6 +183,7 @@ export async function join() {
         }
 
         // check if pli has started
+        // */
     }
 }
 

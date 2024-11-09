@@ -17,7 +17,7 @@ export const useGameStore = defineStore('game', () => {
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
 
-    function addCardToPli(card: ICard, playerId: PlayerId) {
+    function addCardToPliAndRemove(card: ICard, playerId: PlayerId) {
         current_pli.value.push(card);
         storePlayers.removeCard(card, playerId);
     }
@@ -88,7 +88,7 @@ export const useGameStore = defineStore('game', () => {
         player_starting_id,
         team1_score,
         team2_score,
-        setCurrentPli,
+        addCardToPliAndRemove,
         setCurrentPlayerId,
         setStatus,
         setLastAnnonce,
