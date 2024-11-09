@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { deformatAnnonce, setNextPlayerTurn } from '../supabase/annonce';
 import emitDistribution, { deformatCarteToDistribute } from '../supabase/distribution';
 import { deformatTeam, fetchLastPliEvents, sumPointsPli } from '../supabase/pli';
-import { formatPoints, unformatPoints } from '../supabase/points';
+import { emitPoints, formatPoints, unformatPoints, unformatPointsPli } from '../supabase/points';
 import { generateDeckCards } from './deck';
 import { assertPliNumber } from './utils';
 
@@ -185,28 +185,19 @@ function translateError(event: EventShared) {
 
 async function translateWinPli(event: EventShared) {
     const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
     const storePlayers = usePlayersStore();
     const teamWinning: string[] = deformatTeam(event.value as string);
     const pastPlis: IPlay[] = await fetchLastPliEvents();
     const points: number = sumPointsPli(pastPlis);
-    const pointsMultiplier = storeGame.coinched ? 2 : storeGame.surcoinched ? 4 : 1;
-    const teamWinningNumber = storePlayers.team1.find((player) => player.id === teamWinning[0])
+    const teamWinningNumber = storePlayers.team1.find(
+        (player) => player.id === teamWinning[0] || player.id === teamWinning[1],
+    )
         ? 1
         : 2;
-    const scoreTeam1CurrentPli = teamWinningNumber === 1 ? points * pointsMultiplier : 0;
-    const scoreTeam2CurrentPli = teamWinningNumber === 2 ? points * pointsMultiplier : 0;
-    const scoreTeam1Global = storeGame.team1_score + scoreTeam1CurrentPli;
-    const scoreTeam2Global = storeGame.team2_score + scoreTeam2CurrentPli;
-    await supabase.from('Events').insert([
-        {
-            id: await genIdCuid(),
-            type: 'score',
-            playerId: storeAbout.myId,
-            gameId: storeAbout.gameId,
-            value: formatPoints(scoreTeam1Global, scoreTeam2Global),
-        },
-    ]);
+    const scoreTeam1CurrentPli = teamWinningNumber === 1 ? points : 0;
+    const scoreTeam2CurrentPli = teamWinningNumber === 2 ? points : 0;
+    storeGame.setTeam1Score(storeGame.team1_score + scoreTeam1CurrentPli);
+    storeGame.setTeam2Score(storeGame.team2_score + scoreTeam2CurrentPli);
     storeGame.setNewPli();
     toast({
         title: 'Fin du pli',
@@ -215,12 +206,59 @@ async function translateWinPli(event: EventShared) {
     return;
 }
 
-function translateWinGame(event: EventShared) {
+async function translateWinGame(event: EventShared) {
     const storeGame = useGameStore();
+    const storeAbout = useAboutStore();
+    const storePlayers = usePlayersStore();
+    const pointsMultiplier = storeGame.coinched ? 2 : storeGame.surcoinched ? 4 : 1;
+    const { data, error } = await supabase
+        .from('Events')
+        .select('*')
+        .eq('gameId', storeAbout.gameId)
+        .eq('type', 'score_pli');
+    if (error) {
+        console.error('Game has not started:', error);
+        return;
+    }
+    const scoreTeam1 = data.filter((event) => unformatPointsPli(event.value)[0] === 1);
+    const pointsTeam1 = scoreTeam1.map((event) => unformatPointsPli(event.value)[1]);
+    const sum1 = pointsTeam1.reduce((a, b) => a + b, 0);
+    const scoreTeam2 = data.filter((event) => unformatPointsPli(event.value)[0] === 2);
+    const pointsTeam2 = scoreTeam2.map((event) => unformatPointsPli(event.value)[1]);
+    const sum2 = pointsTeam2.reduce((a, b) => a + b, 0);
+    const annonceMade = storeGame.last_annonce;
+    const playerId = annonceMade.playerId;
+    const teamPlayerAnnounce = storePlayers.team1.find((player) => player.id === playerId);
+    const teamNumber = teamPlayerAnnounce ? 1 : 2;
+    if (annonceMade.annonce == 'capot') {
+    }
+    if (annonceMade.annonce == 'generale') {
+    }
+    if (teamNumber === 1) {
+        if (sum1 > annonceMade.annonce) {
+          if (teamNumber === )
+            // annonce validée
+            // =+ points * pointsMultiplier
+        } else {
+            // annonce non validée
+        }
+    } else {
+    }
+    await emitPoints(scoreTeam1, scoreTeam2);
     toast({
         title: 'Fin de partie',
-        description: `Equipe 1: ${storeGame.team1_point_current_pli} points\nEquipe 2: ${storeGame.team2_point_current_pli} points`,
+        description: `Equipe 1: ${scoreDuringGame1} points marqués\nEquipe 2: ${scoreDuringGame2} points marqués`,
     });
+    // shift the player starting and cut the deck
+    await supabase.from('Events').insert([
+        {
+            id: await genIdCuid(),
+            type: 'start_distribution',
+            playerId: storeAbout.myId,
+            gameId: storeAbout.gameId,
+            value: formatPoints(scoreDuringGame1, scoreDuringGame2),
+        },
+    ]);
     return;
 }
 
@@ -249,6 +287,8 @@ async function translatePoints(event: EventShared) {
     storeGame.setTeam2Score(scoreTeam2);
     return;
 }
+
+async function translatePointsPli(event: EventShared) {}
 
 async function translateStartDistribution(event: EventShared) {
     console.log('start distribution', event);
@@ -293,6 +333,8 @@ export default async function translateEvent(event: EventShared) {
             return await translateDistribution(event);
         case 'score':
             return await translatePoints(event);
+        case 'score_pli':
+            return await translatePointsPli(event);
         case 'start_distribution':
             return await translateStartDistribution(event);
         case 'start_annonce':

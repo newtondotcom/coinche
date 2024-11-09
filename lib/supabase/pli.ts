@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import { deformatCarteToDistribute } from './distribution';
 import genIdCuid from './gen';
+import { emitPointsPli } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -26,6 +27,9 @@ export async function closePli() {
             value: formatTeam(storeAbout.myId, teamMatePlayerId),
         },
     ]);
+    const score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
+    const teamWinning = myIndex % 2;
+    await emitPointsPli(teamWinning, score);
     return;
 }
 
@@ -74,11 +78,12 @@ function findWinner(lastPliEvents: IPlay[]) {
 }
 
 export function formatTeam(player1: string, player2: string): string {
-    return [player1, player2].sort().join('-');
+    return `${player1}|${player2}`;
 }
 
-export function deformatTeam(team: string): string[] {
-    return team.split('-');
+export function deformatTeam(team: string): [string, string] {
+    const [player1, player2] = team.split('|');
+    return [player1, player2];
 }
 
 export async function fetchLastPliEvents(): Promise<IPlay[]> {
