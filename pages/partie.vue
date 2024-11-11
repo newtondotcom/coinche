@@ -17,12 +17,9 @@
 </template>
 
 <script setup lang="ts">
-    import { useToast } from '@/components/ui/toast/use-toast';
     import { join, leave } from '@/lib/supabase/io';
     import translateEvent from '@/lib/utils/listener';
     import { createClient } from '@supabase/supabase-js';
-
-    const { toast } = useToast();
 
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();

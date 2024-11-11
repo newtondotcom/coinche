@@ -22,15 +22,15 @@ async function translateAnnonce(event: EventShared) {
     setNextPlayerTurn(event.playerId);
     const playerName = storePlayers.players.find((player) => player.id === event.playerId)?.surname;
     if (annonce.annonce === 0) {
+        const annonceValueFormatted =
+            storeGame.last_annonce.annonce === 0
+                ? 'passe'
+                : `pass à ${storeGame.last_annonce.annonce} ${storeGame.last_annonce.suite}`;
         toast({
             title: 'Passe',
-            description: `${playerName} passe à ${storeGame.last_annonce.annonce} ${storeGame.last_annonce.suite}`,
+            description: `${playerName} ${annonceValueFormatted}`,
         });
     } else {
-        toast({
-            title: 'Annonce',
-            description: `${playerName} annonce ${annonce.annonce} ${annonce.suite}`,
-        });
         storeGame.setLastAnnonce(annonce);
     }
     storeGame.addAnnonceToPli(annonce);
@@ -41,6 +41,7 @@ function translateCoinche(event: EventShared) {
     const storeGame = useGameStore();
     const value = event.value as IAnnonce;
     storeGame.setCoinched(true);
+    setNextPlayerTurn(event.playerId);
     const lastAnnoncePlayer = storePlayers.players.find(
         (player) => player.id === storeGame.last_annonce.playerId,
     );
@@ -55,6 +56,8 @@ function translateSurcoinche(event: EventShared) {
     const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
     const value = event.value as IAnnonce;
+    storeGame.setSurcoinched(true);
+    setNextPlayerTurn(event.playerId);
     const lastAnnoncePlayer = storePlayers.players.find(
         (player) => player.id === storeGame.last_annonce.playerId,
     );
