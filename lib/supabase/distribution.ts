@@ -58,13 +58,6 @@ async function distributeCard(player_id: string) {
             value: formatCarteToDistribute(card, storeGame.pli_number),
         },
     ]);
-    const player = storePlayers.players.find((p) => p.id === player_id);
-    if (player) {
-        player.hands.push(card);
-        console.log('Card distributed to player', player_id);
-    } else {
-        console.error('Player not found');
-    }
 }
 
 export function formatCarteToDistribute(card: ICard, pli_number: number): string {
