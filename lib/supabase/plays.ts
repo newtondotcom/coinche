@@ -20,14 +20,13 @@ export async function emitCardPlay(card: ICard) {
         },
     ]);
     // check if end of pli
-    if (storeGame.current_pli.length == 4) {
+    if (storeGame.current_pli.length == 3) {
         await closePli();
     }
 }
 
 export async function cardPressed(suite: CardSuite, value: CardValue) {
     const storeAbout = useAboutStore();
-    const storeGame = useGameStore();
     const selectedCardIndex = storeAbout.hand.findIndex(
         (card) => card.suite === suite && card.value === value,
     );
@@ -35,11 +34,4 @@ export async function cardPressed(suite: CardSuite, value: CardValue) {
         const [selectedCard] = storeAbout.hand.splice(selectedCardIndex, 1);
         await emitCardPlay(selectedCard);
     }
-
-    console.log('Atout : ', storeGame.last_annonce.suite);
-    console.log('has atout : ', storeAbout.hasAtout);
-    console.log('color Asked : ', storeAbout.colorAsked);
-    console.log('atoutIsAsked  : ', storeAbout.atoutIsAsked);
-    console.log('hasAskedColor : ', storeAbout.hasAskedColor);
-    console.log('highestAtoutInPli : ', storeAbout.highestAtoutInPli);
 }
