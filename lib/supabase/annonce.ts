@@ -22,12 +22,14 @@ export default async function emitAnnonce(annonce: IAnnonce) {
 
     // if pass
     if (annonce.annonce === 0) {
-        // check if this is not the last pass possible
-        const annoncesPassed = storeGame.annonces_pli.filter((annonce) => annonce.annonce === 0);
+        // Get the last two annonces to check if they are both passes
+        const lastTwoAnnonces = storeGame.annonces_pli.slice(-2);
+        const annoncesPassed = lastTwoAnnonces.filter((annonce) => annonce.annonce === 0);
+
+        // Include the current annonce in the check
         if (annoncesPassed.length === 2) {
-            // only 2 because the current annonce is passed
             await startPli();
-            console.log('Starting pli because of 3 passes');
+            console.log('Starting pli because of 3 consecutive passes');
             return;
         } else {
             console.log(annoncesPassed.length, 'passes');
