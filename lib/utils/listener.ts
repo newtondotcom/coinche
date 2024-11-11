@@ -19,10 +19,7 @@ async function translateAnnonce(event: EventShared) {
     const storePlayers = usePlayersStore();
     const annonce = deformatAnnonce(event.value as string, event.playerId);
     storePlayers.setLastAnnonce(annonce, event.playerId);
-    const nextPlayerIndex =
-        storePlayers.players.findIndex((player) => player.id === event.playerId) + 1;
-    const nextPlayer = storePlayers.players[nextPlayerIndex % 4];
-    storeGame.setCurrentPlayerId(nextPlayer.id);
+    setNextPlayerTurn(event.playerId);
     const playerName = storePlayers.players.find((player) => player.id === event.playerId)?.surname;
     if (annonce.annonce === 0) {
         toast({
@@ -130,6 +127,7 @@ async function translateStart(event: EventShared) {
     // same logic applied in the io.ts file - to duplicate / refactor
     storeGame.setStatus('active');
     storeGame.setPlayerStartingId(event.value as string);
+    storeGame.setCurrentPlayerId(event.value as string);
     if (storeAbout.isCreator) {
         await supabase.from('Events').insert([
             {
@@ -161,18 +159,13 @@ async function translateStartPli(event: EventShared) {
         .from('Events')
         .select('*')
         .eq('gameId', storeAbout.gameId)
-        .eq('type', 'annonce');
+        .eq('type', 'start_game');
     if (error) {
         console.error('Game has not started:', error);
         return;
     }
-    const lastAnnounceNotPassed = data.find((event) => event.value.annonce !== 0);
-    console.log('lastAnnounceNotPassed', lastAnnounceNotPassed);
-    const annonceChosen: IAnnonce = deformatAnnonce(
-        lastAnnounceNotPassed.value,
-        lastAnnounceNotPassed.playerId,
-    );
-    storeGame.setLastAnnonce(annonceChosen);
+    const playerIdStarting = data[0].value as string;
+    storeGame.setCurrentPlayerId(playerIdStarting);
     console.log('start pli', event);
     // set cards value to atout
     storeAbout.setTimeToAnnonce(false);
