@@ -13,6 +13,7 @@
 
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
+
     const canBePlayed = computed(() => {
         if (storeGame.current_player_id !== storeAbout.myId) {
             return false;
@@ -55,17 +56,21 @@
 
         return false;
     });
+
     const classStr = ref(props.classStr || '');
     const svgFolder = '/cards';
 
-    const cardSvgPath = `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`;
+    const cardSvgPath = computed(
+        () =>
+            `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
+    );
 </script>
 
 <template>
     <div :class="cn(['card', classStr])">
         <img
             :src="cardSvgPath"
-            :alt="`${props.card.value} of ${props.card.suite} card.`"
+            :alt="`${card.value} of ${card.suite} card.`"
             :style="`max-width:${maxCardWidth}px; height: auto;`"
             :class="
                 cn(
@@ -76,7 +81,14 @@
                     inDeck ? '' : 'cursor-auto',
                 )
             "
-            @click="canBePlayed ? cardPressed(props.card.suite, props.card.value) : () => {}"
+            @click="canBePlayed ? cardPressed(card.suite, card.value) : () => {}"
         />
     </div>
 </template>
+
+<style scoped>
+    .grayscale {
+        filter: grayscale(100%);
+        opacity: 0.6;
+    }
+</style>

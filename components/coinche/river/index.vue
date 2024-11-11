@@ -12,11 +12,9 @@
             >
                 <CoincheCard
                     v-if="storeAbout.pli.length >= i"
-                    :suite="storeAbout.pli[i - 1].suite"
-                    :value="storeAbout.pli[i - 1].value"
+                    :card="storeAbout.pli[i - 1]"
                     classStr="my-1"
                     :inDeck="false"
-                    :canBePlayed="false"
                 />
                 <div
                     :style="{ width: `${maxCardWidth}px`, height: `${maxCardHeight}px` }"
