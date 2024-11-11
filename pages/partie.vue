@@ -1,6 +1,6 @@
 <template>
     <CoincheInterfaceDebug />
-    <CoincheDeck :pressed="cardPressed" />
+    <CoincheDeck />
 
     <CoincheRiver />
 
@@ -19,7 +19,6 @@
 <script setup lang="ts">
     import { useToast } from '@/components/ui/toast/use-toast';
     import { join, leave } from '@/lib/supabase/io';
-    import { emitCardPlay } from '@/lib/supabase/plays';
     import translateEvent from '@/lib/utils/listener';
     import { createClient } from '@supabase/supabase-js';
 
@@ -35,23 +34,6 @@
     storeAbout.setMyId(id);
     storeAbout.setMySurname(surname);
     storeAbout.setGameId(gameId);
-
-    async function cardPressed(suite: CardSuite, value: CardValue) {
-        const selectedCardIndex = storeAbout.hand.findIndex(
-            (card) => card.suite === suite && card.value === value,
-        );
-        if (selectedCardIndex !== -1) {
-            const [selectedCard] = storeAbout.hand.splice(selectedCardIndex, 1);
-            await emitCardPlay(selectedCard);
-        }
-
-        console.log('Atout : ', storeGame.last_annonce.suite);
-        console.log('has atout : ', storeAbout.hasAtout);
-        console.log('color Asked : ', storeAbout.colorAsked);
-        console.log('atoutIsAsked  : ', storeAbout.atoutIsAsked);
-        console.log('hasAskedColor : ', storeAbout.hasAskedColor);
-        console.log('highestAtoutInPli : ', storeAbout.highestAtoutInPli);
-    }
 
     onMounted(async () => {
         await startListening();
