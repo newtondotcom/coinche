@@ -24,9 +24,9 @@
         }
 
         if (storeAbout.atoutIsAsked) {
-            // Atout (trump) is asked
+            // Trump (atout) is asked
             if (props.card.suite === storeAbout.atout) {
-                // Player must play a higher atout if they have one
+                // Player must play a higher trump if they have one
                 return (
                     !storeAbout.highestAtoutInPli ||
                     props.card.valueNum > storeAbout.highestAtoutInPli ||
@@ -37,13 +37,13 @@
                     )
                 );
             } else {
-                // Player has no atout or doesn't need to play an atout
+                // Player has no trump or doesn't need to play a trump
                 return !storeAbout.hand.some((c: ICard) => c.suite === storeAbout.atout);
             }
         }
 
         if (storeAbout.colorAsked && storeAbout.colorAsked !== storeAbout.atout) {
-            // Specific color (non-atout) is asked
+            // Specific color (non-trump) is asked
             return (
                 props.card.suite === storeAbout.colorAsked ||
                 (storeAbout.hand.every((c: ICard) => c.suite !== storeAbout.colorAsked) &&
@@ -64,6 +64,10 @@
         () =>
             `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
     );
+
+    watch(storeGame.current_pli, () => {
+        canBePlayed.value; // Access to trigger reactivity
+    });
 </script>
 
 <template>
