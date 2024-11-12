@@ -75,3 +75,19 @@ export function deformatCarteToDistribute(carte: string) {
         card: card,
     };
 }
+export function formatCarteToPlay(card: ICard, pli_number: number, number_in_pli: number): string {
+    return `${pli_number}|${card.value}|${card.suite}|${number_in_pli}`;
+}
+export function deformatCarteToPlay(carte: string) {
+    const [pli_number, value, suite, number_in_pli] = carte.split('|');
+    const card = {
+        value: value as CardValue,
+        suite: suite as CardSuite,
+        valueNum: parseInt(value),
+    };
+    return {
+        pli_number: parseInt(pli_number),
+        card: card,
+        number_in_pli: parseInt(number_in_pli),
+    };
+}
