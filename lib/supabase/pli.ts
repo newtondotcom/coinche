@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-import { deformatCarteToDistribute } from './distribution';
+import { deformatCarteToDistribute, deformatCarteToPlay } from './distribution';
 import genIdCuid from './gen';
-import { emitPointsPli } from './points';
+import { emitPoints } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -10,9 +10,10 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 export async function closePli() {
     const storeAbout = useAboutStore();
     const storePlayers = usePlayersStore();
-
+    const storeGame = useGameStore();
     // find the winner
-    const pastPlis: IPlay[] = await fetchLastPliEvents();
+    const pastPlis: IPlay[] = storeGame.current_pli;
+    console.log('closePli', pastPlis.length);
     const winnerPlayerId = findWinner(pastPlis);
     const myIndex = storePlayers.players.findIndex(
         (player: IPlayer) => player.id === winnerPlayerId,
@@ -27,9 +28,10 @@ export async function closePli() {
             value: formatTeam(storeAbout.myId, teamMatePlayerId),
         },
     ]);
+    console.log('closePli', pastPlis);
     const score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
     const teamWinning = myIndex % 2;
-    await emitPointsPli(teamWinning, score);
+    await emitPoints(teamWinning, score);
     return;
 }
 
@@ -100,10 +102,10 @@ export async function fetchLastPliEvents(): Promise<IPlay[]> {
     }
     const lastPliId = storeGame.pli_number;
     const lastPliEvents = existingEvents.filter(
-        (event) => deformatCarteToDistribute(event.value).pli_number === lastPliId,
+        (event) => deformatCarteToPlay(event.value).pli_number === lastPliId,
     );
     const pastPlis: IPlay[] = lastPliEvents.map((event) => ({
-        card: deformatCarteToDistribute(event.value).card,
+        card: deformatCarteToPlay(event.value).card,
         playerId: event.playerId,
     }));
     return pastPlis;

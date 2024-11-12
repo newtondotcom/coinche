@@ -35,7 +35,7 @@ export async function emitPointsPli(teamWinning: number, score: number) {
             type: 'score_pli',
             playerId: storeAbout.myId,
             gameId: storeAbout.gameId,
-            value: { teamWinning, score },
+            value: formatPointsPli(teamWinning, score),
         },
     ]);
 }

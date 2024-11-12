@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-import { formatCarteToDistribute } from './distribution';
+import { formatCarteToDistribute, formatCarteToPlay } from './distribution';
 import genIdCuid from './gen';
 import { closePli, formatTeam } from './pli';
 
@@ -16,7 +16,7 @@ export async function emitCardPlay(card: ICard) {
             type: 'play',
             playerId: storeAbout.myId,
             gameId: storeAbout.gameId,
-            value: formatCarteToDistribute(card, storeGame.pli_number),
+            value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
         },
     ]);
     // check if end of pli
