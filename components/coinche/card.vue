@@ -25,7 +25,8 @@
 
         if (storeAbout.atoutIsAsked) {
             // Trump (atout) is asked
-            if (props.card.suite === storeAbout.atout) {
+            const handHasAtout = storeAbout.hand.some((c: ICard) => c.suite === storeAbout.atout);
+            if (handHasAtout) {
                 // Player must play a higher trump if they have one
                 return (
                     !storeAbout.highestAtoutInPli ||
@@ -60,10 +61,7 @@
     const classStr = ref(props.classStr || '');
     const svgFolder = '/cards';
 
-    const cardSvgPath = computed(
-        () =>
-            `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
-    );
+    const cardSvgPath = `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`;
 
     watch(storeGame.current_pli, () => {
         canBePlayed.value; // Access to trigger reactivity
