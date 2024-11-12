@@ -91,8 +91,8 @@ export async function join() {
     if (updatedEvents && updatedEvents.length !== storePlayers.players.length) {
         const buildPlayers: IPlayer[] = [];
         const otherPlayers = updatedEvents.filter((event) => event.type === 'join');
-
-        otherPlayers.forEach((player, index) => {
+        for (let index = 0; index < otherPlayers.length; index++) {
+            const player = otherPlayers[index];
             const local: IPlayer = {
                 id: player.playerId,
                 surname: player.value,
@@ -101,7 +101,7 @@ export async function join() {
                 classement: 0,
             };
             buildPlayers.push(local);
-        });
+        }
 
         storePlayers.setPlayers(buildPlayers);
         console.log(`Game has ${storePlayers.players.length} players`);
