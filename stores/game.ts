@@ -1,9 +1,9 @@
 export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
-    const current_pli = ref<ICard[]>([]);
+    const current_pli = ref<IPlay[]>([]);
     const pli_number = ref<number>(0);
-    const team1_point_current_pli = ref<number>(0);
-    const team2_point_current_pli = ref<number>(0);
+    const team1_point_current_game = ref<number>(0);
+    const team2_point_current_game = ref<number>(0);
     const last_annonce = ref<IAnnonce>({ suite: 'NA', annonce: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
@@ -18,7 +18,7 @@ export const useGameStore = defineStore('game', () => {
     const team2_score = ref<number>(0);
 
     function addCardToPliAndRemove(card: ICard, playerId: PlayerId) {
-        current_pli.value.push(card);
+        current_pli.value.push({ card, playerId });
         storePlayers.removeCard(card, playerId);
         deck.value.push(card);
     }
@@ -48,8 +48,8 @@ export const useGameStore = defineStore('game', () => {
         surcoinched.value = false;
         current_pli.value = [];
         pli_number.value += 1;
-        team1_point_current_pli.value = 0;
-        team2_point_current_pli.value = 0;
+        team1_point_current_game.value = 0;
+        team2_point_current_game.value = 0;
         annonces_pli.value = [];
         deck.value = [];
         last_annonce.value = { suite: 'NA', annonce: 0, playerId: '0' };
@@ -60,12 +60,12 @@ export const useGameStore = defineStore('game', () => {
         player_starting_id.value = playerId;
     }
 
-    function setTeam1Score(score: number) {
-        team1_score.value = score;
-    }
-
-    function setTeam2Score(score: number) {
-        team2_score.value = score;
+    function addScoreToTeam(score: number, num: number) {
+        if (num == 1) {
+            team1_score.value += score;
+        } else {
+            team2_score.value += score;
+        }
     }
 
     function addAnnonceToPli(annonce: IAnnonce) {
@@ -81,8 +81,8 @@ export const useGameStore = defineStore('game', () => {
         current_player_id,
         status,
         pli_number,
-        team1_point_current_pli,
-        team2_point_current_pli,
+        team1_point_current_game,
+        team2_point_current_game,
         last_annonce,
         coinched,
         surcoinched,
@@ -97,8 +97,7 @@ export const useGameStore = defineStore('game', () => {
         setSurcoinched,
         setNewPli,
         setPlayerStartingId,
-        setTeam1Score,
-        setTeam2Score,
+        addScoreToTeam,
         annonces_pli,
         addAnnonceToPli,
         deck,

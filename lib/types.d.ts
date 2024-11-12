@@ -37,8 +37,8 @@ interface IGame {
     status: GameStatus;
     pli_number: number;
     player_starting_id: PlayerId;
-    team1_point_current_pli: number;
-    team2_point_current_pli: number;
+    team1_point_current_game: number;
+    team2_point_current_game: number;
     team1_score: number;
     team2_score: number;
     last_annonce: IAnnonce;

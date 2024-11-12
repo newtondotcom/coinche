@@ -91,6 +91,7 @@ export async function join() {
     if (updatedEvents && updatedEvents.length !== storePlayers.players.length) {
         const buildPlayers: IPlayer[] = [];
         const otherPlayers = updatedEvents.filter((event) => event.type === 'join');
+
         for (let index = 0; index < otherPlayers.length; index++) {
             const player = otherPlayers[index];
             const local: IPlayer = {
