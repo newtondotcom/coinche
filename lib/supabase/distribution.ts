@@ -79,11 +79,15 @@ export function formatCarteToPlay(card: ICard, pli_number: number, number_in_pli
     return `${pli_number}|${card.value}|${card.suite}|${number_in_pli}`;
 }
 export function deformatCarteToPlay(carte: string) {
+    const storeGame = useGameStore();
     const [pli_number, value, suite, number_in_pli] = carte.split('|');
+    const valueNum = storeGame.deck.find(
+        (card) => card.value === value && card.suite === suite,
+    )?.valueNum;
     const card = {
         value: value as CardValue,
         suite: suite as CardSuite,
-        valueNum: parseInt(value),
+        valueNum: valueNum,
     };
     return {
         pli_number: parseInt(pli_number),
