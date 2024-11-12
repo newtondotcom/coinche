@@ -60,3 +60,20 @@ export function setNextPlayerTurn(playerId: string) {
     const nextPlayerId = storePlayers.players[nextPlayerIndex].id;
     storeGame.setCurrentPlayerId(nextPlayerId);
 }
+
+export function setNextPlayerPli(playerId: string) {
+    const storeGame = useGameStore();
+    storeGame.setCurrentPlayerId(playerId);
+}
+
+export function setNextPlayerGame() {
+    const storePlayers = usePlayersStore();
+    const storeGame = useGameStore();
+    const playerId: string = storeGame.player_starting_id;
+    const currentPlayerIndex = storePlayers.players.findIndex(
+        (player: IPlayer) => player.id === playerId,
+    );
+    const nextPlayerIndex = (currentPlayerIndex + 1) % storePlayers.players.length;
+    const nextPlayerId = storePlayers.players[nextPlayerIndex].id;
+    storeGame.setPlayerStartingId(nextPlayerId);
+}
