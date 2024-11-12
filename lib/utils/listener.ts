@@ -2,11 +2,14 @@ import { useToast } from '@/components/ui/toast/use-toast';
 import genIdCuid from '@/lib/supabase/gen';
 import { createClient } from '@supabase/supabase-js';
 
-import { deformatAnnonce, setNextPlayerTurn } from '../supabase/annonce';
-import emitDistribution, { deformatCarteToDistribute } from '../supabase/distribution';
+import { deformatAnnonce, setNextPlayerPli, setNextPlayerTurn } from '../supabase/annonce';
+import emitDistribution, {
+    deformatCarteToDistribute,
+    deformatCarteToPlay,
+} from '../supabase/distribution';
 import { deformatTeam, fetchLastPliEvents, sumPointsPli } from '../supabase/pli';
 import { emitPoints, formatPoints, unformatPoints, unformatPointsPli } from '../supabase/points';
-import { generateDeckCards } from './deck';
+import { generateDeckCards, setValueAccordingToAtout } from './deck';
 import { assertPliNumber } from './utils';
 
 const config = useRuntimeConfig();
@@ -70,15 +73,24 @@ function translateSurcoinche(event: EventShared) {
     return;
 }
 
-function translatePlay(event: EventShared) {
+async function translatePlay(event: EventShared) {
     const storeGame = useGameStore();
-    const def = deformatCarteToDistribute(event.value as string);
+    const def = deformatCarteToPlay(event.value as string);
     const card = def.card;
     const pli_number = def.pli_number;
+    const number_in_pli = def.number_in_pli;
     assertPliNumber(pli_number, storeGame.pli_number);
     const player_id = event.playerId;
     storeGame.addCardToPliAndRemove(card, player_id);
-    setNextPlayerTurn(player_id);
+    if (number_in_pli === 3) {
+        console.log('Last card played');
+        // we have to update the score
+        const pli = await fetchLastPliEvents();
+        const points = sumPointsPli(pli);
+        console.log('Points in pli', points);
+    } else {
+        setNextPlayerTurn(player_id);
+    }
     return;
 }
 
@@ -170,7 +182,8 @@ async function translateStartPli(event: EventShared) {
     const playerIdStarting = data[0].value as string;
     storeGame.setCurrentPlayerId(playerIdStarting);
     console.log('start pli', event);
-    // set cards value to atout
+    const deckWithValues = setValueAccordingToAtout(storeAbout.atout, storeGame.deck);
+    storeGame.setDeck(deckWithValues);
     storeAbout.setTimeToAnnonce(false);
     return;
 }
@@ -181,24 +194,13 @@ function translateError(event: EventShared) {
 
 async function translateWinPli(event: EventShared) {
     const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
     const teamWinning: string[] = deformatTeam(event.value as string);
-    const pastPlis: IPlay[] = await fetchLastPliEvents();
-    const points: number = sumPointsPli(pastPlis);
-    const teamWinningNumber = storePlayers.team1.find(
-        (player) => player.id === teamWinning[0] || player.id === teamWinning[1],
-    )
-        ? 1
-        : 2;
-    const scoreTeam1CurrentPli = teamWinningNumber === 1 ? points : 0;
-    const scoreTeam2CurrentPli = teamWinningNumber === 2 ? points : 0;
-    storeGame.setTeam1Score(storeGame.team1_score + scoreTeam1CurrentPli);
-    storeGame.setTeam2Score(storeGame.team2_score + scoreTeam2CurrentPli);
-    storeGame.setNewPli();
     toast({
         title: 'Fin du pli',
-        description: `Equipe 1: ${storeGame.team1_point_current_pli} points\nEquipe 2: ${storeGame.team2_point_current_pli} points`,
+        description: `L'équipe de  ${teamWinning[0]} et ${teamWinning[1]} a remporté le pli`,
     });
+    storeGame.setNewPli();
+    setNextPlayerPli(teamWinning[0]);
     return;
 }
 
@@ -275,14 +277,22 @@ function translateDistribution(event: EventShared) {
 }
 
 async function translatePoints(event: EventShared) {
+    console.log('points', event);
     const storeGame = useGameStore();
     const [scoreTeam1, scoreTeam2] = unformatPoints(event.value as string);
-    storeGame.setTeam1Score(scoreTeam1);
-    storeGame.setTeam2Score(scoreTeam2);
+    storeGame.addScoreToTeam(scoreTeam1, 1);
+    storeGame.addScoreToTeam(scoreTeam2, 2);
     return;
 }
 
-async function translatePointsPli(event: EventShared) {}
+async function translatePointsPli(event: EventShared) {
+    console.log('score_pli', event);
+    const storeGame = useGameStore();
+    const [scoreTeam1, scoreTeam2] = unformatPoints(event.value as string);
+    storeGame.addScoreToTeam(scoreTeam1, 1);
+    storeGame.addScoreToTeam(scoreTeam2, 2);
+    return;
+}
 
 async function translateStartDistribution(event: EventShared) {
     console.log('start distribution', event);
