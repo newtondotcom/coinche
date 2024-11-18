@@ -76,18 +76,14 @@ export function deformatCarteToDistribute(carte: string) {
     };
 }
 export function formatCarteToPlay(card: ICard, pli_number: number, number_in_pli: number): string {
-    return `${pli_number}|${card.value}|${card.suite}|${number_in_pli}`;
+    return `${pli_number}|${card.value}|${card.suite}|${card.valueNum}|${number_in_pli}`;
 }
 export function deformatCarteToPlay(carte: string) {
-    const storeGame = useGameStore();
-    const [pli_number, value, suite, number_in_pli] = carte.split('|');
-    const valueNum = storeGame.deck.find(
-        (card) => card.value === value && card.suite === suite,
-    )?.valueNum;
+    const [pli_number, value, suite, valueNum, number_in_pli] = carte.split('|');
     const card = {
         value: value as CardValue,
         suite: suite as CardSuite,
-        valueNum: valueNum,
+        valueNum: parseInt(valueNum),
     };
     return {
         pli_number: parseInt(pli_number),
