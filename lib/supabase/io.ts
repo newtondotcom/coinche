@@ -91,9 +91,12 @@ export async function join() {
     if (updatedEvents && updatedEvents.length !== storePlayers.players.length) {
         const buildPlayers: IPlayer[] = [];
         const otherPlayers = updatedEvents.filter((event) => event.type === 'join');
+        const otherPlayersOrdred = otherPlayers.sort(
+            (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+        );
 
-        for (let index = 0; index < otherPlayers.length; index++) {
-            const player = otherPlayers[index];
+        for (let index = 0; index < otherPlayersOrdred.length; index++) {
+            const player = otherPlayersOrdred[index];
             const local: IPlayer = {
                 id: player.playerId,
                 surname: player.value,
