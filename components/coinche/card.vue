@@ -61,7 +61,9 @@
     const classStr = ref(props.classStr || '');
     const svgFolder = '/cards';
 
-    const cardSvgPath = `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`;
+    const cardSvgPath = ref(
+        `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
+    );
 
     watch(storeGame.current_pli, () => {
         canBePlayed.value; // Access to trigger reactivity

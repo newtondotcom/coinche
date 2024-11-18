@@ -33,7 +33,9 @@ export function generateRandomDeck(): ICard[] {
     return deck;
 }
 
-export function setValueAccordingToAtout(atout: CardSuite, deck: ICard[]): ICard[] {
+export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
+    const storeAbout = useAboutStore();
+    const atout = storeAbout.atout;
     return deck.map((card) => {
         // Traditional Atout: Set values for the chosen atout suit
         if (atout !== 'tout-atout' && atout !== 'sans-atout') {

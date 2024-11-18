@@ -8,7 +8,7 @@ export const useAboutStore = defineStore('about', () => {
     const timeToAnnonce = ref<boolean>(false);
     const timeDistrib = ref<boolean>(false);
 
-    const atout = computed(() => storeGame.last_annonce.suite);
+    const atout: ComputedRef<CardSuite> = computed(() => storeGame.last_annonce.suite);
 
     const hand: ComputedRef<ICard[]> = computed(
         () => storePlayers.players.find((p) => p.id === myId.value)?.hands || [],
