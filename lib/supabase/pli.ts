@@ -13,7 +13,9 @@ export async function closePli() {
     const storeGame = useGameStore();
     // find the winner
     const pastPlis: IPlay[] = storeGame.current_pli;
-    console.log('closePli', pastPlis.length);
+    while (pastPlis.length < 4) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     const winnerPlayerId = findWinner(pastPlis);
     const myIndex = storePlayers.players.findIndex(
         (player: IPlayer) => player.id === winnerPlayerId,
@@ -28,9 +30,12 @@ export async function closePli() {
             value: formatTeam(storeAbout.myId, teamMatePlayerId),
         },
     ]);
-    console.log('closePli', pastPlis);
+    console.log(
+        isNaN(pastPlis[0].card.valueNum) ? 'Carte sans valeurs' : pastPlis[0].card.valueNum,
+    );
     const score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
     const teamWinning = myIndex % 2;
+    console.log('closePli', score, teamWinning);
     await emitPoints(teamWinning, score);
     return;
 }
