@@ -114,6 +114,7 @@ export async function join() {
             .select('*')
             .eq('gameId', gameId)
             .eq('type', 'start_game');
+        l;
         if (data?.length == 0) {
             console.error('Game has not started');
             return;
