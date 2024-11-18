@@ -12,7 +12,7 @@
             >
                 <CoincheCard
                     v-if="storeAbout.pli.length >= i"
-                    :card="storeAbout.pli[i - 1]"
+                    :card="storeAbout.pli[i - 1].card"
                     classStr="my-1"
                     :inDeck="false"
                 />
