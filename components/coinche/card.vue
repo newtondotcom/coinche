@@ -14,6 +14,14 @@
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
 
+    const justPressed = ref(false);
+
+    async function onPress() {
+        justPressed.value = true;
+        await cardPressed(props.card.suite, props.card.value);
+        justPressed.value = false;
+    }
+
     const canBePlayed = computed(() => {
         if (storeGame.current_player_id !== storeAbout.myId) {
             return false;
@@ -100,14 +108,14 @@
             :style="`max-width:${maxCardWidth}px; height: auto;`"
             :class="
                 cn(
-                    inDeck && canBePlayed
+                    inDeck && canBePlayed && !justPressed
                         ? 'cursor-pointer hover:scale-125 transition-transform'
                         : '',
-                    inDeck && !canBePlayed ? 'cursor-wait grayscale' : '',
+                    inDeck && (!canBePlayed || justPressed) ? 'cursor-wait grayscale' : '',
                     inDeck ? '' : 'cursor-auto',
                 )
             "
-            @click="canBePlayed ? cardPressed(card.suite, card.value) : () => {}"
+            @click="canBePlayed ? onPress() : () => {}"
         />
     </div>
 </template>
