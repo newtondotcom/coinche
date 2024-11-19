@@ -30,9 +30,6 @@ export async function closePli() {
             value: formatTeam(winnerPlayerId, teamMatePlayerId),
         },
     ]);
-    console.log(
-        isNaN(pastPlis[0].card.valueNum) ? 'Carte sans valeurs' : pastPlis[0].card.valueNum,
-    );
     const score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
     const scoreTeam1 = storePlayers.team1.some((player) => player.id === winnerPlayerId)
         ? score
@@ -40,7 +37,28 @@ export async function closePli() {
     const scoreTeam2 = storePlayers.team2.some((player) => player.id === winnerPlayerId)
         ? score
         : 0;
+    const oldScoreTeam1 = storeGame.team1_point_current_game;
     await emitPoints(scoreTeam1, scoreTeam2);
+    while (oldScoreTeam1 === storeGame.team1_point_current_game) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    if (storeGame.deck.length === 32) {
+        // end of the game
+        if (
+            storeGame.team1_point_current_game >= 1000 ||
+            storeGame.team2_point_current_game >= 1000
+        ) {
+            await supabase.from('Events').insert([
+                {
+                    id: await genIdCuid(),
+                    type: 'end_game',
+                    playerId: storeAbout.myId,
+                    gameId: storeAbout.gameId,
+                    value: formatTeam(winnerPlayerId, teamMatePlayerId),
+                },
+            ]);
+        }
+    }
     return;
 }
 
