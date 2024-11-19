@@ -1,5 +1,5 @@
 import genIdCuid from '~/lib/supabase/gen';
-import { emitPoints, formatPoints, unformatPointsPli } from '~/lib/supabase/points';
+import { emitPoints, formatPoints, unformatPoints } from '~/lib/supabase/points';
 
 import { supabase, toast } from '../listener';
 
@@ -17,11 +17,11 @@ export async function translateWinGame(event: EventShared) {
         console.error('Game has not started:', error);
         return;
     }
-    const scoreTeam1 = data.filter((event) => unformatPointsPli(event.value)[0] === 1);
-    const pointsTeam1 = scoreTeam1.map((event) => unformatPointsPli(event.value)[1]);
+    const scoreTeam1 = data.filter((event) => unformatPoints(event.value)[0] === 1);
+    const pointsTeam1 = scoreTeam1.map((event) => unformatPoints(event.value)[1]);
     const sum1 = pointsTeam1.reduce((a, b) => a + b, 0);
-    const scoreTeam2 = data.filter((event) => unformatPointsPli(event.value)[0] === 2);
-    const pointsTeam2 = scoreTeam2.map((event) => unformatPointsPli(event.value)[1]);
+    const scoreTeam2 = data.filter((event) => unformatPoints(event.value)[0] === 2);
+    const pointsTeam2 = scoreTeam2.map((event) => unformatPoints(event.value)[1]);
     const sum2 = pointsTeam2.reduce((a, b) => a + b, 0);
     const annonceMade = storeGame.last_annonce;
     const playerId = annonceMade.playerId;

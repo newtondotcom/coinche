@@ -37,10 +37,11 @@ export const useAboutStore = defineStore('about', () => {
             (c) => c.card.suite === storeGame.last_annonce.suite,
         );
         if (atoutsInPli.length === 0) return NaN;
-        return atoutsInPli.sort((a, b) => b.card.valueNum - a.card.valueNum)[0].card.valueNum;
+        const orderedAtouts = atoutsInPli.sort((a, b) => b.card.valueNum - a.card.valueNum);
+        return orderedAtouts[0].card.valueNum;
     });
 
-    const atoutIsAsked = computed(() => colorAsked.value === storeGame.last_annonce.suite);
+    const atoutIsAsked = computed(() => colorAsked.value === atout.value);
 
     function setMyId(id: string) {
         myId.value = id;

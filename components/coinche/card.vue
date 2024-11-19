@@ -23,28 +23,32 @@
             return true;
         }
 
-        if (storeAbout.atoutIsAsked) {
-            // Trump (atout) is asked
-            const handHasAtout = storeAbout.hand.some((c: ICard) => c.suite === storeAbout.atout);
-            if (handHasAtout) {
-                // Player must play a higher trump if they have one
-                if (!storeAbout.highestAtoutInPli) {
-                    console.log('highestAtoutInPli is not defined');
-                    return true;
-                }
-                if (props.card.valueNum > storeAbout.highestAtoutInPli) {
-                    console.log('card is higher than highestAtoutInPli');
-                    return true;
-                }
-                const hasNoHigherAtout = storeAbout.hand.every(
-                    (c: ICard) =>
-                        c.suite === storeAbout.atout && c.valueNum <= storeAbout.highestAtoutInPli,
+        if (storeAbout.atout == 'tout-atout' || storeAbout.atout === props.card.suite) {
+            if (storeAbout.atoutIsAsked) {
+                // Trump (atout) is asked
+                const handHasAtout = storeAbout.hand.some(
+                    (c: ICard) => c.suite === storeAbout.atout,
                 );
-                if (hasNoHigherAtout) {
-                    console.log('no higher atout in hand');
-                    return true;
+                // Player is olbiged to play a trump above the highest trump in the pli if they have one
+                // If they don't have a higher trump, they can play any trump
+                if (handHasAtout) {
+                    const hasHigherAtout = storeAbout.hand.some(
+                        (c: ICard) =>
+                            c.suite === storeAbout.atout &&
+                            c.valueNum > storeAbout.highestAtoutInPli,
+                    );
+                    const isLower = props.card.valueNum <= storeAbout.highestAtoutInPli;
+                    const isHigher = props.card.valueNum > storeAbout.highestAtoutInPli;
+                    if (hasHigherAtout && isHigher) {
+                        console.log('has higher atout and card is higher');
+                        return true;
+                    }
+                    if (!hasHigherAtout && isLower) {
+                        console.log('no higher atout and card is lower');
+                        return true;
+                    }
+                    console.log('case not arrigning');
                 }
-                return false;
             } else {
                 // Player has no trump or doesn't need to play a trump
                 return !storeAbout.hand.some((c: ICard) => c.suite === storeAbout.atout);
