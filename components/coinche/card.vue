@@ -40,11 +40,9 @@
                     const isLower = props.card.valueNum <= storeAbout.highestAtoutInPli;
                     const isHigher = props.card.valueNum > storeAbout.highestAtoutInPli;
                     if (hasHigherAtout && isHigher) {
-                        console.log('has higher atout and card is higher');
                         return true;
                     }
                     if (!hasHigherAtout && isLower) {
-                        console.log('no higher atout and card is lower');
                         return true;
                     }
                     console.log('case not arrigning');
@@ -62,7 +60,6 @@
             );
             if (handHasColorAsked) {
                 // Player must play the color asked if they have it
-                console.log('colorAsked is asked and the player has it');
                 return props.card.suite === storeAbout.colorAsked;
             } else {
                 // Player doesn't have the color asked
@@ -71,9 +68,6 @@
                 );
                 if (handHasAtout) {
                     // Player must play a trump if they have one
-                    console.log(
-                        'colorAsked is asked but the player has no colorAsked and has atout',
-                    );
                     return props.card.suite === storeAbout.atout;
                 }
                 console.log(
@@ -81,7 +75,6 @@
                 );
                 return true;
             }
-            return false;
         }
 
         return false;
