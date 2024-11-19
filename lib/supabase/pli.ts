@@ -27,23 +27,26 @@ export async function closePli() {
             type: 'win_pli',
             playerId: storeAbout.myId,
             gameId: storeAbout.gameId,
-            value: formatTeam(storeAbout.myId, teamMatePlayerId),
+            value: formatTeam(winnerPlayerId, teamMatePlayerId),
         },
     ]);
     console.log(
         isNaN(pastPlis[0].card.valueNum) ? 'Carte sans valeurs' : pastPlis[0].card.valueNum,
     );
     const score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
-    const teamWinning = myIndex % 2;
-    console.log('closePli', score, teamWinning);
-    await emitPoints(teamWinning, score);
+    const scoreTeam1 = storePlayers.team1.some((player) => player.id === winnerPlayerId)
+        ? score
+        : 0;
+    const scoreTeam2 = storePlayers.team2.some((player) => player.id === winnerPlayerId)
+        ? score
+        : 0;
+    await emitPoints(scoreTeam1, scoreTeam2);
     return;
 }
 
 export async function startPli() {
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
-    storeGame.setNewPli();
     storeGame.setCurrentPlayerId(storeGame.player_starting_id);
     // launch pli
     await supabase.from('Events').insert([
@@ -84,6 +87,7 @@ function findWinner(lastPliEvents: IPlay[]) {
     }
 }
 
+// first player id is the one starting the next pli
 export function formatTeam(player1: string, player2: string): string {
     return `${player1}|${player2}`;
 }

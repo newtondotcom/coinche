@@ -8,6 +8,7 @@ import { translateDistribution } from './translations/distribution';
 import { translateEndDistribution } from './translations/end_distribution';
 import { translateJoin } from './translations/join';
 import translatePlay from './translations/play';
+import { translatePoints } from './translations/points';
 import { translateStart } from './translations/start';
 import { translateStartDistribution } from './translations/start_distribution';
 import { translateStartPli } from './translations/start_pli';
@@ -31,15 +32,6 @@ function translateEnd(event: EventShared) {
 }
 
 function translateError(event: EventShared) {
-    return;
-}
-
-async function translatePoints(event: EventShared) {
-    console.log('points', event);
-    const storeGame = useGameStore();
-    const [scoreTeam1, scoreTeam2] = unformatPoints(event.value as string);
-    storeGame.addScoreToTeam(scoreTeam1, 1);
-    storeGame.addScoreToTeam(scoreTeam2, 2);
     return;
 }
 

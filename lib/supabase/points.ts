@@ -26,25 +26,3 @@ export async function emitPoints(scoreTeam1: number, scoreTeam2: number) {
         },
     ]);
 }
-
-export async function emitPointsPli(teamWinning: number, score: number) {
-    const storeAbout = useAboutStore();
-    await supabase.from('Events').insert([
-        {
-            id: await genIdCuid(),
-            type: 'score_pli',
-            playerId: storeAbout.myId,
-            gameId: storeAbout.gameId,
-            value: formatPointsPli(teamWinning, score),
-        },
-    ]);
-}
-
-export function formatPointsPli(teamWinning: number, score: number) {
-    return `${teamWinning} - ${score}`;
-}
-
-export function unformatPointsPli(points: string): [number, number] {
-    const [teamWinning, score] = points.split(' - ');
-    return [parseInt(teamWinning), parseInt(score)];
-}
