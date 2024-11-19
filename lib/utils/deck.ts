@@ -43,11 +43,13 @@ export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
                 switch (card.value) {
                     case '7':
                     case '8':
-                    case '9':
                         card.valueNum = 0;
                         break;
+                    case '9':
+                        card.valueNum = 14;
+                        break;
                     case 'J':
-                        card.valueNum = 2;
+                        card.valueNum = 20;
                         break;
                     case 'Q':
                         card.valueNum = 3;
