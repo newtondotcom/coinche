@@ -6,6 +6,7 @@ import translateAnnonce from './translations/annonce';
 import { translateCoinche, translateSurcoinche } from './translations/coinche';
 import { translateDistribution } from './translations/distribution';
 import { translateEndDistribution } from './translations/end_distribution';
+import { translateEnd } from './translations/end_game';
 import { translateJoin } from './translations/join';
 import translatePlay from './translations/play';
 import { translatePoints } from './translations/points';
@@ -23,11 +24,6 @@ export const supabase = createClient(config.public.SUPABASE_URL, config.public.S
 function translateLeave(event: EventShared) {
     const storePlayers = usePlayersStore();
     storePlayers.players = storePlayers.players.filter((player) => player.id !== event.playerId);
-    return;
-}
-function translateEnd(event: EventShared) {
-    const storeGame = useGameStore();
-    storeGame.setStatus('complete');
     return;
 }
 
