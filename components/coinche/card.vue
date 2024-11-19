@@ -28,15 +28,23 @@
             const handHasAtout = storeAbout.hand.some((c: ICard) => c.suite === storeAbout.atout);
             if (handHasAtout) {
                 // Player must play a higher trump if they have one
-                return (
-                    !storeAbout.highestAtoutInPli ||
-                    props.card.valueNum > storeAbout.highestAtoutInPli ||
-                    storeAbout.hand.every(
-                        (c: ICard) =>
-                            c.suite !== storeAbout.atout ||
-                            c.valueNum <= storeAbout.highestAtoutInPli,
-                    )
+                if (!storeAbout.highestAtoutInPli) {
+                    console.log('highestAtoutInPli is not defined');
+                    return true;
+                }
+                if (props.card.valueNum > storeAbout.highestAtoutInPli) {
+                    console.log('card is higher than highestAtoutInPli');
+                    return true;
+                }
+                const hasNoHigherAtout = storeAbout.hand.every(
+                    (c: ICard) =>
+                        c.suite === storeAbout.atout && c.valueNum <= storeAbout.highestAtoutInPli,
                 );
+                if (hasNoHigherAtout) {
+                    console.log('no higher atout in hand');
+                    return true;
+                }
+                return false;
             } else {
                 // Player has no trump or doesn't need to play a trump
                 return !storeAbout.hand.some((c: ICard) => c.suite === storeAbout.atout);
@@ -45,14 +53,31 @@
 
         if (storeAbout.colorAsked && storeAbout.colorAsked !== storeAbout.atout) {
             // Specific color (non-trump) is asked
-            return (
-                props.card.suite === storeAbout.colorAsked ||
-                (storeAbout.hand.every((c: ICard) => c.suite !== storeAbout.colorAsked) &&
-                    props.card.suite === storeAbout.atout) ||
-                storeAbout.hand.every(
-                    (c: ICard) => c.suite !== storeAbout.colorAsked && c.suite !== storeAbout.atout,
-                )
+            const handHasColorAsked = storeAbout.hand.some(
+                (c: ICard) => c.suite === storeAbout.colorAsked,
             );
+            if (handHasColorAsked) {
+                // Player must play the color asked if they have it
+                console.log('colorAsked is asked and the player has it');
+                return props.card.suite === storeAbout.colorAsked;
+            } else {
+                // Player doesn't have the color asked
+                const handHasAtout = storeAbout.hand.some(
+                    (c: ICard) => c.suite === storeAbout.atout,
+                );
+                if (handHasAtout) {
+                    // Player must play a trump if they have one
+                    console.log(
+                        'colorAsked is asked but the player has no colorAsked and has atout',
+                    );
+                    return props.card.suite === storeAbout.atout;
+                }
+                console.log(
+                    'colorAsked is asked but the player has no colorAsked and has no atout',
+                );
+                return true;
+            }
+            return false;
         }
 
         return false;
