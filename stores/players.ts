@@ -4,7 +4,14 @@ export const usePlayersStore = defineStore('players', () => {
     function removeCard(card: ICard, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
         if (player) {
-            player.hands = player.hands.filter((c) => c !== card);
+            player.hands = player.hands.filter(
+                (c) =>
+                    !(
+                        c.suite === card.suite &&
+                        c.value === card.value &&
+                        c.valueNum === card.valueNum
+                    ),
+            );
         }
     }
 
