@@ -44,14 +44,14 @@ export const useGameStore = defineStore('game', () => {
     }
 
     function setNewPli() {
-        coinched.value = false;
-        surcoinched.value = false;
         current_pli.value = [];
         pli_number.value += 1;
-        team1_point_current_game.value = 0;
-        team2_point_current_game.value = 0;
+    }
+
+    function setNewGame() {
+        coinched.value = false;
+        surcoinched.value = false;
         annonces_pli.value = [];
-        deck.value = [];
         last_annonce.value = { suite: 'NA', annonce: 0, playerId: '0' };
     }
 
@@ -66,6 +66,13 @@ export const useGameStore = defineStore('game', () => {
         } else {
             team2_score.value += score;
         }
+    }
+
+    function addScoreToTeam1(score: number) {
+        team1_point_current_game.value = team1_point_current_game.value + score;
+    }
+    function addScoreToTeam2(score: number) {
+        team2_point_current_game.value = team2_point_current_game.value + score;
     }
 
     function addAnnonceToPli(annonce: IAnnonce) {
@@ -102,5 +109,8 @@ export const useGameStore = defineStore('game', () => {
         addAnnonceToPli,
         deck,
         setDeck,
+        addScoreToTeam1,
+        addScoreToTeam2,
+        setNewGame,
     };
 });
