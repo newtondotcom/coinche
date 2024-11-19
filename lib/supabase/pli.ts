@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
+import { emitGameStarting } from '../utils/translations/join';
+import { startGame } from '../utils/translations/start';
 import { deformatCarteToDistribute, deformatCarteToPlay } from './distribution';
 import genIdCuid from './gen';
 import { emitPoints } from './points';
@@ -30,13 +32,18 @@ export async function closePli() {
             value: formatTeam(winnerPlayerId, teamMatePlayerId),
         },
     ]);
-    const score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
+    let score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
+    if (storeGame.deck.length === 32) {
+        score += 10;
+        console.log('Dernier pli donc +10');
+    }
     const scoreTeam1 = storePlayers.team1.some((player) => player.id === winnerPlayerId)
         ? score
         : 0;
     const scoreTeam2 = storePlayers.team2.some((player) => player.id === winnerPlayerId)
         ? score
         : 0;
+    // TODO : check for coinche and surcoinche
     const oldScoreTeam1 = storeGame.team1_point_current_game;
     await emitPoints(scoreTeam1, scoreTeam2);
     while (oldScoreTeam1 === storeGame.team1_point_current_game) {
@@ -57,6 +64,16 @@ export async function closePli() {
                     value: formatTeam(winnerPlayerId, teamMatePlayerId),
                 },
             ]);
+        } else {
+            // next game if not goal score reached
+            console.log('Next game');
+            // update the ui
+            storeGame.setNewGame();
+            // update the db :
+            // fetch the last player starting id
+            const playerId = await fetchLastPliPlayerWinningId();
+            // emit the game starting event
+            await emitGameStarting(playerId);
         }
     }
     return;
@@ -140,4 +157,25 @@ export async function fetchLastPliEvents(): Promise<IPlay[]> {
 
 export function sumPointsPli(plays: IPlay[]) {
     return plays.reduce((acc, play) => acc + play.card.valueNum, 0);
+}
+
+export async function fetchLastPliPlayerWinningId(): Promise<string> {
+    const storeAbout = useAboutStore();
+    const storePlayers = usePlayersStore();
+    const { data: events, error } = await supabase
+        .from('Events')
+        .select('value')
+        .eq('type', 'start_pli')
+        .eq('gameId', storeAbout.gameId);
+    if (error) {
+        console.error(error);
+        return ' ';
+    }
+    const playerStartedId = events[0].value;
+    const playerStartedIndex = storePlayers.players.findIndex(
+        (player) => player.id === playerStartedId,
+    );
+    const playerStartingIndex = (playerStartedIndex + 1) % 4;
+    const playerId = storePlayers.players[playerStartingIndex].id;
+    return playerId;
 }
