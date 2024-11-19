@@ -39,20 +39,9 @@ export async function translateWinGame(event: EventShared) {
         }
     } else {
     }
-    await emitPoints(sum1, sum2);
     toast({
         title: 'Fin de partie',
         description: `Equipe 1: ${sum1} points marqués\nEquipe 2: ${sum2} points marqués`,
     });
-    // shift the player starting and cut the deck
-    await supabase.from('Events').insert([
-        {
-            id: await genIdCuid(),
-            type: 'start_distribution',
-            playerId: storeAbout.myId,
-            gameId: storeAbout.gameId,
-            value: formatPoints(scoreDuringGame1, scoreDuringGame2),
-        },
-    ]);
     return;
 }

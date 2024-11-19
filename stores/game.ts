@@ -53,6 +53,8 @@ export const useGameStore = defineStore('game', () => {
         surcoinched.value = false;
         annonces_pli.value = [];
         last_annonce.value = { suite: 'NA', annonce: 0, playerId: '0' };
+        current_pli.value = [];
+        pli_number.value += 0;
     }
 
     function setPlayerStartingId(playerId: PlayerId) {
@@ -73,6 +75,13 @@ export const useGameStore = defineStore('game', () => {
     }
     function addScoreToTeam2(score: number) {
         team2_point_current_game.value = team2_point_current_game.value + score;
+    }
+
+    function addGlobalScoreToTeam1(score: number) {
+        team1_score.value = team1_score.value + score;
+    }
+    function addGlobalScoreToTeam2(score: number) {
+        team2_score.value = team2_score.value + score;
     }
 
     function addAnnonceToPli(annonce: IAnnonce) {
@@ -112,5 +121,7 @@ export const useGameStore = defineStore('game', () => {
         addScoreToTeam1,
         addScoreToTeam2,
         setNewGame,
+        addGlobalScoreToTeam1,
+        addGlobalScoreToTeam2,
     };
 });
