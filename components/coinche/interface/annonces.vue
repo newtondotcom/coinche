@@ -59,7 +59,9 @@
                     </div>
 
                     <div class="flex flex-col space-y-2 justify-center px-1 mx-1">
-                        <Button @click="passer" :disabled="!canAnnoncer">Passer</Button>
+                        <Button @click="passer" :disabled="!canAnnoncer && !canPasser">
+                            Passer
+                        </Button>
                         <Button :disabled="!canCoincher">Coincher</Button>
                         <Button :disabled="!canSurcoincher">Surcoincher</Button>
                     </div>
@@ -83,6 +85,11 @@
     let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.annonces_pli));
 
     let canAnnoncer = computed<boolean>(() => storeGame.current_player_id === storeAbout.myId);
+    let canPasser = computed<boolean>(
+        () =>
+            storeGame.annonces_pli.length > 3 &&
+            storeGame.annonces_pli.slice(0, 3).every((annonce: IAnnonce) => annonce.annonce === 0),
+    );
 
     let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
 
