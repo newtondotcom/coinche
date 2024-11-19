@@ -8,7 +8,7 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 export default async function emitDistribution(id_player_starting: PlayerId) {
     const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
-
+    cutDeck();
     // distribute cards 3 per person, then 2, then 3
     const players = storePlayers.players;
     const startIndex = players.findIndex((player) => player.id === id_player_starting);
@@ -44,7 +44,6 @@ export default async function emitDistribution(id_player_starting: PlayerId) {
 }
 
 async function distributeCard(player_id: string) {
-    const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
     const deck = storeGame.deck;
@@ -90,4 +89,15 @@ export function deformatCarteToPlay(carte: string) {
         card: card,
         number_in_pli: parseInt(number_in_pli),
     };
+}
+export function cutDeck() {
+    const storeGame = useGameStore();
+    // cut the paquet at a certain index
+    const indexCut = Math.floor(Math.random() * 32);
+    const deck = storeGame.deck;
+    const deck1 = deck.slice(0, indexCut);
+    const deck2 = deck.slice(indexCut);
+    const newDeck = [...deck2, ...deck1];
+    storeGame.setDeck(newDeck);
+    console.log('Deck cut at index', indexCut);
 }
