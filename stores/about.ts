@@ -13,10 +13,9 @@ export const useAboutStore = defineStore('about', () => {
     const hand: ComputedRef<ICard[]> = computed(
         () => storePlayers.players.find((p) => p.id === myId.value)?.hands || [],
     );
-    const pli: Ref<ICard[]> = computed(() => storeGame.current_pli);
 
     const colorAsked: ComputedRef<CardSuite | undefined> = computed(() =>
-        storeGame.current_pli.length > 0 ? storeGame.current_pli[0].suite : undefined,
+        storeGame.current_pli.length > 0 ? storeGame.current_pli[0].card.suite : undefined,
     );
 
     const hasAtout: ComputedRef<boolean> = computed(
@@ -35,10 +34,10 @@ export const useAboutStore = defineStore('about', () => {
 
     const highestAtoutInPli: ComputedRef<number> = computed(() => {
         const atoutsInPli = storeGame.current_pli.filter(
-            (c) => c.suite === storeGame.last_annonce.suite,
+            (c) => c.card.suite === storeGame.last_annonce.suite,
         );
         if (atoutsInPli.length === 0) return NaN;
-        return atoutsInPli.sort((a, b) => b.valueNum - a.valueNum)[0].valueNum;
+        return atoutsInPli.sort((a, b) => b.card.valueNum - a.card.valueNum)[0].card.valueNum;
     });
 
     const atoutIsAsked = computed(() => colorAsked.value === storeGame.last_annonce.suite);
@@ -80,7 +79,6 @@ export const useAboutStore = defineStore('about', () => {
         colorAsked,
         atout,
         hand,
-        pli,
         setGameId,
         gameId,
         isCreator,
