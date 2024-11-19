@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
+import { startGame } from '../utils/translations/start';
 import genIdCuid from './gen';
 import { formatPoints } from './points';
 
@@ -121,10 +122,7 @@ export async function join() {
             console.error('Game has not started');
             return;
         }
-        const messageStarted = data[0];
-        storeGame.setStatus('active');
-        storeGame.setCurrentPlayerId(messageStarted.value as PlayerId);
-        storeGame.setPlayerStartingId(messageStarted.value as PlayerId);
+        await startGame(storePlayers.players[0].id);
 
         /*
         // check if cards have been distributed for pli number 1

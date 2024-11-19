@@ -5,12 +5,17 @@ import { generateDeckCards } from '../deck';
 import { supabase, toast } from '../listener';
 
 export async function translateStart(event: EventShared) {
+    const playerId = event.value as string;
+    startGame(playerId);
+    return;
+}
+
+export async function startGame(playerId: string) {
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
-    // same logic applied in the io.ts file - to duplicate / refactor
     storeGame.setStatus('active');
-    storeGame.setPlayerStartingId(event.value as string);
-    storeGame.setCurrentPlayerId(event.value as string);
+    storeGame.setPlayerStartingId(playerId);
+    storeGame.setCurrentPlayerId(playerId);
     if (storeAbout.isCreator) {
         await supabase.from('Events').insert([
             {
@@ -21,11 +26,12 @@ export async function translateStart(event: EventShared) {
                 value: 'idPlayerStarting',
             },
         ]);
-        storeGame.setDeck(generateDeckCards());
+        if (storeGame.team1_score === 0 && storeGame.team2_score === 0) {
+            storeGame.setDeck(generateDeckCards());
+        }
         await emitDistribution(storeAbout.myId);
     }
     toast({
         title: 'Game has started',
     });
-    return;
 }
