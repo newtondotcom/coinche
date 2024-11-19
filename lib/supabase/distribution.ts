@@ -8,6 +8,7 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 export default async function emitDistribution(id_player_starting: PlayerId) {
     const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
+    const storeGame = useGameStore();
     cutDeck();
     // distribute cards 3 per person, then 2, then 3
     const players = storePlayers.players;
@@ -16,6 +17,10 @@ export default async function emitDistribution(id_player_starting: PlayerId) {
         console.error('Player with the given id_player_starting not found');
     }
     const shiftedPlayers = [...players.slice(startIndex), ...players.slice(0, startIndex)];
+
+    if (storeGame.deck.length !== 32 || shiftedPlayers.length !== 4) {
+        console.error('deck not cut or players not 4');
+    }
 
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < shiftedPlayers.length; j++) {
