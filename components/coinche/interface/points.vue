@@ -54,7 +54,7 @@
                 <div class="flex items-center justify-between space-x-4">
                     <div class="flex items-center space-x-4">
                         <Avatar>
-                            <AvatarFallback>{{ storePlayers.team1[0].score }}</AvatarFallback>
+                            <AvatarFallback>{{ storeGame.team1_score }}</AvatarFallback>
                         </Avatar>
                         <div>
                             <p class="text-sm font-medium leading-none">
@@ -71,7 +71,7 @@
                 <div class="flex items-center justify-between space-x-4">
                     <div class="flex items-center space-x-4">
                         <Avatar>
-                            <AvatarFallback>{{ storePlayers.team1[1].score }}</AvatarFallback>
+                            <AvatarFallback>{{ storeGame.team2_score }}</AvatarFallback>
                         </Avatar>
                         <div>
                             <p class="text-sm font-medium leading-none">
