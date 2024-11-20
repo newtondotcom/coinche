@@ -18,5 +18,5 @@
 </template>
 
 <script setup lang="ts">
-    const storeAbout = useStoreAbout();
+    const storeAbout = useAboutStore();
 </script>

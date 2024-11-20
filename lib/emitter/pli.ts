@@ -1,10 +1,10 @@
 import { emitGameStarting } from '@/lib/listener/join';
-import { startGame } from '@/lib/listener/start';
 import { createClient } from '@supabase/supabase-js';
 
 import { delay } from '../utils/cards';
 import genIdCuid from '../utils/gen_id';
-import { deformatCarteToDistribute, deformatCarteToPlay } from './distribution';
+import { toast } from '../utils/listener';
+import { deformatCarteToPlay } from './distribution';
 import { emitPoints } from './points';
 
 const config = useRuntimeConfig();
@@ -44,7 +44,6 @@ export async function closePli() {
     const scoreTeam2 = storePlayers.team2.some((player) => player.id === winnerPlayerId)
         ? score
         : 0;
-    // TODO : check for coinche and surcoinche
     const oldScoreTeam1 = storeGame.team1_point_current_game;
     await emitPoints(scoreTeam1, scoreTeam2);
     while (oldScoreTeam1 === storeGame.team1_point_current_game) {
@@ -52,10 +51,7 @@ export async function closePli() {
     }
     if (storeGame.deck.length === 32) {
         // end of the game
-        if (
-            storeGame.team1_point_current_game >= 1000 ||
-            storeGame.team2_point_current_game >= 1000
-        ) {
+        if (storeGame.team1_score >= 1000 || storeGame.team2_score >= 1000) {
             await supabase.from('Events').insert([
                 {
                     id: await genIdCuid(),
@@ -66,8 +62,12 @@ export async function closePli() {
                 },
             ]);
         } else {
-            // next game if not goal score reached
+            // next game if not goal score is reached
             console.log('Next game');
+            toast({
+                title: 'Launching New game',
+                description: 'New game is starting',
+            });
             // update the ui
             storeGame.setNewGame();
             // update the db :
