@@ -1,3 +1,5 @@
+import translateAnnonce from "./annonce";
+
 export async function translateEvent(event: EventShared) {
   switch (event.type) {
     case "annonce":

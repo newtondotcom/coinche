@@ -1,5 +1,5 @@
 {
-  "name": "master",
+  "name": "@coinche/master",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
@@ -16,6 +16,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
     "@types/node": "^22.9.1",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "@coinche/shared": "workspace:*"
   }
 }

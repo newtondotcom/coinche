@@ -1,23 +1,47 @@
 import logger from "./logger";
+import type { IGame } from "@coinche/shared";
 
 export default class Master {
-  game: IGame;
+  private static _instance: Master | null = null;
 
-  addPlay(card: ICard, playerId: string) {
-    this.game.rounds[-1].pli.push({
-      card,
-      playerId,
-    });
-    logger.info(`Player ${playerId} played ${card}`);
+  public game: IGame;
+
+  // Private constructor to prevent direct instantiation
+  private constructor() {
+    this.game = { rounds: [] }; // Initialize the game with an empty rounds array
   }
 
-  addAnnonce(annonce: IAnnonce) {
-    this.game.rounds[-1].annonces.push(annonce);
-    logger.info(`Player ${annonce.playerId} announced ${annonce}`);
+  // Getter to access the singleton instance
+  public static get instance(): Master {
+    if (!this._instance) {
+      this._instance = new Master();
+    }
+    return this._instance;
   }
 
-  addRound() {
-    this.game.rounds.push();
-    logger.info(`New round started`);
+  // Add a play to the last round
+  public addPlay(card: ICard, playerId: string): void {
+    const lastRound = this.game.rounds[this.game.rounds.length - 1];
+    if (!lastRound) {
+      throw new Error("No round exists. Add a round first.");
+    }
+    lastRound.pli.push({ card, playerId });
+    logger.info(`Player ${playerId} played ${card.rank} of ${card.suit}`);
+  }
+
+  // Add an announcement to the last round
+  public addAnnonce(annonce: IAnnonce): void {
+    const lastRound = this.game.rounds[this.game.rounds.length - 1];
+    if (!lastRound) {
+      throw new Error("No round exists. Add a round first.");
+    }
+    lastRound.annonces.push(annonce);
+    logger.info(`Player ${annonce.playerId} announced ${annonce.type}`);
+  }
+
+  // Add a new round to the game
+  public addRound(): void {
+    this.game.rounds.push({ pli: [], annonces: [] });
+    logger.info("New round started");
   }
 }
