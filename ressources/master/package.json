@@ -9,9 +9,11 @@
     "typescript": "^5.6.3"
   },
   "scripts": {
-    "dev": "npx tsc -w"
+    "dev": "npx tsc -w",
+    "types": "curl https://raw.githubusercontent.com/newtondotcom/coinche/refs/heads/main/ressources/game/lib/types.d.ts > src/types.d.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.46.1"
+    "@supabase/supabase-js": "^2.46.1",
+    "winston": "^3.17.0"
   }
 }

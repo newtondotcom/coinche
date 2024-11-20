@@ -31,7 +31,7 @@ interface IPlayer {
     last_annonce?: IAnnonce;
 }
 
-interface IGame {
+interface IRound {
     current_pli: ICard[];
     current_player_id: PlayerId;
     status: GameStatus;
@@ -44,6 +44,10 @@ interface IGame {
     last_annonce: IAnnonce;
     coinched: boolean;
     surcoinched: boolean;
+}
+
+interface IGame {
+    rounds: IRound[];
 }
 
 type EventType =
