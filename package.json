@@ -1,13 +1,13 @@
 {
-    "name": "workspaces",
-    "private": "true",
-    "module": "index.ts",
-    "type": "module",
-    "workspaces": [
-      "packages/game",
-      "packages/master"
-    ],
-    "scripts": {
-      "clean": "rm -rf node_modules packages/game/node_modules packages/master/node_modules bun.lockb packages/game/bun.lockb packages/master/bun.lockb"
-    }
+  "name": "workspaces",
+  "private": "true",
+  "module": "index.ts",
+  "type": "module",
+  "workspaces": [
+    "ressources/game",
+    "ressources/master"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules ressources/game/node_modules ressources/master/node_modules bun.lockb ressources/game/bun.lockb ressources/master/bun.lockb"
   }
+}
