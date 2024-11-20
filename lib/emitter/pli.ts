@@ -1,9 +1,10 @@
+import { emitGameStarting } from '@/lib/listener/join';
+import { startGame } from '@/lib/listener/start';
 import { createClient } from '@supabase/supabase-js';
 
-import { emitGameStarting } from '../utils/translations/join';
-import { startGame } from '../utils/translations/start';
+import { delay } from '../utils/cards';
+import genIdCuid from '../utils/gen_id';
 import { deformatCarteToDistribute, deformatCarteToPlay } from './distribution';
-import genIdCuid from './gen';
 import { emitPoints } from './points';
 
 const config = useRuntimeConfig();
@@ -16,7 +17,7 @@ export async function closePli() {
     // find the winner
     const pastPlis: IPlay[] = storeGame.current_pli;
     while (pastPlis.length < 4) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await delay(100);
     }
     const winnerPlayerId = findWinner(pastPlis);
     const myIndex = storePlayers.players.findIndex(
@@ -47,7 +48,7 @@ export async function closePli() {
     const oldScoreTeam1 = storeGame.team1_point_current_game;
     await emitPoints(scoreTeam1, scoreTeam2);
     while (oldScoreTeam1 === storeGame.team1_point_current_game) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await delay(100);
     }
     if (storeGame.deck.length === 32) {
         // end of the game

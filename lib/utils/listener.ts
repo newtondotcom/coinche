@@ -1,20 +1,18 @@
 import { useToast } from '@/components/ui/toast/use-toast';
+import translateAnnonce from '@/lib/listener/annonce';
+import { translateCoinche, translateSurcoinche } from '@/lib/listener/coinche';
+import { translateDistribution } from '@/lib/listener/distribution';
+import { translateEndDistribution } from '@/lib/listener/end_distribution';
+import { translateEnd } from '@/lib/listener/end_game';
+import { translateJoin } from '@/lib/listener/join';
+import translatePlay from '@/lib/listener/play';
+import { translatePoints } from '@/lib/listener/points';
+import { translateStart } from '@/lib/listener/start';
+import { translateStartDistribution } from '@/lib/listener/start_distribution';
+import { translateStartPli } from '@/lib/listener/start_pli';
+import { translateWinGame } from '@/lib/listener/win_game';
+import { translateWinPli } from '@/lib/listener/win_pli';
 import { createClient } from '@supabase/supabase-js';
-
-import { unformatPoints } from '../supabase/points';
-import translateAnnonce from './translations/annonce';
-import { translateCoinche, translateSurcoinche } from './translations/coinche';
-import { translateDistribution } from './translations/distribution';
-import { translateEndDistribution } from './translations/end_distribution';
-import { translateEnd } from './translations/end_game';
-import { translateJoin } from './translations/join';
-import translatePlay from './translations/play';
-import { translatePoints } from './translations/points';
-import { translateStart } from './translations/start';
-import { translateStartDistribution } from './translations/start_distribution';
-import { translateStartPli } from './translations/start_pli';
-import { translateWinGame } from './translations/win_game';
-import { translateWinPli } from './translations/win_pli';
 
 export const { toast } = useToast();
 

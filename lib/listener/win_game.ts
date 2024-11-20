@@ -1,7 +1,6 @@
-import genIdCuid from '~/lib/supabase/gen';
-import { emitPoints, formatPoints, unformatPoints } from '~/lib/supabase/points';
-
-import { supabase, toast } from '../listener';
+import { emitPoints, formatPoints, unformatPoints } from '@/lib/emitter/points';
+import genIdCuid from '@/lib/utils/gen_id';
+import { supabase, toast } from '@/lib/utils/listener';
 
 export async function translateWinGame(event: EventShared) {
     const storeGame = useGameStore();

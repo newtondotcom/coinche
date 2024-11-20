@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-    import emitAnnonce from '@/lib/supabase/annonce';
+    import emitAnnonce from '@/lib/emitter/annonce';
 
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();

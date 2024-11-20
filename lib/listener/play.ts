@@ -1,7 +1,6 @@
-import { setNextPlayerTurn } from '~/lib/supabase/annonce';
-import { deformatCarteToPlay } from '~/lib/supabase/distribution';
-
-import { assertPliNumber } from '../utils';
+import { setNextPlayerTurn } from '@/lib/emitter/annonce';
+import { deformatCarteToPlay } from '@/lib/emitter/distribution';
+import { assertPliNumber } from '@/lib/utils/miscs';
 
 export default function translatePlay(event: EventShared) {
     const storeGame = useGameStore();

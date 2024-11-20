@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { maxCardWidth } from '@/lib/constants';
+    import { cardPressed } from '@/lib/supabase/plays';
     import { cn } from '@/lib/utils';
-    import { cardPressed } from '~/lib/supabase/plays';
 
     interface Props {
         card: ICard;
@@ -126,3 +126,4 @@
         opacity: 0.6;
     }
 </style>
+@/lib/emitter/plays

@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
+import genIdCuid from '../utils/gen_id';
 import { formatCarteToDistribute, formatCarteToPlay } from './distribution';
-import genIdCuid from './gen';
 import { closePli, formatTeam } from './pli';
 
 const config = useRuntimeConfig();

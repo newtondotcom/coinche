@@ -1,8 +1,7 @@
-import emitDistribution from '~/lib/supabase/distribution';
-import genIdCuid from '~/lib/supabase/gen';
-
-import { generateDeckCards } from '../deck';
-import { supabase, toast } from '../listener';
+import emitDistribution from '@/lib/emitter/distribution';
+import { generateDeckCards } from '@/lib/utils/deck';
+import genIdCuid from '@/lib/utils/gen_id';
+import { supabase, toast } from '@/lib/utils/listener';
 
 export async function translateStart(event: EventShared) {
     const playerId = event.value as string;

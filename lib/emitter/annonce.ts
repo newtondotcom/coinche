@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-import genIdCuid from './gen';
+import genIdCuid from '../utils/gen_id';
 import { startPli } from './pli';
 
 const config = useRuntimeConfig();

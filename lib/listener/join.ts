@@ -1,6 +1,5 @@
-import genIdCuid from '~/lib/supabase/gen';
-
-import { supabase } from '../listener';
+import genIdCuid from '@/lib/utils/gen_id';
+import { supabase } from '@/lib/utils/listener';
 
 export async function translateJoin(event: EventShared) {
     const storePlayers = usePlayersStore();

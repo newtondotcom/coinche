@@ -1,5 +1,5 @@
-import { setValueAccordingToAtout } from '../deck';
-import { supabase } from '../listener';
+import { setValueAccordingToAtout } from '@/lib/utils/deck';
+import { supabase } from '@/lib/utils/listener';
 
 export async function translateStartPli(event: EventShared) {
     const storeGame = useGameStore();

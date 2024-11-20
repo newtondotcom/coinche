@@ -1,7 +1,7 @@
+import { startGame } from '@/lib/listener/start';
 import { createClient } from '@supabase/supabase-js';
 
-import { startGame } from '../utils/translations/start';
-import genIdCuid from './gen';
+import genIdCuid from '../utils/gen_id';
 import { formatPoints } from './points';
 
 const config = useRuntimeConfig();
@@ -10,7 +10,6 @@ const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE
 export async function join() {
     const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
-    const storeGame = useGameStore();
     const gameId = storeAbout.gameId;
 
     // Check if there are any events for this gameId

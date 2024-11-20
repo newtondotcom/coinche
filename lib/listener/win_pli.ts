@@ -1,6 +1,5 @@
-import { deformatTeam } from '~/lib/supabase/pli';
-
-import { toast } from '../listener';
+import { deformatTeam } from '@/lib/emitter/pli';
+import { toast } from '@/lib/utils/listener';
 
 export async function translateWinPli(event: EventShared) {
     const storeGame = useGameStore();

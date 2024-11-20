@@ -1,4 +1,4 @@
-import { deformatCarteToDistribute } from '~/lib/supabase/distribution';
+import { deformatCarteToDistribute } from '@/lib/emitter/distribution';
 
 export function translateDistribution(event: EventShared) {
     const storePlayers = usePlayersStore();

@@ -1,4 +1,4 @@
-import { unformatPoints } from '~/lib/supabase/points';
+import { unformatPoints } from '@/lib/emitter/points';
 
 export async function translatePoints(event: EventShared) {
     console.log('points', event);

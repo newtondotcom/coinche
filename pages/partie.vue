@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-    import { join, leave } from '@/lib/supabase/io';
+    import { join, leave } from '@/lib/emitter/join';
     import translateEvent from '@/lib/utils/listener';
     import { createClient } from '@supabase/supabase-js';
 
@@ -59,3 +59,4 @@
             .subscribe();
     }
 </script>
+@/lib/emitter/io

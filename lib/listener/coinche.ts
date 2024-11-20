@@ -1,6 +1,5 @@
-import { setNextPlayerTurn } from '~/lib/supabase/annonce';
-
-import { toast } from '../listener';
+import { setNextPlayerTurn } from '@/lib/emitter/annonce';
+import { toast } from '@/lib/utils/listener';
 
 export function translateCoinche(event: EventShared) {
     const storePlayers = usePlayersStore();
