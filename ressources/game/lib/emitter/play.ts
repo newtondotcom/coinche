@@ -1,6 +1,6 @@
+import genIdCuid from '@/lib/utils/gen_id';
 import { createClient } from '@supabase/supabase-js';
 
-import genIdCuid from '../utils/gen_id';
 import { formatCarteToDistribute, formatCarteToPlay } from './distribution';
 import { closePli, formatTeam } from './pli';
 

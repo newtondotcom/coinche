@@ -1,8 +1,7 @@
+import { formatPoints } from '@/lib/emitter/points';
 import { startGame } from '@/lib/listener/start';
+import genIdCuid from '@/lib/utils/gen_id';
 import { createClient } from '@supabase/supabase-js';
-
-import genIdCuid from '../utils/gen_id';
-import { formatPoints } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);

@@ -1,5 +1,4 @@
-import { emitPoints, formatPoints, unformatPoints } from '@/lib/emitter/points';
-import genIdCuid from '@/lib/utils/gen_id';
+import { unformatPoints } from '@/lib/emitter/points';
 import { supabase, toast } from '@/lib/utils/listener';
 
 export async function translateWinGame(event: EventShared) {

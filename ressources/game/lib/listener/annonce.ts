@@ -12,7 +12,7 @@ export default async function translateAnnonce(event: EventShared) {
         const annonceValueFormatted =
             storeGame.last_annonce.annonce === 0
                 ? 'passe'
-                : `pass à ${storeGame.last_annonce.annonce} ${storeGame.last_annonce.suite}`;
+                : `passe à ${storeGame.last_annonce.annonce} ${storeGame.last_annonce.suite}`;
         toast({
             title: 'Passe',
             description: `${playerName} ${annonceValueFormatted}`,

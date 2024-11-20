@@ -1,7 +1,6 @@
+import { startPli } from '@/lib/emitter/pli';
+import genIdCuid from '@/lib/utils/gen_id';
 import { createClient } from '@supabase/supabase-js';
-
-import genIdCuid from '../utils/gen_id';
-import { startPli } from './pli';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);

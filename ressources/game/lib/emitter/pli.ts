@@ -1,11 +1,10 @@
+import { deformatCarteToPlay } from '@/lib/emitter/distribution';
+import { emitPoints } from '@/lib/emitter/points';
 import { emitGameStarting } from '@/lib/listener/join';
+import { delay } from '@/lib/utils/cards';
+import genIdCuid from '@/lib/utils/gen_id';
+import { toast } from '@/lib/utils/listener';
 import { createClient } from '@supabase/supabase-js';
-
-import { delay } from '../utils/cards';
-import genIdCuid from '../utils/gen_id';
-import { toast } from '../utils/listener';
-import { deformatCarteToPlay } from './distribution';
-import { emitPoints } from './points';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
