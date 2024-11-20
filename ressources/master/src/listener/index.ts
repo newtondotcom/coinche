@@ -1,4 +1,4 @@
-async function translateEvent(event: EventShared) {
+export async function translateEvent(event: EventShared) {
   switch (event.type) {
     case "annonce":
       return translateAnnonce(event);
