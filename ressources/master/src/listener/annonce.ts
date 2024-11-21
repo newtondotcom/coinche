@@ -9,7 +9,7 @@ export default async function translateAnnonce(event: EventShared) {
   const annonce = deformatAnnonce(event.value as string, event.playerId);
   Master.getInstance(event.gameId).addAnnonce(annonce);
   const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
-  await emitCanAnnonce(event.playerId, nextPlayerId);
+  await emitCanAnnonce(nextPlayerId, event.gameId);
 
   if (annonce.annonce === 0) {
     // Get the last two annonces to check if they are both passes

@@ -7,6 +7,7 @@ import Master from "../game";
 import supabase from "../supabase";
 import genIdCuid from "@coinche/shared/src/gen_id";
 import logger from "../logger";
+import { emitCanAnnonce } from "./can";
 
 export default async function emitDistribution(
   id_player_starting: PlayerId,
@@ -58,6 +59,7 @@ export default async function emitDistribution(
       value: id_player_starting,
     },
   ]);
+  await emitCanAnnonce(id_player_starting, gameId);
 }
 
 async function distributeCard(player_id: string, gameId: string) {

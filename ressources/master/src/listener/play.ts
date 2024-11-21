@@ -12,7 +12,7 @@ export default async function translatePlay(event: EventShared) {
   const playerId = event.playerId;
   Master.getInstance(event.gameId).addPlay(card, playerId);
   const nextPlayerId = setNextPlayerTurn(playerId, event.gameId);
-  await emitCanPlay(playerId, nextPlayerId);
+  await emitCanPlay(nextPlayerId, event.gameId);
   // check if end of pli
   if (Master.getInstance(event.gameId).getLastPli().plays.length === 4) {
     logger.info("End of pli");
