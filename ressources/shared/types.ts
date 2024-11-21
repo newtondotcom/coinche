@@ -51,17 +51,19 @@ export interface IPlayer {
 }
 
 export interface IRound {
-  pli: IPlay[];
+  plis: IPli[];
   annonces: IAnnonce[];
-  pli_number: number;
-  current_player_id: PlayerId;
-  player_starting_id: PlayerId;
-
   team1_point_current_game: number;
   team2_point_current_game: number;
   last_annonce: IAnnonce;
   coinched: boolean;
   surcoinched: boolean;
+}
+
+export interface IPli {
+  plays: IPlay[];
+  current_player_id: PlayerId;
+  player_starting_id: PlayerId;
 }
 
 export interface IGame {
@@ -84,6 +86,7 @@ export type Event =
   | "start_pli"
   | "win_pli"
   | "score"
+  | "score_round"
   | "start_distribution"
   | "distribution"
   | "start_annonce"
