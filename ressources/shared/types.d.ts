@@ -57,7 +57,6 @@ interface IRound {
   current_player_id: PlayerId;
   player_starting_id: PlayerId;
 
-  status: GameStatus;
   team1_point_current_game: number;
   team2_point_current_game: number;
   last_annonce: IAnnonce;
@@ -72,6 +71,8 @@ interface IGame {
   deck: ICard[];
   team1_score: number;
   team2_score: number;
+
+  status: GameStatus;
 }
 
 export type Event =

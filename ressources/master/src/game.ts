@@ -7,7 +7,7 @@ export default class Master {
   public game: IGame;
 
   private constructor() {
-    this.game = { rounds: [], players: [], deck: [], gameId: "" }; // Initialize the game with an empty rounds array
+    this.game = { rounds: [], players: [], deck: [], gameId: "", team1_score : 0, team2_score : 0, status : "new" };
   }
   public static get instance(): Master {
     if (!this._instance) {
@@ -45,6 +45,11 @@ export default class Master {
       pli_number: 0,
       current_player_id: "PlayerId",
       player_starting_id: "PlayerId",
+      team1_point_current_game : 0,
+      team2_point_current_game : 0,
+      last_annonce : {suite : "NA", annonce : 0, playerId : "NA"},
+      coinched : false,
+      surcoinched : false
     };
     this.game.rounds.push(roundInit);
     logger.info("New round started");
