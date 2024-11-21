@@ -60,8 +60,6 @@ interface IRound {
   status: GameStatus;
   team1_point_current_game: number;
   team2_point_current_game: number;
-  team1_score: number;
-  team2_score: number;
   last_annonce: IAnnonce;
   coinched: boolean;
   surcoinched: boolean;
@@ -72,6 +70,8 @@ interface IGame {
   players: IPlayer[];
   gameId: string;
   deck: ICard[];
+  team1_score: number;
+  team2_score: number;
 }
 
 export type Event =

@@ -1,14 +1,13 @@
 import { deformatCarteToDistribute } from '@coinche/shared';
 import type { EventShared } from '@coinche/shared';
 
+import { assertPliNumber } from '../utils/miscs';
+
 export function translateDistribution(event: EventShared) {
     const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
     const { pli_number, card } = deformatCarteToDistribute(event.value as string);
-    if (pli_number !== storeGame.pli_number) {
-        console.error('Pli number not matching');
-        return;
-    }
+    assertPliNumber(pli_number, storeGame.pli_number);
     const player_id = event.playerId;
     const player = storePlayers.players.find((p) => p.id === player_id);
     if (player) {

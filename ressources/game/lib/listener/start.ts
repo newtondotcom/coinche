@@ -1,7 +1,5 @@
-import emitDistribution from '@/lib/emitter/distribution';
-import { generateDeckCards } from '@/lib/utils/deck';
-import genIdCuid from '@/lib/utils/gen_id';
-import { supabase, toast } from '@/lib/utils/listener';
+import { toast } from '@/lib/utils/listener';
+import type { EventShared } from '@coinche/shared';
 
 export async function translateStart(event: EventShared) {
     const playerId = event.value as string;
@@ -15,8 +13,7 @@ export async function startGame(playerId: string) {
     storeGame.setStatus('active');
     storeGame.setPlayerStartingId(playerId);
     storeGame.setCurrentPlayerId(playerId);
-    if (storeAbout.isCreator) {
-    }
+    storeGame.setNewGame();
     toast({
         title: 'Game has started',
     });

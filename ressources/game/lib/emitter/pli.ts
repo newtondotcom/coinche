@@ -31,24 +31,3 @@ export async function fetchLastPliEvents(): Promise<IPlay[]> {
 export function sumPointsPli(plays: IPlay[]) {
     return plays.reduce((acc, play) => acc + play.card.valueNum, 0);
 }
-
-export async function fetchLastPliPlayerWinningId(): Promise<string> {
-    const storeAbout = useAboutStore();
-    const storePlayers = usePlayersStore();
-    const { data: events, error } = await supabase
-        .from('Events')
-        .select('value')
-        .eq('type', 'start_pli')
-        .eq('gameId', storeAbout.gameId);
-    if (error) {
-        console.error(error);
-        return ' ';
-    }
-    const playerStartedId = events[0].value;
-    const playerStartedIndex = storePlayers.players.findIndex(
-        (player) => player.id === playerStartedId,
-    );
-    const playerStartingIndex = (playerStartedIndex + 1) % 4;
-    const playerId = storePlayers.players[playerStartingIndex].id;
-    return playerId;
-}

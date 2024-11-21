@@ -1,10 +1,8 @@
-import genIdCuid from '@/lib/utils/gen_id';
 import { supabase } from '@/lib/utils/listener';
+import type { EventShared, IPlayer, PlayerPosition } from '@coinche/shared';
 
 export async function translateJoin(event: EventShared) {
     const storePlayers = usePlayersStore();
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
     if (storePlayers.players.find((player) => player.id === event.playerId)) {
         console.log('Player already in the game');
         return '';

@@ -1,6 +1,7 @@
 import { setNextPlayerTurn } from '@/lib/emitter/annonce';
 import { toast } from '@/lib/utils/listener';
 import { deformatAnnonce } from '@coinche/shared';
+import type { EventShared } from '@coinche/shared';
 
 export default async function translateAnnonce(event: EventShared) {
     const storeGame = useGameStore();

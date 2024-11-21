@@ -61,4 +61,7 @@ export default class Master {
   public addPlayer(player: IPlayer) {
     this.game.players.push(player);
   }
+
+  public isTeam1(playerId: string) {
+    return this.game.players[0].id === playerId || this.game.players[2].id === playerId;
 }
