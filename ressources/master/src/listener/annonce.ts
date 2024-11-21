@@ -1,26 +1,32 @@
 import { startPli } from "../emitter/start_pli";
 import Master from "../game";
 import { deformatAnnonce, type EventShared } from "@coinche/shared";
+import logger from "../logger";
+import { setNextPlayerTurn } from "../utils";
+import { emitCanAnnonce } from "../emitter/can";
 
 export default async function translateAnnonce(event: EventShared) {
   const annonce = deformatAnnonce(event.value as string, event.playerId);
   Master.getInstance(event.gameId).addAnnonce(annonce);
+  const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
+  await emitCanAnnonce(event.playerId, nextPlayerId);
+
   if (annonce.annonce === 0) {
     // Get the last two annonces to check if they are both passes
-    const lastTwoAnnonces = Master.getInstance(event.gameId).game.rounds[
-      -1
-    ].annonces.slice(-2);
+    const lastTwoAnnonces = Master.getInstance(event.gameId)
+      .getLastRound()
+      .annonces.slice(-3);
     const annoncesPassed = lastTwoAnnonces.filter(
       (annonce) => annonce.annonce === 0,
     );
 
     // Include the current annonce in the check
     if (annoncesPassed.length === 3) {
-      await startPli();
-      console.log("Starting pli because of 3 consecutive passes");
+      await startPli(event.gameId);
+      logger.info("Starting pli because of 3 consecutive passes");
       return;
     } else {
-      console.log(annoncesPassed.length, "passes");
+      logger.info(annoncesPassed.length.toString(), "passes");
     }
   }
 }
