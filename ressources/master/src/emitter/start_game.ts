@@ -1,6 +1,6 @@
 import genIdCuid from "@coinche/shared/src/gen_id";
 import supabase from "../supabase";
-import Master from "../game";
+import { emitRoundStarting } from "./start_round";
 
 export async function emitGameStarting(playerId: string, gameId: string) {
   await supabase.from("Events").insert([
@@ -12,4 +12,5 @@ export async function emitGameStarting(playerId: string, gameId: string) {
       value: playerId,
     },
   ]);
+  await emitRoundStarting(gameId, playerId);
 }
