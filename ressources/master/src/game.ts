@@ -48,13 +48,13 @@ export default class Master {
   }
 
   // Add a new round to the game
-  public addRound(): void {
+  public addRound(playerStartingId: string): void {
     const roundInit: IRound = {
       pli: [],
       annonces: [],
       pli_number: 0,
-      current_player_id: "PlayerId",
-      player_starting_id: "PlayerId",
+      current_player_id: playerStartingId,
+      player_starting_id: playerStartingId,
       team1_point_current_game: 0,
       team2_point_current_game: 0,
       last_annonce: { suite: "NA", annonce: 0, playerId: "NA" },
