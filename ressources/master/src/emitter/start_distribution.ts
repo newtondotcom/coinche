@@ -18,7 +18,7 @@ export async function emitStartDistribution(gameId: string) {
     Master.getInstance(gameId).game.deck = generateDeckCards();
   }
   await emitDistribution(
-    Master.getInstance(gameId).getLastRound().player_starting_id,
+    Master.getInstance(gameId).getLastPli().player_starting_id,
     gameId,
   );
 }

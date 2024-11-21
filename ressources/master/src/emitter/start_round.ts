@@ -14,5 +14,6 @@ export async function emitRoundStarting(gameId: string, playerId: string) {
     },
   ]);
   Master.getInstance(gameId).addRound(playerId);
+  Master.getInstance(gameId).addPli(playerId);
   await emitStartDistribution(gameId);
 }

@@ -10,7 +10,7 @@ export async function startPli(gameId: string) {
       type: "start_pli",
       playerId: "master",
       gameId: gameId,
-      value: Master.getInstance(gameId).getLastRound().player_starting_id,
+      value: Master.getInstance(gameId).getLastPli().player_starting_id,
     },
   ]);
 }
