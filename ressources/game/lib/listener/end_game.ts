@@ -1,5 +1,6 @@
-import { deformatTeam } from '@/lib/emitter/pli';
 import { toast } from '@/lib/utils/listener';
+import { deformatTeam } from '@coinche/shared';
+import type { EventShared } from '@coinche/shared';
 
 export function translateEnd(event: EventShared) {
     const storeGame = useGameStore();

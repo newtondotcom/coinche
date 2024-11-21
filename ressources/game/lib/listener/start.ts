@@ -16,19 +16,6 @@ export async function startGame(playerId: string) {
     storeGame.setPlayerStartingId(playerId);
     storeGame.setCurrentPlayerId(playerId);
     if (storeAbout.isCreator) {
-        await supabase.from('Events').insert([
-            {
-                id: await genIdCuid(),
-                type: 'start_distribution',
-                playerId: storeAbout.myId,
-                gameId: storeAbout.gameId,
-                value: 'idPlayerStarting',
-            },
-        ]);
-        if (storeGame.team1_score === 0 && storeGame.team2_score === 0) {
-            storeGame.setDeck(generateDeckCards());
-        }
-        await emitDistribution(storeAbout.myId);
     }
     toast({
         title: 'Game has started',

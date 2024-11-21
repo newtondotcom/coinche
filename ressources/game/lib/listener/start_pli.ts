@@ -1,5 +1,6 @@
 import { setValueAccordingToAtout } from '@/lib/utils/deck';
 import { supabase } from '@/lib/utils/listener';
+import type { EventShared } from '@coinche/shared';
 
 export async function translateStartPli(event: EventShared) {
     const storeGame = useGameStore();

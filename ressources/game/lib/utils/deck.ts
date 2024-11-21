@@ -1,38 +1,6 @@
 const values: CardValue[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
 const suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades'];
 
-export function generateDeckCards(): ICard[] {
-    const cards: ICard[] = [];
-    suites.forEach((s) => {
-        values.forEach((i) => {
-            cards.push({
-                value: i,
-                valueNum: 0,
-                suite: s,
-            });
-        });
-    });
-    return cards;
-}
-
-export function generateRandomDeck(): ICard[] {
-    const deck: ICard[] = [];
-
-    while (deck.length < 8) {
-        const randomSuite: CardSuite = suites[Math.floor(Math.random() * suites.length)];
-        const randomValue: CardValue = values[Math.floor(Math.random() * values.length)];
-        const key: string = Math.random().toString();
-        const valueNum: number = values.indexOf(randomValue) + 1;
-        const isDuplicate = deck.some(
-            (card) => card.suite === randomSuite && card.value === randomValue,
-        );
-        if (!isDuplicate) {
-            deck.push({ suite: randomSuite, value: randomValue, key, valueNum });
-        }
-    }
-    return deck;
-}
-
 export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
     const storeAbout = useAboutStore();
     const atout = storeAbout.atout;

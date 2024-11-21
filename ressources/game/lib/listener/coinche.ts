@@ -1,5 +1,6 @@
 import { setNextPlayerTurn } from '@/lib/emitter/annonce';
 import { toast } from '@/lib/utils/listener';
+import type { EventShared, IAnnonce } from '@coinche/shared';
 
 export function translateCoinche(event: EventShared) {
     const storePlayers = usePlayersStore();

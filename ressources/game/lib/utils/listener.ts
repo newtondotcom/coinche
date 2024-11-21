@@ -13,6 +13,7 @@ import { translateStartPli } from '@/lib/listener/start_pli';
 import { translateWinGame } from '@/lib/listener/win_game';
 import { translateWinPli } from '@/lib/listener/win_pli';
 import { createClient } from '@supabase/supabase-js';
+import type { EventShared } from '@coinche/shared';
 
 export const { toast } = useToast();
 

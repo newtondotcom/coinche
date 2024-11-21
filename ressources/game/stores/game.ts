@@ -1,3 +1,5 @@
+import type { GameStatus, IAnnonce, ICard, IPlay, PlayerId } from '@coinche/shared';
+
 export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
     const current_pli = ref<IPlay[]>([]);

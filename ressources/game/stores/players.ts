@@ -1,3 +1,5 @@
+import type { IAnnonce, ICard, IPlayer, PlayerPosition } from '@coinche/shared';
+
 export const usePlayersStore = defineStore('players', () => {
     const players = ref<IPlayer[]>([]);
 

@@ -1,6 +1,7 @@
 import { setNextPlayerTurn } from '@/lib/emitter/annonce';
-import { deformatCarteToPlay } from '@/lib/emitter/distribution';
 import { assertPliNumber } from '@/lib/utils/miscs';
+import { deformatCarteToPlay } from '@coinche/shared';
+import type { EventShared } from '@coinche/shared';
 
 export default function translatePlay(event: EventShared) {
     const storeGame = useGameStore();

@@ -1,4 +1,5 @@
-import { deformatCarteToDistribute } from '@/lib/emitter/distribution';
+import { deformatCarteToDistribute } from '@coinche/shared';
+import type { EventShared } from '@coinche/shared';
 
 export function translateDistribution(event: EventShared) {
     const storePlayers = usePlayersStore();

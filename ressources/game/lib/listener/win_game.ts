@@ -1,5 +1,6 @@
 import { unformatPoints } from '@/lib/emitter/points';
 import { supabase, toast } from '@/lib/utils/listener';
+import type { EventShared } from '@coinche/shared';
 
 export async function translateWinGame(event: EventShared) {
     const storeGame = useGameStore();

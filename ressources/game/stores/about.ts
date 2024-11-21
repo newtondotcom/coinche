@@ -1,3 +1,5 @@
+import type { CardSuite, ICard } from '@coinche/shared';
+
 export const useAboutStore = defineStore('about', () => {
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();

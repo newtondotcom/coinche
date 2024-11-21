@@ -70,9 +70,11 @@ interface IRound {
 interface IGame {
   rounds: IRound[];
   players: IPlayer[];
+  gameId: string;
+  deck: ICard[];
 }
 
-export type Eventexport type =
+export type Event =
   | "annonce"
   | "coinche"
   | "surcoinche"
@@ -96,7 +98,7 @@ interface EventShared {
   id: string;
   timestamp: number;
   playerId: PlayerId;
-  export type: Eventexport type;
+  type: Event;
   value: string | ICard | IAnnonce;
   gameId: string;
 }

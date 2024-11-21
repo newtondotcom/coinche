@@ -1,5 +1,6 @@
-import { startPli } from "@/lib/emitter/pli";
+import { startPli } from "../emitter/start_pli";
 import Master from "../game";
+import { deformatAnnonce, type EventShared } from "@coinche/shared";
 
 export default async function translateAnnonce(event: EventShared) {
   const annonce = deformatAnnonce(event.value as string, event.playerId);
@@ -12,7 +13,7 @@ export default async function translateAnnonce(event: EventShared) {
     );
 
     // Include the current annonce in the check
-    if (annoncesPassed.length === 2) {
+    if (annoncesPassed.length === 3) {
       await startPli();
       console.log("Starting pli because of 3 consecutive passes");
       return;
@@ -20,17 +21,4 @@ export default async function translateAnnonce(event: EventShared) {
       console.log(annoncesPassed.length, "passes");
     }
   }
-}
-
-export function formatAnnonce(annonce: IAnnonce): string {
-  return `${annonce.annonce}|${annonce.suite}`;
-}
-
-export function deformatAnnonce(annonce: string, playerId: string): IAnnonce {
-  const [annonceValue, suite] = annonce.split("|");
-  return {
-    annonce: parseInt(annonceValue) as Annonce,
-    suite: suite as CardSuite,
-    playerId: playerId,
-  };
 }

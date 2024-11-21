@@ -1,8 +1,7 @@
-import genIdCuid from '@/lib/utils/gen_id';
+import { formatCarteToPlay } from '@coinche/shared';
+import genIdCuid from '@coinche/shared/src/gen_id';
 import { createClient } from '@supabase/supabase-js';
-
-import { formatCarteToDistribute, formatCarteToPlay } from './distribution';
-import { closePli, formatTeam } from './pli';
+import type { CardSuite, CardValue, ICard } from '@coinche/shared';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -19,10 +18,6 @@ export async function emitCardPlay(card: ICard) {
             value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
         },
     ]);
-    // check if end of pli
-    if (storeGame.current_pli.length == 3) {
-        await closePli();
-    }
 }
 
 export async function cardPressed(suite: CardSuite, value: CardValue) {

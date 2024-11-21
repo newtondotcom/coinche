@@ -1,4 +1,5 @@
-import { deformatTeam } from '@/lib/emitter/pli';
+import { deformatTeam } from '@coinche/shared';
+import type { EventShared } from '@coinche/shared';
 
 export async function translateWinPli(event: EventShared) {
     const storeGame = useGameStore();

@@ -1,4 +1,5 @@
-import { unformatPoints } from '@/lib/emitter/points';
+import { unformatPoints } from '@coinche/shared';
+import type { EventShared } from '@coinche/shared';
 
 export async function translatePoints(event: EventShared) {
     console.log('points', event);
