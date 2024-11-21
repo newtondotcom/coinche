@@ -10,8 +10,7 @@
   },
   "scripts": {
     "dev": "bun run index.ts",
-    "watch": "npx tsc -w",
-    "types": "curl https://raw.githubusercontent.com/newtondotcom/coinche/refs/heads/main/ressources/game/lib/types.d.ts > src/types.d.ts"
+    "watch": "npx tsc -w"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
