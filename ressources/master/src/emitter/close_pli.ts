@@ -5,16 +5,19 @@ import supabase from "../supabase";
 import { emitPoints } from "./points";
 import logger from "../logger";
 import { emitGameStarting } from "./start_game";
+import { emitEndRound } from "./end_round";
+import { emitEndGame } from "./end_game";
 
 export async function closePli(gameId: string) {
+  const game = Master.getInstance(gameId).game;
+  const lastRound = Master.getInstance(gameId).getLastRound();
   // find the winner
-  const pastPlis: IPlay[] = Master.getInstance(gameId).getLastRound().pli;
+  const pastPlis: IPlay[] = lastRound.pli;
   const winnerPlayerId = findWinner(pastPlis, gameId);
-  const myIndex = Master.getInstance(gameId).game.players.findIndex(
+  const myIndex = game.players.findIndex(
     (player: IPlayer) => player.id === winnerPlayerId,
   );
-  const teamMatePlayerId =
-    Master.getInstance(gameId).game.players[(myIndex + 2) % 4].id;
+  const teamMatePlayerId = game.players[(myIndex + 2) % 4].id;
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
@@ -25,7 +28,7 @@ export async function closePli(gameId: string) {
     },
   ]);
   let score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
-  if (Master.getInstance(gameId).game.deck.length === 32) {
+  if (game.deck.length === 32) {
     score += 10;
     logger.info("Dernier pli donc +10");
   }
@@ -34,21 +37,12 @@ export async function closePli(gameId: string) {
     : 0;
   const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
   await emitPoints(scoreTeam1, scoreTeam2, gameId);
-  if (Master.getInstance(gameId).game.deck.length === 32) {
+  await emitEndRound(gameId);
+
+  if (game.deck.length === 32) {
     // end of the game
-    if (
-      Master.getInstance(gameId).game.team1_score >= 1000 ||
-      Master.getInstance(gameId).game.team2_score >= 1000
-    ) {
-      await supabase.from("Events").insert([
-        {
-          id: await genIdCuid(),
-          type: "end_game",
-          playerId: "master",
-          gameId: gameId,
-          value: formatTeam(winnerPlayerId, teamMatePlayerId),
-        },
-      ]);
+    if (game.team1_score >= 1000 || game.team2_score >= 1000) {
+      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
     } else {
       // next game if not goal score is reached
       logger.info("Next game");

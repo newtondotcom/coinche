@@ -1,5 +1,7 @@
-const values: CardValue[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
-const suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades'];
+import type { CardSuite, CardValue, ICard } from '@coinche/shared';
+
+const values: CardSuite[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
+const suites: CardValue[] = ['diamonds', 'clubs', 'hearts', 'spades'];
 
 export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
     const storeAbout = useAboutStore();

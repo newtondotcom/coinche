@@ -13,7 +13,7 @@ export default async function translatePlay(event: EventShared) {
 
   // check if end of pli
   if (Master.getInstance(event.gameId).getLastRound().pli.length === 4) {
-    await closePli();
+    await closePli(event.gameId);
   }
   return;
 }

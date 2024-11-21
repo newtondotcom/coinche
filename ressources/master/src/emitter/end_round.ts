@@ -2,6 +2,7 @@ import genIdCuid from "@coinche/shared/src/gen_id";
 import supabase from "../supabase";
 import { formatPoints, formatTeam } from "@coinche/shared";
 import Master from "../game";
+import { emitPointsRound } from "./points_round";
 
 export async function emitEndRound(gameId: string) {
   const lastRound = Master.getInstance(gameId).getLastRound();
@@ -53,13 +54,5 @@ export async function emitEndRound(gameId: string) {
         }
     }
   }
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "score_round",
-      playerId: "master",
-      gameId: gameId,
-      value: formatPoints(scoreTeam1, scoreTeam2),
-    },
-  ]);
+  emitPointsRound(scoreTeam1, scoreTeam2, gameId);
 }

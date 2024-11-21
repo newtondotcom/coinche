@@ -1,8 +1,7 @@
 import { startGame } from '@/lib/listener/start';
-import { formatPoints } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
 import { createClient } from '@supabase/supabase-js';
-import type { IPlay, IPlayer, PlayerPosition } from '@coinche/shared';
+import type { IPlayer, PlayerPosition } from '@coinche/shared';
 
 const config = useRuntimeConfig();
 const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
@@ -80,80 +79,6 @@ export async function join() {
 
         storePlayers.setPlayers(buildPlayers);
         console.log(`Game has ${storePlayers.players.length} players`);
-    }
-    if (storePlayers.players.length === 4) {
-        // same logic as in listener for game_start
-        const { data, error } = await supabase
-            .from('Events')
-            .select('*')
-            .eq('gameId', gameId)
-            .eq('type', 'start_game');
-        if (data?.length == 0) {
-            console.error('Game has not started');
-            return;
-        }
-        await startGame(storePlayers.players[0].id);
-
-        /*
-        // check if cards have been distributed for pli number 1
-        const { data: distributions, error: distributionsError } = await supabase
-            .from('Events')
-            .select('*')
-            .eq('gameId', gameId)
-            .eq('type', 'distribution');
-        if (distributionsError) {
-            console.error('Error fetching distributions:', distributionsError);
-            return;
-        }
-        const distributionsPli1 = distributions.filter(
-            (distribution) => deformatCarteToDistribute(distribution.value).pli_number === 1,
-        );
-        if (distributionsPli1.length === 32) {
-            storeGame.setNewPli();
-            console.log('Starting pli because of 3 passes');
-            distributionsPli1.forEach((distribution) => {
-                const card = deformatCarteToDistribute(distribution.value).card;
-                const player = storePlayers.players.find((p) => p.id === distribution.playerId);
-                if (player) {
-                    player.hands.push(card);
-                } else {
-                    console.error('Player not found');
-                }
-            });
-        }
-
-        // check if announces have been made
-        const { data: annonces, error: annoncesError } = await supabase
-            .from('Events')
-            .select('*')
-            .eq('gameId', gameId)
-            .eq('type', 'annonce');
-        if (annoncesError) {
-            console.error('Error fetching annonces:', annoncesError);
-            return;
-        }
-        if (annonces.length > 0) {
-            // pli has started
-            annonces.forEach((annonce) => {
-                const annonceParsed: IAnnonce = deformatAnnonce(
-                    annonce.value as string,
-                    annonce.playerId,
-                );
-                if (!storeGame.annonces_pli.includes(annonceParsed)) {
-                    storeGame.addAnnonceToPli(annonceParsed);
-                    if (annonceParsed.annonce !== 0) {
-                        storeGame.setLastAnnonce(annonceParsed);
-                    }
-                    console.log('Added annonce to pli', annonceParsed);
-                }
-            });
-            const nextPlayerId = setNextPlayerTurn(annonces[annonces.length - 1].playerId);
-            storeGame.setCurrentPlayerId(nextPlayerId);
-            console.log('Setting current player id', nextPlayerId);
-        }
-
-        // check if pli has started
-        // */
     }
 }
 
