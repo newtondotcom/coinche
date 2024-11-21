@@ -1,7 +1,5 @@
-import genIdCuid from "@coinche/shared/src/gen_id";
-import supabase from "../supabase";
-import { formatPoints, formatTeam } from "@coinche/shared";
 import Master from "../game";
+import logger from "../logger";
 import { emitPointsRound } from "./points_round";
 
 export async function emitEndRound(gameId: string) {
@@ -30,10 +28,12 @@ export async function emitEndRound(gameId: string) {
       default:
         if (lastRound.team1_point_current_game > seuilAnnonce.annonce) {
           // annonce validée
-          scoreTeam1 = lastRound.team1_point_current_game * pointMultiplier;
+          scoreTeam1 =
+            (lastRound.last_annonce.annonce as number) * pointMultiplier;
         } else {
           // annonce chutée
-          scoreTeam2 = lastRound.team1_point_current_game * pointMultiplier;
+          scoreTeam2 =
+            (lastRound.last_annonce.annonce as number) * pointMultiplier;
         }
     }
   } else {
@@ -47,12 +47,15 @@ export async function emitEndRound(gameId: string) {
       default:
         if (lastRound.team2_point_current_game > seuilAnnonce.annonce) {
           // annonce validée
-          scoreTeam2 = lastRound.team2_point_current_game * pointMultiplier;
+          scoreTeam2 =
+            (lastRound.last_annonce.annonce as number) * pointMultiplier;
         } else {
           // annonce chutée
-          scoreTeam1 = lastRound.team2_point_current_game * pointMultiplier;
+          scoreTeam1 =
+            (lastRound.last_annonce.annonce as number) * pointMultiplier;
         }
     }
   }
-  emitPointsRound(scoreTeam1, scoreTeam2, gameId);
+  logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
+  await emitPointsRound(scoreTeam1, scoreTeam2, gameId);
 }
