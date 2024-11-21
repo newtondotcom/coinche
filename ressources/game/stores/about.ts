@@ -9,6 +9,8 @@ export const useAboutStore = defineStore('about', () => {
     const isCreator = ref<boolean>(false);
     const timeToAnnonce = ref<boolean>(false);
     const timeDistrib = ref<boolean>(false);
+    const canPlay = ref<boolean>(false);
+    const canAnnonce = ref<boolean>(false);
 
     const atout: ComputedRef<CardSuite> = computed(() => storeGame.last_annonce.suite);
 
@@ -69,7 +71,19 @@ export const useAboutStore = defineStore('about', () => {
         timeDistrib.value = time;
     }
 
+    function setCanPlay(can: boolean) {
+        canPlay.value = can;
+    }
+
+    function setCanAnnonce(can: boolean) {
+        canAnnonce.value = can;
+    }
+
     return {
+        canPlay,
+        canAnnonce,
+        setCanPlay,
+        setCanAnnonce,
         myId,
         mySurname,
         setMyId,

@@ -84,7 +84,9 @@
     let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.annonces_pli));
     let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.annonces_pli));
 
-    let canAnnoncer = computed<boolean>(() => storeGame.current_player_id === storeAbout.myId);
+    let canAnnoncer = computed<boolean>(
+        () => storeAbout.canAnnonce && storeGame.current_player_id === storeAbout.myId,
+    );
     let canPasser = computed<boolean>(
         () =>
             storeGame.annonces_pli.length > 3 &&

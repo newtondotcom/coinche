@@ -14,6 +14,7 @@ import { translateWinPli } from '@/lib/listener/win_pli';
 import { createClient } from '@supabase/supabase-js';
 import type { EventShared } from '@coinche/shared';
 
+import { translateCanAnnonce, translateCanPlay } from '../listener/can';
 import { translateEndRound } from '../listener/end_round';
 import { translatePointsRound } from '../listener/points_round';
 
@@ -70,6 +71,10 @@ export default async function translateEvent(event: EventShared) {
             return translateStartDistribution(event);
         case 'start_annonce':
             return translateEndDistribution(event);
+        case 'can_play':
+            return translateCanPlay(event);
+        case 'can_annonce':
+            return translateCanAnnonce(event);
         default:
             return '';
     }
