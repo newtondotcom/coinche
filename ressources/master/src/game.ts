@@ -1,5 +1,12 @@
 import logger from "./logger";
-import type { IAnnonce, ICard, IGame, IPlayer, IRound } from "@coinche/shared";
+import type {
+  IAnnonce,
+  ICard,
+  IGame,
+  IPlayer,
+  IPli,
+  IRound,
+} from "@coinche/shared";
 
 export default class Master {
   private static _instances: Map<string, Master> = new Map();
@@ -26,13 +33,14 @@ export default class Master {
     return this._instances.get(gameId)!;
   }
 
-  // Add a play to the last round
+  // Add a play to the last pli of the last round
   public addPlay(card: ICard, playerId: string): void {
     const lastRound = this.game.rounds[this.game.rounds.length - 1];
+    const lastPli = lastRound.plis[lastRound.plis.length - 1];
     if (!lastRound) {
       throw new Error("No round exists. Add a round first.");
     }
-    lastRound.pli.push({ card, playerId });
+    lastPli.plays.push({ card, playerId });
     this.game.deck.push(card);
     logger.info(`Player ${playerId} played ${card.suite} of ${card.value}`);
   }
@@ -50,11 +58,8 @@ export default class Master {
   // Add a new round to the game
   public addRound(playerStartingId: string): void {
     const roundInit: IRound = {
-      pli: [],
+      plis: [],
       annonces: [],
-      pli_number: 0,
-      current_player_id: playerStartingId,
-      player_starting_id: playerStartingId,
       team1_point_current_game: 0,
       team2_point_current_game: 0,
       last_annonce: { suite: "NA", annonce: 0, playerId: "NA" },
@@ -65,12 +70,27 @@ export default class Master {
     logger.info("New round started");
   }
 
+  public addPli(playerStartingId: string): void {
+    const lastRound = this.game.rounds[this.game.rounds.length - 1];
+    const pliInit: IPli = {
+      plays: [],
+      current_player_id: playerStartingId,
+      player_starting_id: playerStartingId,
+    };
+    lastRound.plis.push(pliInit);
+    logger.info("New round started");
+  }
+
   public setId(id: string): void {
     this.game.gameId = id;
   }
 
   public getLastRound() {
     return this.game.rounds[this.game.rounds.length - 1];
+  }
+
+  public getLastPli() {
+    return this.getLastRound().plis[this.getLastRound().plis.length - 1];
   }
 
   public addPlayer(player: IPlayer) {
