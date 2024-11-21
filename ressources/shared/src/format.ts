@@ -1,3 +1,5 @@
+import type { Annonce, CardSuite, CardValue, IAnnonce, ICard } from "../types";
+
 export function formatAnnonce(annonce: IAnnonce): string {
   return `${annonce.annonce}|${annonce.suite}`;
 }
@@ -68,17 +70,4 @@ export function formatPoints(team1_score: number, team2_score: number): string {
 export function unformatPoints(points: string): [number, number] {
   const [team1, team2] = points.split(" - ");
   return [parseInt(team1), parseInt(team2)];
-}
-
-export function formatAnnonce(annonce: IAnnonce): string {
-  return `${annonce.annonce}|${annonce.suite}`;
-}
-
-export function deformatAnnonce(annonce: string, playerId: string): IAnnonce {
-  const [annonceValue, suite] = annonce.split("|");
-  return {
-    annonce: parseInt(annonceValue) as Annonce,
-    suite: suite as CardSuite,
-    playerId: playerId,
-  };
 }

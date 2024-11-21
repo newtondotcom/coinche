@@ -76,23 +76,24 @@ interface IGame {
 }
 
 export type Event =
+  | "join"
+  | "start_game"
+  | "end_game"
+  | "start_round"
+  | "end_round"
+  | "start_pli"
+  | "win_pli"
+  | "score"
+  | "start_distribution"
+  | "distribution"
+  | "start_annonce"
   | "annonce"
   | "coinche"
   | "surcoinche"
-  | "start_distribution"
-  | "start_annonce"
-  | "start_pli"
-  | "win_pli"
-  | "start_game"
-  | "end_game"
-  | "win_game"
   | "play"
-  | "leave"
-  | "join"
   | "error"
-  | "score"
-  | "score_pli"
-  | "distribution";
+  | "win_game"
+  | "leave";
 export type GameStatus = "new" | "paused" | "active" | "complete";
 
 interface EventShared {
