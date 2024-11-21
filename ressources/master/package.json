@@ -9,8 +9,9 @@
     "typescript": "^5.6.3"
   },
   "scripts": {
-    "dev": "bun run index.ts",
-    "watch": "npx tsc -w"
+    "dev2": "bun run index.ts",
+    "watch": "npx tsc -w",
+    "dev": "firefox \"http://localhost:3000/partie?id=0&surname=robebs&gameId=0\" \"http://localhost:3000/partie?id=1&surname=robebs1&gameId=0\" \"http://localhost:3000/partie?id=2&surname=robebs2&gameId=0\" \"http://localhost:3000/partie?id=3&surname=robebs3&gameId=0\" && bun dev2"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
