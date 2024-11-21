@@ -10,9 +10,9 @@ import { emitEndGame } from "./end_game";
 
 export async function closePli(gameId: string) {
   const game = Master.getInstance(gameId).game;
-  const lastRound = Master.getInstance(gameId).getLastRound();
+  const lastPli = Master.getInstance(gameId).getLastPli();
   // find the winner
-  const pastPlis: IPlay[] = lastRound.pli;
+  const pastPlis: IPlay[] = lastPli.plays;
   const winnerPlayerId = findWinner(pastPlis, gameId);
   const myIndex = game.players.findIndex(
     (player: IPlayer) => player.id === winnerPlayerId,
@@ -30,18 +30,18 @@ export async function closePli(gameId: string) {
   let score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
   if (game.deck.length === 32) {
     score += 10;
-    logger.info("Dernier pli donc +10");
   }
   const scoreTeam1 = Master.getInstance(gameId).isTeam1(winnerPlayerId)
     ? score
     : 0;
   const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
   await emitPoints(scoreTeam1, scoreTeam2, gameId);
-  await emitEndRound(gameId);
-
+  Master.getInstance(gameId).addPli(winnerPlayerId);
   if (game.deck.length === 32) {
+    await emitEndRound(gameId);
     // end of the game
-    if (game.team1_score >= 1000 || game.team2_score >= 1000) {
+    const scoreToReach = 1000;
+    if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
       await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
     } else {
       // next game if not goal score is reached

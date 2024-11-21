@@ -79,6 +79,8 @@ export interface IGame {
 
 export type Event =
   | "join"
+  | "can_play"
+  | "can_annonce"
   | "start_game"
   | "end_game"
   | "start_round"

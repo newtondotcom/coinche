@@ -1,18 +1,19 @@
 import type { CardSuite, CardValue, ICard, IPlayer } from "@coinche/shared";
 import Master from "./game";
 
-export function setNextPlayerTurn(playerId: string) {
-  const currentPlayerIndex = Master.instance.game.players.findIndex(
+export function setNextPlayerTurn(playerId: string, gameId: string) {
+  const game = Master.getInstance(gameId).game;
+  const currentPlayerIndex = game.players.findIndex(
     (player: IPlayer) => player.id === playerId,
   );
-  const nextPlayerIndex =
-    (currentPlayerIndex + 1) % Master.instance.game.players.length;
-  const nextPlayerId = Master.instance.game.players[nextPlayerIndex].id;
-  Master.instance.getLastRound().current_player_id = nextPlayerId;
+  const nextPlayerIndex = (currentPlayerIndex + 1) % game.players.length;
+  const nextPlayerId = game.players[nextPlayerIndex].id;
+  Master.getInstance(gameId).getLastPli().current_player_id = nextPlayerId;
+  return nextPlayerId;
 }
 
-export function setNextPlayerPli(playerId: string) {
-  Master.instance.getLastRound().current_player_id = playerId;
+export function setNextPlayerPli(playerId: string, gameId: string) {
+  Master.getInstance(gameId).getLastPli().current_player_id = playerId;
 }
 
 const values: CardValue[] = ["7", "8", "9", "J", "Q", "K", "10", "A"];

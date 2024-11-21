@@ -1,6 +1,8 @@
 import { deformatTeam } from '@coinche/shared';
 import type { EventShared } from '@coinche/shared';
 
+import { toast } from '../utils/listener';
+
 export async function translateWinPli(event: EventShared) {
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
@@ -12,11 +14,9 @@ export async function translateWinPli(event: EventShared) {
     );
     storeGame.setNewPli();
     const text = `${teamWinningPlayers.map((player) => player.surname).join(' et ')} remportent le pli`;
-    /*
     toast({
         title: 'Fin du pli',
         description: text,
     });
-    */
     return;
 }

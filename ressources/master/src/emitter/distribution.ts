@@ -6,6 +6,7 @@ import {
 import Master from "../game";
 import supabase from "../supabase";
 import genIdCuid from "@coinche/shared/src/gen_id";
+import logger from "../logger";
 
 export default async function emitDistribution(
   id_player_starting: PlayerId,
@@ -18,7 +19,8 @@ export default async function emitDistribution(
     (player) => player.id === id_player_starting,
   );
   if (startIndex === -1) {
-    console.error("Player with the given id_player_starting not found");
+    logger.info(id_player_starting);
+    logger.error("Player with the given id_player_starting not found");
   }
   const shiftedPlayers = [
     ...players.slice(startIndex),
@@ -29,7 +31,7 @@ export default async function emitDistribution(
     Master.getInstance(gameId).game.deck.length !== 32 ||
     shiftedPlayers.length !== 4
   ) {
-    console.error("deck not cut or players not 4");
+    logger.error("deck not cut or players not 4");
   }
 
   for (let i = 0; i < 3; i++) {
@@ -81,5 +83,5 @@ export function cutDeck(gameId: string) {
   const deck2 = deck.slice(indexCut);
   const newDeck = [...deck2, ...deck1];
   Master.getInstance(gameId).game.deck = newDeck;
-  console.log("Deck cut at index", indexCut);
+  logger.info("Deck cut at index", indexCut);
 }

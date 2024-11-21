@@ -1,6 +1,7 @@
 import type { EventShared, IPlayer, PlayerPosition } from "@coinche/shared";
 import { emitGameStarting } from "../emitter/start_game";
 import Master from "../game";
+import logger from "../logger";
 
 export async function translateJoin(event: EventShared) {
   if (
@@ -8,7 +9,7 @@ export async function translateJoin(event: EventShared) {
       (player) => player.id === event.playerId,
     )
   ) {
-    console.log("Player already in the game");
+    logger.info("Player already in the game");
     return "";
   } else {
     const local: IPlayer = {
@@ -24,7 +25,7 @@ export async function translateJoin(event: EventShared) {
     if (Master.getInstance(event.gameId).game.players.length === 4) {
       const idPlayerStarting = Master.getInstance(event.gameId).game.players[0]
         .id;
-      await emitGameStarting(idPlayerStarting);
+      await emitGameStarting(idPlayerStarting, event.gameId);
     }
   }
   return;
