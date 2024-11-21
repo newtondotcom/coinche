@@ -15,6 +15,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { EventShared } from '@coinche/shared';
 
 import { translateEndRound } from '../listener/end_round';
+import { translatePointsRound } from '../listener/points_round';
 
 export const { toast } = useToast();
 
@@ -63,6 +64,8 @@ export default async function translateEvent(event: EventShared) {
             return translateDistribution(event);
         case 'score':
             return translatePoints(event);
+        case 'score_round':
+            return translatePointsRound(event);
         case 'start_distribution':
             return translateStartDistribution(event);
         case 'start_annonce':
