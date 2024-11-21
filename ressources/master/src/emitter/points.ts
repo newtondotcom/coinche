@@ -3,13 +3,17 @@ import supabase from "../supabase";
 import { formatPoints } from "@coinche/shared";
 import Master from "../game";
 
-export async function emitPoints(scoreTeam1: number, scoreTeam2: number) {
+export async function emitPoints(
+  scoreTeam1: number,
+  scoreTeam2: number,
+  gameId: string,
+) {
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
       type: "score",
       playerId: "master",
-      gameId: Master.instance.game.gameId,
+      gameId: gameId,
       value: formatPoints(scoreTeam1, scoreTeam2),
     },
   ]);

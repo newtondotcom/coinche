@@ -3,12 +3,12 @@ import Master from "../game";
 import supabase from "../supabase";
 import genIdCuid from "@coinche/shared/src/gen_id";
 
-export async function emitGameCreation() {
+export async function emitGameCreation(gameId: string) {
   // Check if there are any events for this gameId
   const { data: existingEvents, error: selectError } = await supabase
     .from("Events")
     .select("*")
-    .eq("gameId", Master.instance.game.gameId)
+    .eq("gameId", gameId)
     .eq("type", "join");
 
   if (selectError) {
@@ -21,7 +21,7 @@ export async function emitGameCreation() {
     const { data: existingEvents, error: selectError } = await supabase
       .from("Events")
       .select("*")
-      .eq("gameId", Master.instance.game.gameId)
+      .eq("gameId", gameId)
       .eq("type", "score");
     if (selectError) {
       console.error("Error fetching events:", selectError);
@@ -33,7 +33,7 @@ export async function emitGameCreation() {
           id: await genIdCuid(),
           type: "annonce",
           playerId: "master",
-          gameId: Master.instance.game.gameId,
+          gameId: gameId,
           value: formatPoints(0, 0),
         },
       ]);

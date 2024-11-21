@@ -1,4 +1,8 @@
+import type { EventShared } from "@coinche/shared";
 import translateAnnonce from "./annonce";
+import { translateCoinche, translateSurcoinche } from "./coinche";
+import { translateJoin } from "./join";
+import translatePlay from "./play";
 
 export async function translateEvent(event: EventShared) {
   switch (event.type) {
@@ -10,6 +14,9 @@ export async function translateEvent(event: EventShared) {
       return translateSurcoinche(event);
     case "play":
       return translatePlay(event);
+    case "join":
+      return translateJoin(event);
+
     case "end_game":
       return translateEnd(event);
     case "start_game":
@@ -18,8 +25,6 @@ export async function translateEvent(event: EventShared) {
       return translateStartPli(event);
     case "leave":
       return translateLeave(event);
-    case "join":
-      return translateJoin(event);
     case "error":
       return translateError(event);
     case "win_pli":
@@ -27,7 +32,7 @@ export async function translateEvent(event: EventShared) {
     case "win_game":
       return translateWinGame(event);
     case "distribution":
-      return translateDistribution(event);
+      return translateDistribution();
     case "score":
       return translatePoints(event);
     case "score_pli":

@@ -8,11 +8,11 @@ export default async function translatePlay(event: EventShared) {
   const card = def.card;
   const pli_number = def.pli_number;
   const playerId = event.playerId;
-  Master.instance.addPlay(card, playerId);
+  Master.getInstance(event.gameId).addPlay(card, playerId);
   setNextPlayerTurn(playerId);
 
   // check if end of pli
-  if (Master.instance.getLastRound().pli.length === 4) {
+  if (Master.getInstance(event.gameId).getLastRound().pli.length === 4) {
     await closePli();
   }
   return;

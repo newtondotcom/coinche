@@ -2,19 +2,23 @@ import genIdCuid from "@coinche/shared/src/gen_id";
 import supabase from "../supabase";
 import Master from "../game";
 import { generateDeckCards } from "../utils";
+import emitDistribution from "./distribution";
 
-export async function emitStartDistribution() {
+export async function emitStartDistribution(gameId: string) {
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
       type: "start_distribution",
       playerId: "master",
-      gameId: Master.instance.game.gameId,
+      gameId: gameId,
       value: "idPlayerStarting",
     },
   ]);
-  if (Master.instance.game.rounds.length === 1) {
-    Master.instance.game.deck = generateDeckCards();
+  if (Master.getInstance(gameId).game.rounds.length === 1) {
+    Master.getInstance(gameId).game.deck = generateDeckCards();
   }
-  await emitDistribution(Master.instance.getLastRound().player_starting_id);
+  await emitDistribution(
+    Master.getInstance(gameId).getLastRound().player_starting_id,
+    gameId,
+  );
 }

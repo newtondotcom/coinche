@@ -6,43 +6,46 @@ import { emitPoints } from "./points";
 import logger from "../logger";
 import { emitGameStarting } from "./start_game";
 
-export async function closePli() {
+export async function closePli(gameId: string) {
   // find the winner
-  const pastPlis: IPlay[] = Master.instance.getLastRound().pli;
-  const winnerPlayerId = findWinner(pastPlis);
-  const myIndex = Master.instance.game.players.findIndex(
+  const pastPlis: IPlay[] = Master.getInstance(gameId).getLastRound().pli;
+  const winnerPlayerId = findWinner(pastPlis, gameId);
+  const myIndex = Master.getInstance(gameId).game.players.findIndex(
     (player: IPlayer) => player.id === winnerPlayerId,
   );
-  const teamMatePlayerId = Master.instance.game.players[(myIndex + 2) % 4].id;
+  const teamMatePlayerId =
+    Master.getInstance(gameId).game.players[(myIndex + 2) % 4].id;
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
       type: "win_pli",
       playerId: "master",
-      gameId: Master.instance.game.gameId,
+      gameId: gameId,
       value: formatTeam(winnerPlayerId, teamMatePlayerId),
     },
   ]);
   let score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
-  if (Master.instance.game.deck.length === 32) {
+  if (Master.getInstance(gameId).game.deck.length === 32) {
     score += 10;
     logger.info("Dernier pli donc +10");
   }
-  const scoreTeam1 = Master.instance.isTeam1(winnerPlayerId) ? score : 0;
+  const scoreTeam1 = Master.getInstance(gameId).isTeam1(winnerPlayerId)
+    ? score
+    : 0;
   const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
-  await emitPoints(scoreTeam1, scoreTeam2);
-  if (Master.instance.game.deck.length === 32) {
+  await emitPoints(scoreTeam1, scoreTeam2, gameId);
+  if (Master.getInstance(gameId).game.deck.length === 32) {
     // end of the game
     if (
-      Master.instance.game.team1_score >= 1000 ||
-      Master.instance.game.team2_score >= 1000
+      Master.getInstance(gameId).game.team1_score >= 1000 ||
+      Master.getInstance(gameId).game.team2_score >= 1000
     ) {
       await supabase.from("Events").insert([
         {
           id: await genIdCuid(),
           type: "end_game",
           playerId: "master",
-          gameId: Master.instance.game.gameId,
+          gameId: gameId,
           value: formatTeam(winnerPlayerId, teamMatePlayerId),
         },
       ]);
@@ -51,16 +54,16 @@ export async function closePli() {
       logger.info("Next game");
       // update the db :
       // fetch the last player starting id
-      const playerId = await fetchLastPliPlayerWinningId();
+      const playerId = await fetchLastPliPlayerWinningId(gameId);
       // emit the game starting event
-      await emitGameStarting(playerId);
+      await emitGameStarting(playerId, gameId);
     }
   }
   return;
 }
 
-function findWinner(lastPliEvents: IPlay[]) {
-  const atout = Master.instance.getLastRound().last_annonce.suite;
+function findWinner(lastPliEvents: IPlay[], gameId: string) {
+  const atout = Master.getInstance(gameId).getLastRound().last_annonce.suite;
   if (lastPliEvents.some((pli) => pli.card.suite === atout)) {
     // atout is played
     const atoutCards = lastPliEvents.filter((pli) => pli.card.suite === atout);
@@ -87,21 +90,24 @@ function findWinner(lastPliEvents: IPlay[]) {
   }
 }
 
-export async function fetchLastPliPlayerWinningId(): Promise<string> {
+export async function fetchLastPliPlayerWinningId(
+  gameId: string,
+): Promise<string> {
   const { data: events, error } = await supabase
     .from("Events")
     .select("value")
     .eq("type", "start_pli")
-    .eq("gameId", Master.instance.game.gameId);
+    .eq("gameId", gameId);
   if (error) {
     console.error(error);
     return " ";
   }
   const playerStartedId = events[0].value;
-  const playerStartedIndex = Master.instance.game.players.findIndex(
+  const playerStartedIndex = Master.getInstance(gameId).game.players.findIndex(
     (player) => player.id === playerStartedId,
   );
   const playerStartingIndex = (playerStartedIndex + 1) % 4;
-  const playerId = Master.instance.game.players[playerStartingIndex].id;
+  const playerId =
+    Master.getInstance(gameId).game.players[playerStartingIndex].id;
   return playerId;
 }

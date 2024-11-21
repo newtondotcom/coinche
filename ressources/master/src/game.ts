@@ -2,18 +2,28 @@ import logger from "./logger";
 import type { IAnnonce, ICard, IGame, IPlayer, IRound } from "@coinche/shared";
 
 export default class Master {
-  private static _instance: Master | null = null;
+  private static _instances: Map<string, Master> = new Map();
 
   public game: IGame;
 
-  private constructor() {
-    this.game = { rounds: [], players: [], deck: [], gameId: "", team1_score : 0, team2_score : 0, status : "new" };
+  private constructor(gameId: string) {
+    this.game = {
+      rounds: [],
+      players: [],
+      deck: [],
+      gameId: gameId,
+      team1_score: 0,
+      team2_score: 0,
+      status: "new",
+    };
   }
-  public static get instance(): Master {
-    if (!this._instance) {
-      this._instance = new Master();
+
+  public static getInstance(gameId: string): Master {
+    if (!this._instances.has(gameId)) {
+      this._instances.set(gameId, new Master(gameId));
+      logger.info(`New game created with id ${gameId}`);
     }
-    return this._instance;
+    return this._instances.get(gameId)!;
   }
 
   // Add a play to the last round
@@ -45,11 +55,11 @@ export default class Master {
       pli_number: 0,
       current_player_id: "PlayerId",
       player_starting_id: "PlayerId",
-      team1_point_current_game : 0,
-      team2_point_current_game : 0,
-      last_annonce : {suite : "NA", annonce : 0, playerId : "NA"},
-      coinched : false,
-      surcoinched : false
+      team1_point_current_game: 0,
+      team2_point_current_game: 0,
+      last_annonce: { suite: "NA", annonce: 0, playerId: "NA" },
+      coinched: false,
+      surcoinched: false,
     };
     this.game.rounds.push(roundInit);
     logger.info("New round started");
@@ -68,5 +78,9 @@ export default class Master {
   }
 
   public isTeam1(playerId: string) {
-    return this.game.players[0].id === playerId || this.game.players[2].id === playerId;
+    return (
+      this.game.players[0].id === playerId ||
+      this.game.players[2].id === playerId
+    );
+  }
 }

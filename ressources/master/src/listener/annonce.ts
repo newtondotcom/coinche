@@ -4,10 +4,12 @@ import { deformatAnnonce, type EventShared } from "@coinche/shared";
 
 export default async function translateAnnonce(event: EventShared) {
   const annonce = deformatAnnonce(event.value as string, event.playerId);
-  Master.instance.addAnnonce(annonce);
+  Master.getInstance(event.gameId).addAnnonce(annonce);
   if (annonce.annonce === 0) {
     // Get the last two annonces to check if they are both passes
-    const lastTwoAnnonces = Master.instance.game.rounds[-1].annonces.slice(-2);
+    const lastTwoAnnonces = Master.getInstance(event.gameId).game.rounds[
+      -1
+    ].annonces.slice(-2);
     const annoncesPassed = lastTwoAnnonces.filter(
       (annonce) => annonce.annonce === 0,
     );
