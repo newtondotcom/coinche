@@ -24,24 +24,24 @@ export type PlayerPosition = 0 | 1 | 2 | 3;
 export type PlayerId = string;
 export type PlayerSurname = string;
 
-interface ICard {
+export interface ICard {
   suite: CardSuite;
   value: CardValue;
   valueNum: number;
 }
 
-interface IAnnonce {
+export interface IAnnonce {
   suite: CardSuite;
   annonce: Annonce;
   playerId: PlayerId;
 }
 
-interface IPlay {
+export interface IPlay {
   card: ICard;
   playerId: PlayerId;
 }
 
-interface IPlayer {
+export interface IPlayer {
   id: PlayerId;
   surname: PlayerSurname;
   position: PlayerPosition;
@@ -50,7 +50,7 @@ interface IPlayer {
   last_annonce?: IAnnonce;
 }
 
-interface IRound {
+export interface IRound {
   pli: IPlay[];
   annonces: IAnnonce[];
   pli_number: number;
@@ -64,7 +64,7 @@ interface IRound {
   surcoinched: boolean;
 }
 
-interface IGame {
+export interface IGame {
   rounds: IRound[];
   players: IPlayer[];
   gameId: string;
@@ -96,7 +96,7 @@ export type Event =
   | "leave";
 export type GameStatus = "new" | "paused" | "active" | "complete";
 
-interface EventShared {
+export interface EventShared {
   id: string;
   timestamp: number;
   playerId: PlayerId;
