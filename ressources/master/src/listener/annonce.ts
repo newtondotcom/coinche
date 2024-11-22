@@ -22,8 +22,8 @@ export default async function translateAnnonce(event: EventShared) {
 
     // Include the current annonce in the check
     if (annoncesPassed.length === 3) {
-      await startPli(event.gameId);
       logger.info("Starting pli because of 3 consecutive passes");
+      await startPli(event.gameId);
       return;
     } else {
       logger.info(annoncesPassed.length.toString(), "passes");

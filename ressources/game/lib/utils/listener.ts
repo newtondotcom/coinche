@@ -7,7 +7,7 @@ import { translateEndGame } from '@/lib/listener/end_game';
 import { translateJoin } from '@/lib/listener/join';
 import translatePlay from '@/lib/listener/play';
 import { translatePoints } from '@/lib/listener/points';
-import { translateStart } from '@/lib/listener/start';
+import { translateStart } from '~/lib/listener/start_game';
 import { translateStartDistribution } from '@/lib/listener/start_distribution';
 import { translateStartPli } from '@/lib/listener/start_pli';
 import { translateWinPli } from '@/lib/listener/win_pli';

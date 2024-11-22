@@ -1,3 +1,4 @@
+import { emitCanPlay } from "./emitter/can";
 import logger from "./logger";
 import type {
   IAnnonce,
@@ -67,10 +68,10 @@ export default class Master {
       surcoinched: false,
     };
     this.game.rounds.push(roundInit);
-    logger.info("New round started");
+    logger.info("New round created");
   }
 
-  public addPli(playerStartingId: string): void {
+  public async addPli(playerStartingId: string): Promise<void> {
     const lastRound = this.game.rounds[this.game.rounds.length - 1];
     const pliInit: IPli = {
       plays: [],
@@ -78,7 +79,7 @@ export default class Master {
       player_starting_id: playerStartingId,
     };
     lastRound.plis.push(pliInit);
-    logger.info("New round started");
+    logger.info("New pli created");
   }
 
   public setId(id: string): void {

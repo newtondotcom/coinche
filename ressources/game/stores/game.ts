@@ -57,6 +57,8 @@ export const useGameStore = defineStore('game', () => {
         last_annonce.value = { suite: 'NA', annonce: 0, playerId: '0' };
         current_pli.value = [];
         pli_number.value += 0;
+        team1_point_current_game.value = 0;
+        team2_point_current_game.value = 0;
     }
 
     function setPlayerStartingId(playerId: PlayerId) {

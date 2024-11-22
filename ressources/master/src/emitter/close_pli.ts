@@ -7,6 +7,8 @@ import logger from "../logger";
 import { emitGameStarting } from "./start_game";
 import { emitEndRound } from "./end_round";
 import { emitEndGame } from "./end_game";
+import { emitCanPlay } from "./can";
+import { startPli } from "./start_pli";
 
 export async function closePli(gameId: string) {
   const game = Master.getInstance(gameId).game;
@@ -35,8 +37,13 @@ export async function closePli(gameId: string) {
     ? score
     : 0;
   const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
+  Master.getInstance(gameId).getLastRound().team1_point_current_game +=
+    scoreTeam1;
+  Master.getInstance(gameId).getLastRound().team2_point_current_game +=
+    scoreTeam2;
   await emitPoints(scoreTeam1, scoreTeam2, gameId);
-  Master.getInstance(gameId).addPli(winnerPlayerId);
+
+  // end of the round
   if (game.deck.length === 32) {
     await emitEndRound(gameId);
     // end of the game
@@ -52,7 +59,12 @@ export async function closePli(gameId: string) {
       // emit the game starting event
       await emitGameStarting(playerId, gameId);
     }
+  } else {
+    // next pli
+    Master.getInstance(gameId).addPli(winnerPlayerId);
+    await startPli(gameId);
   }
+
   return;
 }
 
