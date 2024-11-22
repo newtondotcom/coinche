@@ -1,4 +1,3 @@
-import { setNextPlayerTurn } from '@/lib/emitter/annonce';
 import { toast } from '@/lib/utils/listener';
 import { deformatAnnonce } from '@coinche/shared';
 import type { EventShared } from '@coinche/shared';
@@ -7,8 +6,6 @@ export default async function translateAnnonce(event: EventShared) {
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
     const annonce = deformatAnnonce(event.value as string, event.playerId);
-    storePlayers.setLastAnnonce(annonce, event.playerId);
-    setNextPlayerTurn(event.playerId);
     const playerName = storePlayers.players.find((player) => player.id === event.playerId)?.surname;
     if (annonce.annonce === 0) {
         const annonceValueFormatted =
@@ -23,5 +20,6 @@ export default async function translateAnnonce(event: EventShared) {
         storeGame.setLastAnnonce(annonce);
     }
     storeGame.addAnnonceToPli(annonce);
+    storePlayers.setLastAnnonce(annonce, event.playerId);
     return;
 }

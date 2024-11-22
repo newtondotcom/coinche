@@ -1,4 +1,3 @@
-import { setNextPlayerTurn } from '@/lib/emitter/annonce';
 import { assertPliNumber } from '@/lib/utils/miscs';
 import { deformatCarteToPlay } from '@coinche/shared';
 import type { EventShared } from '@coinche/shared';
@@ -11,6 +10,5 @@ export default function translatePlay(event: EventShared) {
     assertPliNumber(pli_number, storeGame.pli_number);
     const player_id = event.playerId;
     storeGame.addCardToPliAndRemove(card, player_id);
-    setNextPlayerTurn(player_id);
     return;
 }

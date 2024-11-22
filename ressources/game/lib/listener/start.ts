@@ -9,7 +9,6 @@ export async function translateStart(event: EventShared) {
 
 export async function startGame(playerId: string) {
     const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
     storeGame.setStatus('active');
     storeGame.setPlayerStartingId(playerId);
     storeGame.setCurrentPlayerId(playerId);
