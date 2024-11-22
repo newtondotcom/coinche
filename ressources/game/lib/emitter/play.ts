@@ -1,10 +1,8 @@
 import { formatCarteToPlay } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
-import { createClient } from '@supabase/supabase-js';
 import type { CardSuite, CardValue, ICard } from '@coinche/shared';
 
-const config = useRuntimeConfig();
-const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
+import { supabase } from '../utils/listener';
 
 export async function emitCardPlay(card: ICard) {
     const storeAbout = useAboutStore();

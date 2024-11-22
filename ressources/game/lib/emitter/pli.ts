@@ -1,9 +1,7 @@
 import { deformatCarteToPlay } from '@coinche/shared';
-import { createClient } from '@supabase/supabase-js';
-import type { IPlay, IPlayer } from '@coinche/shared';
+import type { IPlay } from '@coinche/shared';
 
-const config = useRuntimeConfig();
-const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
+import { supabase } from '../utils/listener';
 
 export async function fetchLastPliEvents(): Promise<IPlay[]> {
     const storeAbout = useAboutStore();

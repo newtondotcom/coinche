@@ -1,10 +1,7 @@
-import { startGame } from '@/lib/listener/start';
 import genIdCuid from '@coinche/shared/src/gen_id';
-import { createClient } from '@supabase/supabase-js';
 import type { IPlayer, PlayerPosition } from '@coinche/shared';
 
-const config = useRuntimeConfig();
-const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
+import { supabase } from '../utils/listener';
 
 export async function join() {
     const storePlayers = usePlayersStore();
