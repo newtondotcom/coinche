@@ -23,13 +23,10 @@
     }
 
     const canBePlayed = computed(() => {
-        if (!storeAbout.canPlay) {
-            return false;
-        }
         if (storeGame.current_player_id !== storeAbout.myId) {
             return false;
         }
-        if (!storeAbout.colorAsked) {
+        if (storeGame.current_pli.length === 0) {
             // First to play
             return true;
         }
