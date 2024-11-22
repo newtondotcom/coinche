@@ -16,5 +16,4 @@ export default async function emitAnnonce(annonce: IAnnonce) {
             value: formatAnnonce(annonce),
         },
     ]);
-    storeAbout.setCanAnnonce(false);
 }
