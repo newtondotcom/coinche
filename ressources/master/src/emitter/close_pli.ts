@@ -39,8 +39,14 @@ export async function closePli(gameId: string) {
   const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
   Master.getInstance(gameId).getLastRound().team1_point_current_game +=
     scoreTeam1;
+  logger.info(
+    `T1 : ${Master.getInstance(gameId).getLastRound().team1_point_current_game}`,
+  );
   Master.getInstance(gameId).getLastRound().team2_point_current_game +=
     scoreTeam2;
+  logger.info(
+    `T2 : ${Master.getInstance(gameId).getLastRound().team2_point_current_game}`,
+  );
   await emitPoints(scoreTeam1, scoreTeam2, gameId);
 
   // end of the round
