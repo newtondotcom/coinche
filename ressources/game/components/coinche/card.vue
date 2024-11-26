@@ -2,6 +2,7 @@
     import { maxCardWidth } from '@/lib/constants';
     import { cardPressed } from '@/lib/emitter/play';
     import { cn } from '@/lib/utils';
+    import type { ICard } from '@coinche/shared';
 
     interface Props {
         card: ICard;
