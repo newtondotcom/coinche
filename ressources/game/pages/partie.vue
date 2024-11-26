@@ -1,7 +1,8 @@
 <template>
-    <!--
-    <CoincheInterfaceDebug />--->
+    <!--<CoincheInterfaceDebug />--->
     <CoincheDeck />
+
+    <Soundboard />
 
     <CoincheRiver />
 
