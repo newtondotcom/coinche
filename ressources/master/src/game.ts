@@ -53,6 +53,9 @@ export default class Master {
       throw new Error("No round exists. Add a round first.");
     }
     lastRound.annonces.push(annonce);
+    if (annonce.annonce !== 0) {
+      this.getLastRound().last_annonce = annonce;
+    }
     logger.info(`Player ${annonce.playerId} announced ${annonce.suite}`);
   }
 

@@ -17,12 +17,6 @@ export async function emitEndRound(gameId: string) {
     : 2;
   let scoreTeam1: number = 0;
   let scoreTeam2: number = 0;
-  logger.info(
-    `Calcul du score
-    T1 : ${lastRound.team1_point_current_game},
-    T2:  ${lastRound.team2_point_current_game},
-    Annonce: ${seuilAnnonce.annonce}`,
-  );
   if (teamAnnounced === 1) {
     switch (seuilAnnonce.annonce) {
       case "capot":
@@ -59,5 +53,7 @@ export async function emitEndRound(gameId: string) {
     }
   }
   logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
+  Master.getInstance(gameId).game.team1_score += scoreTeam1;
+  Master.getInstance(gameId).game.team2_score += scoreTeam2;
   await emitPointsRound(scoreTeam1, scoreTeam2, gameId);
 }
