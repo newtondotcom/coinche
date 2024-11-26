@@ -9,6 +9,16 @@ export const useAboutStore = defineStore('about', () => {
     const isCreator = ref<boolean>(false);
     const timeToAnnonce = ref<boolean>(false);
     const timeDistrib = ref<boolean>(false);
+    const turnToPlay = ref<boolean>(false);
+    const turnToAnnonce = ref<boolean>(false);
+
+    const setTurnToPlay = (value: boolean) => {
+        turnToPlay.value = value;
+    };
+
+    const setTurnToAnnonce = (value: boolean) => {
+        turnToAnnonce.value = value;
+    };
 
     const atout: ComputedRef<CardSuite> = computed(() => storeGame.last_annonce.suite);
 
@@ -89,5 +99,9 @@ export const useAboutStore = defineStore('about', () => {
         timeToAnnonce,
         timeDistrib,
         setTimeDistrib,
+        turnToPlay,
+        turnToAnnonce,
+        setTurnToAnnonce,
+        setTurnToPlay,
     };
 });

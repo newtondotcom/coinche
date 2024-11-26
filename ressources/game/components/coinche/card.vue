@@ -15,12 +15,8 @@
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
 
-    const justPressed = ref(false);
-
     async function onPress() {
-        justPressed.value = true;
         await cardPressed(props.card.suite, props.card.value);
-        justPressed.value = false;
     }
 
     const canBePlayed = computed(() => {
@@ -109,10 +105,10 @@
             :style="`max-width:${maxCardWidth}px; height: auto;`"
             :class="
                 cn(
-                    inDeck && canBePlayed && !justPressed
+                    storeAbout.turnToPlay && inDeck && canBePlayed
                         ? 'cursor-pointer hover:scale-125 transition-transform'
                         : '',
-                    inDeck && (!canBePlayed || justPressed) ? 'cursor-wait grayscale' : '',
+                    inDeck && (!canBePlayed || !storeAbout.turnToPlay) ? 'cursor-default' : '',
                     inDeck ? '' : 'cursor-auto',
                 )
             "
@@ -127,4 +123,3 @@
         opacity: 0.6;
     }
 </style>
-@/lib/emitter/plays

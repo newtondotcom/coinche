@@ -73,6 +73,7 @@
 
 <script setup lang="ts">
     import emitAnnonce from '@/lib/emitter/annonce';
+    import type { Annonce, CardSuite, IAnnonce, IPlayer } from '@coinche/shared';
 
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
@@ -84,9 +85,12 @@
     let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.annonces_pli));
     let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.annonces_pli));
 
-    let canAnnoncer = computed<boolean>(() => storeGame.current_player_id === storeAbout.myId);
+    let canAnnoncer = computed<boolean>(
+        () => storeAbout.turnToAnnonce && storeGame.current_player_id === storeAbout.myId,
+    );
     let canPasser = computed<boolean>(
         () =>
+            storeAbout.turnToAnnonce &&
             storeGame.annonces_pli.length > 3 &&
             storeGame.annonces_pli.slice(0, 3).every((annonce: IAnnonce) => annonce.annonce === 0),
     );

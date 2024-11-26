@@ -16,6 +16,7 @@ export async function emitCardPlay(card: ICard) {
             value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
         },
     ]);
+    storeAbout.setTurnToPlay(false);
 }
 
 export async function cardPressed(suite: CardSuite, value: CardValue) {
