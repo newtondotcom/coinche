@@ -1,4 +1,3 @@
-import { toast } from '@/lib/utils/listener';
 import { deformatAnnonce } from '@coinche/shared';
 import type { EventShared } from '@coinche/shared';
 
