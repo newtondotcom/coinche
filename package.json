@@ -7,6 +7,7 @@
     "ressources/*"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules ressources/game/node_modules ressources/master/node_modules bun.lockb ressources/game/bun.lockb ressources/master/bun.lockb"
+    "clean": "rm -rf node_modules ressources/game/node_modules ressources/master/node_modules bun.lockb ressources/game/bun.lockb ressources/master/bun.lockb",
+    "vercel": "cd ressources/game && sh ./merge.sh"
   }
 }
