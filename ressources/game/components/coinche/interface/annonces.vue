@@ -102,6 +102,9 @@
             await emitAnnonce(annonceEnCours.value);
             annonceEnCours.value = { annonce: 0, suite: 'NA', playerId: 'NA' };
         }
+        if (annonceEnCours.value.annonce == 160) {
+            // Check if announce is not above 160
+        }
     });
 
     function canCoincherAnnonce(annonces: IAnnonce[]) {
