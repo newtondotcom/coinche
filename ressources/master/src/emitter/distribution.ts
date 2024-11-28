@@ -63,7 +63,7 @@ export default async function emitDistribution(
 }
 
 async function distributeCard(player_id: string, gameId: string) {
-  const card: ICard = Master.getInstance(gameId).game.deck.pop();
+  const card: ICard = Master.getInstance(gameId).game.deck.pop() as ICard;
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
