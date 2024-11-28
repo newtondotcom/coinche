@@ -7,16 +7,17 @@ import { translateEndGame } from '@/lib/listener/end_game';
 import { translateJoin } from '@/lib/listener/join';
 import translatePlay from '@/lib/listener/play';
 import { translatePoints } from '@/lib/listener/points';
-import { translateStart } from '~/lib/listener/start_game';
 import { translateStartDistribution } from '@/lib/listener/start_distribution';
 import { translateStartPli } from '@/lib/listener/start_pli';
 import { translateWinPli } from '@/lib/listener/win_pli';
 import { createClient } from '@supabase/supabase-js';
+import { translateStart } from '~/lib/listener/start_game';
 import type { EventShared } from '@coinche/shared';
 
 import { translateCanAnnonce, translateCanPlay } from '../listener/can';
 import { translateEndRound } from '../listener/end_round';
 import { translatePointsRound } from '../listener/points_round';
+import { translateStartRound } from '../listener/start_round';
 
 export const { toast } = useToast();
 
@@ -32,8 +33,6 @@ function translateLeave(event: EventShared) {
 function translateError(event: EventShared) {
     return;
 }
-
-async function translatePointsPli(event: EventShared) {}
 
 export default async function translateEvent(event: EventShared) {
     switch (event.type) {
@@ -75,6 +74,8 @@ export default async function translateEvent(event: EventShared) {
             return translateCanPlay(event);
         case 'can_annonce':
             return translateCanAnnonce(event);
+        case 'start_round':
+            return translateStartRound(event);
         default:
             return '';
     }
