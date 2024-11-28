@@ -50,7 +50,7 @@ export const useGameStore = defineStore('game', () => {
         pli_number.value += 1;
     }
 
-    function setNewGame() {
+    function setNewRound() {
         coinched.value = false;
         surcoinched.value = false;
         annonces_pli.value = [];
@@ -124,8 +124,8 @@ export const useGameStore = defineStore('game', () => {
         setDeck,
         addScoreToTeam1,
         addScoreToTeam2,
-        setNewGame,
         addGlobalScoreToTeam1,
         addGlobalScoreToTeam2,
+        setNewRound,
     };
 });

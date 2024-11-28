@@ -3,12 +3,10 @@ import Master from "../game";
 import genIdCuid from "@coinche/shared/src/gen_id";
 import supabase from "../supabase";
 import { emitPoints } from "./points";
-import logger from "../logger";
-import { emitGameStarting } from "./start_game";
 import { emitEndRound } from "./end_round";
 import { emitEndGame } from "./end_game";
-import { emitCanPlay } from "./can";
 import { startPli } from "./start_pli";
+import { emitRoundStarting } from "./start_round";
 
 export async function closePli(gameId: string) {
   const game = Master.getInstance(gameId).game;
@@ -51,13 +49,12 @@ export async function closePli(gameId: string) {
     if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
       await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
     } else {
-      // next game if not goal score is reached
-      logger.info("Next game");
+      // next round if not goal score is reached
       // update the db :
       // fetch the last player starting id
       const playerId = await fetchLastPliPlayerWinningId(gameId);
       // emit the game starting event
-      await emitGameStarting(playerId, gameId);
+      await emitRoundStarting(gameId, playerId);
     }
   } else {
     // next pli
@@ -102,7 +99,7 @@ export async function fetchLastPliPlayerWinningId(
   const { data: events, error } = await supabase
     .from("Events")
     .select("value")
-    .eq("type", "start_pli")
+    .eq("type", "start_round")
     .eq("gameId", gameId);
   if (error) {
     console.error(error);
