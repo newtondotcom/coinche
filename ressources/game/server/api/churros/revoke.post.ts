@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
         }
         if (e instanceof ArcticFetchError) {
             // Failed to call `fetch()`
-            console.log(e.cause);
+            console.log(e);
         }
     }
 

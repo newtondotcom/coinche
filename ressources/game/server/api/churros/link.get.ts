@@ -1,4 +1,4 @@
-import { Authentik, generateCodeVerifier, generateState } from 'arctic';
+import { generateCodeVerifier, generateState } from 'arctic';
 
 import authentik from '../../authentik';
 
