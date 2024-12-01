@@ -5,4 +5,9 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    onMounted(async () => {
+        const url = await $fetch('/api/churros/link');
+        console.log(url);
+    });
+</script>
