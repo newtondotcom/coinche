@@ -4,8 +4,11 @@
             <h1 class="text-primary text-center text-3xl font-bold md:text-4xl cursor-pointer">
                 coinche.n7
             </h1>
-            <h2 class="text-center">Classement</h2>
-            <CoincheInterfaceColorMode />
+            <h2 class="text-center h-full">Classement</h2>
+            <div class="flex flex-row">
+                <CoincheInterfaceColorMode />
+                <Auth />
+            </div>
         </header>
         <NuxtPage />
         <footer></footer>
@@ -18,7 +21,7 @@
     import Toaster from '@/components/ui/toast/Toaster.vue';
 
     useSeoMeta({
-        title: 'Coinche.xyz',
+        title: 'Coinche.n7',
         ogTitle: 'Le meilleur site de coinche en ligne',
         description: `Jouez au jeu de coinche de l'n7`,
         ogDescription: `Jouez au jeu de coinche de l'n7`,
