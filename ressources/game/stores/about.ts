@@ -12,6 +12,8 @@ export const useAboutStore = defineStore('about', () => {
     const turnToPlay = ref<boolean>(false);
     const turnToAnnonce = ref<boolean>(false);
 
+    const authentificated = ref<boolean>(false);
+
     const setTurnToPlay = (value: boolean) => {
         turnToPlay.value = value;
     };
@@ -79,6 +81,10 @@ export const useAboutStore = defineStore('about', () => {
         timeDistrib.value = time;
     }
 
+    function setAuthentificated(value: boolean) {
+        authentificated.value = value;
+    }
+
     return {
         myId,
         mySurname,
@@ -103,5 +109,7 @@ export const useAboutStore = defineStore('about', () => {
         turnToAnnonce,
         setTurnToAnnonce,
         setTurnToPlay,
+        authentificated,
+        setAuthentificated,
     };
 });
