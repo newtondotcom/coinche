@@ -1,22 +1,20 @@
 {
-  "name": "@coinche/master",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.6.3"
-  },
-  "scripts": {
-    "dev": "bun run index.ts",
-    "watch": "npx tsc -w",
-    "firefox": "firefox \"http://localhost:3000/partie?id=0&surname=robebs&gameId=0\" \"http://localhost:3000/partie?id=1&surname=robebs1&gameId=0\" \"http://localhost:3000/partie?id=2&surname=robebs2&gameId=0\" \"http://localhost:3000/partie?id=3&surname=robebs3&gameId=0\""
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.46.1",
-    "@types/node": "^22.9.1",
-    "winston": "^3.17.0",
-    "@coinche/shared": "workspace:*"
-  }
+    "name": "@coinche/master",
+    "module": "index.ts",
+    "type": "module",
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "scripts": {
+        "dev": "bun run index.ts",
+        "watch": "npx tsc -w",
+        "firefox": "firefox \"http://localhost:3000/partie?id=0&surname=robebs&gameId=0\" \"http://localhost:3000/partie?id=1&surname=robebs1&gameId=0\" \"http://localhost:3000/partie?id=2&surname=robebs2&gameId=0\" \"http://localhost:3000/partie?id=3&surname=robebs3&gameId=0\""
+    },
+    "dependencies": {
+        "@coinche/shared": "workspace:*",
+        "@supabase/supabase-js": "^2.46.1",
+        "@types/node": "^22.9.1",
+        "arctic": "^2.3.0",
+        "winston": "^3.17.0"
+    }
 }

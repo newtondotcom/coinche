@@ -1,13 +1,25 @@
 {
-  "name": "workspaces",
-  "private": "true",
-  "module": "index.ts",
-  "type": "module",
-  "workspaces": [
-    "ressources/*"
-  ],
-  "scripts": {
-    "clean": "rm -rf node_modules ressources/game/node_modules ressources/master/node_modules bun.lockb ressources/game/bun.lockb ressources/master/bun.lockb",
-    "vercel": "cd ressources/game && sh ./merge.sh"
-  }
+    "name": "workspaces",
+    "private": "true",
+    "module": "index.ts",
+    "type": "module",
+    "workspaces": [
+        "ressources/*"
+    ],
+    "scripts": {
+        "clean": "rm -rf node_modules ressources/game/node_modules ressources/master/node_modules bun.lockb ressources/game/bun.lockb ressources/master/bun.lockb",
+        "vercel": "cd ressources/game && sh ./merge.sh",
+        "prepare": "husky",
+        "format": "prettier --write ."
+    },
+    "devDependencies": {
+        "@commitlint/config-conventional": "^19.6.0",
+        "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+        "commitlint": "^19.6.0",
+        "husky": "^9.1.7",
+        "prettier": "^3.4.1",
+        "prettier-plugin-tailwindcss": "^0.6.9",
+        "pretty-quick": "^4.0.0",
+        "typescript": "^5.7.2"
+    }
 }
