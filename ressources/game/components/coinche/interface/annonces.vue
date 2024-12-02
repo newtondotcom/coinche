@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <Card>
+    <div class="fixed z-50 flex items-center justify-center">
+        <Card class="shadow-2xl">
             <CardHeader>
                 <CardTitle>Annonces</CardTitle>
                 <CardDescription>
@@ -68,6 +68,7 @@
                 </div>
             </CardContent>
         </Card>
+        cla
     </div>
 </template>
 
