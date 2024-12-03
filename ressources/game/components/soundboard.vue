@@ -11,7 +11,7 @@
                     :key="key"
                     variant="outline"
                     class="my-2"
-                    @click="triggerSound(sound)"
+                    @click="emitAndPlaySound(sound)"
                 >
                     {{ sound }}
                 </Button>
@@ -21,7 +21,8 @@
 </template>
 
 <script setup lang="ts">
-    import { Howl } from 'howler';
+    import { emitSound } from '@/lib/emitter/sound';
+    import { triggerSound } from '@/lib/listener/sound';
     import { AudioLines } from 'lucide-vue-next';
 
     const mapSound = {
@@ -30,10 +31,8 @@
         porte: 'Porte',
     };
 
-    function triggerSound(name: string): void {
-        const sound = new Howl({
-            src: `sounds/${name.toLowerCase()}.mp3`,
-        });
-        sound.play();
+    async function emitAndPlaySound(name: string) {
+        triggerSound(name);
+        await emitSound(name);
     }
 </script>

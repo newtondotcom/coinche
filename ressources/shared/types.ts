@@ -86,6 +86,7 @@ export type Event =
     | 'play'
     | 'error'
     | 'win_game'
+    | 'sound'
     | 'leave';
 export type GameStatus = 'new' | 'paused' | 'active' | 'complete';
 
