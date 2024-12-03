@@ -7,15 +7,19 @@
         "dev": "nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "postinstall": "nuxt prepare"
+        "postinstall": "nuxt prepare",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix"
     },
     "dependencies": {
         "@coinche/shared": "workspace:*",
+        "@nuxt/eslint": "0.7.2",
         "@nuxtjs/tailwindcss": "^6.12.2",
         "@pinia/nuxt": "^0.5.5",
         "@supabase/supabase-js": "^2.45.6",
         "@vueuse/core": "^11.3.0",
         "artic": "^2.2.5",
+        "eslint": "^8.57.0 || ^9.0.0",
         "howler": "^2.2.4",
         "lucide-vue-next": "^0.453.0",
         "nuxt": "^3.13.2",
@@ -25,6 +29,7 @@
         "vue-router": "latest"
     },
     "devDependencies": {
+        "@tailwindcss/typography": "^0.5.15",
         "@types/howler": "^2.2.12",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
