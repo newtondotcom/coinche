@@ -16,5 +16,6 @@
         });
         console.log('Connected');
         storeAbout.setAuthentificated(true);
+        navigateTo('/');
     }
 </script>
