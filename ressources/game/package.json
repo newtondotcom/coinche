@@ -12,7 +12,7 @@
         "lint:fix": "eslint . --fix"
     },
     "dependencies": {
-        "@coinche/shared": "workspace:*",
+        "@coinche/shared": "workspace:shared",
         "@nuxt/eslint": "0.7.2",
         "@nuxtjs/tailwindcss": "^6.12.2",
         "@pinia/nuxt": "^0.5.5",
