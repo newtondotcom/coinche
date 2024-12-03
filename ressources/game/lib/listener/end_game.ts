@@ -15,5 +15,11 @@ export function translateEndGame(event: EventInsert) {
             'La partie est terminée : les gagnants sont ' +
             teamWinningPlayers.map((player) => player.surname).join(' et '),
     });
+
+    /*
+    setTimeout(()=>{
+      navigateTo('/classement');
+    },1000);
+    */
     return;
 }
