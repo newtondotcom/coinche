@@ -4,13 +4,19 @@ import type { IPlay, IPlayer } from '@coinche/shared';
 
 import Master from '../game';
 import supabase from '../supabase';
+import { dev } from '../utils';
 import { distributeRankingPoints, emitEndGame } from './end_game';
 import { emitEndRound } from './end_round';
 import { emitPoints } from './points';
 import { startPli } from './start_pli';
 import { emitRoundStarting } from './start_round';
 
-const scoreToReach = 100;
+let scoreToReach: number;
+if (dev) {
+    scoreToReach = 100;
+} else {
+    scoreToReach = 1000;
+}
 
 export async function closePli(gameId: string) {
     const game = Master.getInstance(gameId).game;
