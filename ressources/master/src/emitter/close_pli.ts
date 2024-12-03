@@ -10,6 +10,8 @@ import { emitPoints } from './points';
 import { startPli } from './start_pli';
 import { emitRoundStarting } from './start_round';
 
+const scoreToReach = 100;
+
 export async function closePli(gameId: string) {
     const game = Master.getInstance(gameId).game;
     const lastPli = Master.getInstance(gameId).getLastPli();
@@ -41,11 +43,9 @@ export async function closePli(gameId: string) {
     if (game.deck.length === 32) {
         await emitEndRound(gameId);
         // end of the game
-        const scoreToReach = 1000;
         if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
             await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
-            const playersIds = game.players.map((player) => player.id);
-            await distributeRankingPoints(playersIds, gameId, scoreTeam1, scoreTeam2);
+            await distributeRankingPoints(game.players, gameId, game.team1_score, game.team2_score);
         } else {
             // next round if not goal score is reached
             // update the db :

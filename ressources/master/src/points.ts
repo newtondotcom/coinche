@@ -2,7 +2,11 @@ import type { PlayerId } from '@coinche/shared';
 
 import supabase from './supabase';
 
-export async function addPointsTo(points: number, playerId: PlayerId): Promise<void> {
+export async function addPointsTo(
+    points: number,
+    playerId: PlayerId,
+    surname: string,
+): Promise<void> {
     // Fetch the current points for the player
     const { data, error } = await supabase
         .from('Points')
@@ -13,7 +17,7 @@ export async function addPointsTo(points: number, playerId: PlayerId): Promise<v
     // Handle the error if no data is found
     if (error || !data) {
         console.error('Error fetching points or no points data found for player', error);
-        await supabase.from('Points').insert([{ playerId, points }]);
+        await supabase.from('Points').insert([{ playerId, points, surname }]);
         return;
     }
 

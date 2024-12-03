@@ -1,7 +1,8 @@
 import { formatTeam } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
-import type { PlayerId } from '@coinche/shared';
+import type { IPlayer } from '@coinche/shared';
 
+import logger from '../logger';
 import { addPointsTo } from '../points';
 import supabase from '../supabase';
 
@@ -22,36 +23,42 @@ export async function emitEndGame(
 }
 
 export async function distributeRankingPoints(
-    players: PlayerId[],
+    players: IPlayer[],
     gameId: string,
     team1Score: number,
     team2Score: number,
 ) {
+    const playersIds = players.map((player) => player.id);
+    console.log(players);
     // store in db the finished game
     await supabase.from('Game').insert([
         {
             gameId: gameId,
-            p1: players[0],
-            p2: players[1],
-            p3: players[2],
-            p4: players[3],
+            p1: playersIds[0],
+            p2: playersIds[1],
+            p3: playersIds[2],
+            p4: playersIds[3],
             team1_score: team1Score,
             team2_score: team2Score,
         },
     ]);
 
     // distribute points
-
     const { data, error } = await supabase.from('Points').select('*').in('playerId', players);
     if (error || !data || data.length !== players.length) {
-        console.error('Error fetching points or missing points data for some players', error);
-        return;
+        logger.error('Error fetching points or missing points data for some players', error);
+        //return;
     }
 
     // Mapping players to their points
-    const playerPoints = players.map(
-        (playerId) => data.find((d) => d.playerId === playerId)?.points,
-    );
+    const playerPoints = players.map((playerId) => {
+        const playerData = data?.find((d) => d.playerId === playerId);
+        if (playerData) {
+            return playerData.points;
+        } else {
+            return 0;
+        }
+    });
 
     if (playerPoints.includes(undefined)) {
         console.error('Some players have missing points data.');
@@ -65,7 +72,7 @@ export async function distributeRankingPoints(
 
     // Points adjustment based on game result
     const adjustPoints = (playerIdx: number, adjustment: number) =>
-        addPointsTo(adjustment, players[playerIdx]);
+        addPointsTo(adjustment, playersIds[playerIdx], players[playerIdx].surname);
 
     if (team1Win) {
         if (mmrT1 < mmrT2) {
