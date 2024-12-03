@@ -63,8 +63,6 @@ export interface IGame {
     deck: ICard[];
     team1_score: number;
     team2_score: number;
-
-    status: GameStatus;
 }
 
 export type Event =
@@ -90,7 +88,6 @@ export type Event =
     | 'win_game'
     | 'sound'
     | 'leave';
-export type GameStatus = 'new' | 'paused' | 'active' | 'complete';
 
 export type ClassementRow = Database['public']['Tables']['Points']['Row'];
 export type EventInsert = Database['public']['Tables']['Events']['Insert'];

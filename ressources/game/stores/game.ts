@@ -1,4 +1,4 @@
-import type { GameStatus, IAnnonce, ICard, IPlay, PlayerId } from '@coinche/shared';
+import type { IAnnonce, ICard, IPlay, PlayerId } from '@coinche/shared';
 
 export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
@@ -14,8 +14,6 @@ export const useGameStore = defineStore('game', () => {
     const current_player_id = ref<PlayerId>('');
     const player_starting_id = ref<PlayerId>('0');
 
-    const status = ref<GameStatus>('new');
-
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
 
@@ -27,10 +25,6 @@ export const useGameStore = defineStore('game', () => {
 
     function setCurrentPlayerId(playerId: PlayerId) {
         current_player_id.value = playerId;
-    }
-
-    function setStatus(newStatus: GameStatus) {
-        status.value = newStatus;
     }
 
     function setLastAnnonce(annonce: IAnnonce) {
@@ -99,7 +93,6 @@ export const useGameStore = defineStore('game', () => {
     return {
         current_pli,
         current_player_id,
-        status,
         pli_number,
         team1_point_current_game,
         team2_point_current_game,
@@ -111,7 +104,6 @@ export const useGameStore = defineStore('game', () => {
         team2_score,
         addCardToPliAndRemove,
         setCurrentPlayerId,
-        setStatus,
         setLastAnnonce,
         setCoinched,
         setSurcoinched,
