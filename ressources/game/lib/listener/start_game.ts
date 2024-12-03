@@ -1,7 +1,7 @@
 import { toast } from '@/lib/utils/listener';
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export async function translateStart(event: EventShared) {
+export async function translateStart(event: EventInsert) {
     const storeGame = useGameStore();
     storeGame.setNewRound();
     toast({

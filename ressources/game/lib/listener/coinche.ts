@@ -1,7 +1,7 @@
 import { toast } from '@/lib/utils/listener';
-import type { EventShared, IAnnonce } from '@coinche/shared';
+import type { EventInsert, IAnnonce } from '@coinche/shared';
 
-export function translateCoinche(event: EventShared) {
+export function translateCoinche(event: EventInsert) {
     const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
     const value = event.value as IAnnonce;
@@ -17,7 +17,7 @@ export function translateCoinche(event: EventShared) {
     return;
 }
 
-export function translateSurcoinche(event: EventShared) {
+export function translateSurcoinche(event: EventInsert) {
     const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
     const value = event.value as IAnnonce;

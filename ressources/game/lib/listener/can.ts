@@ -1,6 +1,6 @@
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export async function translateCanPlay(event: EventShared) {
+export async function translateCanPlay(event: EventInsert) {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
     if (event.value === storeAbout.myId) {
@@ -9,7 +9,7 @@ export async function translateCanPlay(event: EventShared) {
     }
     storeGame.setCurrentPlayerId(event.value as string);
 }
-export async function translateCanAnnonce(event: EventShared) {
+export async function translateCanAnnonce(event: EventInsert) {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
     if (event.value === storeAbout.myId) {

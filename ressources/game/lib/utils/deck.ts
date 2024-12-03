@@ -1,7 +1,4 @@
-import type { CardSuite, CardValue, ICard } from '@coinche/shared';
-
-const values: CardSuite[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
-const suites: CardValue[] = ['diamonds', 'clubs', 'hearts', 'spades'];
+import type { ICard } from '@coinche/shared';
 
 export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
     const storeAbout = useAboutStore();
@@ -153,7 +150,7 @@ export function orderCards(cards: ICard[], value: boolean, tri: boolean): ICard[
     return orderedCards;
 }
 
-function shuffleArray(array: any[]): any[] {
+function shuffleArray(array: ICard[]): ICard[] {
     let currentIndex = array.length,
         randomIndex,
         temporaryValue;

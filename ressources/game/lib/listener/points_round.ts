@@ -1,7 +1,7 @@
 import { unformatPoints } from '@coinche/shared';
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export async function translatePointsRound(event: EventShared) {
+export async function translatePointsRound(event: EventInsert) {
     console.log('points_round', event);
     const storeGame = useGameStore();
     const [scoreTeam1, scoreTeam2] = unformatPoints(event.value as string);

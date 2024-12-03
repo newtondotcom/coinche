@@ -80,8 +80,6 @@ export async function join() {
 }
 
 export async function leave() {
-    const storeAbout = useAboutStore();
-
     // we need to add ourselves to the db
     /*
     await supabase
@@ -91,6 +89,5 @@ export async function leave() {
         .eq('gameId', gameId)
         .eq('type', 'join');
     */
-
     //await supabase.from('Events').delete().not('id', 'is', null);
 }

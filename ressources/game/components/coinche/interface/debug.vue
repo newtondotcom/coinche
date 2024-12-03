@@ -21,6 +21,5 @@
 
 <script setup lang="ts">
     const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
 </script>

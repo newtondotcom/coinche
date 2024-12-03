@@ -1,3 +1,5 @@
+import type { Database } from './database.types';
+
 export type CardSuite =
     | 'diamonds'
     | 'clubs'
@@ -90,11 +92,5 @@ export type Event =
     | 'leave';
 export type GameStatus = 'new' | 'paused' | 'active' | 'complete';
 
-export interface EventShared {
-    id: string;
-    timestamp: number;
-    playerId: PlayerId;
-    type: Event;
-    value: string | ICard | IAnnonce;
-    gameId: string;
-}
+export type ClassementRow = Database['public']['Tables']['Points']['Row'];
+export type EventInsert = Database['public']['Tables']['Events']['Insert'];

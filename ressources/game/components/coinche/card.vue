@@ -93,7 +93,7 @@
     );
 
     watch(storeGame.current_pli, () => {
-        canBePlayed.value; // Access to trigger reactivity
+        canBePlayed.value;
     });
 </script>
 

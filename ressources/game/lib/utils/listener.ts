@@ -12,11 +12,12 @@ import { translateStartPli } from '@/lib/listener/start_pli';
 import { translateWinPli } from '@/lib/listener/win_pli';
 import { createClient } from '@supabase/supabase-js';
 import { translateStart } from '~/lib/listener/start_game';
-import type { Database, EventShared } from '@coinche/shared';
+import type { Database, EventInsert } from '@coinche/shared';
 
 import { translateCanAnnonce, translateCanPlay } from '../listener/can';
 import { translateEndRound } from '../listener/end_round';
 import { translatePointsRound } from '../listener/points_round';
+import { translateSound } from '../listener/sound';
 import { translateStartRound } from '../listener/start_round';
 
 export const { toast } = useToast();
@@ -27,17 +28,18 @@ export const supabase = createClient<Database>(
     config.public.SUPABASE_ANON_KEY,
 );
 
-function translateLeave(event: EventShared) {
+function translateLeave(event: EventInsert) {
     const storePlayers = usePlayersStore();
     storePlayers.players = storePlayers.players.filter((player) => player.id !== event.playerId);
     return;
 }
 
-function translateError(event: EventShared) {
+function translateError(event: EventInsert) {
+    console.log(event.value);
     return;
 }
 
-export default async function translateEvent(event: EventShared) {
+export default async function translateEvent(event: EventInsert) {
     switch (event.type) {
         case 'annonce':
             return translateAnnonce(event);
@@ -79,6 +81,8 @@ export default async function translateEvent(event: EventShared) {
             return translateCanAnnonce(event);
         case 'start_round':
             return translateStartRound(event);
+        case 'sound':
+            return translateSound(event);
         default:
             return '';
     }

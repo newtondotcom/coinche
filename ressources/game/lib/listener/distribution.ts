@@ -1,9 +1,9 @@
 import { deformatCarteToDistribute } from '@coinche/shared';
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
 import { assertPliNumber } from '../utils/miscs';
 
-export function translateDistribution(event: EventShared) {
+export function translateDistribution(event: EventInsert) {
     const storePlayers = usePlayersStore();
     const storeGame = useGameStore();
     const { pli_number, card } = deformatCarteToDistribute(event.value as string);

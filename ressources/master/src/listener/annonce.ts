@@ -1,32 +1,30 @@
-import { startPli } from "../emitter/start_pli";
-import Master from "../game";
-import { deformatAnnonce, type EventShared } from "@coinche/shared";
-import logger from "../logger";
-import { setNextPlayerTurn } from "../utils";
-import { emitCanAnnonce } from "../emitter/can";
+import { deformatAnnonce } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export default async function translateAnnonce(event: EventShared) {
-  const annonce = deformatAnnonce(event.value as string, event.playerId);
-  Master.getInstance(event.gameId).addAnnonce(annonce);
-  const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
-  await emitCanAnnonce(nextPlayerId, event.gameId);
+import { emitCanAnnonce } from '../emitter/can';
+import { startPli } from '../emitter/start_pli';
+import Master from '../game';
+import logger from '../logger';
+import { setNextPlayerTurn } from '../utils';
 
-  if (annonce.annonce === 0) {
-    // Get the last two annonces to check if they are both passes
-    const lastTwoAnnonces = Master.getInstance(event.gameId)
-      .getLastRound()
-      .annonces.slice(-3);
-    const annoncesPassed = lastTwoAnnonces.filter(
-      (annonce) => annonce.annonce === 0,
-    );
+export default async function translateAnnonce(event: EventInsert) {
+    const annonce = deformatAnnonce(event.value as string, event.playerId);
+    Master.getInstance(event.gameId).addAnnonce(annonce);
+    const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
+    await emitCanAnnonce(nextPlayerId, event.gameId);
 
-    // Include the current annonce in the check
-    if (annoncesPassed.length === 3) {
-      logger.info("Starting pli because of 3 consecutive passes");
-      await startPli(event.gameId);
-      return;
-    } else {
-      logger.info(annoncesPassed.length.toString(), "passes");
+    if (annonce.annonce === 0) {
+        // Get the last two annonces to check if they are both passes
+        const lastTwoAnnonces = Master.getInstance(event.gameId).getLastRound().annonces.slice(-3);
+        const annoncesPassed = lastTwoAnnonces.filter((annonce) => annonce.annonce === 0);
+
+        // Include the current annonce in the check
+        if (annoncesPassed.length === 3) {
+            logger.info('Starting pli because of 3 consecutive passes');
+            await startPli(event.gameId);
+            return;
+        } else {
+            logger.info(annoncesPassed.length.toString(), 'passes');
+        }
     }
-  }
 }

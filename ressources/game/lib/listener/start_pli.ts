@@ -1,7 +1,7 @@
 import { setValueAccordingToAtout } from '@/lib/utils/deck';
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export async function translateStartPli(event: EventShared) {
+export async function translateStartPli(event: EventInsert) {
     const storeAbout = useAboutStore();
     const storePlayers = usePlayersStore();
     console.log('start pli', event);

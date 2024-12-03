@@ -1,6 +1,6 @@
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export async function translateEndDistribution(event: EventShared) {
+export async function translateEndDistribution(event: EventInsert) {
     console.log('end distribution', event);
     const storeAbout = useAboutStore();
     storeAbout.setTimeDistrib(false);

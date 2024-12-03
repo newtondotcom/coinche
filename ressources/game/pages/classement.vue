@@ -6,17 +6,21 @@
             Classement
         </h1>
         <div v-if="storeAbout.authentificated">
-            <!-- <ClassementRow :row="userRow" /> -->
+            <ClassementRow :row="userRow" />
         </div>
-        <ClassementRow v-for="row in classement" key="row.id" :row="row" />
+        <ClassementRow v-for="row in classement" :key="row.id" :row="row" />
     </div>
 </template>
 
 <script setup lang="ts">
+    import type { ClassementRow } from '@coinche/shared';
+
     import { supabase } from '../lib/utils/listener';
 
     const classement = ref();
-    const userRow = ref();
+    const userRow = computed<ClassementRow>(() => {
+        return classement.value.find((row: ClassementRow) => row.playerId === storeAbout.myId);
+    });
 
     const storeAbout = useAboutStore();
 

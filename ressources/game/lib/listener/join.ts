@@ -1,7 +1,6 @@
-import { supabase } from '@/lib/utils/listener';
-import type { EventShared, IPlayer, PlayerPosition } from '@coinche/shared';
+import type { EventInsert, IPlayer, PlayerPosition } from '@coinche/shared';
 
-export async function translateJoin(event: EventShared) {
+export async function translateJoin(event: EventInsert) {
     const storePlayers = usePlayersStore();
     if (storePlayers.players.find((player) => player.id === event.playerId)) {
         console.log('Player already in the game');

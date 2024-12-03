@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to, _) => {
     const storeAbout = useAboutStore();
     const allowedPaths = ['/', '/login', '/404', '/regles'];
     console.log('to', to.path);

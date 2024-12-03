@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
     interface ClassementRowProps {
-        row: any;
+        row: ClassementRow;
     }
     defineProps<ClassementRowProps>();
 </script>

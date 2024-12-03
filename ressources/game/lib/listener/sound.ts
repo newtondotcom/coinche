@@ -1,7 +1,7 @@
 import { Howl } from 'howler';
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export async function translateSound(event: EventShared) {
+export async function translateSound(event: EventInsert) {
     const soundName: string = event.value as string;
     triggerSound(soundName);
 }

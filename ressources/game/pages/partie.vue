@@ -1,27 +1,30 @@
 <template>
-    <!--<CoincheInterfaceDebug />--->
-    <CoincheDeck />
+    <div>
+        <!--<CoincheInterfaceDebug />--->
+        <CoincheDeck />
 
-    <Soundboard />
+        <OthersSoundboard />
 
-    <CoincheRiver />
+        <CoincheRiver />
 
-    <CoincheInterfaceAnnonces v-if="storeAbout.timeToAnnonce" />
+        <CoincheInterfaceAnnonces v-if="storeAbout.timeToAnnonce" />
 
-    <div v-if="storePlayers.players.length == 4" class="flex flex-row justify-between">
-        <CoincheInterfacePoints />
-        <CoincheInterfaceTurn />
+        <div v-if="storePlayers.players.length == 4" class="flex flex-row justify-between">
+            <CoincheInterfacePoints />
+            <CoincheInterfaceTurn />
+        </div>
+
+        <CoincheInterfaceSavedAnnonce v-if="storeGame.last_annonce.suite != 'NA'" />
+
+        <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
     </div>
-
-    <CoincheInterfaceSavedAnnonce v-if="storeGame.last_annonce.suite != 'NA'" />
-
-    <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
 </template>
 
 <script setup lang="ts">
     import { join, leave } from '@/lib/emitter/join';
     import translateEvent from '@/lib/utils/listener';
     import { createClient } from '@supabase/supabase-js';
+    import type { EventInsert } from '@coinche/shared';
 
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
@@ -54,8 +57,8 @@
         const config = useRuntimeConfig();
         const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
 
-        const handleInserts = (payload: any) => {
-            translateEvent(payload.new);
+        const handleInserts = (payload: EventInsert) => {
+            translateEvent(payload);
         };
 
         supabase

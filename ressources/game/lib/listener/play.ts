@@ -1,8 +1,8 @@
 import { assertPliNumber } from '@/lib/utils/miscs';
 import { deformatCarteToPlay } from '@coinche/shared';
-import type { EventShared } from '@coinche/shared';
+import type { EventInsert } from '@coinche/shared';
 
-export default function translatePlay(event: EventShared) {
+export default function translatePlay(event: EventInsert) {
     const storeGame = useGameStore();
     const def = deformatCarteToPlay(event.value as string);
     const card = def.card;

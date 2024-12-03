@@ -26,7 +26,7 @@
             </div>
             <div class="flex flex-row">
                 <CoincheInterfaceColorMode />
-                <Auth />
+                <OthersAuth />
             </div>
         </header>
         <Separator />

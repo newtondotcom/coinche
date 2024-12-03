@@ -1,6 +1,6 @@
 import { formatAnnonce } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
-import type { IAnnonce, IPlayer } from '@coinche/shared';
+import type { IAnnonce } from '@coinche/shared';
 
 import { supabase } from '../utils/listener';
 

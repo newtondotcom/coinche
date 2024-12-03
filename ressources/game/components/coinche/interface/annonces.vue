@@ -31,6 +31,7 @@
                     >
                         <Button
                             v-for="annonce in annonces"
+                            :key="annonce.toLocaleString() + Math.random()"
                             :disabled="canAnnonceNumber(annonce) || !canAnnoncer"
                             :variant="annonceEnCours.annonce === annonce ? 'outline' : 'ghost'"
                             aria-label="Valeur de {{ annonce }}"
@@ -44,6 +45,7 @@
                     >
                         <Button
                             v-for="suite in suites"
+                            :key="suite + Math.random()"
                             :variant="annonceEnCours.suite === suite ? 'outline' : 'ghost'"
                             :disabled="!canAnnoncer"
                             aria-label="Suite de {{ annonce }}"

@@ -49,6 +49,5 @@
 </template>
 
 <script setup lang="ts">
-    const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
 </script>

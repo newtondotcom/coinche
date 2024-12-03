@@ -16,8 +16,12 @@
 <script setup lang="ts">
     const storeAbout = useAboutStore();
     const link = ref<string>('');
-    const data = await $fetch('/api/churros/link');
-    link.value = data.url;
+
+    async function fetchLink() {
+        const data = await $fetch('/api/churros/link');
+        link.value = data.url;
+    }
+    fetchLink();
 
     async function test() {
         const data = await $fetch('/api/churros/info');
