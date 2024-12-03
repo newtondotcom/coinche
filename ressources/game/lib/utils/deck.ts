@@ -128,10 +128,10 @@ export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
 export function orderCards(cards: ICard[], value: boolean, tri: boolean): ICard[] {
     let orderedCards: ICard[] = [...cards];
 
-    let diamonds = orderedCards.filter((card) => card.suite === 'diamonds');
-    let clubs = orderedCards.filter((card) => card.suite === 'clubs');
-    let hearts = orderedCards.filter((card) => card.suite === 'hearts');
-    let spades = orderedCards.filter((card) => card.suite === 'spades');
+    const diamonds = orderedCards.filter((card) => card.suite === 'diamonds');
+    const clubs = orderedCards.filter((card) => card.suite === 'clubs');
+    const hearts = orderedCards.filter((card) => card.suite === 'hearts');
+    const spades = orderedCards.filter((card) => card.suite === 'spades');
 
     if (!tri) {
         orderedCards = shuffleArray(orderedCards);

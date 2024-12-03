@@ -9,7 +9,7 @@
             </CardHeader>
             <CardContent>
                 <div class="flex w-full max-w-sm items-center gap-1.5">
-                    <Input v-model="gameId" id="gameId" placeholder="Code" />
+                    <Input id="gameId" v-model="gameId" placeholder="Code" />
                 </div>
             </CardContent>
             <CardFooter>

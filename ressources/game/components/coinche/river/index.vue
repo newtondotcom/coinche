@@ -13,13 +13,10 @@
                 <CoincheCard
                     v-if="storeGame.current_pli.length >= i"
                     :card="storeGame.current_pli[i - 1].card"
-                    classStr="my-1"
-                    :inDeck="false"
+                    class-str="my-1"
+                    :in-deck="false"
                 />
-                <div
-                    :style="{ width: `${maxCardWidth}px`, height: `${maxCardHeight}px` }"
-                    v-else
-                ></div>
+                <div v-else :style="{ width: `${maxCardWidth}px`, height: `${maxCardHeight}px` }" />
             </div>
         </div>
     </div>

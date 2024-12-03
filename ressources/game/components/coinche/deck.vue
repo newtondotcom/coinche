@@ -1,13 +1,13 @@
 <template>
     <div
-        class="flex flex-row absolute bottom-0 justify-center w-full"
         v-if="storeAbout.hand.length > 0"
+        class="flex flex-row absolute bottom-0 justify-center w-full"
     >
         <Card
             v-for="card in storeAbout.hand"
             :key="card.value + card.suite"
             :card="card"
-            :inDeck="true"
+            :in-deck="true"
         />
     </div>
 </template>

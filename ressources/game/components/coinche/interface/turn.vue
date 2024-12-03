@@ -1,9 +1,9 @@
 <template>
     <Card class="w-[350px] h-[200px] mx-2">
-        <CardHeader></CardHeader>
+        <CardHeader />
         <CardContent>
             <div class="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
-                <div></div>
+                <div />
                 <div class="flex justify-center items-center">
                     <Badge
                         :variant="
@@ -15,7 +15,7 @@
                     </Badge>
                     <span class="font-semibold mx-1">{{ storePlayers.players[0].surname }}</span>
                 </div>
-                <div></div>
+                <div />
 
                 <div class="flex justify-center items-center">
                     <Badge
@@ -28,7 +28,7 @@
                     </Badge>
                     <span class="font-semibold mx-1">{{ storePlayers.players[1].surname }}</span>
                 </div>
-                <div></div>
+                <div />
                 <div class="flex justify-center items-center">
                     <Badge
                         :variant="
@@ -41,7 +41,7 @@
                     <span class="font-semibold mx-1">{{ storePlayers.players[2].surname }}</span>
                 </div>
 
-                <div></div>
+                <div />
                 <div class="flex justify-center items-center">
                     <Badge
                         :variant="
@@ -53,10 +53,10 @@
                     </Badge>
                     <span class="font-semibold mx-1">{{ storePlayers.players[3].surname }}</span>
                 </div>
-                <div></div>
+                <div />
             </div>
         </CardContent>
-        <CardFooter></CardFooter>
+        <CardFooter />
     </Card>
 </template>
 

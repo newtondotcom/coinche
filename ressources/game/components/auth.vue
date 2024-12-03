@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row">
-        <NuxtLink :to="link" v-if="!storeAbout.authentificated">
+        <NuxtLink v-if="!storeAbout.authentificated" :to="link">
             <Button variant="secondary">
                 <img
                     src="https://git.inpt.fr/inp-net/visual-identity/-/raw/main/derivations/auth.svg"
@@ -8,7 +8,7 @@
                 Connexion avec INP-net
             </Button>
         </NuxtLink>
-        <Button @click="logout" v-else>Déconnexion</Button>
+        <Button v-else @click="logout">Déconnexion</Button>
         <Button @click="test">Test</Button>
     </div>
 </template>

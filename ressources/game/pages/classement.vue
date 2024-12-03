@@ -6,9 +6,9 @@
             Classement
         </h1>
         <div v-if="storeAbout.authentificated">
-            <ClassementRow :row="userRow" />
+            <!-- <ClassementRow :row="userRow" /> -->
         </div>
-        <ClassementRow v-for="row in classement" :row="row" />
+        <ClassementRow v-for="row in classement" key="row.id" :row="row" />
     </div>
 </template>
 
@@ -25,7 +25,6 @@
         const { data, error } = await classementQuery;
         if (error) throw error;
         classement.value = data;
-        console.log(data);
     }
 
     onMounted(() => {

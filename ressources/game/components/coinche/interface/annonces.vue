@@ -32,9 +32,9 @@
                         <Button
                             v-for="annonce in annonces"
                             :disabled="canAnnonceNumber(annonce) || !canAnnoncer"
-                            @click="annonceEnCours = { ...annonceEnCours, annonce }"
                             :variant="annonceEnCours.annonce === annonce ? 'outline' : 'ghost'"
                             aria-label="Valeur de {{ annonce }}"
+                            @click="annonceEnCours = { ...annonceEnCours, annonce }"
                         >
                             {{ annonce }}
                         </Button>
@@ -44,10 +44,10 @@
                     >
                         <Button
                             v-for="suite in suites"
-                            @click="annonceEnCours = { ...annonceEnCours, suite }"
                             :variant="annonceEnCours.suite === suite ? 'outline' : 'ghost'"
                             :disabled="!canAnnoncer"
                             aria-label="Suite de {{ annonce }}"
+                            @click="annonceEnCours = { ...annonceEnCours, suite }"
                         >
                             {{ suite == 'diamonds' ? '♦️' : '' }}
                             {{ suite == 'hearts' ? '♥️' : '' }}
@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="flex flex-col space-y-2 justify-center px-1 mx-1">
-                        <Button @click="passer" :disabled="!canAnnoncer && !canPasser">
+                        <Button :disabled="!canAnnoncer && !canPasser" @click="passer">
                             Passer
                         </Button>
                         <Button :disabled="!canCoincher">Coincher</Button>
@@ -80,23 +80,30 @@
     const storeAbout = useAboutStore();
     const storePlayers = usePlayersStore();
 
-    let annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
-    let suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades', 'tout-atout', 'sans-atout'];
+    const annonces: Annonce[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
+    const suites: CardSuite[] = [
+        'diamonds',
+        'clubs',
+        'hearts',
+        'spades',
+        'tout-atout',
+        'sans-atout',
+    ];
 
-    let canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.annonces_pli));
-    let canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.annonces_pli));
+    const canCoincher = computed<boolean>(() => canCoincherAnnonce(storeGame.annonces_pli));
+    const canSurcoincher = computed<boolean>(() => canSurcoincherAnnonce(storeGame.annonces_pli));
 
-    let canAnnoncer = computed<boolean>(
+    const canAnnoncer = computed<boolean>(
         () => storeAbout.turnToAnnonce && storeGame.current_player_id === storeAbout.myId,
     );
-    let canPasser = computed<boolean>(
+    const canPasser = computed<boolean>(
         () =>
             storeAbout.turnToAnnonce &&
             storeGame.annonces_pli.length > 3 &&
             storeGame.annonces_pli.slice(0, 3).every((annonce: IAnnonce) => annonce.annonce === 0),
     );
 
-    let annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
+    const annonceEnCours = ref<IAnnonce>({ annonce: 0, suite: 'NA', playerId: storeAbout.myId });
 
     watch(annonceEnCours, async () => {
         if (annonceEnCours.value.annonce !== 0 && annonceEnCours.value.suite !== 'NA') {

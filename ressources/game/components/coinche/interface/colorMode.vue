@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col justify-center">
-        <label @click="toogle" class="relative cursor-pointer p-2" for="light-switch">
+    <div class="flex flex-col justify-center mx-2">
+        <label class="relative cursor-pointer p-2" for="light-switch" @click="toogle">
             <svg class="dark:hidden" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
                 <path
                     class="fill-slate-700 dark:text-white"

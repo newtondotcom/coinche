@@ -8,7 +8,7 @@
 
     <CoincheInterfaceAnnonces v-if="storeAbout.timeToAnnonce" />
 
-    <div class="flex flex-row justify-between" v-if="storePlayers.players.length == 4">
+    <div v-if="storePlayers.players.length == 4" class="flex flex-row justify-between">
         <CoincheInterfacePoints />
         <CoincheInterfaceTurn />
     </div>

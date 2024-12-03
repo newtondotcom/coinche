@@ -9,7 +9,7 @@
             </CardHeader>
             <CardContent>
                 <div class="grid grid-cols-3 gap-2">
-                    <div></div>
+                    <div />
                     <div>
                         {{
                             storePlayers.players.length > 0
@@ -17,7 +17,7 @@
                                 : 'en attente'
                         }}
                     </div>
-                    <div></div>
+                    <div />
                     <div>
                         {{
                             storePlayers.players.length > 3
@@ -25,7 +25,7 @@
                                 : 'en attente'
                         }}
                     </div>
-                    <div></div>
+                    <div />
                     <div>
                         {{
                             storePlayers.players.length > 1
@@ -33,7 +33,7 @@
                                 : 'en attente'
                         }}
                     </div>
-                    <div></div>
+                    <div />
                     <div>
                         {{
                             storePlayers.players.length > 2
@@ -41,7 +41,7 @@
                                 : 'en attente'
                         }}
                     </div>
-                    <div></div>
+                    <div />
                 </div>
             </CardContent>
         </Card>
