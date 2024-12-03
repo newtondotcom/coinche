@@ -12,7 +12,7 @@ import { translateStartPli } from '@/lib/listener/start_pli';
 import { translateWinPli } from '@/lib/listener/win_pli';
 import { createClient } from '@supabase/supabase-js';
 import { translateStart } from '~/lib/listener/start_game';
-import type { EventShared } from '@coinche/shared';
+import type { Database, EventShared } from '@coinche/shared';
 
 import { translateCanAnnonce, translateCanPlay } from '../listener/can';
 import { translateEndRound } from '../listener/end_round';
@@ -22,7 +22,10 @@ import { translateStartRound } from '../listener/start_round';
 export const { toast } = useToast();
 
 const config = useRuntimeConfig();
-export const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
+export const supabase = createClient<Database>(
+    config.public.SUPABASE_URL,
+    config.public.SUPABASE_ANON_KEY,
+);
 
 function translateLeave(event: EventShared) {
     const storePlayers = usePlayersStore();
