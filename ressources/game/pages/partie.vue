@@ -30,6 +30,9 @@
     const id = route.query.id as string;
     const surname = route.query.surname as string;
     const gameId = route.query.gameId as string;
+    if (!id || !surname || !gameId) {
+        navigateTo('/');
+    }
     storeAbout.setMyId(id);
     storeAbout.setMySurname(surname);
     storeAbout.setGameId(gameId);
