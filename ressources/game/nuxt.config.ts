@@ -17,12 +17,13 @@ export default defineNuxtConfig({
     },
     ssr: false,
     runtimeConfig: {
+        CHURROS_CLIENT_ID: process.env.CHURROS_CLIENT_ID,
+        CHURROS_CLIENT_SECRET: process.env.CHURROS_CLIENT_SECRET,
+        SESSION_PASSWORD: process.env.SESSION_PASSWORD,
         public: {
             SUPABASE_URL: process.env.SUPABASE_URL,
             SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
-            CHURROS_CLIENT_ID: process.env.CHURROS_CLIENT_ID,
-            CHURROS_CLIENT_SECRET: process.env.CHURROS_CLIENT_SECRET,
-            SESSION_PASSWORD: process.env.SESSION_PASSWORD,
+            NODE_ENV: process.env.NODE_ENV,
         },
     },
 });
