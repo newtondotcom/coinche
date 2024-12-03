@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!--<CoincheInterfaceDebug />--->
+        <!--<CoincheInterfaceDebug />-->
         <CoincheDeck />
 
         <OthersSoundboard />
@@ -43,10 +43,12 @@
     onMounted(async () => {
         await startListening();
         join();
+        /*
         window.onbeforeunload = (event: BeforeUnloadEvent) => {
             event.preventDefault();
             return 'Are you sure you want to leave this page? Changes you made may not be saved.';
         };
+         */
     });
 
     onBeforeUnmount(async () => {
@@ -58,7 +60,7 @@
         const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
 
         const handleInserts = (payload: EventInsert) => {
-            translateEvent(payload);
+            translateEvent(payload.new as EventInsert);
         };
 
         supabase
