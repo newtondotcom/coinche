@@ -1,15 +1,20 @@
 <template>
     <div class="bg-secondary min-h-screen">
-        <header class="px-2 py-2 flex flex-row justify-between">
+        <header class="px-2 py-2 flex flex-row justify-between items-center">
             <h1 class="text-primary text-center text-3xl font-bold md:text-4xl cursor-pointer">
                 coinche.n7
             </h1>
-            <h2 class="text-center h-full">Classement</h2>
+            <h2
+                class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
+            >
+                Classement
+            </h2>
             <div class="flex flex-row">
                 <CoincheInterfaceColorMode />
                 <Auth />
             </div>
         </header>
+        <Separator />
         <NuxtPage />
         <footer></footer>
     </div>
