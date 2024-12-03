@@ -4,7 +4,7 @@ import { ArcticFetchError, OAuth2RequestError } from 'arctic';
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
     const session = await useSession(event, {
-        password: config.public.SESSION_PASSWORD,
+        password: config.SESSION_PASSWORD,
     });
     const accessToken = session.data.accessToken;
     try {

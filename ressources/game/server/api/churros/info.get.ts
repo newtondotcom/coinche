@@ -4,7 +4,7 @@ const urlUserInfos = 'https://auth.inpt.fr/application/o/userinfo/';
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
     const session = await useSession(event, {
-        password: config.public.SESSION_PASSWORD,
+        password: config.SESSION_PASSWORD,
     });
     const accessToken = session.data.accessToken;
     if (!accessToken) {

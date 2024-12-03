@@ -4,7 +4,7 @@ import { generateCodeVerifier, generateState } from 'arctic';
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
     const session = await useSession(event, {
-        password: config.public.SESSION_PASSWORD,
+        password: config.SESSION_PASSWORD,
     });
     const state = generateState();
     const codeVerifier = generateCodeVerifier();
