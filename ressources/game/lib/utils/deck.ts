@@ -122,48 +122,25 @@ export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
     });
 }
 
-export function orderCards(cards: ICard[], value: boolean, tri: boolean): ICard[] {
+export function orderCards(cards: ICard[], value: boolean): ICard[] {
     let orderedCards: ICard[] = [...cards];
 
     const diamonds = orderedCards.filter((card) => card.suite === 'diamonds');
     const clubs = orderedCards.filter((card) => card.suite === 'clubs');
     const hearts = orderedCards.filter((card) => card.suite === 'hearts');
     const spades = orderedCards.filter((card) => card.suite === 'spades');
-
-    if (!tri) {
-        orderedCards = shuffleArray(orderedCards);
+    if (value) {
+        diamonds.sort((a, b) => a.valueNum - b.valueNum);
+        clubs.sort((a, b) => a.valueNum - b.valueNum);
+        hearts.sort((a, b) => a.valueNum - b.valueNum);
+        spades.sort((a, b) => a.valueNum - b.valueNum);
     } else {
-        if (value) {
-            diamonds.sort((a, b) => a.valueNum - b.valueNum);
-            clubs.sort((a, b) => a.valueNum - b.valueNum);
-            hearts.sort((a, b) => a.valueNum - b.valueNum);
-            spades.sort((a, b) => a.valueNum - b.valueNum);
-        } else {
-            diamonds.sort((a, b) => b.valueNum - a.valueNum);
-            clubs.sort((a, b) => b.valueNum - a.valueNum);
-            hearts.sort((a, b) => b.valueNum - a.valueNum);
-            spades.sort((a, b) => b.valueNum - a.valueNum);
-        }
-        orderedCards = diamonds.concat(clubs, hearts, spades);
+        diamonds.sort((a, b) => b.valueNum - a.valueNum);
+        clubs.sort((a, b) => b.valueNum - a.valueNum);
+        hearts.sort((a, b) => b.valueNum - a.valueNum);
+        spades.sort((a, b) => b.valueNum - a.valueNum);
     }
+    orderedCards = diamonds.concat(clubs, hearts, spades);
 
     return orderedCards;
-}
-
-function shuffleArray(array: ICard[]): ICard[] {
-    let currentIndex = array.length,
-        randomIndex,
-        temporaryValue;
-
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // Swap elements
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
 }
