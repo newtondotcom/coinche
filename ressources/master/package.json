@@ -7,8 +7,7 @@
     },
     "scripts": {
         "dev": "bun run index.ts",
-        "watch": "npx tsc -w",
-        "firefox": "firefox \"http://localhost:3000/partie?id=0&surname=robebs&gameId=0\" \"http://localhost:3000/partie?id=1&surname=robebs1&gameId=0\" \"http://localhost:3000/partie?id=2&surname=robebs2&gameId=0\" \"http://localhost:3000/partie?id=3&surname=robebs3&gameId=0\""
+        "watch": "npx tsc -w"
     },
     "dependencies": {
         "@coinche/shared": "workspace:shared",

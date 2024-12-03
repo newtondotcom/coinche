@@ -9,7 +9,8 @@
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
         "lint": "eslint .",
-        "lint:fix": "eslint . --fix"
+        "lint:fix": "eslint . --fix",
+        "firefox": "firefox \"http://localhost:3000/partie?id=0&surname=robebs&gameId=0\" \"http://localhost:3000/partie?id=1&surname=robebs1&gameId=0\" \"http://localhost:3000/partie?id=2&surname=robebs2&gameId=0\" \"http://localhost:3000/partie?id=3&surname=robebs3&gameId=0\""
     },
     "dependencies": {
         "@coinche/shared": "workspace:shared",
