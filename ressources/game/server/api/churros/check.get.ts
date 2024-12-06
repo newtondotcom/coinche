@@ -17,14 +17,17 @@ export default defineEventHandler(async (event) => {
         const idToken = tokens.idToken();
         const claims = decodeIdToken(idToken);
         console.log(claims);
+        const userId = claims.preferred_username as string;
         await session.clear();
         await session.update({
             accessToken,
             accessTokenExpiresAt,
+            userId,
         });
+        setResponseStatus(event, 200, 'ok');
+        return { userId };
     } catch (e) {
         console.log(e);
         setResponseStatus(event, 404, 'ok');
     }
-    setResponseStatus(event, 200, 'ok');
 });

@@ -9,11 +9,12 @@
     const route = useRoute();
     const code = route.query.code;
     if (code) {
-        await $fetch('/api/churros/check', {
+        const data = await $fetch('/api/churros/check', {
             params: {
                 code: code,
             },
         });
+        storeAbout.setMyId(data?.userId || '');
         console.log('Connected');
         storeAbout.setAuthentificated(true);
         navigateTo('/');

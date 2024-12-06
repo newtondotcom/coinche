@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     });
     const state = generateState();
     const codeVerifier = generateCodeVerifier();
-    const scopes = ['openid', 'profile', 'email'];
+    const scopes = ['openid', 'profile', 'preferred_username'];
     const url = authentik.createAuthorizationURL(state, codeVerifier, scopes);
     await session.update({
         codeVerifier: codeVerifier,
