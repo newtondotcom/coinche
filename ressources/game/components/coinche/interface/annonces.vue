@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed z-50 flex items-center justify-center">
+    <div class="fixed inset-0 z-50 flex items-center justify-center">
         <Card class="shadow-2xl">
             <CardHeader>
                 <CardTitle>Annonces</CardTitle>
