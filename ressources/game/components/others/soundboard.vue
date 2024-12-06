@@ -1,6 +1,8 @@
 <template>
     <Sheet>
-        <SheetTrigger class="absolute bottom-10 right-10"><AudioLines /></SheetTrigger>
+        <SheetTrigger class="absolute bottom-10 right-10">
+            <AudioLines />
+        </SheetTrigger>
         <SheetContent>
             <SheetHeader>
                 <SheetTitle>La meilleure soundboard</SheetTitle>

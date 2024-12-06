@@ -32,6 +32,7 @@
 <script setup lang="ts">
     const storeAbout = useAboutStore();
     const gameId = ref<string>('');
+
     function joinGame() {
         if (storeAbout.authentificated) {
             navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
