@@ -27,6 +27,15 @@ export default class Master {
         return this._instances.get(gameId)!;
     }
 
+    public static deleteInstance(gameId: string): void {
+        if (this._instances.has(gameId)) {
+            this._instances.delete(gameId);
+            logger.info(`Game with id ${gameId} has been deleted`);
+        } else {
+            logger.warn(`Game with id ${gameId} does not exist`);
+        }
+    }
+
     // Add a play to the last pli of the last round
     public addPlay(card: ICard, playerId: string): void {
         const lastRound = this.game.rounds[this.game.rounds.length - 1];
@@ -76,10 +85,6 @@ export default class Master {
         };
         lastRound.plis.push(pliInit);
         logger.info('New pli created');
-    }
-
-    public setId(id: string): void {
-        this.game.gameId = id;
     }
 
     public getLastRound() {
