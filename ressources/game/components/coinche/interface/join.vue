@@ -13,7 +13,7 @@
                     <div>
                         {{
                             storePlayers.players.length > 0
-                                ? storePlayers.players[0].surname
+                                ? storePlayers.players[0].id
                                 : 'en attente'
                         }}
                     </div>
@@ -21,7 +21,7 @@
                     <div>
                         {{
                             storePlayers.players.length > 3
-                                ? storePlayers.players[3].surname
+                                ? storePlayers.players[3].id
                                 : 'en attente'
                         }}
                     </div>
@@ -29,7 +29,7 @@
                     <div>
                         {{
                             storePlayers.players.length > 1
-                                ? storePlayers.players[1].surname
+                                ? storePlayers.players[1].id
                                 : 'en attente'
                         }}
                     </div>
@@ -37,7 +37,7 @@
                     <div>
                         {{
                             storePlayers.players.length > 2
-                                ? storePlayers.players[2].surname
+                                ? storePlayers.players[2].id
                                 : 'en attente'
                         }}
                     </div>

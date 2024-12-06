@@ -12,7 +12,6 @@ export type CardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
 export type Annonce = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 'capot' | 'generale';
 export type PlayerPosition = 0 | 1 | 2 | 3;
 export type PlayerId = string;
-export type PlayerSurname = string;
 
 export interface ICard {
     suite: CardSuite;
@@ -33,7 +32,6 @@ export interface IPlay {
 
 export interface IPlayer {
     id: PlayerId;
-    surname: PlayerSurname;
     position: PlayerPosition;
     hands: ICard[];
     classement: number;

@@ -1,6 +1,5 @@
 import type { IAnnonce, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
 
-import { emitCanPlay } from './emitter/can';
 import logger from './logger';
 
 export default class Master {

@@ -52,6 +52,7 @@ export async function closePli(gameId: string) {
         if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
             await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
             await distributeRankingPoints(game.players, gameId, game.team1_score, game.team2_score);
+            Master.deleteInstance(gameId);
         } else {
             // next round if not goal score is reached
             // update the db :

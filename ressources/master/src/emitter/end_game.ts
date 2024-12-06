@@ -72,7 +72,7 @@ export async function distributeRankingPoints(
 
     // Points adjustment based on game result
     const adjustPoints = (playerIdx: number, adjustment: number) =>
-        addPointsTo(adjustment, playersIds[playerIdx], players[playerIdx].surname);
+        addPointsTo(adjustment, playersIds[playerIdx]);
 
     if (team1Win) {
         if (mmrT1 < mmrT2) {

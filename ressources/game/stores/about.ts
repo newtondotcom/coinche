@@ -4,7 +4,6 @@ export const useAboutStore = defineStore('about', () => {
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
     const myId = ref<string>('0');
-    const mySurname = ref<string>('player1');
     const gameId = ref<string>('0');
     const isCreator = ref<boolean>(false);
     const timeToAnnonce = ref<boolean>(false);
@@ -61,10 +60,6 @@ export const useAboutStore = defineStore('about', () => {
         myId.value = id;
     }
 
-    function setMySurname(surname: string) {
-        mySurname.value = surname;
-    }
-
     function setCreator(creator: boolean) {
         isCreator.value = creator;
     }
@@ -87,9 +82,7 @@ export const useAboutStore = defineStore('about', () => {
 
     return {
         myId,
-        mySurname,
         setMyId,
-        setMySurname,
         setCreator,
         hasAskedColor,
         hasAtout,

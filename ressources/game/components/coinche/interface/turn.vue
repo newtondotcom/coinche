@@ -13,7 +13,7 @@
                     >
                         {{ storePlayers.players[0].hands.length }}
                     </Badge>
-                    <span class="font-semibold mx-1">{{ storePlayers.players[0].surname }}</span>
+                    <span class="font-semibold mx-1">{{ storePlayers.players[0].id }}</span>
                 </div>
                 <div />
 
@@ -26,7 +26,7 @@
                     >
                         {{ storePlayers.players[1].hands.length }}
                     </Badge>
-                    <span class="font-semibold mx-1">{{ storePlayers.players[1].surname }}</span>
+                    <span class="font-semibold mx-1">{{ storePlayers.players[1].id }}</span>
                 </div>
                 <div />
                 <div class="flex justify-center items-center">
@@ -38,7 +38,7 @@
                     >
                         {{ storePlayers.players[2].hands.length }}
                     </Badge>
-                    <span class="font-semibold mx-1">{{ storePlayers.players[2].surname }}</span>
+                    <span class="font-semibold mx-1">{{ storePlayers.players[2].id }}</span>
                 </div>
 
                 <div />
@@ -51,7 +51,7 @@
                     >
                         {{ storePlayers.players[3].hands.length }}
                     </Badge>
-                    <span class="font-semibold mx-1">{{ storePlayers.players[3].surname }}</span>
+                    <span class="font-semibold mx-1">{{ storePlayers.players[3].id }}</span>
                 </div>
                 <div />
             </div>

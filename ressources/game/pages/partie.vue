@@ -31,13 +31,11 @@
     const storeAbout = useAboutStore();
     const route = useRoute();
     const id = route.query.id as string;
-    const surname = route.query.surname as string;
     const gameId = route.query.gameId as string;
-    if (!id || !surname || !gameId) {
+    if (!id || !gameId) {
         navigateTo('/');
     }
     storeAbout.setMyId(id);
-    storeAbout.setMySurname(surname);
     storeAbout.setGameId(gameId);
 
     onMounted(async () => {

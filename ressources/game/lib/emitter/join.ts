@@ -33,7 +33,7 @@ export async function join() {
                 type: 'join',
                 playerId: storeAbout.myId,
                 gameId: gameId,
-                value: storeAbout.mySurname,
+                value: storeAbout.myId,
             },
         ]);
 
@@ -66,7 +66,6 @@ export async function join() {
             const player = otherPlayersOrdred[index];
             const local: IPlayer = {
                 id: player.playerId,
-                surname: player.value,
                 position: index as PlayerPosition,
                 hands: [],
                 classement: 0,

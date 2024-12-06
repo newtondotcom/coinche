@@ -7,7 +7,7 @@ export default async function translateAnnonce(event: EventInsert) {
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
     const annonce = deformatAnnonce(event.value as string, event.playerId);
-    const playerName = storePlayers.players.find((player) => player.id === event.playerId)?.surname;
+    const playerName = event.playerId;
     if (annonce.annonce === 0) {
         toast({
             title: 'Passe',

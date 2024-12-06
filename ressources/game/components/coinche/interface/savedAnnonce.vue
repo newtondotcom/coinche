@@ -16,9 +16,7 @@
             class="bg-opacity-50 bg-gradient-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-5xl cursor-pointer"
         >
             par
-            {{
-                storePlayers.players.find((p) => p.id === storeGame.last_annonce.playerId)?.surname
-            }}
+            {{ storeGame.last_annonce.playerId }}
         </h3>
         <h4
             class="bg-opacity-50 bg-gradient-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-4xl cursor-pointer"
@@ -31,6 +29,5 @@
 
 <script setup lang="ts">
     const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
 </script>

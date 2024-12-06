@@ -13,7 +13,6 @@ export async function translateJoin(event: EventInsert) {
     } else {
         const local: IPlayer = {
             id: event.playerId,
-            surname: event.value as string,
             position: Master.getInstance(event.gameId).game.players.length as PlayerPosition,
             hands: [],
             classement: 0,

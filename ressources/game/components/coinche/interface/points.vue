@@ -14,8 +14,8 @@
                         </Avatar>
                         <div>
                             <p class="text-sm font-medium leading-none">
-                                {{ storePlayers.players[0].surname }} X
-                                {{ storePlayers.players[2].surname }}
+                                {{ storePlayers.players[0].id }} X
+                                {{ storePlayers.players[2].id }}
                             </p>
                             <p class="text-sm text-muted-foreground">
                                 {{ storePlayers.players[0].classement }} ème /
@@ -33,8 +33,8 @@
                         </Avatar>
                         <div>
                             <p class="text-sm font-medium leading-none">
-                                {{ storePlayers.players[1].surname }} X
-                                {{ storePlayers.players[3].surname }}
+                                {{ storePlayers.players[1].id }} X
+                                {{ storePlayers.players[3].id }}
                             </p>
                             <p class="text-sm text-muted-foreground">
                                 {{ storePlayers.players[1].classement }} ème /
@@ -58,8 +58,8 @@
                         </Avatar>
                         <div>
                             <p class="text-sm font-medium leading-none">
-                                {{ storePlayers.players[0].surname }} X
-                                {{ storePlayers.players[2].surname }}
+                                {{ storePlayers.players[0].id }} X
+                                {{ storePlayers.players[2].id }}
                             </p>
                             <p class="text-sm text-muted-foreground">
                                 {{ storePlayers.players[0].classement }} ème /
@@ -75,8 +75,8 @@
                         </Avatar>
                         <div>
                             <p class="text-sm font-medium leading-none">
-                                {{ storePlayers.players[1].surname }} X
-                                {{ storePlayers.players[3].surname }}
+                                {{ storePlayers.players[1].id }} X
+                                {{ storePlayers.players[3].id }}
                             </p>
                             <p class="text-sm text-muted-foreground">
                                 {{ storePlayers.players[1].classement }} ème /

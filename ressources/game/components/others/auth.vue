@@ -9,7 +9,6 @@
             </Button>
         </NuxtLink>
         <Button v-else @click="logout">Déconnexion</Button>
-        <Button @click="test">Test</Button>
     </div>
 </template>
 
@@ -22,11 +21,6 @@
         link.value = data.url;
     }
     fetchLink();
-
-    async function test() {
-        const data = await $fetch('/api/churros/info');
-        console.log(data);
-    }
 
     async function logout() {
         await $fetch('/api/churros/revoke', {

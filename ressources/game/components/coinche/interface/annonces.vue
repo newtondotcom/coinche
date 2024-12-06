@@ -15,11 +15,7 @@
                         {{ storeGame.last_annonce.suite == 'sans-atout' ? 'SA' : '' }}
                     </Badge>
                     par
-                    {{
-                        storePlayers.players.find(
-                            (player: IPlayer) => player.id === storeGame.last_annonce.playerId,
-                        )?.surname
-                    }}
+                    {{ storeGame.last_annonce.playerId }}
                     <Badge v-if="storeGame.coinched">Coinché</Badge>
                     <Badge v-if="storeGame.surcoinched">Coinché</Badge>
                 </CardDescription>

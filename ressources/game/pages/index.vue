@@ -30,10 +30,13 @@
 </template>
 
 <script setup lang="ts">
+    const storeAbout = useAboutStore();
     const gameId = ref<string>('');
     function joinGame() {
-        const id = Math.random().toString(36).substring(7);
-        const surname = Math.random().toString(36).substring(7);
-        navigateTo(`/partie?id=${id}&surname=${surname}&gameId=${gameId.value}`);
+        if (storeAbout.authentificated) {
+            navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
+        } else {
+            navigateTo(`/404`);
+        }
     }
 </script>
