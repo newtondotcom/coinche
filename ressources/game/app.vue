@@ -9,11 +9,18 @@
                 </h1>
             </NuxtLink>
             <div class="flex flex-row space-x-10">
-                <NuxtLink to="/classement">
+                <NuxtLink v-if="storeAbout.authentificated" to="/classement">
                     <h2
                         class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
                     >
                         classement
+                    </h2>
+                </NuxtLink>
+                <NuxtLink v-if="storeAbout.authentificated" to="/historique">
+                    <h2
+                        class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
+                    >
+                        historique
                     </h2>
                 </NuxtLink>
                 <NuxtLink to="/regles">
@@ -39,6 +46,8 @@
 
 <script setup lang="ts">
     import Toaster from '@/components/ui/toast/Toaster.vue';
+
+    const storeAbout = useAboutStore();
 
     useSeoMeta({
         title: 'Coinche.n7',
