@@ -39,6 +39,8 @@
         <Separator />
         <NuxtPage />
         <footer />
+
+        <OthersDevEnv v-if="devmode" />
     </div>
 
     <Toaster />
@@ -48,6 +50,12 @@
     import Toaster from '@/components/ui/toast/Toaster.vue';
 
     const storeAbout = useAboutStore();
+    const devmode = ref(false);
+    onMounted(() => {
+        if (window.location.hostname === 'localhost') {
+            devmode.value = true;
+        }
+    });
 
     useSeoMeta({
         title: 'Coinche.n7',
