@@ -108,3 +108,7 @@ export async function distributeRankingPoints(
         }
     }
 }
+
+export async function deleteRows(gameId: string) {
+    await supabase.from('Events').delete().match({ gameId: gameId });
+}

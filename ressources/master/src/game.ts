@@ -1,5 +1,6 @@
 import type { IAnnonce, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
 
+import { deleteRows } from './emitter/end_game';
 import logger from './logger';
 
 export default class Master {
@@ -26,10 +27,11 @@ export default class Master {
         return this._instances.get(gameId)!;
     }
 
-    public static deleteInstance(gameId: string): void {
+    public static async deleteInstance(gameId: string): Promise<void> {
         if (this._instances.has(gameId)) {
             this._instances.delete(gameId);
-            logger.info(`Game with id ${gameId} has been deleted`);
+            await deleteRows(gameId);
+            logger.info(`Game with id ${gameId} has been deleted from db and memory`);
         } else {
             logger.warn(`Game with id ${gameId} does not exist`);
         }
