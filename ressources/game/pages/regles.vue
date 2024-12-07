@@ -1,6 +1,6 @@
 <template>
     <div>
-        <article class="prose lg:prose-lg px-10 py-20">
+        <article class="prose lg:prose-lg px-10 py-20 min-w-full">
             <h1 id="-1-pr-ambule-"><strong>1. Préambule</strong></h1>
             <p>
                 Ce document a pour fonction d’établir les règles officielles de la belote contrée,
