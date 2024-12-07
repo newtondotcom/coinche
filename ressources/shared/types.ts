@@ -89,3 +89,4 @@ export type Event =
 
 export type ClassementRow = Database['public']['Tables']['Points']['Row'];
 export type EventInsert = Database['public']['Tables']['Events']['Insert'];
+export type HistoriqueRow = Database['public']['Tables']['Game']['Row'];

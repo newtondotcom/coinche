@@ -37,8 +37,8 @@ export type Database = {
                     p2: string;
                     p3: string;
                     p4: string;
-                    team1_score: number | null;
-                    team2_score: number | null;
+                    team1_score: number;
+                    team2_score: number;
                 };
                 Insert: {
                     gameId: string;
@@ -46,8 +46,8 @@ export type Database = {
                     p2: string;
                     p3: string;
                     p4: string;
-                    team1_score?: number | null;
-                    team2_score?: number | null;
+                    team1_score: number;
+                    team2_score: number;
                 };
                 Update: {
                     gameId?: string;
@@ -55,8 +55,8 @@ export type Database = {
                     p2?: string;
                     p3?: string;
                     p4?: string;
-                    team1_score?: number | null;
-                    team2_score?: number | null;
+                    team1_score?: number;
+                    team2_score?: number;
                 };
                 Relationships: [];
             };
