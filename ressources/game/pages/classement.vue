@@ -5,10 +5,21 @@
         >
             Classement
         </h1>
-        <div v-if="storeAbout.authentificated">
-            <ClassementRow :row="userRow" />
+        <div v-if="storeAbout.authentificated && userRow">
+            <OthersClassementRow
+                :row="userRow"
+                :rank="
+                    classement.findIndex((row: ClassementRow) => row.playerId === storeAbout.myId) +
+                    1
+                "
+            />
         </div>
-        <ClassementRow v-for="row in classement" :key="row.id" :row="row" />
+        <OthersClassementRow
+            v-for="(row, index) in classement"
+            :key="row.id"
+            :row="row"
+            :rank="index + 1"
+        />
     </div>
 </template>
 
@@ -19,13 +30,18 @@
 
     const classement = ref();
     const userRow = computed<ClassementRow>(() => {
+        if (!classement.value) return;
         return classement.value.find((row: ClassementRow) => row.playerId === storeAbout.myId);
     });
 
     const storeAbout = useAboutStore();
 
     async function fetchClassement() {
-        const classementQuery = supabase.from('Points').select();
+        const classementQuery = supabase
+            .from('Points')
+            .select()
+            .order('points', { ascending: false })
+            .limit(100);
         const { data, error } = await classementQuery;
         if (error) throw error;
         classement.value = data;
