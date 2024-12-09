@@ -41,12 +41,12 @@
     onMounted(async () => {
         await startListening();
         join();
-        /*
-        window.onbeforeunload = (event: BeforeUnloadEvent) => {
-            event.preventDefault();
-            return 'Are you sure you want to leave this page? Changes you made may not be saved.';
-        };
-         */
+        if (window.location.hostname !== 'localhost') {
+            window.onbeforeunload = (event: BeforeUnloadEvent) => {
+                event.preventDefault();
+                return 'Are you sure you want to leave this page? Changes you made may not be saved.';
+            };
+        }
     });
 
     onBeforeUnmount(async () => {
