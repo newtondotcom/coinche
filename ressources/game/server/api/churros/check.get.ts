@@ -16,7 +16,6 @@ export default defineEventHandler(async (event) => {
         const accessTokenExpiresAt = tokens.accessTokenExpiresAt();
         const idToken = tokens.idToken();
         const claims = decodeIdToken(idToken);
-        console.log(claims);
         const userId = claims.preferred_username as string;
         await session.clear();
         await session.update({
