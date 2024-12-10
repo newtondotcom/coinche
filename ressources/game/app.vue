@@ -43,6 +43,7 @@
         <OthersDevEnv v-if="devmode" />
     </div>
 
+    <NuxtLoadingIndicator />
     <Toaster />
 </template>
 
