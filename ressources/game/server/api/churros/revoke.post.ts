@@ -1,7 +1,8 @@
-import authentik from '~/server/authentik';
+import getAuthentik from '~/server/authentik';
 import { ArcticFetchError, OAuth2RequestError } from 'arctic';
 
 export default defineEventHandler(async (event) => {
+    const authentik = getAuthentik(event);
     const config = useRuntimeConfig();
     const session = await useSession(event, {
         password: config.SESSION_PASSWORD,
