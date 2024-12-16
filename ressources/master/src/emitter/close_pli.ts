@@ -70,7 +70,7 @@ export async function closePli(gameId: string) {
     return;
 }
 
-function findWinner(lastPliEvents: IPlay[], gameId: string) {
+export function findWinner(lastPliEvents: IPlay[], gameId: string) {
     const atout = Master.getInstance(gameId).getLastRound().last_annonce.suite;
     if (lastPliEvents.some((pli) => pli.card.suite === atout)) {
         // atout is played
