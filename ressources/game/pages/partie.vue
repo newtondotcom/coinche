@@ -58,7 +58,10 @@
         const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY);
 
         const handleInserts = (payload: EventInsert) => {
-            translateEvent(payload.new as EventInsert);
+            const event = payload.new as EventInsert;
+            if (event.gameId == gameId) {
+                translateEvent(event);
+            }
         };
 
         supabase
