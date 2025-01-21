@@ -26,4 +26,18 @@ export default defineNuxtConfig({
             NODE_ENV: process.env.NODE_ENV,
         },
     },
+    app: {
+        head: {
+            title: 'Coinche.n7',
+            meta: [
+                { charset: 'utf-8' },
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'Le meilleur site de coinche en ligne',
+                },
+            ],
+            link: [{ rel: 'icon', type: 'image/png', href: '/carro.png' }],
+        },
+    },
 });
