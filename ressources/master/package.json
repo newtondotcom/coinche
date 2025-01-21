@@ -11,9 +11,8 @@
     },
     "dependencies": {
         "@coinche/shared": "workspace:shared",
-        "@supabase/supabase-js": "^2.46.1",
-        "@types/node": "^22.9.1",
-        "arctic": "^2.3.0",
+        "@supabase/supabase-js": "^2.48.0",
+        "@types/node": "^22.10.7",
         "winston": "^3.17.0"
     }
 }
