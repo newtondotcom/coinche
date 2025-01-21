@@ -2,7 +2,7 @@ import getAuthentik from '~/server/authentik';
 import { generateCodeVerifier, generateState } from 'arctic';
 
 export default defineEventHandler(async (event) => {
-    const authentik = getAuthentik(event);
+    const authentik = getAuthentik();
     const config = useRuntimeConfig();
     const session = await useSession(event, {
         password: config.SESSION_PASSWORD,

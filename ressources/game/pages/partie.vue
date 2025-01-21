@@ -26,6 +26,9 @@
     import { createClient } from '@supabase/supabase-js';
     import type { EventInsert } from '@coinche/shared';
 
+    const config = useRuntimeConfig();
+    const devEnv = config.public.NODE_ENV !== 'production';
+
     const storeGame = useGameStore();
     const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
@@ -41,7 +44,7 @@
     onMounted(async () => {
         await startListening();
         join();
-        if (window.location.hostname !== 'localhost') {
+        if (!devEnv) {
             window.onbeforeunload = (event: BeforeUnloadEvent) => {
                 event.preventDefault();
                 return 'Are you sure you want to leave this page? Changes you made may not be saved.';

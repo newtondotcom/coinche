@@ -40,7 +40,7 @@
         <NuxtPage />
         <footer />
 
-        <OthersDevEnv v-if="devmode" />
+        <OthersDevEnv v-if="devEnv" />
     </div>
 
     <NuxtLoadingIndicator />
@@ -51,12 +51,8 @@
     import Toaster from '@/components/ui/toast/Toaster.vue';
 
     const storeAbout = useAboutStore();
-    const devmode = ref(false);
-    onMounted(() => {
-        if (window.location.hostname === 'localhost') {
-            devmode.value = true;
-        }
-    });
+    const config = useRuntimeConfig();
+    const devEnv = config.public.NODE_ENV !== 'production';
 
     useSeoMeta({
         title: 'Coinche.n7',
