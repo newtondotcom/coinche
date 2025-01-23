@@ -32,8 +32,7 @@ export default defineNuxtConfig({
             meta: [
                 { charset: 'utf-8' },
                 {
-                    hid: 'description',
-                    name: 'description',
+                    name: 'Le meilleur site de coinche en ligne',
                     content: 'Le meilleur site de coinche en ligne',
                 },
             ],
