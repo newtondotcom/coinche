@@ -1,5 +1,5 @@
 {
-    "name": "@coinche/master",
+    "name": "@coinche/controller",
     "module": "index.ts",
     "type": "module",
     "devDependencies": {

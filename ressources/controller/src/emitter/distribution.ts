@@ -3,11 +3,11 @@ import {
   type ICard,
   type PlayerId,
 } from "@coinche/shared";
-import Master from "../game";
-import supabase from "../supabase";
+import controller from "@/game";
+import supabase from "@/supabase";
 import genIdCuid from "@coinche/shared/src/gen_id";
-import logger from "../logger";
-import { emitCanAnnonce } from "./can";
+import logger from "@/logger";
+import { emitCanAnnonce } from "@/emitter/can";
 
 export default async function emitDistribution(
   id_player_starting: PlayerId,
@@ -15,7 +15,7 @@ export default async function emitDistribution(
 ) {
   cutDeck(gameId);
   // distribute cards 3 per person, then 2, then 3
-  const players = Master.getInstance(gameId).game.players;
+  const players = controller.getInstance(gameId).game.players;
   const startIndex = players.findIndex(
     (player) => player.id === id_player_starting,
   );
@@ -29,7 +29,7 @@ export default async function emitDistribution(
   ];
 
   if (
-    Master.getInstance(gameId).game.deck.length !== 32 ||
+    controller.getInstance(gameId).game.deck.length !== 32 ||
     shiftedPlayers.length !== 4
   ) {
     logger.error("deck not cut or players not 4");
@@ -54,8 +54,8 @@ export default async function emitDistribution(
     {
       id: await genIdCuid(),
       type: "start_annonce",
-      playerId: "master",
-      gameId: Master.getInstance(gameId).game.gameId,
+      playerId: "controller",
+      gameId: controller.getInstance(gameId).game.gameId,
       value: id_player_starting,
     },
   ]);
@@ -63,7 +63,7 @@ export default async function emitDistribution(
 }
 
 async function distributeCard(player_id: string, gameId: string) {
-  const card: ICard = Master.getInstance(gameId).game.deck.pop() as ICard;
+  const card: ICard = controller.getInstance(gameId).game.deck.pop() as ICard;
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
@@ -72,7 +72,7 @@ async function distributeCard(player_id: string, gameId: string) {
       gameId: gameId,
       value: formatCarteToDistribute(
         card,
-        Master.getInstance(gameId).game.rounds.length,
+        controller.getInstance(gameId).game.rounds.length,
       ),
     },
   ]);
@@ -80,10 +80,10 @@ async function distributeCard(player_id: string, gameId: string) {
 export function cutDeck(gameId: string) {
   // cut the paquet at a certain index
   const indexCut = Math.floor(Math.random() * 32);
-  const deck = Master.getInstance(gameId).game.deck;
+  const deck = controller.getInstance(gameId).game.deck;
   const deck1 = deck.slice(0, indexCut);
   const deck2 = deck.slice(indexCut);
   const newDeck = [...deck2, ...deck1];
-  Master.getInstance(gameId).game.deck = newDeck;
+  controller.getInstance(gameId).game.deck = newDeck;
   logger.info("Deck cut at index", indexCut);
 }

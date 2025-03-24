@@ -6,12 +6,12 @@
         "ressources/*"
     ],
     "scripts": {
-        "clean": "rm -rf node_modules ressources/game/node_modules ressources/master/node_modules bun.lockb ressources/game/bun.lockb ressources/master/bun.lockb",
+        "clean": "rm -rf node_modules ressources/game/node_modules ressources/controller/node_modules bun.lockb ressources/game/bun.lockb ressources/controller/bun.lockb",
         "vercel": "cd ressources/game && sh ./merge.sh",
         "prepare": "husky",
         "format": "prettier --write .",
         "game": "cd ressources/game && bun dev",
-        "master": "cd ressources/master && bun dev"
+        "controller": "cd ressources/controller && bun dev"
     },
     "devDependencies": {
         "@commitlint/config-conventional": "^19.6.0",

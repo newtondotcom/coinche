@@ -1,10 +1,10 @@
 import type { IAnnonce, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
 
-import { deleteRows } from './emitter/end_game';
-import logger from './logger';
+import { deleteRows } from '@/emitter/end_game';
+import logger from '@/logger';
 
-export default class Master {
-    private static _instances: Map<string, Master> = new Map();
+export default class controller {
+    private static _instances: Map<string, controller> = new Map();
 
     public game: IGame;
 
@@ -19,9 +19,9 @@ export default class Master {
         };
     }
 
-    public static getInstance(gameId: string): Master {
+    public static getInstance(gameId: string): controller {
         if (!this._instances.has(gameId)) {
-            this._instances.set(gameId, new Master(gameId));
+            this._instances.set(gameId, new controller(gameId));
             logger.info(`New game created with id ${gameId}`);
         }
         return this._instances.get(gameId)!;

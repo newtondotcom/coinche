@@ -1,20 +1,20 @@
 import { deformatCarteToPlay } from '@coinche/shared';
 import type { EventInsert } from '@coinche/shared';
 
-import { emitCanPlay } from '../emitter/can';
-import { closePli } from '../emitter/close_pli';
-import Master from '../game';
-import logger from '../logger';
-import { setNextPlayerTurn } from '../utils';
+import { emitCanPlay } from '@/emitter/can';
+import { closePli } from '@/emitter/close_pli';
+import controller from '@/game';
+import logger from '@/logger';
+import { setNextPlayerTurn } from '@/utils';
 
 export default async function translatePlay(event: EventInsert) {
     const def = deformatCarteToPlay(event.value as string);
     const card = def.card;
     const pli_number = def.pli_number;
     const playerId = event.playerId;
-    Master.getInstance(event.gameId).addPlay(card, playerId);
+    controller.getInstance(event.gameId).addPlay(card, playerId);
     // check if end of pli
-    if (Master.getInstance(event.gameId).getLastPli().plays.length === 4) {
+    if (controller.getInstance(event.gameId).getLastPli().plays.length === 4) {
         logger.info('End of pli');
         await closePli(event.gameId);
     } else {

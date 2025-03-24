@@ -1,13 +1,13 @@
 import genIdCuid from "@coinche/shared/src/gen_id";
-import supabase from "../supabase";
-import logger from "../logger";
+import supabase from "@/supabase";
+import logger from "@/logger";
 
 export async function emitCanPlay(playerId: string, gameId: string) {
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
       type: "can_play",
-      playerId: "master",
+      playerId: "controller",
       gameId: gameId,
       value: playerId,
     },
@@ -20,7 +20,7 @@ export async function emitCanAnnonce(playerId: string, gameId: string) {
     {
       id: await genIdCuid(),
       type: "can_annonce",
-      playerId: "master",
+      playerId: "controller",
       gameId: gameId,
       value: playerId,
     },

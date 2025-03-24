@@ -1,7 +1,7 @@
 import { deformatCarteToDistribute } from '@coinche/shared';
 import type { EventInsert } from '@coinche/shared';
 
-import { assertPliNumber } from '../utils/miscs';
+import { assertPliNumber } from '@/utils/miscs';
 
 export function translateDistribution(event: EventInsert) {
     const storePlayers = usePlayersStore();

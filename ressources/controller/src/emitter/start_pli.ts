@@ -1,18 +1,18 @@
 import genIdCuid from "@coinche/shared/src/gen_id";
-import Master from "../game";
-import supabase from "../supabase";
-import { emitCanPlay } from "./can";
-import logger from "../logger";
+import controller from "@/game";
+import supabase from "@/supabase";
+import { emitCanPlay } from "@/emitter/can";
+import logger from "@/logger";
 
 export async function startPli(gameId: string) {
   // launch pli
   const playerIdStarting =
-    Master.getInstance(gameId).getLastPli().player_starting_id;
+    controller.getInstance(gameId).getLastPli().player_starting_id;
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
       type: "start_pli",
-      playerId: "master",
+      playerId: "controller",
       gameId: gameId,
       value: playerIdStarting,
     },

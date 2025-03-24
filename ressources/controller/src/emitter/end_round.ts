@@ -1,14 +1,14 @@
-import Master from '../game';
-import logger from '../logger';
-import { findWinner } from './close_pli';
-import { emitPointsRound } from './points_round';
+import controller from '@/game';
+import logger from '@/logger';
+import { findWinner } from '@/emitter/close_pli';
+import { emitPointsRound } from '@/emitter/points_round';
 
 export async function emitEndRound(gameId: string) {
-    const masterInstance = Master.getInstance(gameId);
-    const lastRound = masterInstance.getLastRound();
+    const controllerInstance = controller.getInstance(gameId);
+    const lastRound = controllerInstance.getLastRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
     const seuilAnnonce = lastRound.last_annonce;
-    const teamAnnounced = masterInstance.isTeam1(seuilAnnonce.playerId) ? 1 : 2;
+    const teamAnnounced = controllerInstance.isTeam1(seuilAnnonce.playerId) ? 1 : 2;
 
     const calculateCapotGeneraleScore = (annonce: string) => {
         const plis = lastRound.plis;
@@ -17,8 +17,8 @@ export async function emitEndRound(gameId: string) {
         plis.forEach((pli) => {
             const winnerPli = findWinner(pli.plays, gameId);
             if (
-                (teamAnnounced === 1 && !masterInstance.isTeam1(winnerPli)) ||
-                (teamAnnounced === 2 && masterInstance.isTeam1(winnerPli))
+                (teamAnnounced === 1 && !controllerInstance.isTeam1(winnerPli)) ||
+                (teamAnnounced === 2 && controllerInstance.isTeam1(winnerPli))
             ) {
                 isSuccessful = false;
             }
@@ -82,7 +82,7 @@ export async function emitEndRound(gameId: string) {
     }
 
     logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
-    masterInstance.game.team1_score += scoreTeam1;
-    masterInstance.game.team2_score += scoreTeam2;
+    controllerInstance.game.team1_score += scoreTeam1;
+    controllerInstance.game.team2_score += scoreTeam2;
     await emitPointsRound(scoreTeam1, scoreTeam2, gameId);
 }

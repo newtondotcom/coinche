@@ -2,9 +2,9 @@ import { formatTeam } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
 import type { IPlayer } from '@coinche/shared';
 
-import logger from '../logger';
+import logger from '@/logger';
 import { addPointsTo } from '../points';
-import supabase from '../supabase';
+import supabase from '@/supabase';
 
 export async function emitEndGame(
     winnerPlayerId: string,
@@ -15,7 +15,7 @@ export async function emitEndGame(
         {
             id: await genIdCuid(),
             type: 'end_game',
-            playerId: 'master',
+            playerId: 'controller',
             gameId: gameId,
             value: formatTeam(winnerPlayerId, teamMatePlayerId),
         },

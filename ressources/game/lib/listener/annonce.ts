@@ -1,7 +1,7 @@
 import { deformatAnnonce } from '@coinche/shared';
 import type { EventInsert } from '@coinche/shared';
 
-import { toast } from '../utils/listener';
+import { toast } from '@/utils/listener';
 
 export default async function translateAnnonce(event: EventInsert) {
     const storeGame = useGameStore();

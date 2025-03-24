@@ -1,9 +1,9 @@
 import type { EventInsert } from '@coinche/shared';
 
-import translateAnnonce from './annonce';
-import { translateCoinche, translateSurcoinche } from './coinche';
-import { translateJoin } from './join';
-import translatePlay from './play';
+import translateAnnonce from '@/listener/annonce';
+import { translateCoinche, translateSurcoinche } from '@/listener/coinche';
+import { translateJoin } from '@/listener/join';
+import translatePlay from '@/listener/play';
 
 export async function translateEvent(event: EventInsert) {
     switch (event.type) {

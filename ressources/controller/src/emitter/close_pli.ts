@@ -2,14 +2,14 @@ import { formatTeam } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
 import type { IPlay, IPlayer } from '@coinche/shared';
 
-import Master from '../game';
-import supabase from '../supabase';
-import { dev } from '../utils';
-import { distributeRankingPoints, emitEndGame } from './end_game';
-import { emitEndRound } from './end_round';
-import { emitPoints } from './points';
-import { startPli } from './start_pli';
-import { emitRoundStarting } from './start_round';
+import controller from '@/game';
+import supabase from '@/supabase';
+import { dev } from '@/utils';
+import { distributeRankingPoints, emitEndGame } from '@/emitter/end_game';
+import { emitEndRound } from '@/emitter/end_round';
+import { emitPoints } from '@/emitter/points';
+import { startPli } from '@/emitter/start_pli';
+import { emitRoundStarting } from '@/emitter/start_round';
 
 let scoreToReach: number;
 if (dev) {
@@ -19,8 +19,8 @@ if (dev) {
 }
 
 export async function closePli(gameId: string) {
-    const game = Master.getInstance(gameId).game;
-    const lastPli = Master.getInstance(gameId).getLastPli();
+    const game = controller.getInstance(gameId).game;
+    const lastPli = controller.getInstance(gameId).getLastPli();
     // find the winner
     const pastPlis: IPlay[] = lastPli.plays;
     const winnerPlayerId = findWinner(pastPlis, gameId);
@@ -30,7 +30,7 @@ export async function closePli(gameId: string) {
         {
             id: await genIdCuid(),
             type: 'win_pli',
-            playerId: 'master',
+            playerId: 'controller',
             gameId: gameId,
             value: formatTeam(winnerPlayerId, teamMatePlayerId),
         },
@@ -39,10 +39,10 @@ export async function closePli(gameId: string) {
     if (game.deck.length === 32) {
         score += 10;
     }
-    const scoreTeam1 = Master.getInstance(gameId).isTeam1(winnerPlayerId) ? score : 0;
+    const scoreTeam1 = controller.getInstance(gameId).isTeam1(winnerPlayerId) ? score : 0;
     const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
-    Master.getInstance(gameId).getLastRound().team1_point_current_game += scoreTeam1;
-    Master.getInstance(gameId).getLastRound().team2_point_current_game += scoreTeam2;
+    controller.getInstance(gameId).getLastRound().team1_point_current_game += scoreTeam1;
+    controller.getInstance(gameId).getLastRound().team2_point_current_game += scoreTeam2;
     await emitPoints(scoreTeam1, scoreTeam2, gameId);
 
     // end of the round
@@ -52,7 +52,7 @@ export async function closePli(gameId: string) {
         if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
             await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
             await distributeRankingPoints(game.players, gameId, game.team1_score, game.team2_score);
-            Master.deleteInstance(gameId);
+            controller.deleteInstance(gameId);
         } else {
             // next round if not goal score is reached
             // update the db :
@@ -63,7 +63,7 @@ export async function closePli(gameId: string) {
         }
     } else {
         // next pli
-        Master.getInstance(gameId).addPli(winnerPlayerId);
+        controller.getInstance(gameId).addPli(winnerPlayerId);
         await startPli(gameId);
     }
 
@@ -71,7 +71,7 @@ export async function closePli(gameId: string) {
 }
 
 export function findWinner(lastPliEvents: IPlay[], gameId: string) {
-    const atout = Master.getInstance(gameId).getLastRound().last_annonce.suite;
+    const atout = controller.getInstance(gameId).getLastRound().last_annonce.suite;
     if (lastPliEvents.some((pli) => pli.card.suite === atout)) {
         // atout is played
         const atoutCards = lastPliEvents.filter((pli) => pli.card.suite === atout);
@@ -107,10 +107,10 @@ export async function fetchLastPliPlayerWinningId(gameId: string): Promise<strin
         return ' ';
     }
     const playerStartedId = events[0].value;
-    const playerStartedIndex = Master.getInstance(gameId).game.players.findIndex(
+    const playerStartedIndex = controller.getInstance(gameId).game.players.findIndex(
         (player) => player.id === playerStartedId,
     );
     const playerStartingIndex = (playerStartedIndex + 1) % 4;
-    const playerId = Master.getInstance(gameId).game.players[playerStartingIndex].id;
+    const playerId = controller.getInstance(gameId).game.players[playerStartingIndex].id;
     return playerId;
 }

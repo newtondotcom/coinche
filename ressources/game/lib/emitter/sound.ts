@@ -1,6 +1,6 @@
 import genIdCuid from '@coinche/shared/src/gen_id';
 
-import { supabase } from '../utils/listener';
+import { supabase } from '@/utils/listener';
 
 export async function emitSound(name: string): Promise<void> {
     const storeAbout = useAboutStore();

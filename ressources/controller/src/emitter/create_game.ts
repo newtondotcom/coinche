@@ -1,6 +1,5 @@
 import { formatPoints } from "@coinche/shared";
-import Master from "../game";
-import supabase from "../supabase";
+import supabase from "@/supabase";
 import genIdCuid from "@coinche/shared/src/gen_id";
 
 export async function emitGameCreation(gameId: string) {
@@ -32,7 +31,7 @@ export async function emitGameCreation(gameId: string) {
         {
           id: await genIdCuid(),
           type: "annonce",
-          playerId: "master",
+          playerId: "controller",
           gameId: gameId,
           value: formatPoints(0, 0),
         },

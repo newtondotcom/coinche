@@ -1,6 +1,6 @@
 import type { PlayerId } from '@coinche/shared';
 
-import supabase from './supabase';
+import supabase from '@/supabase';
 
 export async function addPointsTo(points: number, playerId: PlayerId): Promise<void> {
     // Fetch the current points for the player
