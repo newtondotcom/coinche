@@ -3,18 +3,24 @@
         <article class="prose lg:prose-lg px-10 py-20 min-w-full">
             <h1 id="-1-pr-ambule-"><strong>1. Préambule</strong></h1>
             <p>
-                Ce document a pour fonction d’établir les règles officielles de la belote contrée,
+                Ce document a pour fonction d’établir les règles officielles propres à l'n7 de la belote contrée,
                 dans sa variante la plus pratiquée, c’est-à-dire la belote contrée à 4 joueurs
-                répartis en 2 équipes de 2 joueurs, seules règles reconnues par la Fédération
+                répartis en 2 équipes de 2 joueurs, en se basant sur les règles reconnues par la Fédération
                 Française de Belote.
             </p>
             <p>
-                Source :
+                Sources :
                 <a
                     href="http://www.ffbelote.org/wp-content/uploads/2015/11/REGLES-DE-LA-BELOTE-CONTREE.pdf"
                 >
                     Règles officielles de la Belote Contrée
                 </a>
+                <a
+                    href="https://github.com/vareversat/carg/blob/dev/assets/rules/contree_belote_rules.md"
+                >
+                    Règles rédigées par Valentin REVERSAT
+                </a>
+                
             </p>
             <hr />
             <h1 id="-2-pr-sentation-"><strong>2. Présentation</strong></h1>
@@ -340,6 +346,10 @@
                 En cas de capot, c’est-à-dire les 8 plis remportés par la même équipe, le dix de der
                 vaut 100 points, portant ainsi le total à 252 points.
             </p>
+            <h2 id="9-3-generale">9.3. Générale</h2>
+            <p>
+                En cas de générale, c’est-à-dire les 8 plis remportés par la même personne, portant ainsi le total à 500 points.
+            </p>
             <hr />
             <h1 id="-10-calcul-du-score-"><strong>10. Calcul du score</strong></h1>
             <h2 id="10-1-r-sultat-de-la-donne">10.1. Résultat de la donne</h2>
@@ -360,7 +370,7 @@
                         Les preneurs obtiennent un
                         <strong>
                             total supérieur ou égal à l’enchère demandée OU ont réalisé les huit
-                            plis en cas de capot demandé.
+                            plis en cas de capot demandé OU la même personne a réalisé les huit plis.
                         </strong>
                     </p>
                 </li>
@@ -431,7 +441,7 @@
             <ul>
                 <li>
                     <strong>Les preneurs</strong>
-                    <em>ne marquent rien</em>
+                    ne marquent <em>rien</em>
                     , à l’exception éventuelle des 20 points de belote qui sont réputés imprenables.
                 </li>
                 <li>
@@ -474,12 +484,7 @@
                     provoque la chute ou la réussite du contrat pour l&#39;équipe preneuse.
                 </p>
             </blockquote>
-            <h2 id="10-2-arrondi">10.2. Arrondi</h2>
-            <p>
-                À la coinche, les points de la partie sont arrondis à la dizaine la plus proche.
-                Note : 85 est arrondi à 90 tandis que 84 est arrondi à 80.
-            </p>
-            <h2 id="10-3-fin-de-partie">10.3. Fin de partie</h2>
+            <h2 id="10-2-fin-de-partie">10.2. Fin de partie</h2>
             <p>
                 Le premier camp atteignant ou dépassant le nombre de points fixés au préalable
                 remporte la partie.
@@ -554,41 +559,6 @@
                     </tr>
                 </tbody>
             </table>
-            <p>L&#39;ordre et la valeur des carrés sont les suivants</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Combinaison</th>
-                        <th>Valeur</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><em>4 As</em></td>
-                        <td><strong>200 points</strong></td>
-                    </tr>
-                    <tr>
-                        <td><em>4 Dix</em></td>
-                        <td><strong>150 points</strong></td>
-                    </tr>
-                    <tr>
-                        <td><em>4 Roi</em></td>
-                        <td>100 points</td>
-                    </tr>
-                    <tr>
-                        <td><em>4 Dame</em></td>
-                        <td>100 points</td>
-                    </tr>
-                    <tr>
-                        <td><em>4 Valet</em></td>
-                        <td>100 points</td>
-                    </tr>
-                    <tr>
-                        <td><em>4 Neuf</em></td>
-                        <td>100 points</td>
-                    </tr>
-                </tbody>
-            </table>
             <h2 id="11-3-tout-atout">11.3. Tout Atout</h2>
             <p>
                 Lors d&#39;un contrat à Tout Atout, toutes les couleurs sont définies comme atout.
@@ -645,7 +615,6 @@
                     </tr>
                 </tbody>
             </table>
-            <p>L’ordre et la valeur des carrés demeurent inchangés.</p>
         </article>
         <span>
             Règles tirées de
