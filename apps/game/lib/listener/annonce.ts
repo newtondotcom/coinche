@@ -1,5 +1,5 @@
-import { toast } from '@/utils/listener';
 import { deformatAnnonce } from '@coinche/shared';
+import { toast } from 'vue-sonner';
 import type { EventInsert } from '@coinche/shared';
 
 export default async function translateAnnonce(event: EventInsert) {
@@ -8,8 +8,7 @@ export default async function translateAnnonce(event: EventInsert) {
     const annonce = deformatAnnonce(event.value as string, event.playerId);
     const playerName = event.playerId;
     if (annonce.annonce === 0) {
-        toast({
-            title: 'Passe',
+        toast('Passe', {
             description: `${playerName} passe`,
         });
     } else {

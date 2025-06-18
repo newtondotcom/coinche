@@ -1,4 +1,4 @@
-import { assertPliNumber } from '@/utils/miscs';
+import { assertPliNumber } from '@/lib/utils/miscs';
 import { deformatCarteToDistribute } from '@coinche/shared';
 import type { EventInsert } from '@coinche/shared';
 

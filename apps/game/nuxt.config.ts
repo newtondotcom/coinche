@@ -1,19 +1,12 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
     devtools: { enabled: false },
-    modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@pinia/nuxt', '@nuxt/eslint'],
-    shadcn: {
-        prefix: '',
-        componentDir: './components/ui',
-    },
-    tailwindcss: {
-        cssPath: ['~/assets/css/tailwind.css', { injectPosition: 'first' }],
-        configPath: 'tailwind.config',
-        exposeConfig: {
-            level: 2,
-        },
-        viewer: false,
+    modules: ['shadcn-nuxt', '@pinia/nuxt', '@nuxt/eslint'],
+    css: ['~/assets/css/tailwind.css'],
+    vite: {
+        plugins: [tailwindcss()],
     },
     ssr: false,
     runtimeConfig: {

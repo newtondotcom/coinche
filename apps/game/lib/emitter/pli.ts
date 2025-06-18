@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/listener';
+import { supabase } from '@/lib/utils/listener';
 import { deformatCarteToPlay } from '@coinche/shared';
 import type { IPlay } from '@coinche/shared';
 

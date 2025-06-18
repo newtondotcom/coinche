@@ -1,4 +1,3 @@
-import { toast } from '@/utils/listener';
 import { deformatTeam } from '@coinche/shared';
 import type { EventInsert } from '@coinche/shared';
 

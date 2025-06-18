@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/listener';
+import { supabase } from '@/lib/utils/listener';
 import { formatCarteToPlay } from '@coinche/shared';
 import genIdCuid from '@coinche/shared/src/gen_id';
 import type { CardSuite, CardValue, ICard } from '@coinche/shared';

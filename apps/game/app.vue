@@ -44,11 +44,16 @@
     </div>
 
     <NuxtLoadingIndicator />
-    <Toaster />
+    <ClientOnly>
+        <Toaster />
+    </ClientOnly>
 </template>
 
 <script setup lang="ts">
-    import Toaster from '@/components/ui/toast/Toaster.vue';
+    import { Toaster } from '@/components/ui/sonner';
+
+    import 'vue-sonner/style.css';
+
     import { isDevEnv } from '~/lib/utils/miscs';
 
     const config = useRuntimeConfig();

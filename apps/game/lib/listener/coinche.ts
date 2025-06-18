@@ -1,4 +1,4 @@
-import { toast } from '@/lib/utils/listener';
+import { toast } from 'vue-sonner';
 import type { EventInsert, IAnnonce } from '@coinche/shared';
 
 export function translateCoinche(event: EventInsert) {

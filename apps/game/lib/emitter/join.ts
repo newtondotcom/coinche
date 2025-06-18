@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/listener';
+import { supabase } from '@/lib/utils/listener';
 import genIdCuid from '@coinche/shared/src/gen_id';
 import type { IPlayer, PlayerPosition } from '@coinche/shared';
 
