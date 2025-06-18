@@ -21,7 +21,7 @@
         >
             Élu meilleur jeu de coinche de l'
             <span
-                class="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-primary/100 to-primary/40"
+                class="bg-clip-text text-transparent drop-shadow-2xl bg-linear-to-b from-primary to-primary/40"
             >
                 n7
             </span>

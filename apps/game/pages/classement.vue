@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col justify-center items-center">
         <h1
-            class="my-4 text-5xl font-bold bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-primary/100 to-primary/40"
+            class="my-4 text-5xl font-bold bg-clip-text text-transparent drop-shadow-2xl bg-linear-to-b from-primary to-primary/40"
         >
             Classement
         </h1>
