@@ -3,24 +3,24 @@
     "private": "true",
     "type": "module",
     "workspaces": [
-        "ressources/*"
+        "apps/*"
     ],
     "scripts": {
-        "clean": "rm -rf node_modules ressources/game/node_modules ressources/controller/node_modules bun.lockb ressources/game/bun.lockb ressources/controller/bun.lockb",
-        "vercel": "cd ressources/game && sh ./merge.sh",
+        "clean": "rm -rf node_modules apps/game/node_modules apps/controller/node_modules bun.lockb apps/game/bun.lockb apps/controller/bun.lockb",
+        "vercel": "cd apps/game && sh ./merge.sh",
         "prepare": "husky",
         "format": "prettier --write .",
-        "game": "cd ressources/game && bun dev",
-        "controller": "cd ressources/controller && bun dev"
+        "game": "cd apps/game && bun dev",
+        "controller": "cd apps/controller && bun dev"
     },
     "devDependencies": {
-        "@commitlint/config-conventional": "^19.6.0",
-        "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
-        "commitlint": "^19.6.1",
+        "@commitlint/config-conventional": "^19.8.1",
+        "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
+        "commitlint": "^19.8.1",
         "husky": "^9.1.7",
-        "prettier": "^3.4.2",
-        "prettier-plugin-tailwindcss": "^0.6.10",
-        "pretty-quick": "^4.0.0",
-        "typescript": "^5.7.3"
+        "prettier": "^3.5.3",
+        "prettier-plugin-tailwindcss": "^0.6.12",
+        "pretty-quick": "^4.2.2",
+        "typescript": "^5.8.3"
     }
 }
