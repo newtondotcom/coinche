@@ -1,26 +1,18 @@
 {
-    "name": "coinche",
-    "private": "true",
-    "type": "module",
-    "workspaces": [
-        "apps/*"
-    ],
-    "scripts": {
-        "clean": "rm -rf node_modules apps/game/node_modules apps/controller/node_modules bun.lockb apps/game/bun.lockb apps/controller/bun.lockb",
-        "vercel": "cd apps/game && sh ./merge.sh",
-        "prepare": "husky",
-        "format": "prettier --write .",
-        "game": "cd apps/game && bun dev",
-        "controller": "cd apps/controller && bun dev"
-    },
-    "devDependencies": {
-        "@commitlint/config-conventional": "^19.8.1",
-        "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
-        "commitlint": "^19.8.1",
-        "husky": "^9.1.7",
-        "prettier": "^3.5.3",
-        "prettier-plugin-tailwindcss": "^0.6.12",
-        "pretty-quick": "^4.2.2",
-        "typescript": "^5.8.3"
-    }
+  "name": "coinche",
+  "private": "true",
+  "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules apps/game/node_modules apps/controller/node_modules bun.lockb apps/game/bun.lockb apps/controller/bun.lockb",
+    "vercel": "cd apps/game && sh ./merge.sh",
+    "format": "prettier --write .",
+    "game": "cd apps/game && bun dev",
+    "controller": "cd apps/controller && bun dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
 }
