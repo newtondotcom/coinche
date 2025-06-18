@@ -8,7 +8,7 @@ export default async function translateAnnonce(event: EventInsert) {
     const annonce = deformatAnnonce(event.value as string, event.playerId);
     const playerName = event.playerId;
     if (annonce.annonce === 0) {
-        toast('Passe', {
+        toast.message('Passe', {
             description: `${playerName} passe`,
         });
     } else {
