@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-    import emitAnnonce from '@/lib/emitter/annonce';
+    import emitAnnonce from '@/shared/emitter/annonce';
     import type { Annonce, CardSuite, IAnnonce, IPlayer } from '@coinche/shared';
 
     const storeGame = useGameStore();

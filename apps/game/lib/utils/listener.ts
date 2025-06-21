@@ -1,23 +1,26 @@
-import translateAnnonce from "@/lib/listener/annonce";
-import { translateCoinche, translateSurcoinche } from "@/lib/listener/coinche";
-import { translateDistribution } from "@/lib/listener/distribution";
-import { translateEndDistribution } from "@/lib/listener/end_distribution";
-import { translateEndGame } from "@/lib/listener/end_game";
-import { translateEndRound } from "@/lib/listener/end_round";
-import { translateJoin } from "@/lib/listener/join";
-import translatePlay from "@/lib/listener/play";
-import { translatePoints } from "@/lib/listener/points";
-import { translatePointsRound } from "@/lib/listener/points_round";
-import { translateSound } from "@/lib/listener/sound";
-import { translateStartDistribution } from "@/lib/listener/start_distribution";
-import { translateStartPli } from "@/lib/listener/start_pli";
-import { translateStartRound } from "@/lib/listener/start_round";
-import { translateWinPli } from "@/lib/listener/win_pli";
+import translateAnnonce from "@/shared/listener/annonce";
+import {
+  translateCoinche,
+  translateSurcoinche,
+} from "@/shared/listener/coinche";
+import { translateDistribution } from "@/shared/listener/distribution";
+import { translateEndDistribution } from "@/shared/listener/end_distribution";
+import { translateEndGame } from "@/shared/listener/end_game";
+import { translateEndRound } from "@/shared/listener/end_round";
+import { translateJoin } from "@/shared/listener/join";
+import translatePlay from "@/shared/listener/play";
+import { translatePoints } from "@/shared/listener/points";
+import { translatePointsRound } from "@/shared/listener/points_round";
+import { translateSound } from "@/shared/listener/sound";
+import { translateStartDistribution } from "@/shared/listener/start_distribution";
+import { translateStartPli } from "@/shared/listener/start_pli";
+import { translateStartRound } from "@/shared/listener/start_round";
+import { translateWinPli } from "@/shared/listener/win_pli";
 import { createClient } from "@supabase/supabase-js";
-import { translateStart } from "@/lib/listener/start_game";
-import type { Database, EventInsert } from "~/shared/utils/format";
+import { translateStart } from "@/shared/listener/start_game";
+import type { Database, EventInsert } from "@/shared/utils/format";
 
-import { translateCanAnnonce, translateCanPlay } from "@/lib/listener/can";
+import { translateCanAnnonce, translateCanPlay } from "@/shared/listener/can";
 
 const config = useRuntimeConfig();
 export const supabase = createClient<Database>(

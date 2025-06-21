@@ -1,12 +1,13 @@
 import { isDevEnv } from "~/shared/utils/miscs";
-import { authClient } from "~/shared/auth/client";
+import { useAuth } from "~/composables/useAuth";
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const allowedPaths = ["/", "/login", "/404", "/regles", "/api/alive"];
   const config = useRuntimeConfig();
   const devEnv = isDevEnv(config);
-  const { data: session } = await authClient.useSession(useFetch);
-  if (!devEnv && !allowedPaths.includes(to.path) && !session.value) {
+  const { useSession } = useAuth();
+  const session = await useSession();
+  if (!devEnv && !allowedPaths.includes(to.path) && !session) {
     return navigateTo("/404");
   }
 });

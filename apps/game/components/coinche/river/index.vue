@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-    import { maxCardHeight, maxCardWidth } from '@/lib/constants';
+    import { maxCardHeight, maxCardWidth } from '@/shared/constants';
     import { cn } from '@/lib/utils';
 
     const storeGame = useGameStore();

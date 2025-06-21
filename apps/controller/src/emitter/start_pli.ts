@@ -2,7 +2,7 @@ import { emitCanPlay } from "@/emitter/can";
 import controller from "@/game";
 import logger from "@/logger";
 import supabase from "@/supabase";
-import genIdCuid from "~/shared/utils/gen_id";
+import genIdCuid from "@/shared/utils/gen_id";
 
 export async function startPli(gameId: string) {
   // launch pli

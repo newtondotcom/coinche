@@ -1,6 +1,6 @@
 import supabase from "@/supabase";
-import { formatPoints } from "~/shared/utils/format";
-import genIdCuid from "~/shared/utils/gen_id";
+import { formatPoints } from "@/shared/utils/format";
+import genIdCuid from "@/shared/utils/gen_id";
 
 export async function emitPointsRound(
   scoreTeam1: number,

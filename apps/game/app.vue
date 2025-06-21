@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { Toaster } from "@/components/ui/sonner";
-import { isDevEnv } from "~/shared/utils/miscs";
+import { isDevEnv } from "@/shared/utils/miscs";
 
 const config = useRuntimeConfig();
 

@@ -2,9 +2,9 @@ import { emitCanAnnonce } from "@/emitter/can";
 import controller from "@/game";
 import logger from "@/logger";
 import supabase from "@/supabase";
-import { formatCarteToDistribute } from "~/shared/utils/format";
-import genIdCuid from "~/shared/utils/gen_id";
-import type { ICard, PlayerId } from "~/shared/utils/format";
+import { formatCarteToDistribute } from "@/shared/utils/format";
+import genIdCuid from "@/shared/utils/gen_id";
+import type { ICard, PlayerId } from "@/shared/utils/format";
 
 export default async function emitDistribution(
   id_player_starting: PlayerId,

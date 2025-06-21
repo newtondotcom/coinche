@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { maxCardWidth } from '@/lib/constants';
-    import { cardPressed } from '@/lib/emitter/play';
+    import { maxCardWidth } from '@/shared/constants';
+    import { cardPressed } from '@/shared/emitter/play';
     import { cn } from '@/lib/utils';
     import type { ICard } from '@coinche/shared';
 

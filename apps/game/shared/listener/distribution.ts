@@ -1,5 +1,5 @@
-import { assertPliNumber } from "~/shared/utils/miscs";
-import { deformatCarteToDistribute } from '~/shared/utils/format';
+import { assertPliNumber } from "@/shared/utils/miscs";
+import { deformatCarteToDistribute } from "~/shared/utils/format";
 import type { EventInsert } from "@coinche/shared";
 
 export function translateDistribution(event: EventInsert) {

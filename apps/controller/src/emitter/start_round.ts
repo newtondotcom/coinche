@@ -2,7 +2,7 @@ import { emitStartDistribution } from "@/emitter/start_distribution";
 import controller from "@/game";
 import logger from "@/logger";
 import supabase from "@/supabase";
-import genIdCuid from "~/shared/utils/gen_id";
+import genIdCuid from "@/shared/utils/gen_id";
 
 export async function emitRoundStarting(gameId: string, playerId: string) {
   await supabase.from("Events").insert([

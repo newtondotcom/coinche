@@ -1,4 +1,4 @@
-import { deformatAnnonce } from "~/shared/utils/format";
+import { deformatAnnonce } from "@/shared/utils/format";
 import { toast } from "vue-sonner";
 import type { EventInsert } from "@coinche/shared";
 

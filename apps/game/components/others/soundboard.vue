@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-    import { emitSound } from '@/lib/emitter/sound';
-    import { triggerSound } from '@/lib/listener/sound';
+    import { emitSound } from '@/shared/emitter/sound';
+    import { triggerSound } from '@/shared/listener/sound';
     import { AudioLines } from 'lucide-vue-next';
 
     const mapSound = {

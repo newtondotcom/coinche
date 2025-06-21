@@ -1,6 +1,6 @@
 import supabase from "@/supabase";
-import { formatPoints } from "~/shared/utils/format";
-import genIdCuid from "~/shared/utils/gen_id";
+import { formatPoints } from "@/shared/utils/format";
+import genIdCuid from "@/shared/utils/gen_id";
 
 export async function emitGameCreation(gameId: string) {
   // Check if there are any events for this gameId

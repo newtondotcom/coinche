@@ -24,11 +24,11 @@
 </template>
 
 <script setup lang="ts">
-import { join, leave } from "@/lib/emitter/join";
-import translateEvent from "@/lib/utils/listener";
+import { join, leave } from "@/shared/emitter/join";
+import translateEvent from "@/shared/utils/listener";
 import { createClient } from "@supabase/supabase-js";
-import { isDevEnv } from "@/lib/utils/miscs";
-import type { EventInsert } from "~/shared/utils/format";
+import { isDevEnv } from "@/shared/utils/miscs";
+import type { EventInsert } from "@coinche/shared";
 
 const config = useRuntimeConfig();
 

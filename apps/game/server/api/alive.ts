@@ -1,4 +1,4 @@
-import { supabase } from "~/shared/utils/listener";
+import { supabase } from "@/shared/utils/listener";
 import { defineEventHandler } from "h3";
 
 export default defineEventHandler(async () => {
