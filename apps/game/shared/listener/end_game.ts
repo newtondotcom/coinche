@@ -1,4 +1,4 @@
-import { deformatTeam } from '@coinche/shared';
+import { deformatTeam } from '~/shared/utils/format';
 import { toast } from 'vue-sonner';
 import type { EventInsert } from '@coinche/shared';
 

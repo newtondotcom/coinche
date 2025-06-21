@@ -1,11 +1,12 @@
-import { isDevEnv } from '~/lib/utils/miscs';
+import { isDevEnv } from "~/shared/utils/miscs";
+import { authClient } from "~/shared/auth/client";
 
-export default defineNuxtRouteMiddleware((to, _) => {
-    const storeAbout = useAboutStore();
-    const allowedPaths = ['/', '/login', '/404', '/regles', '/api/alive'];
-    const config = useRuntimeConfig();
-    const devEnv = isDevEnv(config);
-    if (!devEnv && !allowedPaths.includes(to.path) && !storeAbout.authentificated) {
-        return navigateTo('/404');
-    }
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const allowedPaths = ["/", "/login", "/404", "/regles", "/api/alive"];
+  const config = useRuntimeConfig();
+  const devEnv = isDevEnv(config);
+  const { data: session } = await authClient.useSession(useFetch);
+  if (!devEnv && !allowedPaths.includes(to.path) && !session.value) {
+    return navigateTo("/404");
+  }
 });

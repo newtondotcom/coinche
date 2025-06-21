@@ -1,6 +1,6 @@
-import { supabase } from '@/lib/utils/listener';
+import { supabase } from '@/shared/utils/listener';
 import { formatCarteToPlay } from '@coinche/shared';
-import genIdCuid from '@coinche/shared/src/gen_id';
+import genIdCuid from '~/shared/utils/gen_id';
 import type { CardSuite, CardValue, ICard } from '@coinche/shared';
 
 export async function emitCardPlay(card: ICard) {

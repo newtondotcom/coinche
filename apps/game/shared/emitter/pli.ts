@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/utils/listener';
-import { deformatCarteToPlay } from '@coinche/shared';
+import { supabase } from '@/shared/utils/listener';
+import { deformatCarteToPlay } from '~/shared/utils/format';
 import type { IPlay } from '@coinche/shared';
 
 export async function fetchLastPliEvents(): Promise<IPlay[]> {

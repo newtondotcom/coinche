@@ -1,4 +1,4 @@
-import { unformatPoints } from '@coinche/shared';
+import { unformatPoints } from '~/shared/utils/format';
 import type { EventInsert } from '@coinche/shared';
 
 export async function translatePoints(event: EventInsert) {
