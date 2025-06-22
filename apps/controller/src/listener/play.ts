@@ -3,7 +3,7 @@ import { closePli } from '@/emitter/close_pli';
 import controller from '@/game';
 import logger from '@/logger';
 import { setNextPlayerTurn } from '@/utils';
-import { deformatCarteToPlay } from '@coinche/shared';
+import deformatCarteToPlay from "../../../game/shared/utils/gen_id";
 import type { EventInsert } from '@coinche/shared';
 
 export default async function translatePlay(event: EventInsert) {

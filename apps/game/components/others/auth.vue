@@ -1,31 +1,26 @@
 <template>
     <div class="flex flex-row">
-        <NuxtLink v-if="!storeAbout.authentificated" :to="link">
-            <Button variant="secondary">
+            <Button v-if="!loggedIn" variant="secondary" @click="SignIn">
                 <img
                     src="https://git.inpt.fr/inp-net/visual-identity/-/raw/main/derivations/auth.svg"
                 />
                 Connexion avec INP-net
             </Button>
-        </NuxtLink>
-        <Button v-else @click="logout">Déconnexion</Button>
+        <Button v-else @click="SignOut">Déconnexion</Button>
     </div>
 </template>
 
 <script setup lang="ts">
-    const storeAbout = useAboutStore();
-    const link = ref<string>('');
+    const {signIn, loggedIn, signOut } = useAuth()
 
-    async function fetchLink() {
-        const data = await $fetch('/api/churros/link');
-        link.value = data.url;
-    }
-    fetchLink();
-
-    async function logout() {
-        await $fetch('/api/churros/revoke', {
-            method: 'POST',
+    async function SignIn(){
+        await signIn.social({
+            provider: "churros",
+            callbackURL :"/regles"
         });
-        storeAbout.setAuthentificated(false);
+    }
+
+    async function SignOut(){
+        await signOut();
     }
 </script>

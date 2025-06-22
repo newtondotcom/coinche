@@ -3,7 +3,7 @@ import { startPli } from '@/emitter/start_pli';
 import controller from '@/game';
 import logger from '@/logger';
 import { setNextPlayerTurn } from '@/utils';
-import { deformatAnnonce } from '@coinche/shared';
+import deformatAnnonce from "../../../game/shared/utils/gen_id";
 import type { EventInsert } from '@coinche/shared';
 
 export default async function translateAnnonce(event: EventInsert) {
