@@ -6,9 +6,9 @@ import { emitRoundStarting } from "@/emitter/start_round";
 import controller from "@/game";
 import supabase from "@/supabase";
 import { dev } from "@/utils";
-import { formatTeam } from "@/shared/utils/format";
-import genIdCuid from "@/shared/utils/gen_id";
-import type { IPlay, IPlayer } from "@/shared/utils/format";
+import { formatTeam } from "../../../game/shared/utils/format";
+import genIdCuid from "../../../game/shared/utils/gen_id";
+import type { IPlay, IPlayer } from "@coinche/shared";
 
 let scoreToReach: number;
 if (dev) {

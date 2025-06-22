@@ -1,6 +1,7 @@
 import logger from "@/logger";
 import supabase from "@/supabase";
-import genIdCuid from "@/shared/utils/gen_id";
+import { formatPoints } from "../../../game/shared/utils/format";
+import genIdCuid from "../../../game/shared/utils/gen_id";
 
 export async function emitCanPlay(playerId: string, gameId: string) {
   await supabase.from("Events").insert([

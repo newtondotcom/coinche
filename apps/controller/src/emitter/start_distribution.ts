@@ -2,7 +2,7 @@ import emitDistribution from "@/emitter/distribution";
 import controller from "@/game";
 import supabase from "@/supabase";
 import { generateDeckCards } from "@/utils";
-import genIdCuid from "@/shared/utils/gen_id";
+import genIdCuid from "../../../game/shared/utils/gen_id";
 
 export async function emitStartDistribution(gameId: string) {
   await supabase.from("Events").insert([

@@ -1,8 +1,8 @@
 import logger from "@/logger";
 import supabase from "@/supabase";
-import { formatTeam } from "@/shared/utils/format";
-import genIdCuid from "@/shared/utils/gen_id";
-import type { IPlayer } from "@/shared/utils/format";
+import { formatTeam } from "../../../game/shared/utils/format";
+import genIdCuid from "../../../game/shared/utils/gen_id";
+import type { IPlayer } from "@coinche/shared";
 
 import { addPointsTo } from "../points";
 
