@@ -60,8 +60,8 @@
                         <Button :disabled="!canAnnoncer && !canPasser" @click="passer">
                             Passer
                         </Button>
-                        <Button :disabled="!canCoincher">Coincher</Button>
-                        <Button :disabled="!canSurcoincher">Surcoincher</Button>
+                        <Button :disabled="!canCoincher" @click="emitCoinche">Coincher</Button>
+                        <Button :disabled="!canSurcoincher" @click="emitSurcoinche">Surcoincher</Button>
                     </div>
                 </div>
             </CardContent>
@@ -72,6 +72,7 @@
 
 <script setup lang="ts">
     import emitAnnonce from '@/shared/emitter/annonce';
+    import {emitCoinche, emitSurcoinche} from "@/shared/emitter/coinche"
     import type { Annonce, CardSuite, IAnnonce, IPlayer } from '@coinche/shared';
 
     const storeGame = useGameStore();

@@ -17,3 +17,4 @@ export default async function emitAnnonce(annonce: IAnnonce) {
     ]);
     storeAbout.setTurnToAnnonce(false);
 }
+

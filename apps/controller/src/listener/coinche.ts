@@ -2,7 +2,7 @@ import { startPli } from '@/emitter/start_pli';
 import controller from '@/game';
 import logger from '@/logger';
 import { setNextPlayerTurn } from '@/utils';
-import type { EventInsert, IAnnonce } from '@coinche/shared';
+import type { EventInsert} from '@coinche/shared';
 
 export async function translateCoinche(event: EventInsert) {
     controller.getInstance(event.gameId).getLastRound().coinched = true;
