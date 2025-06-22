@@ -7,10 +7,14 @@
     },
     "scripts": {
         "dev": "bun run index.ts",
-        "watch": "npx tsc -w"
+        "watch": "npx tsc -w",
+        "gen_types" : "proto-loader-gen-types --longs=String --enums=String --defaults --oneofs --grpcLib=@grpc/grpc-js --outDir=proto/ ../shared/grpc/*.proto"
     },
     "dependencies": {
         "@coinche/shared": "workspace:shared",
+        "@coinche/game": "workspace:game",
+        "@grpc/grpc-js": "^1.13.4",
+        "@grpc/proto-loader": "^0.7.15",
         "@supabase/supabase-js": "^2.50.0",
         "@types/node": "^22.15.32",
         "arctic": "^3.7.0",
