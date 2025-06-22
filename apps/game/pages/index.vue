@@ -30,14 +30,21 @@
 </template>
 
 <script setup lang="ts">
+    const {loggedIn} = useAuth();
     const storeAbout = useAboutStore();
     const gameId = ref<string>('');
 
-    function joinGame() {
-        if (storeAbout.authentificated) {
-            navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
-        } else {
+    async function joinGame() {
+        if (!loggedIn.value) {
             navigateTo(`/404`);
+            return;
         }
+        // Check if game exists
+        const res = await $fetch('/api/checkGameExists', { params: { gameId: gameId.value } }) as { exists: boolean };
+        if (!res.exists) {
+            const confirmed = window.confirm('Ce code de partie n\'existe pas. Voulez-vous créer une nouvelle partie ?');
+            if (!confirmed) return;
+        }
+        navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
     }
 </script>

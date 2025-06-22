@@ -1,18 +1,15 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   pgTable,
-  varchar,
   text,
   integer,
   timestamp,
-  uuid,
   boolean,
-  pgEnum,
 } from "drizzle-orm/pg-core";
 
 
 // --- BetterAuth Tables ---
-export const user = pgTable("user", {
+export const user = pgTable("User", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -23,7 +20,7 @@ export const user = pgTable("user", {
   banned: boolean("banned").notNull().default(false),
 });
 
-export const session = pgTable("session", {
+export const session = pgTable("Session", {
   id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
@@ -36,7 +33,7 @@ export const session = pgTable("session", {
     .references(() => user.id, { onDelete: "cascade" }),
 });
 
-export const account = pgTable("account", {
+export const account = pgTable("Account", {
   id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
@@ -54,7 +51,7 @@ export const account = pgTable("account", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const verification = pgTable("verification", {
+export const verification = pgTable("Verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
@@ -64,8 +61,8 @@ export const verification = pgTable("verification", {
 });
 
 // --- Game Tables ---
-export const game = pgTable("game", {
-  id: uuid("id").primaryKey().defaultRandom(),
+export const game = pgTable("Game", {
+  id: text("id").primaryKey(),
   player1Id: text("player1_id")
     .notNull()
     .references(() => user.id, { onDelete: "restrict" }),
@@ -87,9 +84,9 @@ export const game = pgTable("game", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const events = pgTable("events", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  gameId: uuid("game_id")
+export const events = pgTable("Events", {
+  id: text("id").primaryKey(),
+  gameId: text("game_id")
     .notNull()
     .references(() => game.id, { onDelete: "cascade" }),
   playerId: text("player_id")
@@ -102,8 +99,8 @@ export const events = pgTable("events", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const playerStats = pgTable("player_stats", {
-  id: uuid("id").primaryKey().defaultRandom(),
+export const playerStats = pgTable("PlayerStats", {
+  id: text("id").primaryKey(),
   playerId: text("player_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -118,9 +115,9 @@ export const playerStats = pgTable("player_stats", {
 });
 
 // Table de liaison pour les équipes (plus flexible)
-export const gameTeams = pgTable("game_teams", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  gameId: uuid("game_id")
+export const gameTeams = pgTable("GameTeams", {
+  id: text("id").primaryKey(),
+  gameId: text("game_id")
     .notNull()
     .references(() => game.id, { onDelete: "cascade" }),
   teamNumber: integer("team_number").notNull(), // 1 ou 2

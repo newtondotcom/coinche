@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { OthersAuth } from '#components';
+
+</script>
+
 <template>
     <div class="flex flex-col justify-center items-center min-h-screen">
         <h1
@@ -5,6 +10,6 @@
         >
             Cette page nécessite d'être authentifié
         </h1>
-        <Auth />
+        <OthersAuth />
     </div>
 </template>

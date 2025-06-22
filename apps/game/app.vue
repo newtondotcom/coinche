@@ -9,14 +9,14 @@
         </h1>
       </NuxtLink>
       <div class="flex flex-row space-x-10">
-        <NuxtLink v-if="storeAbout.authentificated" to="/classement">
+        <NuxtLink v-if="loggedIn" to="/classement">
           <h2
             class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
           >
             classement
           </h2>
         </NuxtLink>
-        <NuxtLink v-if="storeAbout.authentificated" to="/historique">
+        <NuxtLink v-if="loggedIn" to="/historique">
           <h2
             class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
           >
@@ -55,7 +55,7 @@ import { isDevEnv } from "@/shared/utils/miscs";
 
 const config = useRuntimeConfig();
 
-const storeAbout = useAboutStore();
+const {loggedIn} = useAuth()
 
 useSeoMeta({
   title: "Coinche.n7",
