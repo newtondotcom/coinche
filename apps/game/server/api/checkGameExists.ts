@@ -9,5 +9,5 @@ export default defineEventHandler(async (event) => {
     return { exists: false };
   }
   const result = await db.select().from(game).where(eq(game.id, String(gameId))).limit(1);
-  return { exists: result.length > 0 };
+  return { exists: result.length>0, playerCount : result.length};
 }); 
