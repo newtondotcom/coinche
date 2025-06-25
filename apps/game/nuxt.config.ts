@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: false },
-  modules: ["shadcn-nuxt", "@pinia/nuxt", "@nuxt/eslint"],
+  modules: ["shadcn-nuxt", "@pinia/nuxt", "@nuxt/eslint",'motion-v/nuxt'],
   css: ["@/assets/css/tailwind.css"],
   vite: {
     plugins: [tailwindcss()],
