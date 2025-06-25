@@ -29,6 +29,7 @@ import translateEvent from "@/shared/utils/listener";
 import { createClient } from "@supabase/supabase-js";
 import { isDevEnv } from "@/shared/utils/miscs";
 import type { EventInsert } from "@coinche/shared";
+const { loggedIn} = useAuth();
 
 const config = useRuntimeConfig();
 
@@ -38,8 +39,12 @@ const storeAbout = useAboutStore();
 const route = useRoute();
 const id = route.query.id as string;
 const gameId = route.query.gameId as string;
-if (!id || !gameId) {
-  navigateTo("/");
+
+// Check if loaded in an iframe
+const isIframe = typeof window !== 'undefined' && window.self !== window.top;
+
+if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
+  navigateTo("/404");
 }
 storeAbout.setMyId(id);
 storeAbout.setGameId(gameId);
