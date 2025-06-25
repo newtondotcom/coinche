@@ -2,6 +2,7 @@ import { emitGameStarting } from '@/emitter/start_game';
 import controller from '@/game';
 import logger from '@/logger';
 import type { EventInsert, IPlayer, PlayerPosition } from '@coinche/shared';
+import winston from 'winston';
 
 export async function translateJoin(event: EventInsert) {
     if (
@@ -19,7 +20,7 @@ export async function translateJoin(event: EventInsert) {
             classement: 0,
         };
         controller.getInstance(event.gameId).game.players.push(local);
-        console.log('Addded player', local);
+        winston.info('Addded player', local);
         if (controller.getInstance(event.gameId).game.players.length === 4) {
             const idPlayerStarting = controller.getInstance(event.gameId).game.players[0].id;
             await emitGameStarting(idPlayerStarting, event.gameId);

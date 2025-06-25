@@ -29,7 +29,7 @@ export async function distributeRankingPoints(
   team2Score: number,
 ) {
   const playersIds = players.map((player) => player.id);
-  console.log(players);
+  (players);
   // store in db the finished game
   await supabase.from("Game").insert([
     {

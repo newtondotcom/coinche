@@ -26,12 +26,9 @@
 <script setup lang="ts">
 import { join, leave } from "@/shared/emitter/join";
 import translateEvent from "@/shared/utils/listener";
-import { createClient } from "@supabase/supabase-js";
 import { isDevEnv } from "@/shared/utils/miscs";
-import type { EventInsert } from "@coinche/shared";
-const { loggedIn} = useAuth();
-
-const config = useRuntimeConfig();
+import { getWS, onWSMessage, sendWS } from "@/lib/utils/ws";
+const { loggedIn } = useAuth();
 
 const storeGame = useGameStore();
 const storePlayers = usePlayersStore();
@@ -39,6 +36,7 @@ const storeAbout = useAboutStore();
 const route = useRoute();
 const id = route.query.id as string;
 const gameId = route.query.gameId as string;
+const config = useRuntimeConfig();
 
 // Check if loaded in an iframe
 const isIframe = typeof window !== 'undefined' && window.self !== window.top;
@@ -50,7 +48,28 @@ storeAbout.setMyId(id);
 storeAbout.setGameId(gameId);
 
 onMounted(async () => {
-  await startListening();
+  // Connect to WebSocket and listen for events
+  getWS();
+  onWSMessage((event) => {
+    if (event.type === 'player_list' && event.gameId == gameId) {
+      // Update the player store with the full player list
+      // Assume storePlayers.setPlayers expects an array of player IDs
+      // You may need to map to IPlayer objects if needed
+      const buildPlayers = event.players.map((playerId: string, index: number) => ({
+        id: playerId,
+        position: index,
+        hands: [],
+        classement: 0,
+      }));
+      storePlayers.setPlayers(buildPlayers);
+      return;
+    }
+    if (event.gameId == gameId) {
+      translateEvent(event);
+    }
+  });
+  // Send join event
+  sendWS({ type: "join_game", gameId });
   join();
   if (!isDevEnv(config)) {
     window.onbeforeunload = (event: BeforeUnloadEvent) => {
@@ -61,30 +80,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(async () => {
+  sendWS({ type: "leave_game", gameId });
   leave();
 });
-
-async function startListening() {
-  const config = useRuntimeConfig();
-  const supabase = createClient(
-    config.public.SUPABASE_URL,
-    config.public.SUPABASE_ANON_KEY,
-  );
-
-  const handleInserts = (payload: EventInsert) => {
-    const event = payload.new as EventInsert;
-    if (event.gameId == gameId) {
-      translateEvent(event);
-    }
-  };
-
-  supabase
-    .channel(gameId)
-    .on(
-      "postgres_changes",
-      { event: "INSERT", schema: "public", table: "Events" },
-      handleInserts,
-    )
-    .subscribe();
-}
 </script>

@@ -29,6 +29,6 @@ export async function addPointsTo(points: number, playerId: PlayerId): Promise<v
     if (updateError) {
         console.error('Error updating points', updateError);
     } else {
-        console.log('Points updated successfully');
+        ('Points updated successfully');
     }
 }
