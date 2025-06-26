@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--<CoincheInterfaceDebug />-->
+    <CoincheInterfaceDebug />
     <CoincheDeck />
 
     <OthersSoundboard />
@@ -25,18 +25,19 @@
 
 <script setup lang="ts">
 import { join, leave } from "@/shared/emitter/join";
-import translateEvent from "@/shared/utils/listener";
+import { handleWSEvent } from "@/shared/utils/listener";
 import { isDevEnv } from "@/shared/utils/miscs";
-import { getWS, onWSMessage, sendWS } from "@/lib/utils/ws";
-const { loggedIn } = useAuth();
+import { getWS, onWSMessage, sendWS, closeWS } from "@/lib/utils/ws";
 
+const { loggedIn } = useAuth();
 const storeGame = useGameStore();
 const storePlayers = usePlayersStore();
 const storeAbout = useAboutStore();
 const route = useRoute();
+const config = useRuntimeConfig();
+
 const id = route.query.id as string;
 const gameId = route.query.gameId as string;
-const config = useRuntimeConfig();
 
 // Check if loaded in an iframe
 const isIframe = typeof window !== 'undefined' && window.self !== window.top;
@@ -44,33 +45,37 @@ const isIframe = typeof window !== 'undefined' && window.self !== window.top;
 if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
   navigateTo("/404");
 }
+
 storeAbout.setMyId(id);
 storeAbout.setGameId(gameId);
 
+// Store cleanup function for WebSocket listener
+let cleanupListener: (() => void) | null = null;
+
 onMounted(async () => {
-  // Connect to WebSocket and listen for events
+  // Connect to WebSocket and set up listener
   getWS();
-  onWSMessage((event) => {
-    if (event.type === 'player_list' && event.gameId == gameId) {
-      // Update the player store with the full player list
-      // Assume storePlayers.setPlayers expects an array of player IDs
-      // You may need to map to IPlayer objects if needed
-      const buildPlayers = event.players.map((playerId: string, index: number) => ({
-        id: playerId,
-        position: index,
-        hands: [],
-        classement: 0,
-      }));
-      storePlayers.setPlayers(buildPlayers);
-      return;
-    }
-    if (event.gameId == gameId) {
-      translateEvent(event);
+  
+  // Set up message listener with cleanup function
+  cleanupListener = onWSMessage((event) => {
+    console.log('Received WebSocket event:', event);
+    
+    if (event.gameId === gameId) {
+      handleWSEvent(event);
+    } else {
+      console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
     }
   });
+
   // Send join event
-  sendWS({ type: "join_game", gameId });
-  join();
+  try {
+    sendWS({ type: "join_game", gameId });
+    join();
+  } catch (error) {
+    console.error('Failed to join game:', error);
+  }
+
+  // Set up beforeunload handler for non-dev environments
   if (!isDevEnv(config)) {
     window.onbeforeunload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -80,7 +85,31 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(async () => {
-  sendWS({ type: "leave_game", gameId });
-  leave();
+  try {
+    // Send leave event
+    sendWS({ type: "leave_game", gameId });
+    leave();
+  } catch (error) {
+    console.error('Failed to send leave event:', error);
+  }
+  
+  // Clean up WebSocket listener
+  if (cleanupListener) {
+    cleanupListener();
+    cleanupListener = null;
+  }
+  
+  // Remove beforeunload handler
+  if (!isDevEnv(config)) {
+    window.onbeforeunload = null;
+  }
+});
+
+// Clean up on route change as well
+onBeforeRouteLeave(() => {
+  if (cleanupListener) {
+    cleanupListener();
+    cleanupListener = null;
+  }
 });
 </script>

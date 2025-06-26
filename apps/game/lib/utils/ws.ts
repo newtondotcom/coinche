@@ -1,21 +1,46 @@
 // WebSocket client utility for Bun server
-// Usage: import { getWS, sendWS, onWSMessage } from '@/lib/utils/ws';
+// Usage: import { getWS, sendWS, onWSMessage, offWSMessage } from '@/lib/utils/ws';
 
 let ws: WebSocket | null = null;
-const listeners: ((msg: any) => void)[] = [];
+const listeners = new Set<(msg: any) => void>();
 
 export function getWS() {
   if (!ws || ws.readyState === WebSocket.CLOSED) {
     // TODO: Replace with your actual server address/port
     ws = new WebSocket(`ws://${window.location.hostname}:3001`);
+    
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
+    
     ws.onmessage = (event) => {
+      console.log('Raw event:', event);
       let data;
       try {
         data = JSON.parse(event.data);
       } catch (e) {
+        console.warn('Failed to parse WebSocket message as JSON:', e);
         data = event.data;
       }
-      listeners.forEach((cb) => cb(data));
+      console.log('Parsed data:', data);
+      
+      // Notify all listeners
+      listeners.forEach((cb) => {
+        try {
+          cb(data);
+        } catch (error) {
+          console.error('Error in WebSocket listener:', error);
+        }
+      });
+    };
+    
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    ws.onclose = (event) => {
+      console.log('WebSocket closed:', event.code, event.reason);
+      ws = null;
     };
   }
   return ws;
@@ -23,15 +48,40 @@ export function getWS() {
 
 export function sendWS(event: object) {
   const socket = getWS();
+  
   if (socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(event));
-  } else {
+  } else if (socket.readyState === WebSocket.CONNECTING) {
+    // Wait for connection to open
     socket.addEventListener('open', () => {
       socket.send(JSON.stringify(event));
     }, { once: true });
+  } else {
+    console.error('WebSocket is not connected and cannot send message');
   }
 }
 
 export function onWSMessage(cb: (msg: any) => void) {
-  listeners.push(cb);
-} 
+  listeners.add(cb);
+  
+  // Return cleanup function
+  return () => {
+    listeners.delete(cb);
+  };
+}
+
+export function offWSMessage(cb: (msg: any) => void) {
+  listeners.delete(cb);
+}
+
+export function clearAllListeners() {
+  listeners.clear();
+}
+
+export function closeWS() {
+  if (ws) {
+    ws.close();
+    ws = null;
+  }
+  listeners.clear();
+}
