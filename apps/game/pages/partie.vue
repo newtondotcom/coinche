@@ -58,18 +58,18 @@ onMounted(async () => {
   
   // Set up message listener with cleanup function
   cleanupListener = onWSMessage((event) => {
-    console.log('Received WebSocket event:', event);
+    console.log('Received WebSocket event:', event.type);
     
+    handleWSEvent(event);
     if (event.gameId === gameId) {
-      handleWSEvent(event);
+      //
     } else {
-      console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
+      //console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
     }
   });
 
   // Send join event
   try {
-    sendWS({ type: "join_game", gameId });
     join();
   } catch (error) {
     console.error('Failed to join game:', error);

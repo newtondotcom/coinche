@@ -1,9 +1,7 @@
 import { sendWS } from '@/lib/utils/ws';
 import genIdCuid from '~/shared/utils/gen_id';
-import type { IPlayer, PlayerPosition } from '@coinche/shared';
 
 export async function join() {
-    const storePlayers = usePlayersStore();
     const storeAbout = useAboutStore();
     const gameId = storeAbout.gameId;
     // Just send join event via WebSocket

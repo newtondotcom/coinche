@@ -2,13 +2,13 @@ import { distributeRankingPoints, emitEndGame } from "@/emitter/end_game";
 import { emitEndRound } from "@/emitter/end_round";
 import { emitPoints } from "@/emitter/points";
 import { startPli } from "@/emitter/start_pli";
-import { emitRoundStarting } from "@/emitter/start_round";
 import controller from "@/game";
 import supabase from "@/supabase";
 import { dev } from "@/utils";
 import { formatTeam } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 import type { IPlay, IPlayer } from "@coinche/shared";
+import { emitStartTrick } from "./start_trick";
 
 let scoreToReach: number;
 if (dev) {
@@ -17,7 +17,10 @@ if (dev) {
   scoreToReach = 1000;
 }
 
-export async function closePli(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function closePli(gameId: string, publish: (room: string, payload: any) => void) {
   const game = controller.getInstance(gameId).game;
   const lastPli = controller.getInstance(gameId).getLastPli();
   // find the winner
@@ -48,19 +51,20 @@ export async function closePli(gameId: string) {
     scoreTeam1;
   controller.getInstance(gameId).getLastRound().team2_point_current_game +=
     scoreTeam2;
-  await emitPoints(scoreTeam1, scoreTeam2, gameId);
+  await emitPoints(scoreTeam1, scoreTeam2, gameId, publish);
 
   // end of the round
   if (game.deck.length === 32) {
-    await emitEndRound(gameId);
+    await emitEndRound(gameId, publish);
     // end of the game
     if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
-      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
+      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId, publish);
       await distributeRankingPoints(
         game.players,
         gameId,
         game.team1_score,
         game.team2_score,
+        publish
       );
       controller.deleteInstance(gameId);
     } else {
@@ -69,12 +73,12 @@ export async function closePli(gameId: string) {
       // fetch the last player starting id
       const playerId = await fetchLastPliPlayerWinningId(gameId);
       // emit the game starting event
-      await emitRoundStarting(gameId, playerId);
+      await emitStartTrick(gameId, playerId, publish);
     }
   } else {
     // next pli
     controller.getInstance(gameId).addPli(winnerPlayerId);
-    await startPli(gameId);
+    await startPli(gameId, publish);
   }
 
   return;

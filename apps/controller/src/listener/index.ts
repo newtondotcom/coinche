@@ -1,21 +1,25 @@
 import translateAnnonce from '@/listener/annonce';
 import { translateCoinche, translateSurcoinche } from '@/listener/coinche';
-import { translateJoin } from '@/listener/join';
 import translatePlay from '@/listener/play';
 import type { EventInsert } from '@coinche/shared';
+import { handlePlayerJoinLeave } from './join_leave';
 
-export async function translateEvent(event: EventInsert) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function translateEvent(event: EventInsert, publish: (room: string, payload: any) => void) {
     switch (event.type) {
         case 'annonce':
-            return translateAnnonce(event);
+            return translateAnnonce(event,publish);
         case 'coinche':
-            return translateCoinche(event);
+            return translateCoinche(event,publish);
         case 'surcoinche':
-            return translateSurcoinche(event);
+            return translateSurcoinche(event,publish);
         case 'play':
-            return translatePlay(event);
+            return translatePlay(event,publish);
         case 'join':
-            return translateJoin(event);
+        case 'leave':
+            return handlePlayerJoinLeave(event,publish);
         default:
             return '';
     }

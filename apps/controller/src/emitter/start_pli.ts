@@ -4,7 +4,10 @@ import logger from "@/logger";
 import supabase from "@/supabase";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 
-export async function startPli(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function startPli(gameId: string, publish: (room: string, payload: any) => void) {
   // launch pli
   const playerIdStarting = controller
     .getInstance(gameId)
@@ -19,5 +22,5 @@ export async function startPli(gameId: string) {
     },
   ]);
   logger.info(`Starting pli for ${playerIdStarting}`);
-  await emitCanPlay(playerIdStarting, gameId);
+  await emitCanPlay(playerIdStarting, gameId, publish);
 }

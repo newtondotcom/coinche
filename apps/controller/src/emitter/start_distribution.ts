@@ -4,7 +4,10 @@ import supabase from "@/supabase";
 import { generateDeckCards } from "@/utils";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 
-export async function emitStartDistribution(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function emitStartDistribution(gameId: string, publish: (room: string, payload: any) => void) {
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
@@ -20,5 +23,6 @@ export async function emitStartDistribution(gameId: string) {
   await emitDistribution(
     controller.getInstance(gameId).getLastPli().player_starting_id,
     gameId,
+    publish
   );
 }

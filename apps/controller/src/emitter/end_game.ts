@@ -6,10 +6,14 @@ import type { IPlayer } from "@coinche/shared";
 
 import { addPointsTo } from "../points";
 
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
 export async function emitEndGame(
   winnerPlayerId: string,
   teamMatePlayerId: string,
   gameId: string,
+  publish: (room: string, payload: any) => void
 ) {
   await supabase.from("Events").insert([
     {
@@ -22,11 +26,15 @@ export async function emitEndGame(
   ]);
 }
 
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
 export async function distributeRankingPoints(
   players: IPlayer[],
   gameId: string,
   team1Score: number,
   team2Score: number,
+  publish: (room: string, payload: any) => void
 ) {
   const playersIds = players.map((player) => player.id);
   (players);
@@ -115,6 +123,9 @@ export async function distributeRankingPoints(
   }
 }
 
-export async function deleteRows(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function deleteRows(gameId: string, publish: (room: string, payload: any) => void) {
   await supabase.from("Events").delete().match({ gameId: gameId });
 }

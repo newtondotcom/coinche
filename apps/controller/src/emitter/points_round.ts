@@ -1,19 +1,22 @@
-import supabase from "@/supabase";
 import { formatPoints } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
 export async function emitPointsRound(
   scoreTeam1: number,
   scoreTeam2: number,
   gameId: string,
+  publish: (room: string, payload: any) => void
 ) {
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "score_round",
-      playerId: "controller",
-      gameId: gameId,
-      value: formatPoints(scoreTeam1, scoreTeam2),
-    },
-  ]);
+  const event = {
+    id: await genIdCuid(),
+    type: "score_round",
+    playerId: "controller",
+    gameId: gameId,
+    value: formatPoints(scoreTeam1, scoreTeam2),
+    timestamp: new Date().toISOString(),
+  };
+  publish(`game-${gameId}`, event);
 }

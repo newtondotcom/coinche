@@ -1,14 +1,17 @@
 import { emitCanAnnonce } from "@/emitter/can";
 import controller from "@/game";
 import logger from "@/logger";
-import supabase from "@/supabase";
 import { formatCarteToDistribute } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 import type { ICard, PlayerId } from "@coinche/shared";
 
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
 export default async function emitDistribution(
   id_player_starting: PlayerId,
   gameId: string,
+  publish: (room: string, payload: any) => void
 ) {
   cutDeck(gameId);
   // distribute cards 3 per person, then 2, then 3
@@ -34,45 +37,48 @@ export default async function emitDistribution(
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId);
+      await distributeCard(shiftedPlayers[j].id, gameId, publish);
     }
   }
   for (let i = 0; i < 2; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId);
+      await distributeCard(shiftedPlayers[j].id, gameId, publish);
     }
   }
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId);
+      await distributeCard(shiftedPlayers[j].id, gameId, publish);
     }
   }
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "start_annonce",
-      playerId: "controller",
-      gameId: controller.getInstance(gameId).game.gameId,
-      value: id_player_starting,
-    },
-  ]);
-  await emitCanAnnonce(id_player_starting, gameId);
+  const event = {
+    id: await genIdCuid(),
+    type: "start_annonce",
+    playerId: "controller",
+    gameId: controller.getInstance(gameId).game.gameId,
+    value: id_player_starting,
+    timestamp: new Date().toISOString(),
+  };
+  publish(`game-${gameId}`, event);
+  await emitCanAnnonce(id_player_starting, gameId, publish);
 }
 
-async function distributeCard(player_id: string, gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+async function distributeCard(player_id: string, gameId: string, publish: (room: string, payload: any) => void) {
   const card: ICard = controller.getInstance(gameId).game.deck.pop() as ICard;
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "distribution",
-      playerId: player_id,
-      gameId: gameId,
-      value: formatCarteToDistribute(
-        card,
-        controller.getInstance(gameId).game.rounds.length,
-      ),
-    },
-  ]);
+  const event = {
+    id: await genIdCuid(),
+    type: "distribution",
+    playerId: player_id,
+    gameId: gameId,
+    value: formatCarteToDistribute(
+      card,
+      controller.getInstance(gameId).game.rounds.length,
+    ),
+    timestamp: new Date().toISOString(),
+  };
+  publish(`game-${gameId}`, event);
 }
 export function cutDeck(gameId: string) {
   // cut the paquet at a certain index

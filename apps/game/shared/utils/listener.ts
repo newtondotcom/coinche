@@ -14,34 +14,28 @@ import { translatePointsRound } from "@/shared/listener/points_round";
 import { translateSound } from "@/shared/listener/sound";
 import { translateStartDistribution } from "@/shared/listener/start_distribution";
 import { translateStartPli } from "@/shared/listener/start_pli";
-import { translateStartRound } from "@/shared/listener/start_round";
 import { translateWinPli } from "@/shared/listener/win_pli";
-import { createClient } from "@supabase/supabase-js";
 import { translateStart } from "@/shared/listener/start_game";
-import type { Database, EventInsert } from "@/shared/utils/format";
-
 import { translateCanAnnonce, translateCanPlay } from "@/shared/listener/can";
+import translateStartTrick from "../listener/start_trick";
+import { translatePlayerList } from "../listener/player_list";
 
-const config = useRuntimeConfig();
-export const supabase = createClient<Database>(
-  config.public.SUPABASE_URL,
-  config.public.SUPABASE_ANON_KEY,
-);
-
-function translateLeave(event: EventInsert) {
-  const storePlayers = usePlayersStore();
-  storePlayers.players = storePlayers.players.filter(
-    (player) => player.id !== event.playerId,
-  );
-  return;
-}
-
-function translateError(event: EventInsert) {
+function translateLeave(event: any) {
   console.log(event.value);
   return;
 }
 
-export default async function translateEvent(event: EventInsert) {
+function translateSystem(event : any){
+  console.log(event);
+  return
+}
+
+function translateError(event: any) {
+  console.log(event.value);
+  return;
+}
+
+export function handleWSEvent(event: any) {
   switch (event.type) {
     case "annonce":
       return translateAnnonce(event);
@@ -81,11 +75,16 @@ export default async function translateEvent(event: EventInsert) {
       return translateCanPlay(event);
     case "can_annonce":
       return translateCanAnnonce(event);
-    case "start_round":
-      return translateStartRound(event);
+    case "start_trick":
+      return translateStartTrick(event);
     case "sound":
       return translateSound(event);
+    case "player_list":
+      return translatePlayerList(event);
+    case "system":
+      return translateSystem(event);
     default:
+      console.error("no event");
       return "";
   }
 }

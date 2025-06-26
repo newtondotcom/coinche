@@ -6,7 +6,7 @@
         "@types/bun": "latest"
     },
     "scripts": {
-        "dev": "bun run index.ts",
+        "dev": "bun --watch index.ts",
         "watch": "npx tsc -w"
     },
     "dependencies": {

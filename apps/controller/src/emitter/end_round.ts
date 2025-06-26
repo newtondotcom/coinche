@@ -3,7 +3,10 @@ import { emitPointsRound } from '@/emitter/points_round';
 import controller from '@/game';
 import logger from '@/logger';
 
-export async function emitEndRound(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function emitEndRound(gameId: string, publish: (room: string, payload: any) => void) {
     const controllerInstance = controller.getInstance(gameId);
     const lastRound = controllerInstance.getLastRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
@@ -84,5 +87,5 @@ export async function emitEndRound(gameId: string) {
     logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
     controllerInstance.game.team1_score += scoreTeam1;
     controllerInstance.game.team2_score += scoreTeam2;
-    await emitPointsRound(scoreTeam1, scoreTeam2, gameId);
+    await emitPointsRound(scoreTeam1, scoreTeam2, gameId, publish);
 }

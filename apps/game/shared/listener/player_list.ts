@@ -1,6 +1,7 @@
 // Handles player_list event from the server on the client
-// Usage: handlePlayerListEvent(event, storePlayers)
+// Usage: translatePlayerList(event, storePlayers)
 
+import type { IPlayer } from "@coinche/shared";
 import { toast } from "vue-sonner";
 
 /**
@@ -8,8 +9,10 @@ import { toast } from "vue-sonner";
  * @param event The event object received from the server (type: 'player_list')
  * @param storePlayers The Pinia/Vue store for players
  */
-export function handlePlayerListEvent(event: any, storePlayers: any) {
-  if (event.type === 'player_list' && Array.isArray(event.players)) {
+export function translatePlayerList(event: any) {
+  if (Array.isArray(event.players)) {
+    const storePlayers = usePlayersStore();
+    //handlePlayerListNotification(event.players,storePlayers.players)
     const buildPlayers = event.players.map((playerId: string, index: number) => ({
       id: playerId,
       position: index,
@@ -18,6 +21,8 @@ export function handlePlayerListEvent(event: any, storePlayers: any) {
     }));
     storePlayers.setPlayers(buildPlayers);
     console.log("There are now : " + event.players.size + "size")
+  } else {
+      console.error("error in translatePlayerList",event.players)
   }
 }
 
@@ -26,7 +31,7 @@ export function handlePlayerListEvent(event: any, storePlayers: any) {
  * @param newPlayers The new array of player IDs
  * @param prevPlayers The previous array of player IDs
  */
-export function handlePlayerListNotification(newPlayers: string[], prevPlayers: string[]) {
+export function handlePlayerListNotification(newPlayers: string[], prevPlayers: IPlayer[]) {
   // Find joined players
   const joined = newPlayers.filter(p => !prevPlayers.includes(p));
   // Find left players
