@@ -10,7 +10,7 @@ export const auth = betterAuth({
     provider: "pg",
     schema: schema,
   }),
-  trustedOrigins: [config.VERCEL_URL!]
+  trustedOrigins: [config.VERCEL_URL!],
   plugins: [
     genericOAuth({
       config: [
