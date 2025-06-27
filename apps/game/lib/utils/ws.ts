@@ -14,7 +14,6 @@ export function getWS() {
     };
     
     ws.onmessage = (event) => {
-      console.log('Raw event:', event);
       let data;
       try {
         data = JSON.parse(event.data);

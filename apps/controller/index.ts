@@ -1,4 +1,6 @@
+import logger from '@/logger';
 import { translateEvent } from './src/listener';
+import { serve } from 'bun';
 
 async function getUsernameFromCookies(cookie: string | null) {
     return "test";
@@ -28,6 +30,8 @@ function randomId() {
   return Math.random().toString(36).slice(2, 10);
 }
 
+const gameId = "0";
+
 // --- Bun WebSocket Server ---
 const server = Bun.serve({
   port : 3001,
@@ -35,17 +39,25 @@ const server = Bun.serve({
     const cookies = req.headers.get("cookie");
     // Note: getUsernameFromCookies is async, but Bun.serve expects sync. Use a placeholder for now.
     const username = "test"; // await getUsernameFromCookies(cookies); // If you want to make this async, use a wrapper
-    const success = server.upgrade(req, { data: { username } });
+    // Attach gameId and userId to ws.data
+    const success = server.upgrade(req, { data: { username, gameId } });
     if (success) return undefined;
     return new Response("Hello world");
   },
   websocket: {
     open(ws) {
+      const data = ws.data as { username: string, gameId: string };
+      const gameId = data.gameId;
       // On connect, no room joined yet
       userRooms.set(ws, new Set());
-      const data = ws.data as { username: string };
+      ws.subscribe(gameId);
+      logger.info("cleint suscribed to room")
+      // ws.data already contains username and gameId from upgrade
     },
     async message(ws, raw) {
+      // ws.data is typed as unknown, so we need to assert its shape
+      const data = ws.data as { username: string, gameId: string };
+      const gameId = data.gameId;
       let msg: EventInsert;
       // Ensure raw is a string
       let rawStr: string = typeof raw === "string" ? raw : raw.toString();
@@ -55,43 +67,24 @@ const server = Bun.serve({
         ws.send(JSON.stringify({ type: "system", message: "Invalid message format." }));
         return;
       }
-      // --- Custom event routing (call game logic) ---
-      if (msg.type === "join" && typeof msg.gameId === "string" && msg.gameId.length > 0) {
-        ws.subscribe(msg.gameId);
-        // Track the room in userRooms
-        let rooms = userRooms.get(ws);
-        if (!rooms) {
-          rooms = new Set();
-          userRooms.set(ws, rooms);
-        }
-        rooms.add(msg.gameId);
-        console.log(`User subscribed to room ${msg.gameId}`);
-      }
-      if (msg.type === "leave" && typeof msg.gameId === "string" && msg.gameId.length > 0) {
-        ws.unsubscribe(msg.gameId);
-        // Remove the room from userRooms
-        const rooms = userRooms.get(ws);
-        if (rooms) {
-          rooms.delete(msg.gameId);
-        }
-        console.log(`User unsubscribed from room ${msg.gameId}`);
-      }
       if (msg.type && msg.gameId) {
-        const data = ws.data as { username: string };
+        // Use ws.data for userId and gameId
+        const data = ws.data as { username: string, gameId: string };
         // Fill missing fields for EventInsert
         const event: EventInsert = {
           ...msg, // spread first so explicit fields below take precedence
-          gameId: msg.gameId!,
+          gameId: msg.gameId || data.gameId,
           id: (msg as any).id || randomId(),
           playerId: (msg as any).playerId || data.username,
           type: msg.type,
           value: (msg as any).value || '',
           timestamp: (msg as any).timestamp || new Date().toISOString(),
         };
-        const publish = (room: string, payload: any) => {
-          console.log("sending ws event", room, payload);
-          server.publish(room, payload);
+        const publish = (payload: any) => {
+          console.log("sending ws event", gameId, payload);
+          server.publish(data.gameId,JSON.stringify(payload));
         };
+        logger.info(event);
         await translateEvent(event, publish);
         return;
       }
