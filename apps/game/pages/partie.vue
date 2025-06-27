@@ -7,7 +7,7 @@
 
     <CoincheRiver />
 
-    <CoincheInterfaceAnnonces v-if="storeAbout.timeToAnnonce" />
+    <CoincheInterfaceBiddings v-if="storeAbout.timeTobidding" />
 
     <div
       v-if="storePlayers.players.length == 4"
@@ -17,7 +17,7 @@
       <CoincheInterfaceTurn />
     </div>
 
-    <CoincheInterfaceSavedAnnonce v-if="storeGame.last_annonce.suite != 'NA'" />
+    <CoincheInterfaceSavedBidding v-if="storeGame.last_bidding.suite != 'NA'" />
 
     <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
   </div>

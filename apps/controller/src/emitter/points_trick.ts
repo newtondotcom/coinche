@@ -4,7 +4,7 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitPointsRound(
+export async function emitPointsTrick(
   scoreTeam1: number,
   scoreTeam2: number,
   gameId: string,

@@ -1,4 +1,4 @@
-import translateAnnonce from "@/shared/listener/annonce";
+import translateBidding from "@/shared/listener/bidding";
 import {
   translateCoinche,
   translateSurcoinche,
@@ -16,7 +16,7 @@ import { translateStartDistribution } from "@/shared/listener/start_distribution
 import { translateStartPli } from "@/shared/listener/start_pli";
 import { translateWinPli } from "@/shared/listener/win_pli";
 import { translateStart } from "@/shared/listener/start_game";
-import { translateCanAnnonce, translateCanPlay } from "@/shared/listener/can";
+import { translateCanBid, translateCanPlay } from "@/shared/listener/can";
 import translateStartTrick from "../listener/start_trick";
 import { translatePlayerList } from "../listener/player_list";
 
@@ -37,8 +37,8 @@ function translateError(event: any) {
 
 export function handleWSEvent(event: any) {
   switch (event.type) {
-    case "annonce":
-      return translateAnnonce(event);
+    case "bid":
+      return translateBidding(event);
     case "coinche":
       return translateCoinche(event);
     case "surcoinche":
@@ -69,12 +69,12 @@ export function handleWSEvent(event: any) {
       return translatePointsRound(event);
     case "start_distribution":
       return translateStartDistribution(event);
-    case "start_annonce":
+    case "start_bidding":
       return translateEndDistribution(event);
     case "can_play":
       return translateCanPlay(event);
-    case "can_annonce":
-      return translateCanAnnonce(event);
+    case "can_bid":
+      return translateCanBid(event);
     case "start_trick":
       return translateStartTrick(event);
     case "sound":

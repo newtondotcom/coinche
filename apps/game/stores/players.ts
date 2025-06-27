@@ -1,4 +1,4 @@
-import type { IAnnonce, ICard, IPlayer, PlayerPosition } from '@coinche/shared';
+import type { Ibidding, ICard, IPlayer, PlayerPosition } from '@coinche/shared';
 
 export const usePlayersStore = defineStore('players', () => {
     const players = ref<IPlayer[]>([]);
@@ -25,10 +25,10 @@ export const usePlayersStore = defineStore('players', () => {
         players.value = newPlayers;
     }
 
-    function setLastAnnonce(annonce: IAnnonce, playerId: string) {
+    function setLastbidding(bidding: Ibidding, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
         if (player) {
-            player.last_annonce = annonce;
+            player.last_bidding = bidding;
         }
     }
 
@@ -54,6 +54,6 @@ export const usePlayersStore = defineStore('players', () => {
         setPosition,
         addPlayer,
         setPlayers,
-        setLastAnnonce,
+        setLastbidding,
     };
 });

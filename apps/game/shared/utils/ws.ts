@@ -21,7 +21,6 @@ export function getWS() {
         console.warn('Failed to parse WebSocket message as JSON:', e);
         data = event.data;
       }
-      console.log('Parsed data:', data);
       
       // Notify all listeners
       listeners.forEach((cb) => {

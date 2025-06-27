@@ -1,19 +1,19 @@
 import { findWinner } from '@/emitter/close_pli';
-import { emitPointsRound } from '@/emitter/points_trick';
 import controller from '@/game';
 import logger from '@/logger';
+import { emitPointsTrick } from './points_trick';
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitEndRound(gameId: string, publish: (payload: any) => void) {
+export async function emitEndTrick(gameId: string, publish: (payload: any) => void) {
     const controllerInstance = controller.getInstance(gameId);
     const lastRound = controllerInstance.getLastRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
-    const seuilAnnonce = lastRound.last_annonce;
-    const teamAnnounced = controllerInstance.isTeam1(seuilAnnonce.playerId) ? 1 : 2;
+    const seuilbidding = lastRound.last_bidding;
+    const teamAnnounced = controllerInstance.isTeam1(seuilbidding.playerId) ? 1 : 2;
 
-    const calculateCapotGeneraleScore = (annonce: string) => {
+    const calculateCapotGeneraleScore = (bidding: string) => {
         const plis = lastRound.plis;
         let isSuccessful = true;
 
@@ -28,26 +28,26 @@ export async function emitEndRound(gameId: string, publish: (payload: any) => vo
         });
 
         if (isSuccessful) {
-            return annonce === 'capot' ? 250 * pointMultiplier : 500 * pointMultiplier;
+            return bidding === 'capot' ? 250 * pointMultiplier : 500 * pointMultiplier;
         }
         return 0;
     };
 
     const calculateDefaultScore = () => {
-        const annonceValue =
-            typeof seuilAnnonce.annonce === 'number'
-                ? seuilAnnonce.annonce
-                : parseInt(seuilAnnonce.annonce, 10);
+        const biddingValue =
+            typeof seuilbidding.bidding === 'number'
+                ? seuilbidding.bidding
+                : parseInt(seuilbidding.bidding, 10);
 
         if (
-            (teamAnnounced === 1 && lastRound.team1_point_current_game > annonceValue) ||
-            (teamAnnounced === 2 && lastRound.team2_point_current_game > annonceValue)
+            (teamAnnounced === 1 && lastRound.team1_point_current_game > biddingValue) ||
+            (teamAnnounced === 2 && lastRound.team2_point_current_game > biddingValue)
         ) {
-            // annonce validée
-            return annonceValue * pointMultiplier;
+            // bidding validée
+            return biddingValue * pointMultiplier;
         } else {
-            // annonce chutée
-            return -annonceValue * pointMultiplier;
+            // bidding chutée
+            return -biddingValue * pointMultiplier;
         }
     };
 
@@ -55,10 +55,10 @@ export async function emitEndRound(gameId: string, publish: (payload: any) => vo
     let scoreTeam2 = 0;
 
     if (teamAnnounced === 1) {
-        switch (seuilAnnonce.annonce) {
+        switch (seuilbidding.bidding) {
             case 'capot':
             case 'generale':
-                scoreTeam1 = calculateCapotGeneraleScore(seuilAnnonce.annonce);
+                scoreTeam1 = calculateCapotGeneraleScore(seuilbidding.bidding);
                 break;
             default:
                 scoreTeam1 = calculateDefaultScore();
@@ -69,10 +69,10 @@ export async function emitEndRound(gameId: string, publish: (payload: any) => vo
                 break;
         }
     } else {
-        switch (seuilAnnonce.annonce) {
+        switch (seuilbidding.bidding) {
             case 'capot':
             case 'generale':
-                scoreTeam2 = calculateCapotGeneraleScore(seuilAnnonce.annonce);
+                scoreTeam2 = calculateCapotGeneraleScore(seuilbidding.bidding);
                 break;
             default:
                 scoreTeam2 = calculateDefaultScore();
@@ -87,5 +87,5 @@ export async function emitEndRound(gameId: string, publish: (payload: any) => vo
     logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
     controllerInstance.game.team1_score += scoreTeam1;
     controllerInstance.game.team2_score += scoreTeam2;
-    await emitPointsRound(scoreTeam1, scoreTeam2, gameId, publish);
+    await emitPointsTrick(scoreTeam1, scoreTeam2, gameId, publish);
 }

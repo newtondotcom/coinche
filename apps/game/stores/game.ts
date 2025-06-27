@@ -1,4 +1,4 @@
-import type { IAnnonce, ICard, IPlay, PlayerId } from '@coinche/shared';
+import type { Ibidding, ICard, IPlay, PlayerId } from '@coinche/shared';
 
 export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
@@ -6,11 +6,11 @@ export const useGameStore = defineStore('game', () => {
     const pli_number = ref<number>(0);
     const team1_point_current_game = ref<number>(0);
     const team2_point_current_game = ref<number>(0);
-    const last_annonce = ref<IAnnonce>({ suite: 'NA', annonce: 0, playerId: '0' });
+    const last_bidding = ref<Ibidding>({ suite: 'NA', bidding: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
     const deck = ref<ICard[]>([]);
-    const annonces_pli = ref<IAnnonce[]>([]);
+    const biddings_pli = ref<Ibidding[]>([]);
     const current_player_id = ref<PlayerId>('');
     const player_starting_id = ref<PlayerId>('0');
 
@@ -27,8 +27,8 @@ export const useGameStore = defineStore('game', () => {
         current_player_id.value = playerId;
     }
 
-    function setLastAnnonce(annonce: IAnnonce) {
-        last_annonce.value = annonce;
+    function setLastbidding(bidding: Ibidding) {
+        last_bidding.value = bidding;
     }
 
     function setCoinched(newCoinched: boolean) {
@@ -47,8 +47,8 @@ export const useGameStore = defineStore('game', () => {
     function setNewRound() {
         coinched.value = false;
         surcoinched.value = false;
-        annonces_pli.value = [];
-        last_annonce.value = { suite: 'NA', annonce: 0, playerId: '0' };
+        biddings_pli.value = [];
+        last_bidding.value = { suite: 'NA', bidding: 0, playerId: '0' };
         current_pli.value = [];
         pli_number.value += 0;
         team1_point_current_game.value = 0;
@@ -82,8 +82,8 @@ export const useGameStore = defineStore('game', () => {
         team2_score.value = team2_score.value + score;
     }
 
-    function addAnnonceToPli(annonce: IAnnonce) {
-        annonces_pli.value.push(annonce);
+    function addbiddingToPli(bidding: Ibidding) {
+        biddings_pli.value.push(bidding);
     }
 
     function setDeck(deckf: ICard[]) {
@@ -96,7 +96,7 @@ export const useGameStore = defineStore('game', () => {
         pli_number,
         team1_point_current_game,
         team2_point_current_game,
-        last_annonce,
+        last_bidding,
         coinched,
         surcoinched,
         player_starting_id,
@@ -104,14 +104,14 @@ export const useGameStore = defineStore('game', () => {
         team2_score,
         addCardToPliAndRemove,
         setCurrentPlayerId,
-        setLastAnnonce,
+        setLastbidding,
         setCoinched,
         setSurcoinched,
         setNewPli,
         setPlayerStartingId,
         addScoreToTeam,
-        annonces_pli,
-        addAnnonceToPli,
+        biddings_pli,
+        addbiddingToPli,
         deck,
         setDeck,
         addScoreToTeam1,

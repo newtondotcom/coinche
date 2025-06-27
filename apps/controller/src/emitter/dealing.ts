@@ -1,4 +1,4 @@
-import { emitCanAnnonce } from "@/emitter/can";
+import { emitCanBid } from "@/emitter/can";
 import controller from "@/game";
 import logger from "@/logger";
 import { formatCarteToDistribute } from "../../../game/shared/utils/format";
@@ -53,14 +53,14 @@ export default async function emitDealing(
   }
   const event = {
     id: await genIdCuid(),
-    type: "start_annonce",
+    type: "start_bidding",
     playerId: "controller",
     gameId: controller.getInstance(gameId).game.gameId,
     value: id_player_starting,
     timestamp: new Date().toISOString(),
   };
   publish(event);
-  await emitCanAnnonce(id_player_starting, gameId, publish);
+  await emitCanBid(id_player_starting, gameId, publish);
 }
 
 /**

@@ -20,15 +20,15 @@ export async function emitCanPlay(playerId: string, gameId: string, publish: (pa
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitCanAnnonce(playerId: string, gameId: string, publish: (payload: any) => void) {
+export async function emitCanBid(playerId: string, gameId: string, publish: (payload: any) => void) {
   const event = {
     id: await genIdCuid(),
-    type: "can_annonce",
+    type: "can_bid",
     playerId: "controller",
     gameId: gameId,
     value: playerId,
     timestamp: new Date().toISOString(),
   };
   publish(event);
-  logger.info(`${playerId} can annonce`);
+  logger.info(`${playerId} can bidding`);
 }

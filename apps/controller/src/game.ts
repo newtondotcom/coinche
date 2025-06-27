@@ -1,6 +1,6 @@
 import { deleteRows } from '@/emitter/end_game';
 import logger from '@/logger';
-import type { IAnnonce, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
+import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
 
 export default class controller {
     private static _instances: Map<string, controller> = new Map();
@@ -57,24 +57,24 @@ export default class controller {
         this.game.deck.push(card);
         logger.info(`Player ${playerId} played ${card.suite} of ${card.value}`);
     }
-    public addAnnonce(annonce: IAnnonce): void {
+    public addbidding(bidding: Ibidding): void {
         const lastRound = this.game.rounds[this.game.rounds.length - 1];
         if (!lastRound) {
             throw new Error('No round exists. Add a round first.');
         }
-        lastRound.annonces.push(annonce);
-        if (annonce.annonce !== 0) {
-            this.getLastRound().last_annonce = annonce;
+        lastRound.biddings.push(bidding);
+        if (bidding.bidding !== 0) {
+            this.getLastRound().last_bidding = bidding;
         }
-        logger.info(`Player ${annonce.playerId} announced ${annonce.suite}`);
+        logger.info(`Player ${bidding.playerId} announced ${bidding.suite}`);
     }
     public addRound(playerStartingId: string): void {
         const roundInit: IRound = {
             plis: [],
-            annonces: [],
+            biddings: [],
             team1_point_current_game: 0,
             team2_point_current_game: 0,
-            last_annonce: { suite: 'NA', annonce: 0, playerId: 'NA' },
+            last_bidding: { suite: 'NA', bidding: 0, playerId: 'NA' },
             coinched: false,
             surcoinched: false,
         };
@@ -96,5 +96,9 @@ export default class controller {
     }
     public getLastPli() {
         return this.getLastRound().plis[this.getLastRound().plis.length - 1];
+    }    
+    public isTeam1(playerId: string) {
+        const players = Array.from(this.getPlayers());
+        return players[0].id === playerId || players[2].id === playerId;
     }
 }

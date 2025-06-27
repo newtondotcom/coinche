@@ -33,7 +33,7 @@ export async function emitGameCreation(gameId: string, publish: (payload: any) =
       await supabase.from("Events").insert([
         {
           id: await genIdCuid(),
-          type: "annonce",
+          type: "bidding",
           playerId: "controller",
           gameId: gameId,
           value: formatPoints(0, 0),

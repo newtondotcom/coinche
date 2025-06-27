@@ -9,7 +9,7 @@ export type CardSuite =
     | 'sans-atout'
     | 'NA';
 export type CardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
-export type Annonce = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 'capot' | 'generale';
+export type bidding = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 'capot' | 'generale';
 export type PlayerPosition = 0 | 1 | 2 | 3;
 export type PlayerId = string;
 
@@ -19,9 +19,9 @@ export interface ICard {
     valueNum: number;
 }
 
-export interface IAnnonce {
+export interface Ibidding {
     suite: CardSuite;
-    annonce: Annonce;
+    bidding: bidding;
     playerId: PlayerId;
 }
 
@@ -35,15 +35,15 @@ export interface IPlayer {
     position: PlayerPosition;
     hands: ICard[];
     classement: number;
-    last_annonce?: IAnnonce;
+    last_bidding?: Ibidding;
 }
 
 export interface IRound {
     plis: IPli[];
-    annonces: IAnnonce[];
+    biddings: Ibidding[];
     team1_point_current_game: number;
     team2_point_current_game: number;
-    last_annonce: IAnnonce;
+    last_bidding: Ibidding;
     coinched: boolean;
     surcoinched: boolean;
 }
@@ -66,7 +66,7 @@ export interface IGame {
 export type Event =
     | 'join'
     | 'can_play'
-    | 'can_annonce'
+    | 'can_bid'
     | 'start_game'
     | 'end_game'
     | 'start_trick'
@@ -77,8 +77,8 @@ export type Event =
     | 'score_trick'
     | 'start_distribution'
     | 'distribution'
-    | 'start_annonce'
-    | 'annonce'
+    | 'start_bidding'
+    | 'bidding'
     | 'coinche'
     | 'surcoinche'
     | 'play'

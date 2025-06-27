@@ -6,10 +6,10 @@ export const useAboutStore = defineStore('about', () => {
     const myId = ref<string>('0');
     const gameId = ref<string>('0');
     const isCreator = ref<boolean>(false);
-    const timeToAnnonce = ref<boolean>(false);
+    const timeTobidding = ref<boolean>(false);
     const timeDistrib = ref<boolean>(false);
     const turnToPlay = ref<boolean>(false);
-    const turnToAnnonce = ref<boolean>(false);
+    const turnTobidding = ref<boolean>(false);
 
     const authentificated = ref<boolean>(false);
 
@@ -17,11 +17,11 @@ export const useAboutStore = defineStore('about', () => {
         turnToPlay.value = value;
     };
 
-    const setTurnToAnnonce = (value: boolean) => {
-        turnToAnnonce.value = value;
+    const setTurnTobidding = (value: boolean) => {
+        turnTobidding.value = value;
     };
 
-    const atout: ComputedRef<CardSuite> = computed(() => storeGame.last_annonce.suite);
+    const atout: ComputedRef<CardSuite> = computed(() => storeGame.last_bidding.suite);
 
     const hand: ComputedRef<ICard[]> = computed(
         () => storePlayers.players.find((p) => p.id === myId.value)?.hands || [],
@@ -35,7 +35,7 @@ export const useAboutStore = defineStore('about', () => {
         () =>
             storePlayers.players
                 .find((player) => player.id == myId.value)
-                ?.hands.some((card: ICard) => card.suite === storeGame.last_annonce.suite) || false,
+                ?.hands.some((card: ICard) => card.suite === storeGame.last_bidding.suite) || false,
     );
 
     const hasAskedColor: ComputedRef<boolean> = computed(
@@ -47,7 +47,7 @@ export const useAboutStore = defineStore('about', () => {
 
     const highestAtoutInPli: ComputedRef<number> = computed(() => {
         const atoutsInPli = storeGame.current_pli.filter(
-            (c) => c.card.suite === storeGame.last_annonce.suite,
+            (c) => c.card.suite === storeGame.last_bidding.suite,
         );
         if (atoutsInPli.length === 0) return NaN;
         const orderedAtouts = atoutsInPli.sort((a, b) => b.card.valueNum - a.card.valueNum);
@@ -68,8 +68,8 @@ export const useAboutStore = defineStore('about', () => {
         gameId.value = id;
     }
 
-    function setTimeToAnnonce(time: boolean) {
-        timeToAnnonce.value = time;
+    function setTimeTobidding(time: boolean) {
+        timeTobidding.value = time;
     }
 
     function setTimeDistrib(time: boolean) {
@@ -94,13 +94,13 @@ export const useAboutStore = defineStore('about', () => {
         setGameId,
         gameId,
         isCreator,
-        setTimeToAnnonce,
-        timeToAnnonce,
+        setTimeTobidding,
+        timeTobidding,
         timeDistrib,
         setTimeDistrib,
         turnToPlay,
-        turnToAnnonce,
-        setTurnToAnnonce,
+        turnTobidding,
+        setTurnTobidding,
         setTurnToPlay,
         authentificated,
         setAuthentificated,

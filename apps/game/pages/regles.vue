@@ -115,7 +115,7 @@
                 que passer ou contrer.
             </p>
             <p>
-                La manière d’annoncer son contrat doit toujours être la même. On annonce d’abord la
+                La manière d’biddingr son contrat doit toujours être la même. On bidding d’abord la
                 valeur du contrat (80, 90,100…), puis la couleur (pique, cœur…), par exemple « 90
                 cœur ».
             </p>
@@ -165,7 +165,7 @@
             <ul>
                 <li>Les points remportés lors des plis</li>
                 <li>Les points de la belote éventuelle ainsi</li>
-                <li>Les points des annonces éventuelles.</li>
+                <li>Les points des biddings éventuelles.</li>
             </ul>
             <hr />
             <h1 id="-5-le-jeu-de-la-carte-"><strong>5. Le jeu de la carte</strong></h1>
@@ -330,8 +330,8 @@
                 </strong>
             </p>
             <hr />
-            <h1 id="-8-les-annonces-"><strong>8. Les annonces</strong></h1>
-            <p>La belote contrée se joue toujours sans annonces.</p>
+            <h1 id="-8-les-biddings-"><strong>8. Les biddings</strong></h1>
+            <p>La belote contrée se joue toujours sans biddings.</p>
             <hr />
             <h1 id="-9-dix-de-der-et-capot-"><strong>9. Dix de der et capot</strong></h1>
             <h2 id="9-1-dix-de-der">9.1. Dix de der</h2>
@@ -398,7 +398,7 @@
                 </li>
             </ul>
             <p>
-                Cas particulier : si un capot est réalisé par les preneurs, les annonces des
+                Cas particulier : si un capot est réalisé par les preneurs, les biddings des
                 défenseurs changent de main et sont marqués par les preneurs, et ce, que le capot
                 ait été demandé lors des enchères ou non.
             </p>
@@ -411,11 +411,11 @@
                             : (
                             <em>160 points (ou 250 points si capot réalisé, même non demandé)</em>
                             +
-                            <em>Leurs annonces</em>
+                            <em>Leurs biddings</em>
                             +
                             <em>Leur belote</em>
                             +
-                            <em>Les annonces des défenseurs qui changent de main</em>
+                            <em>Les biddings des défenseurs qui changent de main</em>
                             +
                             <em>
                                 Le montant du contrat demandé (250 points pour un capot demandé)
@@ -451,11 +451,11 @@
                     marquent
                     <em>160 points de chute</em>
                     +
-                    <em>Leurs annonces</em>
+                    <em>Leurs biddings</em>
                     +
                     <em>Leur belote</em>
                     +
-                    <em>Les annonces des preneurs qui changent de main</em>
+                    <em>Les biddings des preneurs qui changent de main</em>
                     +
                     <em>Le montant du contrat demandé (250 points pour un capot demandé)</em>
                     .

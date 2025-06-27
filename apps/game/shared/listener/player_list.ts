@@ -12,7 +12,7 @@ import { toast } from "vue-sonner";
 export function translatePlayerList(event: any) {
   if (Array.isArray(event.value)) {
     const storePlayers = usePlayersStore();
-    //handlePlayerListNotification(event.value,storePlayers.players)
+    handlePlayerListNotification(event.value,storePlayers.players)
     const buildPlayers = event.value.map((player: IPlayer, index: number) => ({
       id: player.id,
       position: player.position,
