@@ -1,5 +1,5 @@
 import { distributeRankingPoints, emitEndGame } from "@/emitter/end_game";
-import { emitEndRound } from "@/emitter/end_round";
+import { emitEndRound } from "@/emitter/end_trick";
 import { emitPoints } from "@/emitter/points";
 import { startPli } from "@/emitter/start_pli";
 import controller from "@/game";
@@ -119,7 +119,7 @@ export async function fetchLastPliPlayerWinningId(
   const { data: events, error } = await supabase
     .from("Events")
     .select("value")
-    .eq("type", "start_round")
+    .eq("type", "start_trick")
     .eq("gameId", gameId);
   if (error) {
     console.error(error);

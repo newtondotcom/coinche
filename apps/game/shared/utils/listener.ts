@@ -3,14 +3,14 @@ import {
   translateCoinche,
   translateSurcoinche,
 } from "@/shared/listener/coinche";
-import { translateDistribution } from "@/shared/listener/distribution";
+import { translateDealing } from "@/shared/listener/distribution";
 import { translateEndDistribution } from "@/shared/listener/end_distribution";
 import { translateEndGame } from "@/shared/listener/end_game";
-import { translateEndRound } from "@/shared/listener/end_round";
+import { translateEndRound } from "@/shared/listener/end_trick";
 import { translateJoin } from "@/shared/listener/join";
 import translatePlay from "@/shared/listener/play";
 import { translatePoints } from "@/shared/listener/points";
-import { translatePointsRound } from "@/shared/listener/points_round";
+import { translatePointsRound } from "@/shared/listener/points_trick";
 import { translateSound } from "@/shared/listener/sound";
 import { translateStartDistribution } from "@/shared/listener/start_distribution";
 import { translateStartPli } from "@/shared/listener/start_pli";
@@ -47,7 +47,7 @@ export function handleWSEvent(event: any) {
       return translatePlay(event);
     case "end_game":
       return translateEndGame(event);
-    case "end_round":
+    case "end_trick":
       return translateEndRound(event);
     case "start_game":
       return translateStart(event);
@@ -61,11 +61,11 @@ export function handleWSEvent(event: any) {
       return translateError(event);
     case "win_pli":
       return translateWinPli(event);
-    case "distribution":
-      return translateDistribution(event);
+    case "dealing":
+      return translateDealing(event);
     case "score":
       return translatePoints(event);
-    case "score_round":
+    case "score_trick":
       return translatePointsRound(event);
     case "start_distribution":
       return translateStartDistribution(event);

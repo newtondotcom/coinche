@@ -1,4 +1,4 @@
-import { sendWS } from '@/lib/utils/ws';
+import { sendWS } from '~/shared/utils/ws';
 import genIdCuid from '~/shared/utils/gen_id';
 
 export async function emitSound(name: string): Promise<void> {

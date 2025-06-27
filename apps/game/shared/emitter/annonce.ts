@@ -1,4 +1,4 @@
-import { sendWS } from '@/lib/utils/ws';
+import { sendWS } from '~/shared/utils/ws';
 import { formatAnnonce } from '~/shared/utils/format';
 import genIdCuid from '~/shared/utils/gen_id';
 import type { IAnnonce } from '@coinche/shared';

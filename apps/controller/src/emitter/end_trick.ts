@@ -1,5 +1,5 @@
 import { findWinner } from '@/emitter/close_pli';
-import { emitPointsRound } from '@/emitter/points_round';
+import { emitPointsRound } from '@/emitter/points_trick';
 import controller from '@/game';
 import logger from '@/logger';
 

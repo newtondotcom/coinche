@@ -27,7 +27,7 @@
 import { join, leave } from "@/shared/emitter/join";
 import { handleWSEvent } from "@/shared/utils/listener";
 import { isDevEnv } from "@/shared/utils/miscs";
-import { getWS, onWSMessage, sendWS, closeWS } from "@/lib/utils/ws";
+import { getWS, onWSMessage, sendWS, closeWS } from "~/shared/utils/ws";
 
 const { loggedIn } = useAuth();
 const storeGame = useGameStore();

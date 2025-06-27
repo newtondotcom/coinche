@@ -12,17 +12,17 @@ import { toast } from "vue-sonner";
 export function translatePlayerList(event: any) {
   if (Array.isArray(event.value)) {
     const storePlayers = usePlayersStore();
-    //handlePlayerListNotification(event.players,storePlayers.players)
-    const buildPlayers = event.value.map((playerId: string, index: number) => ({
-      id: playerId,
-      position: index,
-      hands: [],
-      classement: 0,
+    //handlePlayerListNotification(event.value,storePlayers.players)
+    const buildPlayers = event.value.map((player: IPlayer, index: number) => ({
+      id: player.id,
+      position: player.position,
+      hands: player.hands,
+      classement: player.classement,
     }));
     storePlayers.setPlayers(buildPlayers);
-    console.log("There are now : " + event.players.size + "size")
+    console.log("There are now : " + event.value.size + "size")
   } else {
-      console.error("error in translatePlayerList",event.players)
+      console.error("error in translatePlayerList",event.value)
   }
 }
 

@@ -56,7 +56,7 @@ export interface IPli {
 
 export interface IGame {
     rounds: IRound[];
-    players: IPlayer[];
+    playersMap: Map<string, IPlayer>
     gameId: string;
     deck: ICard[];
     team1_score: number;
@@ -69,12 +69,12 @@ export type Event =
     | 'can_annonce'
     | 'start_game'
     | 'end_game'
-    | 'start_round'
-    | 'end_round'
+    | 'start_trick'
+    | 'end_trick'
     | 'start_pli'
     | 'win_pli'
     | 'score'
-    | 'score_round'
+    | 'score_trick'
     | 'start_distribution'
     | 'distribution'
     | 'start_annonce'

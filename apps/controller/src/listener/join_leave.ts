@@ -1,7 +1,8 @@
 import { emitGameStarting } from "@/emitter/start_game";
-import { gamePlayers } from "../..";
 import logger from "@/logger";
 import genIdCuid from "../../../game/shared/utils/gen_id";
+import controller from "@/game";
+import type { IPlayer } from '@coinche/shared';
 
 /**
  * Handles player join/leave events for a game room.
@@ -9,32 +10,35 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
  * @param ws WebSocket connection
  */
 export async function handlePlayerJoinLeave(event: any, publish: (payload: any) => void) {
+  const gameId = event.gameId;
+  const playerId = event.playerId;
+  const gameController = controller.getInstance(gameId);
+  const playersSetOld = gameController.getPlayers();
   if (event.type === 'join') {
-    if (!gamePlayers.has(event.gameId)) gamePlayers.set(event.gameId, new Set());
-    gamePlayers.get(event.gameId)!.add(event.playerId);
+    const player: IPlayer = { id: playerId, position: playersSetOld.size as any, hands: [], classement: 0 };
+    gameController.addPlayer(player);
   } else if (event.type === 'leave') {
-    if (gamePlayers.has(event.gameId)) {
-      gamePlayers.get(event.gameId)!.delete(event.playerId);
-    }
+    gameController.removePlayer(playerId);
   }
   // Always broadcast the updated player list to all in the room
+  const playersSet = gameController.getPlayers();
   const event2 = {
-    gameId: event.gameId,
+    gameId,
     id: await genIdCuid(),
     type: 'player_list',
     playerId: "controller",
-    value: Array.from(gamePlayers.get(event.gameId) || []),
+    value: Array.from(playersSet),
     timestamp: new Date().toISOString(),
   }
   publish(event2);
   if (event.type === 'join') {
-        // If there are now 4 players, emit start_game
-        if (gamePlayers.get(event.gameId)!.size === 4) {
-          // Get the first playerId from the Set
-          const firstPlayerId = Array.from(gamePlayers.get(event.gameId)!)[0];
-          await emitGameStarting(firstPlayerId, event.gameId, publish);
-        } else {
-          logger.info(gamePlayers.get(event.gameId)!.size)
-        }
+    // If there are now 4 players, emit start_game
+    if (playersSet.size === 4) {
+      // Get the first playerId from the Set
+      const firstPlayer = Array.from(playersSet)[0];
+      await emitGameStarting(firstPlayer.id, gameId, publish);
+    } else {
+      logger.info(playersSet.size)
+    }
   }
 } 

@@ -15,7 +15,8 @@ export default async function emitDealing(
 ) {
   cutDeck(gameId);
   // distribute cards 3 per person, then 2, then 3
-  const players = controller.getInstance(gameId).game.players;
+  const playersMap = controller.getInstance(gameId).game.playersMap;
+  const players = Array.from(playersMap.values());
   const startIndex = players.findIndex(
     (player) => player.id === id_player_starting,
   );
@@ -32,7 +33,7 @@ export default async function emitDealing(
     controller.getInstance(gameId).game.deck.length !== 32 ||
     shiftedPlayers.length !== 4
   ) {
-    logger.error("deck not cut or players not 4");
+    logger.error(`deck not cut or players not 4 ${controller.getInstance(gameId).game.deck.length},${shiftedPlayers.length}`);
   }
 
   for (let i = 0; i < 3; i++) {
@@ -69,7 +70,7 @@ async function distributeCard(player_id: string, gameId: string, publish: (paylo
   const card: ICard = controller.getInstance(gameId).game.deck.pop() as ICard;
   const event = {
     id: await genIdCuid(),
-    type: "distribution",
+    type: "dealing",
     playerId: player_id,
     gameId: gameId,
     value: formatCarteToDistribute(
@@ -84,6 +85,7 @@ export function cutDeck(gameId: string) {
   // cut the paquet at a certain index
   const indexCut = Math.floor(Math.random() * 32);
   const deck = controller.getInstance(gameId).game.deck;
+  // const shuffledDeck = deck
   const deck1 = deck.slice(0, indexCut);
   const deck2 = deck.slice(indexCut);
   const newDeck = [...deck2, ...deck1];

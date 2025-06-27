@@ -12,7 +12,7 @@ export async function emitPointsRound(
 ) {
   const event = {
     id: await genIdCuid(),
-    type: "score_round",
+    type: "score_trick",
     playerId: "controller",
     gameId: gameId,
     value: formatPoints(scoreTeam1, scoreTeam2),

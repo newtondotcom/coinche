@@ -1,4 +1,4 @@
-import { sendWS } from '@/lib/utils/ws';
+import { sendWS } from '~/shared/utils/ws';
 import { formatCarteToPlay } from '@/shared/utils/format';
 import genIdCuid from '~/shared/utils/gen_id';
 import type { CardSuite, CardValue, ICard } from '@coinche/shared';
