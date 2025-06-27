@@ -10,10 +10,10 @@ import { toast } from "vue-sonner";
  * @param storePlayers The Pinia/Vue store for players
  */
 export function translatePlayerList(event: any) {
-  if (Array.isArray(event.players)) {
+  if (Array.isArray(event.value)) {
     const storePlayers = usePlayersStore();
     //handlePlayerListNotification(event.players,storePlayers.players)
-    const buildPlayers = event.players.map((playerId: string, index: number) => ({
+    const buildPlayers = event.value.map((playerId: string, index: number) => ({
       id: playerId,
       position: index,
       hands: [],
