@@ -20,7 +20,7 @@ if (dev) {
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function closePli(gameId: string, publish: (room: string, payload: any) => void) {
+export async function closePli(gameId: string, publish: (payload: any) => void) {
   const game = controller.getInstance(gameId).game;
   const lastPli = controller.getInstance(gameId).getLastPli();
   // find the winner

@@ -4,7 +4,7 @@ import logger from '@/logger';
 import { setNextPlayerTurn } from '@/utils';
 import type { EventInsert} from '@coinche/shared';
 
-export async function translateCoinche(event: EventInsert, publish: (room: string, payload: any) => void) {
+export async function translateCoinche(event: EventInsert, publish: (payload: any) => void) {
     controller.getInstance(event.gameId).getLastRound().coinched = true;
     setNextPlayerTurn(event.playerId, event.gameId);
     logger.info('Coinche');
@@ -12,7 +12,7 @@ export async function translateCoinche(event: EventInsert, publish: (room: strin
     return;
 }
 
-export async function translateSurcoinche(event: EventInsert, publish: (room: string, payload: any) => void) {
+export async function translateSurcoinche(event: EventInsert, publish: (payload: any) => void) {
     controller.getInstance(event.gameId).getLastRound().surcoinched = true;
     setNextPlayerTurn(event.playerId, event.gameId);
     logger.info('Surcoinche');

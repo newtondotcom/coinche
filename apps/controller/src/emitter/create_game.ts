@@ -5,7 +5,7 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitGameCreation(gameId: string, publish: (room: string, payload: any) => void) {
+export async function emitGameCreation(gameId: string, publish: (payload: any) => void) {
   // Check if there are any events for this gameId
   const { data: existingEvents, error: selectError } = await supabase
     .from("Events")

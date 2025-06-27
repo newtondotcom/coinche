@@ -8,10 +8,10 @@ import type { ICard, PlayerId } from "@coinche/shared";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export default async function emitDistribution(
+export default async function emitDealing(
   id_player_starting: PlayerId,
   gameId: string,
-  publish: (room: string, payload: any) => void
+  publish: (payload: any) => void
 ) {
   cutDeck(gameId);
   // distribute cards 3 per person, then 2, then 3
@@ -58,14 +58,14 @@ export default async function emitDistribution(
     value: id_player_starting,
     timestamp: new Date().toISOString(),
   };
-  publish(`game-${gameId}`, event);
+  publish(event);
   await emitCanAnnonce(id_player_starting, gameId, publish);
 }
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-async function distributeCard(player_id: string, gameId: string, publish: (room: string, payload: any) => void) {
+async function distributeCard(player_id: string, gameId: string, publish: (payload: any) => void) {
   const card: ICard = controller.getInstance(gameId).game.deck.pop() as ICard;
   const event = {
     id: await genIdCuid(),
@@ -78,7 +78,7 @@ async function distributeCard(player_id: string, gameId: string, publish: (room:
     ),
     timestamp: new Date().toISOString(),
   };
-  publish(`game-${gameId}`, event);
+  publish(event);
 }
 export function cutDeck(gameId: string) {
   // cut the paquet at a certain index

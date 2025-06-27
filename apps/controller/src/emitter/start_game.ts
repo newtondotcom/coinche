@@ -1,10 +1,11 @@
-import { emitStartTrick } from "@/emitter/start_trick";
+import controller from "@/game";
 import genIdCuid from "../../../game/shared/utils/gen_id";
+import { emitStartDealing } from "./start_dealing";
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitGameStarting(playerId: string, gameId: string, publish: (room: string, payload: any) => void) {
+export async function emitGameStarting(playerId: string, gameId: string, publish: (payload: any) => void) {
   const event = {
     id: await genIdCuid(),
     type: "start_game",
@@ -13,6 +14,9 @@ export async function emitGameStarting(playerId: string, gameId: string, publish
     value: playerId,
     timestamp: new Date().toISOString(),
   };
-  publish(`game-${gameId}`, event);
-  await emitStartTrick(gameId, playerId, publish);
+  publish(event);
+  controller.getInstance(gameId).addRound(playerId);
+  //await emitStartTrick(gameId, playerId, publish);
+  //await emitCanAnnonce(playerId,gameId,publish)
+  await emitStartDealing(gameId,publish);
 }

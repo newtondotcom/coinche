@@ -6,7 +6,7 @@ import { setNextPlayerTurn } from '@/utils';
 import deformatCarteToPlay from "../../../game/shared/utils/gen_id";
 import type { EventInsert } from '@coinche/shared';
 
-export default async function translatePlay(event: EventInsert, publish: (room: string, payload: any) => void) {
+export default async function translatePlay(event: EventInsert, publish: (payload: any) => void) {
     const def = deformatCarteToPlay(event.value as string);
     const card = def.card;
     const pli_number = def.pli_number;

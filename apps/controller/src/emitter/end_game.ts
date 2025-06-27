@@ -13,7 +13,7 @@ export async function emitEndGame(
   winnerPlayerId: string,
   teamMatePlayerId: string,
   gameId: string,
-  publish: (room: string, payload: any) => void
+  publish: (payload: any) => void
 ) {
   await supabase.from("Events").insert([
     {
@@ -34,7 +34,7 @@ export async function distributeRankingPoints(
   gameId: string,
   team1Score: number,
   team2Score: number,
-  publish: (room: string, payload: any) => void
+  publish: (payload: any) => void
 ) {
   const playersIds = players.map((player) => player.id);
   (players);
@@ -126,6 +126,6 @@ export async function distributeRankingPoints(
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function deleteRows(gameId: string, publish: (room: string, payload: any) => void) {
+export async function deleteRows(gameId: string, publish: (payload: any) => void) {
   await supabase.from("Events").delete().match({ gameId: gameId });
 }

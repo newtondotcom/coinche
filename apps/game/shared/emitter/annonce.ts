@@ -14,6 +14,7 @@ export default async function emitAnnonce(annonce: IAnnonce) {
         value: formatAnnonce(annonce),
         timestamp: new Date().toISOString(),
     });
+    storeAbout.setTimeToAnnonce(true);
     storeAbout.setTurnToAnnonce(false);
 }
 

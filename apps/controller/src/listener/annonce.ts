@@ -6,7 +6,7 @@ import { setNextPlayerTurn } from '@/utils';
 import deformatAnnonce from "../../../game/shared/utils/gen_id";
 import type { EventInsert } from '@coinche/shared';
 
-export default async function translateAnnonce(event: EventInsert, publish: (room: string, payload: any) => void) {
+export default async function translateAnnonce(event: EventInsert, publish: (payload: any) => void) {
     const annonce = deformatAnnonce(event.value as string, event.playerId);
     controller.getInstance(event.gameId).addAnnonce(annonce);
     const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);

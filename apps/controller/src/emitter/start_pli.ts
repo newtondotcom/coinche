@@ -7,7 +7,7 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function startPli(gameId: string, publish: (room: string, payload: any) => void) {
+export async function startPli(gameId: string, publish: (payload: any) => void) {
   // launch pli
   const playerIdStarting = controller
     .getInstance(gameId)

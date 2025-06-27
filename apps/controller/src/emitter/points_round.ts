@@ -8,7 +8,7 @@ export async function emitPointsRound(
   scoreTeam1: number,
   scoreTeam2: number,
   gameId: string,
-  publish: (room: string, payload: any) => void
+  publish: (payload: any) => void
 ) {
   const event = {
     id: await genIdCuid(),
@@ -18,5 +18,5 @@ export async function emitPointsRound(
     value: formatPoints(scoreTeam1, scoreTeam2),
     timestamp: new Date().toISOString(),
   };
-  publish(`game-${gameId}`, event);
+  publish(event);
 }

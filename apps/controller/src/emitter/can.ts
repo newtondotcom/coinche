@@ -4,7 +4,7 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitCanPlay(playerId: string, gameId: string, publish: (room: string, payload: any) => void) {
+export async function emitCanPlay(playerId: string, gameId: string, publish: (payload: any) => void) {
   const event = {
     id: await genIdCuid(),
     type: "can_play",
@@ -13,14 +13,14 @@ export async function emitCanPlay(playerId: string, gameId: string, publish: (ro
     value: playerId,
     timestamp: new Date().toISOString(),
   };
-  publish(`game-${gameId}`, event);
+  publish(event);
   logger.info(`${playerId} can play`);
 }
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitCanAnnonce(playerId: string, gameId: string, publish: (room: string, payload: any) => void) {
+export async function emitCanAnnonce(playerId: string, gameId: string, publish: (payload: any) => void) {
   const event = {
     id: await genIdCuid(),
     type: "can_annonce",
@@ -29,6 +29,6 @@ export async function emitCanAnnonce(playerId: string, gameId: string, publish: 
     value: playerId,
     timestamp: new Date().toISOString(),
   };
-  publish(`game-${gameId}`, event);
+  publish(event);
   logger.info(`${playerId} can annonce`);
 }

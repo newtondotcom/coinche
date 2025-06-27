@@ -6,7 +6,7 @@ import logger from '@/logger';
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitEndRound(gameId: string, publish: (room: string, payload: any) => void) {
+export async function emitEndRound(gameId: string, publish: (payload: any) => void) {
     const controllerInstance = controller.getInstance(gameId);
     const lastRound = controllerInstance.getLastRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;

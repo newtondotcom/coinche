@@ -7,7 +7,7 @@ import genIdCuid from '../../../game/shared/utils/gen_id';
  * @param playerId The player Id starting
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitStartTrick(gameId: string,playerId :string, publish: (room: string, payload: any) => void) {
+export async function emitStartTrick(gameId: string,playerId :string, publish: (payload: any) => void) {
   const event = {
     id: await genIdCuid(),
     type: 'start_trick',
@@ -17,5 +17,5 @@ export async function emitStartTrick(gameId: string,playerId :string, publish: (
     timestamp: new Date().toISOString(),
   };
   logger.info(`[start_trick] Starting trick for player ${playerId} in game ${gameId}`);
-  publish(`game-${gameId}`, event);
+  publish(event);
 } 

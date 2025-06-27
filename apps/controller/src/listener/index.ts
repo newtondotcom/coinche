@@ -7,7 +7,7 @@ import { handlePlayerJoinLeave } from './join_leave';
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function translateEvent(event: EventInsert, publish: (room: string, payload: any) => void) {
+export async function translateEvent(event: EventInsert, publish: (payload: any) => void) {
     switch (event.type) {
         case 'annonce':
             return translateAnnonce(event,publish);
