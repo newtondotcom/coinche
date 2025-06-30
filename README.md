@@ -9,4 +9,7 @@ Coinche / Contrée is a trick-taking card game that involves four players divide
 
 ### Technical choices
 
-Since this is a multiplayer game, I have chosen to work with a real time db and `supabase-js` to suscribe to those. Each of the 4 clients emits events and update locally their ui based on events published by the `controller`.
+Since this is a multiplayer game, I have chosen to work with a [publish-subscribe WebSocket server with Bun](https://bun.sh/guides/websocket/pubsub) and a Postgres db for persistant data such as player score.
+The game is made using [nuxt](https://nuxt.com/).
+
+I would love to port it to native app using [Tauri](https://tauri.app/) and includes paid dlc purchases made possible in app using [PWA](https://whatpwacando.today/payment).
