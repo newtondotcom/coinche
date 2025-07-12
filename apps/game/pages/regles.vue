@@ -217,13 +217,6 @@
                         jouer un atout si l&#39;on en possède (on dit que l’on « coupe »), sinon on
                         se défausse en jouant n&#39;importe quelle carte.
                     </p>
-                    <p>
-                        Précision : Si un adversaire a déjà coupé, et qu’il ne nous reste que des
-                        atouts inférieurs au sien, il n’est
-                        <strong>pas</strong>
-                        obligatoire d’en jouer un (on dit que l’on « ne pisse pas »), on peut se
-                        défausser
-                    </p>
                 </li>
                 <li>
                     <p>
