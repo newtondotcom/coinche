@@ -8,8 +8,8 @@ export async function translateSound(event: EventInsert) {
 
 export function triggerSound(name: string): void {
     // Check if sound is muted before playing
-    const storeAbout = useAboutStore();
-    if (storeAbout.soundMuted) {
+    const { soundMuted } = useSoundSettings();
+    if (soundMuted.value) {
         return;
     }
     

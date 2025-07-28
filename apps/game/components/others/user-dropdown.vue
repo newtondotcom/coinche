@@ -32,12 +32,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const { user, signOut } = useAuth();
-const storeAbout = useAboutStore();
-
-const soundMuted = computed(() => storeAbout.soundMuted);
+const { soundMuted, toggleSoundMuted } = useSoundSettings();
 
 function toggleMute() {
-  storeAbout.setSoundMuted(!storeAbout.soundMuted);
+  toggleSoundMuted();
 }
 
 async function handleSignOut() {

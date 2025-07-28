@@ -12,7 +12,6 @@ export const useAboutStore = defineStore('about', () => {
     const turnToAnnonce = ref<boolean>(false);
 
     const authentificated = ref<boolean>(false);
-    const soundMuted = ref<boolean>(false);
 
     const setTurnToPlay = (value: boolean) => {
         turnToPlay.value = value;
@@ -81,10 +80,6 @@ export const useAboutStore = defineStore('about', () => {
         authentificated.value = value;
     }
 
-    function setSoundMuted(value: boolean) {
-        soundMuted.value = value;
-    }
-
     return {
         myId,
         setMyId,
@@ -109,7 +104,5 @@ export const useAboutStore = defineStore('about', () => {
         setTurnToPlay,
         authentificated,
         setAuthentificated,
-        soundMuted,
-        setSoundMuted,
     };
 });
