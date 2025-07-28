@@ -53,6 +53,9 @@ storeAbout.setGameId(gameId);
 let cleanupListener: (() => void) | null = null;
 
 onMounted(async () => {
+  // Reset loading state for player list
+  storePlayers.resetLoadingState();
+  
   // Connect to WebSocket and set up listener
   getWS();
   
