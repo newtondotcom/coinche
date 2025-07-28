@@ -7,6 +7,12 @@ export async function translateSound(event: EventInsert) {
 }
 
 export function triggerSound(name: string): void {
+    // Check if sound is muted before playing
+    const storeAbout = useAboutStore();
+    if (storeAbout.soundMuted) {
+        return;
+    }
+    
     const sound = new Howl({
         src: `sounds/${name.toLowerCase()}.mp3`,
     });
