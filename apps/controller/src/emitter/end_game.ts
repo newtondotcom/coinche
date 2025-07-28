@@ -7,6 +7,34 @@ import type { IPlayer } from "@coinche/shared";
 import { addPointsTo } from "../points";
 
 /**
+ * Calculate expected score for a player against another team
+ * @param playerRating The player's current rating
+ * @param opponentTeamRating The average rating of the opponent team
+ * @returns Expected score between 0 and 1
+ */
+function calculateExpectedScore(playerRating: number, opponentTeamRating: number): number {
+  const ratingDifference = opponentTeamRating - playerRating;
+  return 1 / (1 + Math.pow(10, ratingDifference / 400));
+}
+
+/**
+ * Calculate new ELO rating for a player
+ * @param currentRating The player's current rating
+ * @param actualScore The actual score (1 for win, 0 for loss)
+ * @param expectedScore The expected score calculated from ratings
+ * @param kFactor The K-factor for rating adjustment (default 32)
+ * @returns The new rating
+ */
+function calculateNewRating(
+  currentRating: number, 
+  actualScore: number, 
+  expectedScore: number, 
+  kFactor: number = 32
+): number {
+  return currentRating + kFactor * (actualScore - expectedScore);
+}
+
+/**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitEndGame(
@@ -37,7 +65,7 @@ export async function distributeRankingPoints(
   publish: (payload: any) => void
 ) {
   const playersIds = players.map((player) => player.id);
-  (players);
+  
   // store in db the finished game
   await supabase.from("Game").insert([
     {
@@ -51,76 +79,72 @@ export async function distributeRankingPoints(
     },
   ]);
 
-  // distribute points
+  // fetch current ratings for all players
   const { data, error } = await supabase
     .from("Points")
     .select("*")
-    .in("playerId", players);
+    .in("playerId", playersIds);
+    
   if (error || !data || data.length !== players.length) {
     logger.error(
       "Error fetching points or missing points data for some players",
       error,
     );
-    //return;
+    return;
   }
 
-  // Mapping players to their points
-  const playerPoints = players.map((playerId) => {
-    const playerData = data?.find((d) => d.playerId === playerId);
+  // Mapping players to their points (MMR/ELO ratings)
+  const playerRatings = playersIds.map((playerId) => {
+    const playerData = data.find((d) => d.playerId === playerId);
     if (playerData) {
       return playerData.points;
     } else {
-      return 0;
+      return 1200; // Default starting rating
     }
   });
 
-  if (playerPoints.includes(undefined)) {
+  if (playerRatings.includes(undefined)) {
     console.error("Some players have missing points data.");
     return;
   }
 
-  const mmrT1 = (playerPoints[0] + playerPoints[2]) / 2;
-  const mmrT2 = (playerPoints[1] + playerPoints[3]) / 2;
-  const diffMMR = Math.abs(mmrT1 - mmrT2);
-  const team1Win = team1Score > team2Score;
-
-  // Points adjustment based on game result
-  const adjustPoints = (playerIdx: number, adjustment: number) =>
-    addPointsTo(adjustment, playersIds[playerIdx]);
-
-  if (team1Win) {
-    if (mmrT1 < mmrT2) {
-      // TEAM 1
-      adjustPoints(0, 10 + diffMMR / 20);
-      adjustPoints(2, 10 + diffMMR / 20);
-      // TEAM 2
-      adjustPoints(3, -10 - diffMMR / 20);
-      adjustPoints(1, -10 - diffMMR / 20);
-    } else {
-      // TEAM 1
-      adjustPoints(0, 10 - diffMMR / 20);
-      adjustPoints(2, 10 - diffMMR / 20);
-      // TEAM 2
-      adjustPoints(3, -10 + diffMMR / 20);
-      adjustPoints(1, -10 + diffMMR / 20);
-    }
-  } else {
-    if (mmrT1 < mmrT2) {
-      // TEAM 1
-      adjustPoints(0, -10 + diffMMR / 20);
-      adjustPoints(2, -10 + diffMMR / 20);
-      // TEAM 2
-      adjustPoints(3, 10 - diffMMR / 20);
-      adjustPoints(1, 10 - diffMMR / 20);
-    } else {
-      // TEAM 1
-      adjustPoints(0, -10 - diffMMR / 20);
-      adjustPoints(2, -10 - diffMMR / 20);
-      // TEAM 2
-      adjustPoints(3, 10 + diffMMR / 20);
-      adjustPoints(1, 10 + diffMMR / 20);
-    }
-  }
+  // Team configurations: Team 1 = players 0,2 | Team 2 = players 1,3
+  const team1Players = [0, 2];
+  const team2Players = [1, 3];
+  
+  // Calculate team average ratings
+  const team1AvgRating = (playerRatings[0] + playerRatings[2]) / 2;
+  const team2AvgRating = (playerRatings[1] + playerRatings[3]) / 2;
+  
+  // Determine game outcome
+  const team1Won = team1Score > team2Score;
+  
+  // K-factor for rating adjustment (you can adjust this value)
+  // K=32 is standard, K=16 for experienced players, K=10 for masters
+  const kFactor = 32;
+  
+  // Calculate new ratings for each player individually
+  team1Players.forEach((playerIndex) => {
+    const currentRating = playerRatings[playerIndex];
+    const expectedScore = calculateExpectedScore(currentRating, team2AvgRating);
+    const actualScore = team1Won ? 1 : 0;
+    const newRating = calculateNewRating(currentRating, actualScore, expectedScore, kFactor);
+    const ratingChange = newRating - currentRating;
+    
+    // Apply the rating change
+    addPointsTo(ratingChange, playersIds[playerIndex]);
+  });
+  
+  team2Players.forEach((playerIndex) => {
+    const currentRating = playerRatings[playerIndex];
+    const expectedScore = calculateExpectedScore(currentRating, team1AvgRating);
+    const actualScore = team1Won ? 0 : 1;
+    const newRating = calculateNewRating(currentRating, actualScore, expectedScore, kFactor);
+    const ratingChange = newRating - currentRating;
+    
+    // Apply the rating change
+    addPointsTo(ratingChange, playersIds[playerIndex]);
+  });
 }
 
 /**
