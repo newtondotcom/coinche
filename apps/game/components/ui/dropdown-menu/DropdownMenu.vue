@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { DropdownMenuRoot, type DropdownMenuRootProps } from 'radix-vue'
+import { DropdownMenuRoot, type DropdownMenuRootEmits, type DropdownMenuRootProps, useForwardPropsEmits } from 'reka-ui'
 
-interface Props extends DropdownMenuRootProps {}
+const props = defineProps<DropdownMenuRootProps>()
+const emits = defineEmits<DropdownMenuRootEmits>()
 
-defineOptions({
-  inheritAttrs: false,
-})
-
-const props = withDefaults(defineProps<Props>(), {})
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
-  <DropdownMenuRoot v-bind="props">
+  <DropdownMenuRoot
+    data-slot="dropdown-menu"
+    v-bind="forwarded"
+  >
     <slot />
   </DropdownMenuRoot>
 </template>
