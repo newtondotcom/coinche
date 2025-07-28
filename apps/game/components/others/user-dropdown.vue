@@ -1,13 +1,11 @@
 <template>
   <DropdownMenu>
-    <DropdownMenuTrigger as-child>
-      <Button variant="secondary" class="flex items-center gap-2">
+    <DropdownMenuTrigger class="flex items-center gap-2">
         <User class="h-4 w-4" />
         {{ user?.name || 'Utilisateur' }}
         <ChevronDown class="h-4 w-4" />
-      </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
+    <DropdownMenuContent>
       <DropdownMenuItem @click="toggleMute" class="flex items-center gap-2">
         <component :is="soundMuted ? VolumeX : Volume2" class="h-4 w-4" />
         {{ soundMuted ? 'Activer le son' : 'Désactiver le son' }}
