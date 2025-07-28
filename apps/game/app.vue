@@ -31,9 +31,10 @@
           </h2>
         </NuxtLink>
       </div>
-      <div class="flex flex-row">
+      <div class="flex flex-row items-center gap-2">
         <CoincheInterfaceColorMode />
-        <OthersAuth />
+        <OthersUserDropdown v-if="loggedIn" />
+        <OthersAuth v-else />
       </div>
     </header>
     <Separator />
