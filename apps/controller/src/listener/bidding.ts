@@ -9,6 +9,19 @@ import { emitBid } from '@/emitter/bid';
 
 export default async function translateBidding(event: EventInsert, publish: (payload: any) => void) {
     const bid = deformatBidding(event.value as string, event.playerId);
+    
+    // Update coinche/surcoinche state based on special bid values
+    const controllerInstance = controller.getInstance(event.gameId);
+    const lastRound = controllerInstance.getLastRound();
+    
+    if (bid.bidding === 251 || bid.bidding === 501) {
+        // Coinché bid
+        lastRound.coinched = true;
+    } else if (bid.bidding === 252 || bid.bidding === 502) {
+        // Surcoinché bid
+        lastRound.surcoinched = true;
+    }
+    
     controller.getInstance(event.gameId).addbidding(bid);
     await emitBid(bid,event.gameId,publish);
     const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);

@@ -29,7 +29,7 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
         });
 
         if (isSuccessful) {
-            // Return the exact bid value since coinche status is already included
+            // Return the exact bid value since coinche status is already included for special bids
             return bidding;
         }
         return 0;
@@ -42,8 +42,8 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
                 : parseInt(seuilbidding.bidding, 10);
 
         if (
-            (teamAnnounced === 1 && lastRound.team1_point_current_game > biddingValue) ||
-            (teamAnnounced === 2 && lastRound.team2_point_current_game > biddingValue)
+            (teamAnnounced === 1 && lastRound.team1_point_current_game >= biddingValue) ||
+            (teamAnnounced === 2 && lastRound.team2_point_current_game >= biddingValue)
         ) {
             // bidding validée
             return biddingValue * pointMultiplier;
@@ -58,10 +58,10 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
 
     if (teamAnnounced === 1) {
         if (typeof seuilbidding.bidding === 'number' && seuilbidding.bidding >= 250) {
-            // Special bid (250-252 for capot, 500-502 for générale)
+            // Special bid (250-252 for capot, 500-502 for générale) - use exact value
             scoreTeam1 = calculateSpecialBidScore(seuilbidding.bidding);
         } else {
-            // Regular bid
+            // Regular bid (80-160) - use traditional multiplier
             scoreTeam1 = calculateDefaultScore();
             if (scoreTeam1 < 0) {
                 scoreTeam2 = -scoreTeam1;
@@ -70,10 +70,10 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
         }
     } else {
         if (typeof seuilbidding.bidding === 'number' && seuilbidding.bidding >= 250) {
-            // Special bid (250-252 for capot, 500-502 for générale)
+            // Special bid (250-252 for capot, 500-502 for générale) - use exact value
             scoreTeam2 = calculateSpecialBidScore(seuilbidding.bidding);
         } else {
-            // Regular bid
+            // Regular bid (80-160) - use traditional multiplier
             scoreTeam2 = calculateDefaultScore();
             if (scoreTeam2 < 0) {
                 scoreTeam1 = -scoreTeam2;

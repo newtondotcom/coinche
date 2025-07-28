@@ -1,5 +1,4 @@
 import translateBidding from '@/listener/bidding';
-import { translateCoinche, translateSurcoinche } from '@/listener/coinche';
 import translatePlay from '@/listener/play';
 import type { EventInsert } from '@coinche/shared';
 import { handlePlayerJoinLeave } from './join_leave';
@@ -11,10 +10,6 @@ export async function translateEvent(event: EventInsert, publish: (payload: any)
     switch (event.type) {
         case 'bidding':
             return translateBidding(event,publish);
-        case 'coinche':
-            return translateCoinche(event,publish);
-        case 'surcoinche':
-            return translateSurcoinche(event,publish);
         case 'play':
             return translatePlay(event,publish);
         case 'join':

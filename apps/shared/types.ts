@@ -44,6 +44,8 @@ export interface IRound {
     team1_point_current_game: number;
     team2_point_current_game: number;
     last_bidding: Ibidding;
+    coinched: boolean;
+    surcoinched: boolean;
 }
 
 export interface IPli {

@@ -377,7 +377,7 @@
                             <em>Leur total</em>
                             +
                             <em>
-                                Le montant du contrat demandé (250 points pour un capot demandé)
+                                Le montant du contrat demandé (250 points pour un capot non coinché, 251 pour coinché, 252 pour surcoinché, ou 500 points pour une générale non coinchée, 501 pour coinchée, 502 pour surcoinchée)
                             </em>
                             .
                         </li>
@@ -393,7 +393,7 @@
             <p>
                 Cas particulier : si un capot est réalisé par les preneurs, les biddings des
                 défenseurs changent de main et sont marqués par les preneurs, et ce, que le capot
-                ait été demandé lors des enchères ou non.
+                ait été demandé lors des enchères ou non. Les points accordés dépendent du type d'enchère (250-252 pour capot, 500-502 pour générale).
             </p>
             <ul>
                 <li>
@@ -402,7 +402,7 @@
                         <li>
                             <strong>Les preneurs marquent</strong>
                             : (
-                            <em>160 points (ou 250 points si capot réalisé, même non demandé)</em>
+                            <em>160 points (ou 250-252 points pour capot, 500-502 points pour générale)</em>
                             +
                             <em>Leurs biddings</em>
                             +
@@ -411,7 +411,7 @@
                             <em>Les biddings des défenseurs qui changent de main</em>
                             +
                             <em>
-                                Le montant du contrat demandé (250 points pour un capot demandé)
+                                Le montant du contrat demandé (selon l'enchère spéciale)
                             </em>
                             ) × 2 (resp.4)
                         </li>
@@ -450,7 +450,7 @@
                     +
                     <em>Les biddings des preneurs qui changent de main</em>
                     +
-                    <em>Le montant du contrat demandé (250 points pour un capot demandé)</em>
+                    <em>Le montant du contrat demandé (selon l'enchère spéciale : 250-252 pour capot, 500-502 pour générale)</em>
                     .
                 </li>
             </ul>

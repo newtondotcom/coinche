@@ -1,8 +1,4 @@
 import translateBidding from "@/shared/listener/bidding";
-import {
-  translateCoinche,
-  translateSurcoinche,
-} from "@/shared/listener/coinche";
 import { translateDealing } from "@/shared/listener/distribution";
 import { translateEndDistribution } from "@/shared/listener/end_distribution";
 import { translateEndGame } from "@/shared/listener/end_game";
@@ -39,10 +35,6 @@ export function handleWSEvent(event: any) {
   switch (event.type) {
     case "bid":
       return translateBidding(event);
-    case "coinche":
-      return translateCoinche(event);
-    case "surcoinche":
-      return translateSurcoinche(event);
     case "play":
       return translatePlay(event);
     case "end_game":
