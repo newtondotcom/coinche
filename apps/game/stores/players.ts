@@ -2,6 +2,7 @@ import type { Ibidding, ICard, IPlayer, PlayerPosition } from '@coinche/shared';
 
 export const usePlayersStore = defineStore('players', () => {
     const players = ref<IPlayer[]>([]);
+    const isLoadingPlayerList = ref<boolean>(true);
 
     function removeCard(card: ICard, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
@@ -23,6 +24,11 @@ export const usePlayersStore = defineStore('players', () => {
 
     function setPlayers(newPlayers: IPlayer[]) {
         players.value = newPlayers;
+        isLoadingPlayerList.value = false;
+    }
+
+    function resetLoadingState() {
+        isLoadingPlayerList.value = true;
     }
 
     function setLastbidding(bidding: Ibidding, playerId: string) {
@@ -48,6 +54,7 @@ export const usePlayersStore = defineStore('players', () => {
 
     return {
         players,
+        isLoadingPlayerList,
         team1,
         team2,
         removeCard,
@@ -55,5 +62,6 @@ export const usePlayersStore = defineStore('players', () => {
         addPlayer,
         setPlayers,
         setLastbidding,
+        resetLoadingState,
     };
 });
