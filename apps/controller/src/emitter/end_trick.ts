@@ -13,10 +13,11 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     const seuilbidding = lastRound.last_bidding;
     const teamAnnounced = controllerInstance.isTeam1(seuilbidding.playerId) ? 1 : 2;
 
-    const calculateCapotGeneraleScore = (bidding: string) => {
+    const calculateSpecialBidScore = (bidding: number) => {
         const plis = lastRound.plis;
         let isSuccessful = true;
 
+        // For special bids (250+ or 500+), check if all tricks are won by the same team
         plis.forEach((pli) => {
             const winnerPli = findWinner(pli.plays, gameId);
             if (
@@ -28,7 +29,8 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
         });
 
         if (isSuccessful) {
-            return bidding === 'capot' ? 250 * pointMultiplier : 500 * pointMultiplier;
+            // Return the exact bid value since coinche status is already included
+            return bidding;
         }
         return 0;
     };
@@ -55,32 +57,28 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     let scoreTeam2 = 0;
 
     if (teamAnnounced === 1) {
-        switch (seuilbidding.bidding) {
-            case 'capot':
-            case 'generale':
-                scoreTeam1 = calculateCapotGeneraleScore(seuilbidding.bidding);
-                break;
-            default:
-                scoreTeam1 = calculateDefaultScore();
-                if (scoreTeam1 < 0) {
-                    scoreTeam2 = -scoreTeam1;
-                    scoreTeam1 = 0;
-                }
-                break;
+        if (typeof seuilbidding.bidding === 'number' && seuilbidding.bidding >= 250) {
+            // Special bid (250-252 for capot, 500-502 for générale)
+            scoreTeam1 = calculateSpecialBidScore(seuilbidding.bidding);
+        } else {
+            // Regular bid
+            scoreTeam1 = calculateDefaultScore();
+            if (scoreTeam1 < 0) {
+                scoreTeam2 = -scoreTeam1;
+                scoreTeam1 = 0;
+            }
         }
     } else {
-        switch (seuilbidding.bidding) {
-            case 'capot':
-            case 'generale':
-                scoreTeam2 = calculateCapotGeneraleScore(seuilbidding.bidding);
-                break;
-            default:
-                scoreTeam2 = calculateDefaultScore();
-                if (scoreTeam2 < 0) {
-                    scoreTeam1 = -scoreTeam2;
-                    scoreTeam2 = 0;
-                }
-                break;
+        if (typeof seuilbidding.bidding === 'number' && seuilbidding.bidding >= 250) {
+            // Special bid (250-252 for capot, 500-502 for générale)
+            scoreTeam2 = calculateSpecialBidScore(seuilbidding.bidding);
+        } else {
+            // Regular bid
+            scoreTeam2 = calculateDefaultScore();
+            if (scoreTeam2 < 0) {
+                scoreTeam1 = -scoreTeam2;
+                scoreTeam2 = 0;
+            }
         }
     }
 

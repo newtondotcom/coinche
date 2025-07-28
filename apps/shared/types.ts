@@ -9,7 +9,7 @@ export type CardSuite =
     | 'sans-atout'
     | 'NA';
 export type CardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
-export type bidding = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 'capot' | 'generale';
+export type bidding = 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 250 | 251 | 252 | 500 | 501 | 502;
 export type PlayerPosition = 0 | 1 | 2 | 3;
 export type PlayerId = string;
 
@@ -44,8 +44,6 @@ export interface IRound {
     team1_point_current_game: number;
     team2_point_current_game: number;
     last_bidding: Ibidding;
-    coinched: boolean;
-    surcoinched: boolean;
 }
 
 export interface IPli {
@@ -79,8 +77,6 @@ export type Event =
     | 'distribution'
     | 'start_bidding'
     | 'bidding'
-    | 'coinche'
-    | 'surcoinche'
     | 'play'
     | 'error'
     | 'win_game'
