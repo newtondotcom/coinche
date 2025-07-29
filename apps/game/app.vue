@@ -62,15 +62,6 @@ const {loggedIn} = useAuth();
 // Check if current page is the game page
 const isGamePage = computed(() => route.path === '/partie');
 
-// Initialize turn notifications (only on game page)
-if (process.client) {
-  watchEffect(() => {
-    if (isGamePage.value && loggedIn.value) {
-      useTurnNotifications();
-    }
-  });
-}
-
 useSeoMeta({
   title: "Coinche.n7",
   ogTitle: "Le meilleur site de coinche en ligne",
