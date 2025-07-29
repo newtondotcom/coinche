@@ -6,11 +6,11 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npx turbo run dev",
-    "build": "npx turbo run build",
-    "lint": "npx turbo run lint",
-    "lint:fix": "npx turbo run lint:fix",
-    "turbo:clean": "npx turbo run clean"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "turbo:clean": "turbo run clean"
   },
   "devDependencies": {
     "turbo": "^2.5.5"
