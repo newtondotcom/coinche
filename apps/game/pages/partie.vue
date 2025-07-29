@@ -77,6 +77,11 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to join game:', error);
   }
+  
+  // Initialize turn notifications for logged in users
+  // if (loggedIn.value) {
+  useTurnNotifications();
+  // }
 
   // Set up beforeunload handler for non-dev environments
   if (!isDevEnv(config)) {

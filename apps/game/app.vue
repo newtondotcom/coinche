@@ -3,7 +3,7 @@
     <OthersHeader />
     <Separator />
     <NuxtPage />
-    <footer />
+    <OthersFooter v-if="!isGamePage" />
 
     <OthersDevEnv v-if="isDevEnv(config)" />
   </div>
@@ -19,6 +19,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { isDevEnv } from "@/shared/utils/miscs";
 
 const config = useRuntimeConfig();
+const route = useRoute();
+
+const {loggedIn} = useAuth();
+
+// Check if current page is the game page
+const isGamePage = computed(() => route.path === '/partie');
 
 useSeoMeta({
   title: "Coinche.n7",
