@@ -10,6 +10,10 @@
         <component :is="soundMuted ? VolumeX : Volume2" class="h-4 w-4" />
         {{ soundMuted ? 'Activer le son' : 'Désactiver le son' }}
       </DropdownMenuItem>
+      <DropdownMenuItem @click="toggleNotifications" class="flex items-center gap-2">
+        <component :is="notificationsMuted ? BellOff : Bell" class="h-4 w-4" />
+        {{ notificationsMuted ? 'Activer les notifications' : 'Désactiver les notifications' }}
+      </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click="handleSignOut" class="flex items-center gap-2 text-red-600">
         <LogOut class="h-4 w-4" />
@@ -20,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { User, ChevronDown, LogOut, Volume2, VolumeX } from 'lucide-vue-next';
+import { User, ChevronDown, LogOut, Volume2, VolumeX, Bell, BellOff } from 'lucide-vue-next';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,10 +34,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const { user, signOut } = useAuth();
-const { soundMuted, toggleSoundMuted } = useSoundSettings();
+const { soundMuted, notificationsMuted, toggleSoundMuted, toggleNotificationsMuted } = useSoundSettings();
 
 function toggleMute() {
   toggleSoundMuted();
+}
+
+function toggleNotifications() {
+  toggleNotificationsMuted();
 }
 
 async function handleSignOut() {
