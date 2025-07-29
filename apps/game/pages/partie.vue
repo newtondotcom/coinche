@@ -54,9 +54,9 @@ onMounted(async () => {
   join();
   
   // Initialize turn notifications for logged in users
-  if (loggedIn.value) {
+  // if (loggedIn.value) {
     useTurnNotifications();
-  }
+  // }
   
   if (!isDevEnv(config)) {
     window.onbeforeunload = (event: BeforeUnloadEvent) => {
