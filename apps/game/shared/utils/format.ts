@@ -1,19 +1,19 @@
 import type {
-  Annonce,
+  bidding,
   CardSuite,
   CardValue,
-  IAnnonce,
+  Ibidding,
   ICard,
 } from "@coinche/shared/types";
 
-export function formatAnnonce(annonce: IAnnonce): string {
-  return `${annonce.annonce}|${annonce.suite}`;
+export function formatbidding(bidding: Ibidding): string {
+  return `${bidding.bidding}|${bidding.suite}`;
 }
 
-export function deformatAnnonce(annonce: string, playerId: string): IAnnonce {
-  const [annonceValue, suite] = annonce.split("|");
+export function deformatBidding(bidding: string, playerId: string): Ibidding {
+  const [biddingValue, suite] = bidding.split("|");
   return {
-    annonce: parseInt(annonceValue) as Annonce,
+    bidding: parseInt(biddingValue) as bidding,
     suite: suite as CardSuite,
     playerId: playerId,
   };

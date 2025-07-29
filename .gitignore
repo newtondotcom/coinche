@@ -1,4 +1,7 @@
 node_modules
-bun.lockb
-.DS_Store
-.vercel
+.turbo
+
+**/.DS_Store
+.vscode/**
+
+.github/workflows/.env

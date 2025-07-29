@@ -1,14 +1,14 @@
 import { distributeRankingPoints, emitEndGame } from "@/emitter/end_game";
-import { emitEndRound } from "@/emitter/end_round";
 import { emitPoints } from "@/emitter/points";
 import { startPli } from "@/emitter/start_pli";
-import { emitRoundStarting } from "@/emitter/start_round";
 import controller from "@/game";
 import supabase from "@/supabase";
 import { dev } from "@/utils";
 import { formatTeam } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 import type { IPlay, IPlayer } from "@coinche/shared";
+import { emitStartTrick } from "./start_trick";
+import { emitEndTrick } from "./end_trick";
 
 let scoreToReach: number;
 if (dev) {
@@ -17,16 +17,20 @@ if (dev) {
   scoreToReach = 1000;
 }
 
-export async function closePli(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function closePli(gameId: string, publish: (payload: any) => void) {
   const game = controller.getInstance(gameId).game;
   const lastPli = controller.getInstance(gameId).getLastPli();
   // find the winner
   const pastPlis: IPlay[] = lastPli.plays;
   const winnerPlayerId = findWinner(pastPlis, gameId);
-  const myIndex = game.players.findIndex(
+  const players: IPlayer[] = Array.from(controller.getInstance(gameId).getPlayers());
+  const myIndex = players.findIndex(
     (player: IPlayer) => player.id === winnerPlayerId,
   );
-  const teamMatePlayerId = game.players[(myIndex + 2) % 4].id;
+  const teamMatePlayerId = players[(myIndex + 2) % 4].id;
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
@@ -48,19 +52,20 @@ export async function closePli(gameId: string) {
     scoreTeam1;
   controller.getInstance(gameId).getLastRound().team2_point_current_game +=
     scoreTeam2;
-  await emitPoints(scoreTeam1, scoreTeam2, gameId);
+  await emitPoints(scoreTeam1, scoreTeam2, gameId, publish);
 
   // end of the round
   if (game.deck.length === 32) {
-    await emitEndRound(gameId);
+    await emitEndTrick(gameId, publish);
     // end of the game
     if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
-      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
+      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId, publish);
       await distributeRankingPoints(
-        game.players,
+        Array.from(controller.getInstance(gameId).getPlayers()),
         gameId,
         game.team1_score,
         game.team2_score,
+        publish
       );
       controller.deleteInstance(gameId);
     } else {
@@ -69,12 +74,12 @@ export async function closePli(gameId: string) {
       // fetch the last player starting id
       const playerId = await fetchLastPliPlayerWinningId(gameId);
       // emit the game starting event
-      await emitRoundStarting(gameId, playerId);
+      await emitStartTrick(gameId, playerId, publish);
     }
   } else {
     // next pli
     controller.getInstance(gameId).addPli(winnerPlayerId);
-    await startPli(gameId);
+    await startPli(gameId, publish);
   }
 
   return;
@@ -82,7 +87,7 @@ export async function closePli(gameId: string) {
 
 export function findWinner(lastPliEvents: IPlay[], gameId: string) {
   const atout = controller.getInstance(gameId).getLastRound()
-    .last_annonce.suite;
+    .last_bidding.suite;
   if (lastPliEvents.some((pli) => pli.card.suite === atout)) {
     // atout is played
     const atoutCards = lastPliEvents.filter((pli) => pli.card.suite === atout);
@@ -115,18 +120,22 @@ export async function fetchLastPliPlayerWinningId(
   const { data: events, error } = await supabase
     .from("Events")
     .select("value")
-    .eq("type", "start_round")
+    .eq("type", "start_trick")
     .eq("gameId", gameId);
   if (error) {
     console.error(error);
     return " ";
   }
   const playerStartedId = events[0].value;
-  const playerStartedIndex = controller
-    .getInstance(gameId)
-    .game.players.findIndex((player) => player.id === playerStartedId);
-  const playerStartingIndex = (playerStartedIndex + 1) % 4;
-  const playerId =
-    controller.getInstance(gameId).game.players[playerStartingIndex].id;
+  const players: { id: string }[] = (controller.getInstance(gameId).game as any).players;
+  if (!players || !Array.isArray(players)) {
+    throw new Error("Players array not found in game instance");
+  }
+  const playerStartedIndex = players.findIndex((player) => player.id === playerStartedId);
+  if (playerStartedIndex === -1) {
+    throw new Error("Starting player not found in players array");
+  }
+  const playerStartingIndex = (playerStartedIndex + 1) % players.length;
+  const playerId = players[playerStartingIndex].id;
   return playerId;
 }

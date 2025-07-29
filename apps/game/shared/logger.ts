@@ -1,3 +1,4 @@
+/*
 import winston from "winston";
 
 // Create a logger
@@ -15,7 +16,7 @@ const logger = winston.createLogger({
 
 // Add console transport in non-production environments
 if (process.env.NODE_ENV == "NODE_ENV") {
-  logger.add(
+  console.add(
     new winston.transports.Console({
       format: winston.format.simple(),
     }),
@@ -24,3 +25,4 @@ if (process.env.NODE_ENV == "NODE_ENV") {
 
 // Export the logger
 export default logger;
+*/

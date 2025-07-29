@@ -7,7 +7,7 @@
 
         Distributing : {{ storeAbout.timeDistrib }}
         <br />
-        Announcing : {{ storeAbout.timeToAnnonce }}
+        Announcing : {{ storeAbout.timeTobidding }}
         <br />
         Player starting : {{ storeGame.player_starting_id }}
         <br />

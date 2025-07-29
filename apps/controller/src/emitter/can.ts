@@ -1,29 +1,34 @@
 import logger from "@/logger";
-import supabase from "@/supabase";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 
-export async function emitCanPlay(playerId: string, gameId: string) {
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "can_play",
-      playerId: "controller",
-      gameId: gameId,
-      value: playerId,
-    },
-  ]);
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function emitCanPlay(playerId: string, gameId: string, publish: (payload: any) => void) {
+  const event = {
+    id: await genIdCuid(),
+    type: "can_play",
+    playerId: "controller",
+    gameId: gameId,
+    value: playerId,
+    timestamp: new Date().toISOString(),
+  };
+  publish(event);
   logger.info(`${playerId} can play`);
 }
 
-export async function emitCanAnnonce(playerId: string, gameId: string) {
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "can_annonce",
-      playerId: "controller",
-      gameId: gameId,
-      value: playerId,
-    },
-  ]);
-  logger.info(`${playerId} can annonce`);
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function emitCanBid(playerId: string, gameId: string, publish: (payload: any) => void) {
+  const event = {
+    id: await genIdCuid(),
+    type: "can_bid",
+    playerId: "controller",
+    gameId: gameId,
+    value: playerId,
+    timestamp: new Date().toISOString(),
+  };
+  publish(event);
+  logger.info(`${playerId} can bidding`);
 }

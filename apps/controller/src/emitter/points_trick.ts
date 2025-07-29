@@ -4,7 +4,7 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitPoints(
+export async function emitPointsTrick(
   scoreTeam1: number,
   scoreTeam2: number,
   gameId: string,
@@ -12,7 +12,7 @@ export async function emitPoints(
 ) {
   const event = {
     id: await genIdCuid(),
-    type: "score",
+    type: "score_trick",
     playerId: "controller",
     gameId: gameId,
     value: formatPoints(scoreTeam1, scoreTeam2),

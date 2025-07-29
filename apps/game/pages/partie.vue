@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!--<CoincheInterfaceDebug />-->
+    <CoincheInterfaceDebug />
     <CoincheDeck />
 
     <OthersSoundboard />
 
     <CoincheRiver />
 
-    <CoincheInterfaceAnnonces v-if="storeAbout.timeToAnnonce" />
+    <CoincheInterfaceBiddings v-if="storeAbout.timeTobidding" />
 
     <div
       v-if="storePlayers.players.length == 4"
@@ -17,7 +17,7 @@
       <CoincheInterfaceTurn />
     </div>
 
-    <CoincheInterfaceSavedAnnonce v-if="storeGame.last_annonce.suite != 'NA'" />
+    <CoincheInterfaceSavedBidding v-if="storeGame.last_bidding.suite != 'NA'" />
 
     <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
   </div>
@@ -25,18 +25,17 @@
 
 <script setup lang="ts">
 import { join, leave } from "@/shared/emitter/join";
-import translateEvent from "@/shared/utils/listener";
-import { createClient } from "@supabase/supabase-js";
+import { handleWSEvent } from "@/shared/utils/listener";
 import { isDevEnv } from "@/shared/utils/miscs";
-import type { EventInsert } from "@coinche/shared";
-const { loggedIn} = useAuth();
+import { getWS, onWSMessage, sendWS, closeWS } from "~/shared/utils/ws";
 
-const config = useRuntimeConfig();
-
+const { loggedIn } = useAuth();
 const storeGame = useGameStore();
 const storePlayers = usePlayersStore();
 const storeAbout = useAboutStore();
 const route = useRoute();
+const config = useRuntimeConfig();
+
 const id = route.query.id as string;
 const gameId = route.query.gameId as string;
 
@@ -46,18 +45,45 @@ const isIframe = typeof window !== 'undefined' && window.self !== window.top;
 if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
   navigateTo("/404");
 }
+
 storeAbout.setMyId(id);
 storeAbout.setGameId(gameId);
 
+// Store cleanup function for WebSocket listener
+let cleanupListener: (() => void) | null = null;
+
 onMounted(async () => {
-  await startListening();
-  join();
+  // Reset loading state for player list
+  storePlayers.resetLoadingState();
+  
+  // Connect to WebSocket and set up listener
+  getWS();
+  
+  // Set up message listener with cleanup function
+  cleanupListener = onWSMessage((event) => {
+    console.log('Received WebSocket event:', event.type);
+    
+    handleWSEvent(event);
+    if (event.gameId === gameId) {
+      //
+    } else {
+      //console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
+    }
+  });
+
+  // Send join event
+  try {
+    join();
+  } catch (error) {
+    console.error('Failed to join game:', error);
+  }
   
   // Initialize turn notifications for logged in users
   // if (loggedIn.value) {
-    useTurnNotifications();
+  useTurnNotifications();
   // }
-  
+
+  // Set up beforeunload handler for non-dev environments
   if (!isDevEnv(config)) {
     window.onbeforeunload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -67,30 +93,31 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(async () => {
-  leave();
+  try {
+    // Send leave event
+    sendWS({ type: "leave_game", gameId });
+    leave();
+  } catch (error) {
+    console.error('Failed to send leave event:', error);
+  }
+  
+  // Clean up WebSocket listener
+  if (cleanupListener) {
+    cleanupListener();
+    cleanupListener = null;
+  }
+  
+  // Remove beforeunload handler
+  if (!isDevEnv(config)) {
+    window.onbeforeunload = null;
+  }
 });
 
-async function startListening() {
-  const config = useRuntimeConfig();
-  const supabase = createClient(
-    config.public.SUPABASE_URL,
-    config.public.SUPABASE_ANON_KEY,
-  );
-
-  const handleInserts = (payload: EventInsert) => {
-    const event = payload.new as EventInsert;
-    if (event.gameId == gameId) {
-      translateEvent(event);
-    }
-  };
-
-  supabase
-    .channel(gameId)
-    .on(
-      "postgres_changes",
-      { event: "INSERT", schema: "public", table: "Events" },
-      handleInserts,
-    )
-    .subscribe();
-}
+// Clean up on route change as well
+onBeforeRouteLeave(() => {
+  if (cleanupListener) {
+    cleanupListener();
+    cleanupListener = null;
+  }
+});
 </script>

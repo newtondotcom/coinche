@@ -3,17 +3,18 @@
     "module": "index.ts",
     "type": "module",
     "devDependencies": {
-        "@types/bun": "latest"
+        "@types/bun": "latest",
+        "typescript": "^5.8.3"
     },
     "scripts": {
-        "dev": "bun run index.ts",
-        "watch": "npx tsc -w"
+        "build": "tsc && tsc-alias",
+        "check-types": "tsc --noEmit",
+        "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+        "dev": "bun run --hot src/index.ts"
     },
     "dependencies": {
-        "@coinche/shared": "workspace:shared",
-        "@supabase/supabase-js": "^2.50.0",
-        "@types/node": "^22.15.32",
-        "arctic": "^3.7.0",
+        "@coinche/shared": "file:../shared",
+        "@types/node": "^22.16.5",
         "winston": "^3.17.0"
     }
 }

@@ -2,7 +2,10 @@ import supabase from "@/supabase";
 import { formatPoints } from "@coinche/game";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 
-export async function emitGameCreation(gameId: string) {
+/**
+ * @param publish A function to publish to the WebSocket room (publish(room, payload))
+ */
+export async function emitGameCreation(gameId: string, publish: (payload: any) => void) {
   // Check if there are any events for this gameId
   const { data: existingEvents, error: selectError } = await supabase
     .from("Events")
@@ -30,7 +33,7 @@ export async function emitGameCreation(gameId: string) {
       await supabase.from("Events").insert([
         {
           id: await genIdCuid(),
-          type: "annonce",
+          type: "bidding",
           playerId: "controller",
           gameId: gameId,
           value: formatPoints(0, 0),

@@ -1,4 +1,4 @@
-import { supabase } from '@/shared/utils/listener';
+import { sendWS } from '~/shared/utils/ws';
 import { formatCarteToPlay } from '@/shared/utils/format';
 import genIdCuid from '~/shared/utils/gen_id';
 import type { CardSuite, CardValue, ICard } from '@coinche/shared';
@@ -6,15 +6,14 @@ import type { CardSuite, CardValue, ICard } from '@coinche/shared';
 export async function emitCardPlay(card: ICard) {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
-    await supabase.from('Events').insert([
-        {
-            id: await genIdCuid(),
-            type: 'play',
-            playerId: storeAbout.myId,
-            gameId: storeAbout.gameId,
-            value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
-        },
-    ]);
+    sendWS({
+        id: await genIdCuid(),
+        type: 'play',
+        playerId: storeAbout.myId,
+        gameId: storeAbout.gameId,
+        value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
+        timestamp: new Date().toISOString(),
+    });
     storeAbout.setTurnToPlay(false);
 }
 
