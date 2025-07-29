@@ -2,16 +2,10 @@
   "name": "coinche",
   "private": "true",
   "type": "module",
-  "packageManager": "npm@10.0.0",
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules apps/game/node_modules apps/controller/node_modules bun.lockb apps/game/bun.lockb apps/controller/bun.lockb",
-    "vercel": "cd apps/game && sh ./merge.sh",
-    "format": "prettier --write .",
-    "game": "cd apps/game && bun dev",
-    "controller": "cd apps/controller && bun dev",
     "dev": "npx turbo run dev",
     "build": "npx turbo run build",
     "lint": "npx turbo run lint",
@@ -20,8 +14,5 @@
   },
   "devDependencies": {
     "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "better-sqlite3": "^11.10.0"
   }
 }
