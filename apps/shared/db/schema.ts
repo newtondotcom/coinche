@@ -18,6 +18,7 @@ export const user = pgTable("User", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   banned: boolean("banned").notNull().default(false),
+  username: text("username").notNull().unique(),
 });
 
 export const session = pgTable("Session", {
