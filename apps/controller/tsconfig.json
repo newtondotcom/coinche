@@ -8,7 +8,12 @@
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["bun-types", "node"]
+    "types": ["bun-types", "node","bun"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+          },
+    "outDir": "./dist",
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "dist"]

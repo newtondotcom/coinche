@@ -8,9 +8,5 @@
     },
     "dependencies": {
         "@paralleldrive/cuid2": "^2.2.2"
-    },
-    "scripts": {
-        "build": "npx tsc --build",
-        "supabase-types": "bunx supabase gen types typescript --project-id 'kywihgqwpyfierzrvosx' --schema public > database.types.ts"
     }
 }

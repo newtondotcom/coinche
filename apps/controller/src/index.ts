@@ -1,6 +1,6 @@
-import logger from '@/logger';
-import { translateEvent } from './src/listener';
+import { translateEvent } from './listener';
 import { serve } from 'bun';
+import logger from './logger';
 
 async function getUsernameFromCookies(cookie: string | null) {
     return "test";
@@ -33,7 +33,7 @@ function randomId() {
 const gameId = "0";
 
 // --- Bun WebSocket Server ---
-const server = Bun.serve({
+const server = serve({
   port : 3001,
   fetch(req, server) {
     const cookies = req.headers.get("cookie");
