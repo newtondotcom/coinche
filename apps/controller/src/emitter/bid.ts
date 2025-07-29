@@ -1,6 +1,5 @@
-import type { Ibidding } from '@coinche/shared';
+import type { EventInsert, Ibidding } from '@coinche/shared';
 import genIdCuid from '../../../game/shared/utils/gen_id';
-import type { EventInsert } from '@/../index'; // Adjust import if EventInsert type is elsewhere
 import { formatbidding } from '../../../game/shared/utils/format';
 
 export async function emitBid(

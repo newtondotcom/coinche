@@ -1,34 +1,25 @@
-import supabase from '@/supabase';
 import type { PlayerId } from '@coinche/shared';
+import { playerStats } from '@coinche/shared/db/schema';
+import { eq} from "drizzle-orm";
+import { db } from './db';
+import logger from './logger';
 
 export async function addPointsTo(points: number, playerId: PlayerId): Promise<void> {
     // Fetch the current points for the player
-    const { data, error } = await supabase
-        .from('Points')
-        .select('points')
-        .eq('playerId', playerId)
-        .single();
-
-    // Handle the error if no data is found
-    if (error || !data) {
-        console.error('Error fetching points or no points data found for player', error);
-        await supabase.from('Points').insert([{ playerId, points }]);
-        return;
-    }
+    const data = await db
+        .select()
+        .from(playerStats)
+        .where(eq(playerStats.playerId, playerId))
+        .limit(1);
 
     // Calculate the new points
-    const newPoints = data.points + points;
+    const newPoints = data[0].totalPoints + points;
 
     // Update the points in the database
-    const { error: updateError } = await supabase
-        .from('Points')
-        .update({ points: newPoints })
-        .eq('playerId', playerId);
-
-    // Handle any error during the update
-    if (updateError) {
-        console.error('Error updating points', updateError);
-    } else {
-        ('Points updated successfully');
-    }
+    await db
+        .update(playerStats)
+        .set({ totalPoints: newPoints })
+        .where(eq(playerStats.playerId, playerId)); 
+    
+    logger.log({ level: 'info', message: 'Points updated successfully' });
 }

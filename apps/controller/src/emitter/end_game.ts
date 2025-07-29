@@ -1,10 +1,12 @@
 import logger from "@/logger";
-import supabase from "@/supabase";
 import { formatTeam } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
-import type { IPlayer } from "@coinche/shared";
+import type { EventInsert, IPlayer } from "@coinche/shared";
+import {events, game, playerStats} from "@coinche/shared/db/schema";
+import { eq, or } from "drizzle-orm";
 
 import { addPointsTo } from "../points";
+import { db } from "@/db";
 
 /**
  * Calculate expected score for a player against another team
@@ -43,15 +45,14 @@ export async function emitEndGame(
   gameId: string,
   publish: (payload: any) => void
 ) {
-  await supabase.from("Events").insert([
-    {
-      id: await genIdCuid(),
-      type: "end_game",
-      playerId: "controller",
-      gameId: gameId,
-      value: formatTeam(winnerPlayerId, teamMatePlayerId),
-    },
-  ]);
+  const event: EventInsert = {
+    id: await genIdCuid(),
+    type: "end_game",
+    playerId: "controller",
+    gameId: gameId,
+    value: formatTeam(winnerPlayerId, teamMatePlayerId),
+  };
+  publish(event);
 }
 
 /**
@@ -67,28 +68,32 @@ export async function distributeRankingPoints(
   const playersIds = players.map((player) => player.id);
   
   // store in db the finished game
-  await supabase.from("Game").insert([
-    {
-      gameId: gameId,
-      p1: playersIds[0],
-      p2: playersIds[1],
-      p3: playersIds[2],
-      p4: playersIds[3],
-      team1_score: team1Score,
-      team2_score: team2Score,
-    },
-  ]);
+  await db.insert(game).values({
+    id: gameId,
+    player1Id: playersIds[0],
+    player2Id: playersIds[1],
+    player3Id: playersIds[2],
+    player4Id: playersIds[3],
+    team1Score: team1Score,
+    team2Score: team2Score,
+  });
 
-  // fetch current ratings for all players
-  const { data, error } = await supabase
-    .from("Points")
-    .select("*")
-    .in("playerId", playersIds);
-    
-  if (error || !data || data.length !== players.length) {
+  // fetch current ratings for all players using drizzle ORM
+  const data = await db
+    .select()
+    .from(playerStats)
+    .where(
+      or(
+        eq(playerStats.playerId, playersIds[0]),
+        eq(playerStats.playerId, playersIds[1]),
+        eq(playerStats.playerId, playersIds[2]),
+        eq(playerStats.playerId, playersIds[3])
+      )
+    );
+
+  if (!data || data.length !== players.length) {
     logger.error(
-      "Error fetching points or missing points data for some players",
-      error,
+      "Error fetching points or missing points data for some players"
     );
     return;
   }
@@ -97,16 +102,11 @@ export async function distributeRankingPoints(
   const playerRatings = playersIds.map((playerId) => {
     const playerData = data.find((d) => d.playerId === playerId);
     if (playerData) {
-      return playerData.points;
+      return playerData.totalPoints;
     } else {
       return 1200; // Default starting rating
     }
   });
-
-  if (playerRatings.includes(undefined)) {
-    console.error("Some players have missing points data.");
-    return;
-  }
 
   // Team configurations: Team 1 = players 0,2 | Team 2 = players 1,3
   const team1Players = [0, 2];
@@ -151,5 +151,5 @@ export async function distributeRankingPoints(
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function deleteRows(gameId: string, publish: (payload: any) => void) {
-  await supabase.from("Events").delete().match({ gameId: gameId });
+  await db.delete(events).where(eq(game.id, gameId));
 }

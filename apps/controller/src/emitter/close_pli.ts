@@ -2,13 +2,15 @@ import { distributeRankingPoints, emitEndGame } from "@/emitter/end_game";
 import { emitPoints } from "@/emitter/points";
 import { startPli } from "@/emitter/start_pli";
 import controller from "@/game";
-import supabase from "@/supabase";
 import { dev } from "@/utils";
 import { formatTeam } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
-import type { IPlay, IPlayer } from "@coinche/shared";
+import type { EventInsert, IPlay, IPlayer } from "@coinche/shared";
 import { emitStartTrick } from "./start_trick";
 import { emitEndTrick } from "./end_trick";
+import { eq, or, and, desc} from "drizzle-orm";
+import { db } from "@/db";
+import { events } from "@coinche/shared/db/schema";
 
 let scoreToReach: number;
 if (dev) {
@@ -31,15 +33,14 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
     (player: IPlayer) => player.id === winnerPlayerId,
   );
   const teamMatePlayerId = players[(myIndex + 2) % 4].id;
-  await supabase.from("Events").insert([
-    {
+  const event: EventInsert = {
       id: await genIdCuid(),
       type: "win_pli",
       playerId: "controller",
       gameId: gameId,
       value: formatTeam(winnerPlayerId, teamMatePlayerId),
-    },
-  ]);
+  }
+  publish(event);
   let score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
   if (game.deck.length === 32) {
     score += 10;
@@ -117,16 +118,18 @@ export function findWinner(lastPliEvents: IPlay[], gameId: string) {
 export async function fetchLastPliPlayerWinningId(
   gameId: string,
 ): Promise<string> {
-  const { data: events, error } = await supabase
-    .from("Events")
-    .select("value")
-    .eq("type", "start_trick")
-    .eq("gameId", gameId);
-  if (error) {
-    console.error(error);
-    return " ";
-  }
-  const playerStartedId = events[0].value;
+  const data  = await db
+    .select()
+    .from(events)
+    .where(
+      and(
+        eq(events.type, "start_trick"),
+        eq(events.gameId, gameId)
+      )
+    )
+    .orderBy(desc(events.createdAt))
+    .limit(1);
+  const playerStartedId = data[0].value;
   const players: { id: string }[] = (controller.getInstance(gameId).game as any).players;
   if (!players || !Array.isArray(players)) {
     throw new Error("Players array not found in game instance");

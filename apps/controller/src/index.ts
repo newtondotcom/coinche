@@ -1,35 +1,18 @@
 import { translateEvent } from '@/listener';
 import { serve } from 'bun';
 import logger from '@/logger';
+import { EventInsert } from '@coinche/shared';
 
 async function getUsernameFromCookies(cookie: string | null) {
     return "test";
 }
-
-// --- WebSocket Message Types ---
-// This should match the EventInsert type expected by translateEvent
-// You may want to import EventInsert from '@coinche/shared' if available
-// For now, we use a compatible shape
-export type EventInsert = {
-  gameId: string;
-  id: string;
-  playerId: string;
-  type: string;
-  value: string;
-  timestamp?: string;
-  [key: string]: any;
-};
 
 // --- Room Management ---
 export const userRooms = new Map<any, Set<string>>(); // ws -> Set<room>
 // --- In-memory player tracking for each game ---
 export const gamePlayers = new Map<string, Set<string>>(); // gameId -> Set<playerId>
 
-// --- Helper to generate random id if missing ---
-function randomId() {
-  return Math.random().toString(36).slice(2, 10);
-}
-
+// --- In-memory gameId for the example ---
 const gameId = "0";
 
 // --- Bun WebSocket Server ---
@@ -74,7 +57,7 @@ const server = serve({
         const event: EventInsert = {
           ...msg, // spread first so explicit fields below take precedence
           gameId: msg.gameId || data.gameId,
-          id: (msg as any).id || randomId(),
+          id: (msg as any).id || crypto.randomUUID(),
           playerId: (msg as any).playerId || data.username,
           type: msg.type,
           value: (msg as any).value || '',
