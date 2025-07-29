@@ -16,7 +16,6 @@
     "@coinche/shared": "file:../shared",
     "@nuxt/eslint": "0.7.2",
     "@pinia/nuxt": "^0.5.5",
-    "@supabase/supabase-js": "^2.50.0",
     "@tailwindcss/vite": "^4.1.10",
     "@vueuse/core": "^13.4.0",
     "better-auth": "^1.2.9",

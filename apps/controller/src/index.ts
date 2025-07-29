@@ -1,6 +1,6 @@
-import { translateEvent } from './listener';
+import { translateEvent } from '@/listener';
 import { serve } from 'bun';
-import logger from './logger';
+import logger from '@/logger';
 
 async function getUsernameFromCookies(cookie: string | null) {
     return "test";
