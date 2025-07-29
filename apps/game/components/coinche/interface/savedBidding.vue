@@ -1,33 +1,21 @@
 <template>
-    <div class="absolute left-[50%] top-[30%] -translate-x-[50%]">
-        <h2
-            class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-7xl cursor-pointer"
-        >
-            {{ storeGame.last_bidding.bidding }}
-
-            {{ storeAbout.atout == 'clubs' ? '♣' : '' }}
-            {{ storeAbout.atout == 'diamonds' ? '♦' : '' }}
-            {{ storeAbout.atout == 'hearts' ? '♥' : '' }}
-            {{ storeAbout.atout == 'spades' ? '♠' : '' }}
-            {{ storeAbout.atout == 'sans-atout' ? 'SA' : '' }}
-            {{ storeAbout.atout == 'tout-atout' ? 'TA' : '' }}
-        </h2>
-        <h3
-            class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-5xl cursor-pointer"
-        >
-            par
-            {{ storeGame.last_bidding.playerId }}
-        </h3>
-        <h4
-            class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-4xl cursor-pointer"
-        >
-            <Badge v-if="storeGame.coinched">Coinché</Badge>
-            <Badge v-if="storeGame.surcoinched">Coinché</Badge>
-        </h4>
+  <div class="border border-white bg-slate-800 rounded p-2 h-[50px] flex gap-2">
+    <div>
+      {{ storeGame.last_bid.bidding }}
     </div>
+    <div>
+      {{ storeGame.last_bid.suite == 'diamonds' ? '♦️' : '' }}
+      {{ storeGame.last_bid.suite == 'hearts' ? '♥️' : '' }}
+      {{ storeGame.last_bid.suite == 'clubs' ? '♣️' : '' }}
+      {{ storeGame.last_bid.suite == 'spades' ? '♠️' : '' }}
+      {{ storeGame.last_bid.suite == 'tout-atout' ? 'TA' : '' }}
+      {{ storeGame.last_bid.suite == 'sans-atout' ? 'SA' : '' }}
+    </div>
+    Par
+    {{ storeGame.last_bid.playerId }}
+  </div>
 </template>
 
 <script setup lang="ts">
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
+const storeGame = useGameStore();
 </script>

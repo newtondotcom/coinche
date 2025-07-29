@@ -1,16 +1,11 @@
-import type { EventInsert } from '@coinche/shared';
-import { toast } from 'vue-sonner';
+import { setValueAccordingToAtout } from "~/shared/utils/deck";
+import type { EventInsert } from "@coinche/shared";
 
-/**
- * Handles the 'start_trick' event from the server.
- * Sets the current player to the one who starts the trick and logs the event.
- * @param event The event object (type: 'start_trick')
- */
-export default function translateStartTrick(event: EventInsert) {
-  const storeGame = useGameStore();
-  const playerId = event.playerId
-  storeGame.setCurrentPlayerId(playerId);
-  storeGame.setNewRound();
-  console.info(`[start_trick] It's now ${playerId}'s turn to start the trick.`);
-  toast.message(`${playerId} commence le round`);
+export async function translateStartTrick(event: EventInsert) {
+  const storeAbout = useAboutStore();
+  const storePlayers = usePlayersStore();
+  storePlayers.getPlayers().forEach((player) => {
+    player.hands = setValueAccordingToAtout(player.hands);
+  });
+  return;
 } 

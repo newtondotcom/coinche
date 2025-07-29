@@ -1,24 +1,24 @@
-import type { Ibidding, ICard, IPlay, PlayerId } from '@coinche/shared';
+import type { IBid, ICard, IPlay, PlayerId } from '@coinche/shared';
 
 export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
-    const current_pli = ref<IPlay[]>([]);
-    const pli_number = ref<number>(0);
+    const current_trick = ref<IPlay[]>([]);
+    const trick_number = ref<number>(0);
     const team1_point_current_game = ref<number>(0);
     const team2_point_current_game = ref<number>(0);
-    const last_bidding = ref<Ibidding>({ suite: 'NA', bidding: 0, playerId: '0' });
+    const last_bid = ref<IBid>({ suite: 'NA', bidding: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
     const deck = ref<ICard[]>([]);
-    const biddings_pli = ref<Ibidding[]>([]);
+    const bids_round = ref<IBid[]>([]);
     const current_player_id = ref<PlayerId>('');
     const player_starting_id = ref<PlayerId>('0');
 
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
 
-    function addCardToPliAndRemove(card: ICard, playerId: PlayerId) {
-        current_pli.value.push({ card, playerId });
+    function addCardToTrickAndRemove(card: ICard, playerId: PlayerId) {
+        current_trick.value.push({ card, playerId });
         storePlayers.removeCard(card, playerId);
         deck.value.push(card);
     }
@@ -27,8 +27,8 @@ export const useGameStore = defineStore('game', () => {
         current_player_id.value = playerId;
     }
 
-    function setLastbidding(bidding: Ibidding) {
-        last_bidding.value = bidding;
+    function setLastBid(bid: IBid) {
+        last_bid.value = bid;
     }
 
     function setCoinched(newCoinched: boolean) {
@@ -39,18 +39,18 @@ export const useGameStore = defineStore('game', () => {
         surcoinched.value = newSurcoinched;
     }
 
-    function setNewPli() {
-        current_pli.value = [];
-        pli_number.value += 1;
+    function setNewTrick() {
+        current_trick.value = [];
+        trick_number.value += 1;
     }
 
     function setNewRound() {
         coinched.value = false;
         surcoinched.value = false;
-        biddings_pli.value = [];
-        last_bidding.value = { suite: 'NA', bidding: 0, playerId: '0' };
-        current_pli.value = [];
-        pli_number.value += 0;
+        bids_round.value = [];
+        last_bid.value = { suite: 'NA', bidding: 0, playerId: '0' };
+        current_trick.value = [];
+        trick_number.value += 0;
         team1_point_current_game.value = 0;
         team2_point_current_game.value = 0;
     }
@@ -82,8 +82,8 @@ export const useGameStore = defineStore('game', () => {
         team2_score.value = team2_score.value + score;
     }
 
-    function addbiddingToPli(bidding: Ibidding) {
-        biddings_pli.value.push(bidding);
+    function addBidToRound(bid: IBid) {
+        bids_round.value.push(bid);
     }
 
     function setDeck(deckf: ICard[]) {
@@ -91,27 +91,27 @@ export const useGameStore = defineStore('game', () => {
     }
 
     return {
-        current_pli,
+        current_trick,
         current_player_id,
-        pli_number,
+        trick_number,
         team1_point_current_game,
         team2_point_current_game,
-        last_bidding,
+        last_bid,
         coinched,
         surcoinched,
         player_starting_id,
         team1_score,
         team2_score,
-        addCardToPliAndRemove,
+        addCardToTrickAndRemove,
         setCurrentPlayerId,
-        setLastbidding,
+        setLastBid,
         setCoinched,
         setSurcoinched,
-        setNewPli,
+        setNewTrick,
         setPlayerStartingId,
         addScoreToTeam,
-        biddings_pli,
-        addbiddingToPli,
+        bids_round,
+        addBidToRound,
         deck,
         setDeck,
         addScoreToTeam1,

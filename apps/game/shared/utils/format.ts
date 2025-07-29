@@ -2,16 +2,16 @@ import type {
   bidding,
   CardSuite,
   CardValue,
-  Ibidding,
+  IBid,
   ICard,
 } from "@coinche/shared/types";
 
-export function formatbidding(bidding: Ibidding): string {
-  return `${bidding.bidding}|${bidding.suite}`;
+export function formatBid(bid: IBid): string {
+  return `${bid.bidding}|${bid.suite}`;
 }
 
-export function deformatBidding(bidding: string, playerId: string): Ibidding {
-  const [biddingValue, suite] = bidding.split("|");
+export function deformatBid(bidString: string, playerId: string): IBid {
+  const [biddingValue, suite] = bidString.split("|");
   return {
     bidding: parseInt(biddingValue) as bidding,
     suite: suite as CardSuite,
@@ -21,45 +21,45 @@ export function deformatBidding(bidding: string, playerId: string): Ibidding {
 
 export function formatCarteToPlay(
   card: ICard,
-  pli_number: number,
-  number_in_pli: number,
+  trick_number: number,
+  number_in_trick: number,
 ): string {
-  return `${pli_number}|${card.value}|${card.suite}|${card.valueNum}|${number_in_pli}`;
+  return `${trick_number}|${card.value}|${card.suite}|${card.valueNum}|${number_in_trick}`;
 }
 export function deformatCarteToPlay(carte: string) {
-  const [pli_number, value, suite, valueNum, number_in_pli] = carte.split("|");
+  const [trick_number, value, suite, valueNum, number_in_trick] = carte.split("|");
   const card = {
     value: value as CardValue,
     suite: suite as CardSuite,
     valueNum: parseInt(valueNum),
   };
   return {
-    pli_number: parseInt(pli_number),
+    trick_number: parseInt(trick_number),
     card: card,
-    number_in_pli: parseInt(number_in_pli),
+    number_in_trick: parseInt(number_in_trick),
   };
 }
 
 export function formatCarteToDistribute(
   card: ICard,
-  pli_number: number,
+  trick_number: number,
 ): string {
-  return `${pli_number}|${card.value}|${card.suite}`;
+  return `${trick_number}|${card.value}|${card.suite}`;
 }
 export function deformatCarteToDistribute(carte: string) {
-  const [pli_number, value, suite] = carte.split("|");
+  const [trick_number, value, suite] = carte.split("|");
   const card = {
     value: value as CardValue,
     suite: suite as CardSuite,
     valueNum: parseInt(value),
   };
   return {
-    pli_number: parseInt(pli_number),
+    trick_number: parseInt(trick_number),
     card: card,
   };
 }
 
-// first player id is the one starting the next pli
+// first player id is the one starting the next trick
 export function formatTeam(player1: string, player2: string): string {
   return `${player1}|${player2}`;
 }

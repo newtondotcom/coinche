@@ -1,25 +1,20 @@
 <template>
-    <div class="absolute bottom-0 right-4 bg-red-500 font-semibold z-20">
-        Pli number : {{ storeGame.pli_number }}
-        <br />
-        Deck length : {{ storeGame.deck.length }}
-        <br />
-
-        Distributing : {{ storeAbout.timeDistrib }}
-        <br />
-        Announcing : {{ storeAbout.timeTobidding }}
-        <br />
-        Player starting : {{ storeGame.player_starting_id }}
-        <br />
-        Current player id : {{ storeGame.current_player_id }}
-        <br />
-        Atout : {{ storeAbout.atout }}
-        <br />
-        Cards in hands : {{ storeAbout.hand.length }}
-    </div>
+  <div class="flex flex-col gap-2 border border-white p-4">
+    Trick number : {{ storeGame.trick_number }}
+    <br />
+    Current player id : {{ storeGame.current_player_id }}
+    <br />
+    My id : {{ storeAbout.myId }}
+    <br />
+    team1_score : {{ storeGame.team1_score }}
+    <br />
+    team2_score : {{ storeGame.team2_score }}
+    <br />
+    <!-- ... rest of the template ... -->
+  </div>
 </template>
 
 <script setup lang="ts">
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
+const storeGame = useGameStore();
+const storeAbout = useAboutStore();
 </script>

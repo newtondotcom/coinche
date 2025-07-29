@@ -1,29 +1,18 @@
 import { sendWS } from '~/shared/utils/ws';
-import { formatCarteToPlay } from '@/shared/utils/format';
+import { formatCarteToPlay } from '~/shared/utils/format';
 import genIdCuid from '~/shared/utils/gen_id';
-import type { CardSuite, CardValue, ICard } from '@coinche/shared';
+import type { ICard } from '@coinche/shared';
 
-export async function emitCardPlay(card: ICard) {
+export default async function emitPlay(card: ICard) {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
+    const gameId = storeAbout.gameId;
     sendWS({
         id: await genIdCuid(),
         type: 'play',
         playerId: storeAbout.myId,
-        gameId: storeAbout.gameId,
-        value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
+        gameId: gameId,
+        value: formatCarteToPlay(card, storeGame.trick_number, storeGame.current_trick.length),
         timestamp: new Date().toISOString(),
     });
-    storeAbout.setTurnToPlay(false);
-}
-
-export async function cardPressed(suite: CardSuite, value: CardValue) {
-    const storeAbout = useAboutStore();
-    const selectedCardIndex = storeAbout.hand.findIndex(
-        (card) => card.suite === suite && card.value === value,
-    );
-    if (selectedCardIndex !== -1) {
-        const [selectedCard] = storeAbout.hand.splice(selectedCardIndex, 1);
-        await emitCardPlay(selectedCard);
-    }
 }

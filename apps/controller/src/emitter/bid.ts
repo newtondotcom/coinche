@@ -1,10 +1,10 @@
-import type { Ibidding } from '@coinche/shared';
+import type { IBid } from '@coinche/shared';
 import genIdCuid from '../../../game/shared/utils/gen_id';
 import type { EventInsert } from '@/../index'; // Adjust import if EventInsert type is elsewhere
-import { formatbidding } from '../../../game/shared/utils/format';
+import { formatBid } from '../../../game/shared/utils/format';
 
 export async function emitBid(
-  bid: Ibidding,
+  bid: IBid,
   gameId : string,
   publish: (payload: any) => void
 ) {
@@ -13,7 +13,7 @@ export async function emitBid(
     type: 'bid',
     playerId: bid.playerId,
     gameId: gameId,
-    value: formatbidding(bid),
+    value: formatBid(bid),
     timestamp: new Date().toISOString(),
   };
   publish(event);

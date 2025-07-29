@@ -21,10 +21,10 @@ export async function emitStartDealing(gameId: string, publish: (payload: any) =
   if (controller.getInstance(gameId).game.rounds.length === 1) {
     controller.getInstance(gameId).game.deck = generateDeckCards();
   } else {
-    logger.error("start(_delaing - dekc was not generated" + controller.getInstance(gameId).game.rounds.length)
+    logger.error("start_dealing - deck was not generated" + controller.getInstance(gameId).game.rounds.length)
   }
   await emitDealing(
-    controller.getInstance(gameId).getLastPli().player_starting_id,
+    controller.getInstance(gameId).getLastTrick().player_starting_id,
     gameId,
     publish
   );

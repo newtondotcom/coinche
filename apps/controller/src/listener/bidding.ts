@@ -1,14 +1,14 @@
 import { emitCanBid } from '@/emitter/can';
-import { startPli } from '@/emitter/start_pli';
+import { startTrick } from '@/emitter/start_trick';
 import controller from '@/game';
 import logger from '@/logger';
 import { setNextPlayerTurn } from '@/utils';
 import type { EventInsert } from '@coinche/shared';
-import { deformatBidding } from '../../../game/shared/utils/format';
+import { deformatBid } from '../../../game/shared/utils/format';
 import { emitBid } from '@/emitter/bid';
 
-export default async function translateBidding(event: EventInsert, publish: (payload: any) => void) {
-    const bid = deformatBidding(event.value as string, event.playerId);
+export default async function translateBid(event: EventInsert, publish: (payload: any) => void) {
+    const bid = deformatBid(event.value as string, event.playerId);
     
     // Update coinche/surcoinche state based on special bid values
     const controllerInstance = controller.getInstance(event.gameId);
@@ -22,26 +22,26 @@ export default async function translateBidding(event: EventInsert, publish: (pay
         lastRound.surcoinched = true;
     }
     
-    controller.getInstance(event.gameId).addbidding(bid);
+    controller.getInstance(event.gameId).addBid(bid);
     await emitBid(bid,event.gameId,publish);
     const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
     await emitCanBid(nextPlayerId, event.gameId, publish);
     
     if (bid.bidding === 0) {
-        // Get the last two biddings to check if they are both passes
-        const lastTwobiddings = controller
+        // Get the last two bids to check if they are both passes
+        const lastTwoBids = controller
             .getInstance(event.gameId)
             .getLastRound()
-            .biddings.slice(-3);
-        const biddingsPassed = lastTwobiddings.filter((bidding) => bidding.bidding === 0);
+            .bids.slice(-3);
+        const bidsPassed = lastTwoBids.filter((bid) => bid.bidding === 0);
 
-        // Include the current bidding in the check
-        if (biddingsPassed.length === 3) {
-            logger.info('Starting pli because of 3 consecutive passes');
-            await startPli(event.gameId, publish);
+        // Include the current bid in the check
+        if (bidsPassed.length === 3) {
+            logger.info('Starting trick because of 3 consecutive passes');
+            await startTrick(event.gameId, publish);
             return;
         } else {
-            logger.info(biddingsPassed.length.toString(), 'passes');
+            logger.info(bidsPassed.length.toString(), 'passes');
         }
     }
 }

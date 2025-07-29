@@ -26,11 +26,11 @@
         }
 
         // If it's the first card of the trick (entame), any card can be played
-        if (storeGame.current_pli.length === 0) {
+        if (storeGame.current_trick.length === 0) {
             return true;
         }
 
-        const colorAsked = storeAbout.colorAsked;
+        const colorAsked = storeGame.current_trick[0].card.suite;
         const atout = storeAbout.atout;
         const cardSuite = props.card.suite;
         const cardValue = props.card.valueNum;
@@ -52,15 +52,15 @@
             if (hasColorAsked) {
                 if (cardSuite === colorAsked) {
                     // Must play higher if possible
-                    const highestInPli = Math.max(...storeGame.current_pli
+                    const highestInTrick = Math.max(...storeGame.current_trick
                         .filter(p => p.card.suite === colorAsked)
                         .map(p => p.card.valueNum));
                     
                     const hasHigher = hand.some((c: ICard) => 
-                        c.suite === colorAsked && c.valueNum > highestInPli);
+                        c.suite === colorAsked && c.valueNum > highestInTrick);
                     
                     if (hasHigher) {
-                        return cardValue > highestInPli;
+                        return cardValue > highestInTrick;
                     }
                     return true; // Can play any card of the asked color if no higher available
                 }
@@ -81,9 +81,9 @@
 
             // If trump is asked, must go higher when possible
             if (colorAsked === atout) {
-                const atoutsInPli = storeGame.current_pli.filter(p => p.card.suite === atout);
-                if (atoutsInPli.length > 0) {
-                    const highestAtout = Math.max(...atoutsInPli.map(p => p.card.valueNum));
+                const atoutsInTrick = storeGame.current_trick.filter(p => p.card.suite === atout);
+                if (atoutsInTrick.length > 0) {
+                    const highestAtout = Math.max(...atoutsInTrick.map(p => p.card.valueNum));
                     const hasHigherAtout = hand.some((c: ICard) => 
                         c.suite === atout && c.valueNum > highestAtout);
                     
@@ -97,23 +97,23 @@
 
         // Rule 2: If can't follow suit, check if partner is winning
         const isPartnerWinning = () => {
-            if (storeGame.current_pli.length === 0) return false;
+            if (storeGame.current_trick.length === 0) return false;
             
             // Determine who the partner is (players 0&2 vs 1&3)
             const myTeam = parseInt(storeAbout.myId) % 2;
             const partnerIds = ['0', '1', '2', '3'].filter(id => parseInt(id) % 2 === myTeam);
             
             // Find the currently winning card
-            let winningPlay = storeGame.current_pli[0];
-            const atoutsInPli = storeGame.current_pli.filter(p => p.card.suite === atout);
+            let winningPlay = storeGame.current_trick[0];
+            const atoutsInTrick = storeGame.current_trick.filter(p => p.card.suite === atout);
             
-            if (atoutsInPli.length > 0) {
+            if (atoutsInTrick.length > 0) {
                 // If there are trumps, highest trump wins
-                winningPlay = atoutsInPli.reduce((highest, current) => 
+                winningPlay = atoutsInTrick.reduce((highest, current) => 
                     current.card.valueNum > highest.card.valueNum ? current : highest);
             } else {
                 // Otherwise, highest card of asked color wins
-                const suitCards = storeGame.current_pli.filter(p => p.card.suite === colorAsked);
+                const suitCards = storeGame.current_trick.filter(p => p.card.suite === colorAsked);
                 if (suitCards.length > 0) {
                     winningPlay = suitCards.reduce((highest, current) => 
                         current.card.valueNum > highest.card.valueNum ? current : highest);
@@ -131,7 +131,7 @@
         // Rule 4: If partner is not winning and we have trump, must play trump
         if (hasAtout && cardSuite === atout) {
             // Check if opponent has already played trump
-            const opponentAtouts = storeGame.current_pli
+            const opponentAtouts = storeGame.current_trick
                 .filter(p => p.card.suite === atout)
                 .filter(p => {
                     const playerTeam = parseInt(p.playerId) % 2;
@@ -172,7 +172,7 @@
         `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
     );
 
-    watch(storeGame.current_pli, () => {
+    watch(storeGame.current_trick, () => {
         canBePlayed.value;
     });
 </script>

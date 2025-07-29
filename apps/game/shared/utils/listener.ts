@@ -1,82 +1,82 @@
-import translateBidding from "@/shared/listener/bidding";
-import { translateDealing } from "@/shared/listener/distribution";
-import { translateEndDistribution } from "@/shared/listener/end_distribution";
-import { translateEndGame } from "@/shared/listener/end_game";
-import { translateEndRound } from "@/shared/listener/end_trick";
+import { translateDealing } from '@/shared/listener/distribution';
+import translatePlay from '@/shared/listener/play';
+import translateBid from '@/shared/listener/bidding';
+import { translateEndRound } from "@/shared/listener/end_round";
+import { translateCanBid } from "@/shared/listener/can_bid";
+import { translateCanPlay } from "@/shared/listener/can_play";
 import { translateJoin } from "@/shared/listener/join";
-import translatePlay from "@/shared/listener/play";
-import { translatePoints } from "@/shared/listener/points";
-import { translatePointsRound } from "@/shared/listener/points_trick";
-import { translateSound } from "@/shared/listener/sound";
-import { translateStartDistribution } from "@/shared/listener/start_distribution";
-import { translateStartPli } from "@/shared/listener/start_pli";
-import { translateWinPli } from "@/shared/listener/win_pli";
-import { translateStart } from "@/shared/listener/start_game";
-import { translateCanBid, translateCanPlay } from "@/shared/listener/can";
-import translateStartTrick from "../listener/start_trick";
-import { translatePlayerList } from "../listener/player_list";
+import { translateStartDealing } from "@/shared/listener/start_dealing";
+import { translateScore } from "@/shared/listener/score";
+import { translateStartTrick } from "@/shared/listener/start_trick";
+import { translateWinTrick } from "@/shared/listener/win_trick";
+import type { EventInsert } from '@coinche/shared';
 
-function translateLeave(event: any) {
-  console.log(event.value);
-  return;
-}
+export const onWSMessage = (callback: (event: EventInsert) => void) => {
+    const { $supabase } = useNuxtApp();
+    const storeAbout = useAboutStore();
+    
+    const channel = $supabase
+        .channel('events')
+        .on(
+            'postgres_changes',
+            {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'Events',
+                filter: `gameId=eq.${storeAbout.gameId}`,
+            },
+            async (payload) => {
+                const event = payload.new as EventInsert;
+                callback(event);
+                console.log('Event received:', event);
+                
+                switch (event.type) {
+                    case 'join':
+                        await translateJoin(event);
+                        break;
+                    case 'start_distribution':
+                        await translateStartDealing(event);
+                        break;
+                    case 'distribution':
+                        await translateDealing(event);
+                        break;
+                    case 'can_bid':
+                        await translateCanBid(event);
+                        break;
+                    case 'bid':
+                        await translateBid(event);
+                        break;
+                    case 'can_play':
+                        await translateCanPlay(event);
+                        break;
+                    case 'start_trick':
+                        await translateStartTrick(event);
+                        break;
+                    case 'play':
+                        await translatePlay(event);
+                        break;
+                    case 'win_trick':
+                        await translateWinTrick(event);
+                        break;
+                    case 'score':
+                        await translateScore(event);
+                        break;
+                    case 'score_round':
+                        await translateScore(event);
+                        break;
+                    case 'end_round':
+                        await translateEndRound(event);
+                        break;
+                    default:
+                        console.warn('Unknown event type:', event.type);
+                }
+            }
+        )
+        .subscribe();
 
-function translateSystem(event : any){
-  console.log(event);
-  return
-}
+    return () => {
+        channel.unsubscribe();
+    };
+};
 
-function translateError(event: any) {
-  console.log(event.value);
-  return;
-}
-
-export function handleWSEvent(event: any) {
-  switch (event.type) {
-    case "bid":
-      return translateBidding(event);
-    case "play":
-      return translatePlay(event);
-    case "end_game":
-      return translateEndGame(event);
-    case "end_trick":
-      return translateEndRound(event);
-    case "start_game":
-      return translateStart(event);
-    case "start_pli":
-      return translateStartPli(event);
-    case "leave":
-      return translateLeave(event);
-    case "join":
-      return translateJoin(event);
-    case "error":
-      return translateError(event);
-    case "win_pli":
-      return translateWinPli(event);
-    case "dealing":
-      return translateDealing(event);
-    case "score":
-      return translatePoints(event);
-    case "score_trick":
-      return translatePointsRound(event);
-    case "start_distribution":
-      return translateStartDistribution(event);
-    case "start_bidding":
-      return translateEndDistribution(event);
-    case "can_play":
-      return translateCanPlay(event);
-    case "can_bid":
-      return translateCanBid(event);
-    case "start_trick":
-      return translateStartTrick(event);
-    case "sound":
-      return translateSound(event);
-    case "player_list":
-      return translatePlayerList(event);
-    case "system":
-      return translateSystem(event);
-    default:
-      console.error("no event");
-      return "";
-  }
-}
+export const supabase = useSupabaseClient();

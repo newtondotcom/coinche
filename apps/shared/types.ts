@@ -19,7 +19,7 @@ export interface ICard {
     valueNum: number;
 }
 
-export interface Ibidding {
+export interface IBid {
     suite: CardSuite;
     bidding: bidding;
     playerId: PlayerId;
@@ -35,20 +35,20 @@ export interface IPlayer {
     position: PlayerPosition;
     hands: ICard[];
     classement: number;
-    last_bidding?: Ibidding;
+    last_bid?: IBid;
 }
 
 export interface IRound {
-    plis: IPli[];
-    biddings: Ibidding[];
+    tricks: ITrick[];
+    bids: IBid[];
     team1_point_current_game: number;
     team2_point_current_game: number;
-    last_bidding: Ibidding;
+    last_bid: IBid;
     coinched: boolean;
     surcoinched: boolean;
 }
 
-export interface IPli {
+export interface ITrick {
     plays: IPlay[];
     current_player_id: PlayerId;
     player_starting_id: PlayerId;
@@ -69,16 +69,16 @@ export type Event =
     | 'can_bid'
     | 'start_game'
     | 'end_game'
+    | 'start_round'
+    | 'end_round'
     | 'start_trick'
-    | 'end_trick'
-    | 'start_pli'
-    | 'win_pli'
+    | 'win_trick'
     | 'score'
-    | 'score_trick'
+    | 'score_round'
     | 'start_distribution'
     | 'distribution'
     | 'start_bidding'
-    | 'bidding'
+    | 'bid'
     | 'play'
     | 'error'
     | 'win_game'

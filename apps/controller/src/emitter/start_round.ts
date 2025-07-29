@@ -6,20 +6,19 @@ import genIdCuid from "../../../game/shared/utils/gen_id";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function startPli(gameId: string, publish: (payload: any) => void) {
-  // launch pli
-  const playerIdStarting = controller
-    .getInstance(gameId)
-    .getLastPli().player_starting_id;
+export async function emitStartRound(gameId: string, playerId: string, publish: (payload: any) => void) {
+  // launch new round
+  controller.getInstance(gameId).addRound(playerId);
+  controller.getInstance(gameId).addTrick(playerId);
   const event = {
     id: await genIdCuid(),
-    type: "start_pli",
+    type: "start_round",
     playerId: "controller",
     gameId: gameId,
-    value: playerIdStarting,
+    value: playerId,
     timestamp : new Date().toISOString(),
   }
   publish(event)
-  logger.info(`Starting pli for ${playerIdStarting}`);
-  await emitCanPlay(playerIdStarting, gameId, publish);
+  logger.info(`Starting new round for ${playerId}`);
+  await emitCanPlay(playerId, gameId, publish);
 }

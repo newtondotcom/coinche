@@ -1,28 +1,28 @@
-import { findWinner } from '@/emitter/close_pli';
+import { findWinner } from '@/emitter/close_trick';
 import controller from '@/game';
 import logger from '@/logger';
-import { emitPointsTrick } from './points_trick';
+import { emitPointsRound } from './points_round';
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitEndTrick(gameId: string, publish: (payload: any) => void) {
+export async function emitEndRound(gameId: string, publish: (payload: any) => void) {
     const controllerInstance = controller.getInstance(gameId);
     const lastRound = controllerInstance.getLastRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
-    const seuilbidding = lastRound.last_bidding;
-    const teamAnnounced = controllerInstance.isTeam1(seuilbidding.playerId) ? 1 : 2;
+    const seuilBid = lastRound.last_bid;
+    const teamAnnounced = controllerInstance.isTeam1(seuilBid.playerId) ? 1 : 2;
 
     const calculateSpecialBidScore = (bidding: number) => {
-        const plis = lastRound.plis;
+        const tricks = lastRound.tricks;
         let isSuccessful = true;
 
         // For special bids (250+ or 500+), check if all tricks are won by the same team
-        plis.forEach((pli) => {
-            const winnerPli = findWinner(pli.plays, gameId);
+        tricks.forEach((trick) => {
+            const winnerTrick = findWinner(trick.plays, gameId);
             if (
-                (teamAnnounced === 1 && !controllerInstance.isTeam1(winnerPli)) ||
-                (teamAnnounced === 2 && controllerInstance.isTeam1(winnerPli))
+                (teamAnnounced === 1 && !controllerInstance.isTeam1(winnerTrick)) ||
+                (teamAnnounced === 2 && controllerInstance.isTeam1(winnerTrick))
             ) {
                 isSuccessful = false;
             }
@@ -37,18 +37,18 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
 
     const calculateDefaultScore = () => {
         const biddingValue =
-            typeof seuilbidding.bidding === 'number'
-                ? seuilbidding.bidding
-                : parseInt(seuilbidding.bidding, 10);
+            typeof seuilBid.bidding === 'number'
+                ? seuilBid.bidding
+                : parseInt(seuilBid.bidding, 10);
 
         if (
             (teamAnnounced === 1 && lastRound.team1_point_current_game >= biddingValue) ||
             (teamAnnounced === 2 && lastRound.team2_point_current_game >= biddingValue)
         ) {
-            // bidding validée
+            // bid validée
             return biddingValue * pointMultiplier;
         } else {
-            // bidding chutée
+            // bid chutée
             return -biddingValue * pointMultiplier;
         }
     };
@@ -57,9 +57,9 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     let scoreTeam2 = 0;
 
     if (teamAnnounced === 1) {
-        if (typeof seuilbidding.bidding === 'number' && seuilbidding.bidding >= 250) {
+        if (typeof seuilBid.bidding === 'number' && seuilBid.bidding >= 250) {
             // Special bid (250-252 for capot, 500-502 for générale) - use exact value
-            scoreTeam1 = calculateSpecialBidScore(seuilbidding.bidding);
+            scoreTeam1 = calculateSpecialBidScore(seuilBid.bidding);
         } else {
             // Regular bid (80-160) - use traditional multiplier
             scoreTeam1 = calculateDefaultScore();
@@ -69,9 +69,9 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
             }
         }
     } else {
-        if (typeof seuilbidding.bidding === 'number' && seuilbidding.bidding >= 250) {
+        if (typeof seuilBid.bidding === 'number' && seuilBid.bidding >= 250) {
             // Special bid (250-252 for capot, 500-502 for générale) - use exact value
-            scoreTeam2 = calculateSpecialBidScore(seuilbidding.bidding);
+            scoreTeam2 = calculateSpecialBidScore(seuilBid.bidding);
         } else {
             // Regular bid (80-160) - use traditional multiplier
             scoreTeam2 = calculateDefaultScore();
@@ -85,5 +85,5 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
     controllerInstance.game.team1_score += scoreTeam1;
     controllerInstance.game.team2_score += scoreTeam2;
-    await emitPointsTrick(scoreTeam1, scoreTeam2, gameId, publish);
+    await emitPointsRound(scoreTeam1, scoreTeam2, gameId, publish);
 }

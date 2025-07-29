@@ -1,43 +1,33 @@
-import controller from '@/game';
+import controller from './game';
 import type { CardSuite, CardValue, ICard, IPlayer } from '@coinche/shared';
 import logger from './logger';
 
 export const dev = process.env.NODE_ENV !== 'production';
 
-export function setNextPlayerTurn(playerId: string, gameId: string) {
-    const gameController = controller.getInstance(gameId);
-    
-    // Get players from the controller, not the game object
-    const players: IPlayer[] = Array.from(gameController.getPlayers());
-    
-    if (players.length === 0) {
-      throw new Error('No players found in game');
-    }
-  
-    const currentPlayerIndex = players.findIndex((player: IPlayer) => player.id === playerId);
-    
-    if (currentPlayerIndex === -1) {
-      throw new Error('Current player not found');
-    }
-  
-    // Calculate next player index (circular)
-    const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    const nextPlayerId = players[nextPlayerIndex].id;
-  
-    // Update the current player in the last pli
-    const lastPli = gameController.getLastPli();
-    if (lastPli) {
-      lastPli.current_player_id = nextPlayerId;
-    }
-  
-    logger.info(`Turn changed from player ${playerId} to player ${nextPlayerId}`);
-    
-    return nextPlayerId;
-  }
+export function getCurrentPlayerFromTrick(gameId: string): string {
+  const gameController = controller.getInstance(gameId);
+  const lastTrick = gameController.getLastTrick();
+  const playerIndex = Array.from(gameController.getPlayers()).findIndex(
+    (player) => player.id === lastTrick.player_starting_id
+  );
+  const numberOfCards = lastTrick.plays.length;
+  const players = Array.from(gameController.getPlayers());
+  return players[(playerIndex + numberOfCards) % players.length].id;
+}
 
+export function setNextPlayerTurn(playerId: string, gameId: string): string {
+  const playerIndex = Array.from(
+    controller.getInstance(gameId).getPlayers()
+  ).findIndex((player) => player.id === playerId);
+  const players = Array.from(controller.getInstance(gameId).getPlayers());
+  const nextPlayerIndex = (playerIndex + 1) % players.length;
+  const nextPlayerId = players[nextPlayerIndex].id;
+  controller.getInstance(gameId).getLastTrick().current_player_id = nextPlayerId;
+  return nextPlayerId;
+}
 
-export function setNextPlayerPli(playerId: string, gameId: string) {
-    controller.getInstance(gameId).getLastPli().current_player_id = playerId;
+export function setNextPlayerTrick(playerId: string, gameId: string) {
+    controller.getInstance(gameId).getLastTrick().current_player_id = playerId;
 }
 
 const values: CardValue[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];

@@ -1,14 +1,14 @@
 import { distributeRankingPoints, emitEndGame } from "@/emitter/end_game";
 import { emitPoints } from "@/emitter/points";
-import { startPli } from "@/emitter/start_pli";
+import { startTrick } from "@/emitter/start_trick";
 import controller from "@/game";
 import supabase from "@/supabase";
 import { dev } from "@/utils";
 import { formatTeam } from "../../../game/shared/utils/format";
 import genIdCuid from "../../../game/shared/utils/gen_id";
 import type { IPlay, IPlayer } from "@coinche/shared";
-import { emitStartTrick } from "./start_trick";
-import { emitEndTrick } from "./end_trick";
+import { emitStartRound } from "./start_round";
+import { emitEndRound } from "./end_round";
 
 let scoreToReach: number;
 if (dev) {
@@ -20,12 +20,12 @@ if (dev) {
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function closePli(gameId: string, publish: (payload: any) => void) {
+export async function closeTrick(gameId: string, publish: (payload: any) => void) {
   const game = controller.getInstance(gameId).game;
-  const lastPli = controller.getInstance(gameId).getLastPli();
+  const lastTrick = controller.getInstance(gameId).getLastTrick();
   // find the winner
-  const pastPlis: IPlay[] = lastPli.plays;
-  const winnerPlayerId = findWinner(pastPlis, gameId);
+  const pastTricks: IPlay[] = lastTrick.plays;
+  const winnerPlayerId = findWinner(pastTricks, gameId);
   const players: IPlayer[] = Array.from(controller.getInstance(gameId).getPlayers());
   const myIndex = players.findIndex(
     (player: IPlayer) => player.id === winnerPlayerId,
@@ -34,13 +34,13 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
   await supabase.from("Events").insert([
     {
       id: await genIdCuid(),
-      type: "win_pli",
+      type: "win_trick",
       playerId: "controller",
       gameId: gameId,
       value: formatTeam(winnerPlayerId, teamMatePlayerId),
     },
   ]);
-  let score = pastPlis.reduce((acc, pli) => acc + pli.card.valueNum, 0);
+  let score = pastTricks.reduce((acc, trick) => acc + trick.card.valueNum, 0);
   if (game.deck.length === 32) {
     score += 10;
   }
@@ -56,7 +56,7 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
 
   // end of the round
   if (game.deck.length === 32) {
-    await emitEndTrick(gameId, publish);
+    await emitEndRound(gameId, publish);
     // end of the game
     if (game.team1_score >= scoreToReach || game.team2_score >= scoreToReach) {
       await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId, publish);
@@ -72,25 +72,25 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
       // next round if not goal score is reached
       // update the db :
       // fetch the last player starting id
-      const playerId = await fetchLastPliPlayerWinningId(gameId);
+      const playerId = await fetchLastTrickPlayerWinningId(gameId);
       // emit the game starting event
-      await emitStartTrick(gameId, playerId, publish);
+      await emitStartRound(gameId, playerId, publish);
     }
   } else {
-    // next pli
-    controller.getInstance(gameId).addPli(winnerPlayerId);
-    await startPli(gameId, publish);
+    // next trick
+    controller.getInstance(gameId).addTrick(winnerPlayerId);
+    await startTrick(gameId, publish);
   }
 
   return;
 }
 
-export function findWinner(lastPliEvents: IPlay[], gameId: string) {
+export function findWinner(lastTrickEvents: IPlay[], gameId: string) {
   const atout = controller.getInstance(gameId).getLastRound()
-    .last_bidding.suite;
-  if (lastPliEvents.some((pli) => pli.card.suite === atout)) {
+    .last_bid.suite;
+  if (lastTrickEvents.some((trick) => trick.card.suite === atout)) {
     // atout is played
-    const atoutCards = lastPliEvents.filter((pli) => pli.card.suite === atout);
+    const atoutCards = lastTrickEvents.filter((trick) => trick.card.suite === atout);
     const highestAtout = atoutCards.reduce((acc, card) => {
       if (card.card.valueNum > acc.card.valueNum) {
         return card;
@@ -100,9 +100,9 @@ export function findWinner(lastPliEvents: IPlay[], gameId: string) {
     return highestAtout.playerId;
   } else {
     // no atout played
-    const firstSuite = lastPliEvents[0].card.suite;
-    const sameSuite = lastPliEvents.filter(
-      (pli) => pli.card.suite === firstSuite,
+    const firstSuite = lastTrickEvents[0].card.suite;
+    const sameSuite = lastTrickEvents.filter(
+      (trick) => trick.card.suite === firstSuite,
     );
     const highestSameSuite = sameSuite.reduce((acc, card) => {
       if (card.card.valueNum > acc.card.valueNum) {
@@ -114,13 +114,13 @@ export function findWinner(lastPliEvents: IPlay[], gameId: string) {
   }
 }
 
-export async function fetchLastPliPlayerWinningId(
+export async function fetchLastTrickPlayerWinningId(
   gameId: string,
 ): Promise<string> {
   const { data: events, error } = await supabase
     .from("Events")
     .select("value")
-    .eq("type", "start_trick")
+    .eq("type", "start_round")
     .eq("gameId", gameId);
   if (error) {
     console.error(error);

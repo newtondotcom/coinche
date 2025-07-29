@@ -2,7 +2,7 @@ import { supabase } from '@/shared/utils/listener';
 import { deformatCarteToPlay } from '~/shared/utils/format';
 import type { IPlay } from '@coinche/shared';
 
-export async function fetchLastPliEvents(): Promise<IPlay[]> {
+export async function fetchLastTrickEvents(): Promise<IPlay[]> {
     const storeAbout = useAboutStore();
     const storeGame = useGameStore();
     const { data: existingEvents, error: selectError } = await supabase
@@ -14,17 +14,17 @@ export async function fetchLastPliEvents(): Promise<IPlay[]> {
         console.error('Error fetching events', selectError);
         return [];
     }
-    const lastPliId = storeGame.pli_number;
-    const lastPliEvents = existingEvents.filter(
-        (event) => deformatCarteToPlay(event.value).pli_number === lastPliId,
+    const lastTrickId = storeGame.trick_number;
+    const lastTrickEvents = existingEvents.filter(
+        (event) => deformatCarteToPlay(event.value).trick_number === lastTrickId,
     );
-    const pastPlis: IPlay[] = lastPliEvents.map((event) => ({
+    const pastTricks: IPlay[] = lastTrickEvents.map((event) => ({
         card: deformatCarteToPlay(event.value).card,
         playerId: event.playerId,
     }));
-    return pastPlis;
+    return pastTricks;
 }
 
-export function sumPointsPli(plays: IPlay[]) {
+export function sumPointsTrick(plays: IPlay[]) {
     return plays.reduce((acc, play) => acc + play.card.valueNum, 0);
 }

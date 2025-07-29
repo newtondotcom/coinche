@@ -1,18 +1,17 @@
-import { assertPliNumber } from "@/shared/utils/miscs";
-import { deformatCarteToDistribute } from "~/shared/utils/format";
-import type { EventInsert } from "@coinche/shared";
+import { deformatCarteToDistribute } from '@/shared/utils/format';
+import type { EventInsert } from '@coinche/shared';
 
-export function translateDealing(event: EventInsert) {
-  const storePlayers = usePlayersStore();
-  const storeGame = useGameStore();
-  const { pli_number, card } = deformatCarteToDistribute(event.value as string);
-  //assertPliNumber(pli_number, storeGame.pli_number);
-  const player_id = event.playerId;
-  const player = storePlayers.players.find((p) => p.id === player_id);
-  if (player) {
-    player.hands.push(card);
-  } else {
-    console.error("Player not found");
-  }
-  return;
+export default async function translateDistribution(event: EventInsert) {
+    const storeGame = useGameStore();
+    const storePlayer = usePlayersStore();
+    const { trick_number, card } = deformatCarteToDistribute(event.value as string);
+    //assertTrickNumber(trick_number, storeGame.trick_number);
+    storePlayer.setHands([...storePlayer.getPlayer(event.playerId)?.hands || [], card], event.playerId);
+    return;
+}
+
+function assertTrickNumber(trick_number: number, expected: number) {
+    if (trick_number !== expected) {
+        throw new Error(`Trick number mismatch: expected ${expected}, got ${trick_number}`);
+    }
 }
