@@ -6,16 +6,14 @@
     "apps/*"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules apps/game/node_modules apps/controller/node_modules bun.lockb apps/game/bun.lockb apps/controller/bun.lockb",
-    "vercel": "cd apps/game && sh ./merge.sh",
-    "format": "prettier --write .",
-    "game": "cd apps/game && bun dev",
-    "controller": "cd apps/controller && bun dev"
+    "dev": "npx turbo run dev",
+    "build": "npx turbo run build",
+    "lint": "npx turbo run lint",
+    "lint:fix": "npx turbo run lint:fix",
+    "turbo:clean": "npx turbo run clean"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "turbo": "^2.5.5"
   },
-  "dependencies": {
-    "better-sqlite3": "^11.10.0"
-  }
+  "packageManager": "bun@1.2.17"
 }

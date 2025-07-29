@@ -21,8 +21,6 @@ export default defineNuxtConfig({
     DATABASE_URL : process.env.DATABASE_URL,
 
     public: {
-      SUPABASE_URL: process.env.SUPABASE_URL,
-      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
       NODE_ENV: process.env.NODE_ENV,
       BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     },
