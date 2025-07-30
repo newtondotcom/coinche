@@ -1,24 +1,24 @@
-<script setup lang="ts">
-const { $authClient } = useNuxtApp();
-import SignInForm from "~/components/SignInForm.vue";
-import SignUpForm from "~/components/SignUpForm.vue";
-
-const session = $authClient.useSession();
-const showSignIn = ref(true);
-
-watchEffect(() => {
-  if (!session?.value.isPending && session?.value.data) {
-    navigateTo("/dashboard", { replace: true });
-  }
-});
-</script>
-
 <template>
-  <div>
-    <Loader v-if="session.isPending" />
-    <div v-else-if="!session.data">
-      <SignInForm v-if="showSignIn" @switch-to-sign-up="showSignIn = false" />
-      <SignUpForm v-else @switch-to-sign-in="showSignIn = true" />
+    <div class="h-full w-full flex justify-center align-middle my-20 text-4xl font-semibold">
+        Fracasses pas la table stpppp
     </div>
-  </div>
 </template>
+
+<script setup lang="ts">
+import { useAboutStore } from '@/stores/about';
+
+    const storeAbout = useAboutStore();
+    const route = useRoute();
+    const code = route.query.code;
+    if (code) {
+        const data = await $fetch('/api/churros/check', {
+            params: {
+                code: code,
+            },
+        });
+        storeAbout.setMyId(data?.userId || '');
+        console.log('Connected');
+        storeAbout.setAuthentificated(true);
+        navigateTo('/');
+    }
+</script>

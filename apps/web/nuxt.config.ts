@@ -1,9 +1,11 @@
+import tailwindcss from '@tailwindcss/vite'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: 'latest',
-  devtools: { enabled: true },
-  modules: ['@nuxt/ui'],
-  css: ['~/assets/css/main.css'],
+  devtools: { enabled: false },
+  modules: ['@nuxt/ui', 'shadcn-nuxt', '@pinia/nuxt'],
+  css: ['@/assets/css/main.css'],
   devServer: {
     port: 3001
   },
@@ -12,5 +14,14 @@ export default defineNuxtConfig({
     public: {
       serverURL: process.env.NUXT_PUBLIC_SERVER_URL,
     }
-  }
+  },
+  shadcn: {
+    prefix: '',
+    componentDir: './app/components/ui'
+  },
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
+  },
 })

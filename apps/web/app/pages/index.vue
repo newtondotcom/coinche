@@ -1,62 +1,109 @@
-<script setup lang="ts">
-const { $orpc } = useNuxtApp()
-import { useQuery } from '@tanstack/vue-query'
-
-const TITLE_TEXT = `
- ██████╗ ███████╗████████╗████████╗███████╗██████╗
- ██╔══██╗██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
- ██████╔╝█████╗     ██║      ██║   █████╗  ██████╔╝
- ██╔══██╗██╔══╝     ██║      ██║   ██╔══╝  ██╔══██╗
- ██████╔╝███████╗   ██║      ██║   ███████╗██║  ██║
- ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
-
- ████████╗    ███████╗████████╗ █████╗  ██████╗██╗  ██╗
- ╚══██╔══╝    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-    ██║       ███████╗   ██║   ███████║██║     █████╔╝
-    ██║       ╚════██║   ██║   ██╔══██║██║     ██╔═██╗
-    ██║       ███████║   ██║   ██║  ██║╚██████╗██║  ██╗
-    ╚═╝       ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
- `;
-
-const healthCheck = useQuery($orpc.healthCheck.queryOptions())
-</script>
-
 <template>
-  <div class="container mx-auto max-w-3xl px-4 py-2">
-    <pre class="overflow-x-auto font-mono text-sm whitespace-pre-wrap">{{ TITLE_TEXT }}</pre>
-    <div class="grid gap-6 mt-4">
-      <section class="rounded-lg border p-4">
-        <h2 class="mb-2 font-medium">API Status</h2>
-        <div class="flex items-center gap-2">
-            <div class="flex items-center gap-2">
-              <div
-                class="w-2 h-2 rounded-full"
-                :class="{
-                  'bg-yellow-500 animate-pulse': healthCheck.status.value === 'pending',
-                  'bg-green-500': healthCheck.status.value === 'success',
-                  'bg-red-500': healthCheck.status.value === 'error',
-                  'bg-gray-400': healthCheck.status.value !== 'pending' &&
-                                  healthCheck.status.value !== 'success' &&
-                                  healthCheck.status.value !== 'error'
-                }"
-              ></div>
-              <span class="text-sm text-muted-foreground">
-                <template v-if="healthCheck.status.value === 'pending'">
-                  Checking...
-                </template>
-                <template v-else-if="healthCheck.status.value === 'success'">
-                  Connected ({{ healthCheck.data.value }})
-                </template>
-                <template v-else-if="healthCheck.status.value === 'error'">
-                  Error: {{ healthCheck.error.value?.message || 'Failed to connect' }}
-                </template>
-                 <template v-else>
-                  Idle
-                </template>
-              </span>
-            </div>
-          </div>
-      </section>
+    <div class="flex flex-col items-center justify-center align-middle min-h-screen">
+        <Card class="w-[500px] shadow-2xl">
+            <CardHeader>
+                <CardTitle>créer / rejoindre</CardTitle>
+                <CardDescription>
+                    Rentrer un code pour rejoindre ou créer une partie
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div class="flex w-full max-w-sm items-center gap-1.5">
+                    <Input id="gameId" v-model="gameId" placeholder="Code" />
+                </div>
+            </CardContent>
+            <CardFooter>
+                <AlertDialog>
+                    <AlertDialogTrigger as-child>
+                        <Button>
+                            Rejoindre
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                <template v-if="loading">
+                                    <Skeleton class="h-6 w-48" />
+                                </template>
+                                <template v-else>
+                                    {{ gameExists ? 'Partie trouvée' : 'Créer une nouvelle partie ?' }}
+                                </template>
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                                <template v-if="loading">
+                                    <Skeleton class="h-12 w-64" />
+                                </template>
+                                <template v-else>
+                                    <span v-if="gameExists">
+                                        Il y a actuellement {{ playerCount }} joueur{{ playerCount > 1 ? 's' : '' }} dans la partie.<br>
+                                        Voulez-vous rejoindre ?
+                                    </span>
+                                    <span v-else>
+                                        Ce code de partie n'existe pas. Voulez-vous créer une nouvelle partie ?
+                                    </span>
+                                </template>
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <template v-if="loading">
+                                <Skeleton class="h-10 w-24" />
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            </template>
+                            <template v-else>
+                                <AlertDialogAction @click="confirmJoin">
+                                    {{ gameExists ? 'Rejoindre' : 'Créer' }}
+                                </AlertDialogAction>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            </template>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </CardFooter>
+        </Card>
+        <div
+            class="my-20 mx-20 inset-0 flex items-center px-4 pointer-events-none justify-center font-bold text-3xl text-neutral-800 dark:text-neutral-100 text-center md:text-4xl lg:text-7xl"
+        >
+            Élu meilleur jeu de coinche de l'
+            <span
+                class="bg-clip-text text-transparent drop-shadow-2xl bg-linear-to-b from-primary to-primary/40"
+            >
+                n7
+            </span>
+        </div>
     </div>
-  </div>
 </template>
+
+<script setup lang="ts">
+import { useAuth } from '@/composables/useAuth';
+import { useAboutStore } from '@/stores/about';
+
+const { loggedIn } = useAuth();
+const storeAbout = useAboutStore();
+const gameId = ref<string>('');
+
+const loading = ref(false);
+const gameExists = ref(false);
+const playerCount = ref(0);
+
+async function confirmJoin() {
+    if (!loggedIn.value) {
+        navigateTo(`/404`);
+        return;
+    }
+    loading.value = true;
+    try {
+        const res = await $fetch('/api/game/players', { params: { gameId: gameId.value } }) as { exists: boolean, playerCount?: number };
+        gameExists.value = res.exists;
+        playerCount.value = res.playerCount ?? 0;
+        // If not loading, then actually join/redirect
+        if (res.exists || !res.exists) {
+            loading.value = false;
+            navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
+        }
+    } catch (e) {
+        gameExists.value = false;
+        playerCount.value = 0;
+        loading.value = false;
+    }
+}
+</script>
