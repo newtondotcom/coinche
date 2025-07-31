@@ -20,6 +20,7 @@
     <CoincheInterfaceSavedBidding v-if="storeGame.last_bidding.suite != 'NA'" />
 
     <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
+    
   </div>
 </template>
 
