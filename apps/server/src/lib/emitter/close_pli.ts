@@ -8,7 +8,7 @@ import { genIdCuid } from '@coinche/shared';
 import type { EventInsert, IPlay, IPlayer } from "@coinche/shared";
 import { emitStartTrick } from "./start_trick";
 import { emitEndTrick } from "./end_trick";
-import { eq, or, and, desc} from "drizzle-orm";
+import { eq, and, desc} from "drizzle-orm";
 import { db } from "@/db";
 import { events } from "@/db/schema/coinche";
 
@@ -118,23 +118,12 @@ export function findWinner(lastPliEvents: IPlay[], gameId: string) {
 export async function fetchLastPliPlayerWinningId(
   gameId: string,
 ): Promise<string> {
-  const data  = await db
-    .select()
-    .from(events)
-    .where(
-      and(
-        eq(events.type, "start_trick"),
-        eq(events.gameId, gameId)
-      )
-    )
-    .orderBy(desc(events.createdAt))
-    .limit(1);
-  const playerStartedId = data[0].value;
   const players: { id: string }[] = (controller.getInstance(gameId).game as any).players;
   if (!players || !Array.isArray(players)) {
     throw new Error("Players array not found in game instance");
   }
-  const playerStartedIndex = players.findIndex((player) => player.id === playerStartedId);
+  const oldPlayerStartedId = controller.getInstance(gameId).getLastPli().player_starting_id;
+  const playerStartedIndex = players.findIndex((player) => player.id === oldPlayerStartedId);
   if (playerStartedIndex === -1) {
     throw new Error("Starting player not found in players array");
   }

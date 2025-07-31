@@ -5,10 +5,10 @@ export function formatbidding(bidding: Ibidding): string {
 }
 
 export function deformatBidding(value: string, playerId: string): Ibidding {
-  const [biddingStr,suite] = value.split('|');
+  const [suite, biddingStr] = value.split('|');
   return {
     suite: suite as CardSuite,
-    bidding: parseInt(biddingStr) as bidding,
+    bidding: parseInt(biddingStr) as bidding, 
     playerId,
   };
 }

@@ -5,7 +5,7 @@ import logger from '@/lib/logger';
 import { setNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatCarteToPlay } from '@coinche/shared';
-import genIdCuid from '@/lib/utils/gen_id';
+import { genIdCuid } from '@coinche/shared';
 
 export default async function translatePlay(event: EventInsert, publish: (payload: any) => void) {
     const def = deformatCarteToPlay(event.value as string);

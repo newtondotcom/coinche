@@ -1,4 +1,4 @@
-import { formatPoints } from "@/lib/utils/format";
+import { formatPoints } from '@coinche/shared';
 import { genIdCuid } from '@coinche/shared';
 
 /**
