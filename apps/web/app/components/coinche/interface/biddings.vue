@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
     import emitbidding from '@/shared/emitter/bidding';
-import type { bidding, CardSuite, Ibidding } from '~/shared/types';
+    import type { IPlayer, bidding, CardSuite, Ibidding } from "@coinche/shared";
 
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();

@@ -104,6 +104,7 @@ const wsHandler = {
       };
       logger.info(event);
       await translateEvent(event, publish);
+      await new Promise(resolve => setTimeout(resolve, 500));
       return;
     }
     ws.send(JSON.stringify({ type: "system", message: "Unknown event type or missing gameId." }));
@@ -118,7 +119,7 @@ const wsHandler = {
     }
     userRooms.delete(ws);
     // Optionally broadcast disconnect
-    
+
     // for now, we are cleaning everything
     userRooms.delete(ws);
     gamePlayers.delete(gameId);

@@ -2,7 +2,6 @@ import { findWinner } from '@/lib/emitter/close_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { emitPointsTrick } from './points_trick';
-
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */

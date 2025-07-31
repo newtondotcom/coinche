@@ -32,7 +32,9 @@ export const useAboutStore = defineStore('about', () => {
     );
 
     const colorAsked: ComputedRef<CardSuite | undefined> = computed(() =>
-        storeGame.current_pli.length > 0 ? storeGame.current_pli[0].card.suite : undefined,
+        storeGame.current_pli.length > 0 && storeGame.current_pli[0]?.card
+            ? storeGame.current_pli[0].card.suite
+            : undefined,
     );
 
     const hasAtout: ComputedRef<boolean> = computed(
@@ -54,11 +56,12 @@ export const useAboutStore = defineStore('about', () => {
             (c) => c.card.suite === storeGame.last_bidding.suite,
         );
         if (atoutsInPli.length === 0) return NaN;
+        // Fix: Check if orderedAtouts[0] is defined before accessing valueNum
         const orderedAtouts = atoutsInPli.sort((a, b) => b.card.valueNum - a.card.valueNum);
-        return orderedAtouts[0].card.valueNum;
+        return orderedAtouts[0]?.card.valueNum ?? NaN;
     });
 
-    const atoutIsAsked = computed(() => colorAsked.value === atout.value);
+    const atoutIsAsked = computed(() => colorAsked.value !== undefined && atout.value !== undefined && colorAsked.value === atout.value);
 
     function setMyId(id: string) {
         myId.value = id;

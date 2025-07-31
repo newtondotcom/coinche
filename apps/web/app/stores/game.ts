@@ -7,8 +7,6 @@ export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
     const current_pli = ref<IPlay[]>([]);
     const pli_number = ref<number>(0);
-    const team1_point_current_game = ref<number>(0);
-    const team2_point_current_game = ref<number>(0);
     const last_bidding = ref<Ibidding>({ suite: 'NA', bidding: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
@@ -19,6 +17,8 @@ export const useGameStore = defineStore('game', () => {
 
     const team1_score = ref<number>(0);
     const team2_score = ref<number>(0);
+    const team1_point_current_game = ref<number>(0);
+    const team2_point_current_game = ref<number>(0);
 
     function addCardToPliAndRemove(card: ICard, playerId: PlayerId) {
         current_pli.value.push({ card, playerId });
@@ -63,14 +63,6 @@ export const useGameStore = defineStore('game', () => {
         player_starting_id.value = playerId;
     }
 
-    function addScoreToTeam(score: number, num: number) {
-        if (num == 1) {
-            team1_score.value += score;
-        } else {
-            team2_score.value += score;
-        }
-    }
-
     function addScoreToTeam1(score: number) {
         team1_point_current_game.value = team1_point_current_game.value + score;
     }
@@ -80,9 +72,11 @@ export const useGameStore = defineStore('game', () => {
 
     function addGlobalScoreToTeam1(score: number) {
         team1_score.value = team1_score.value + score;
+        team1_point_current_game.value = 0;
     }
     function addGlobalScoreToTeam2(score: number) {
         team2_score.value = team2_score.value + score;
+        team2_point_current_game.value = 0;
     }
 
     function addbiddingToPli(bidding: Ibidding) {
@@ -112,7 +106,6 @@ export const useGameStore = defineStore('game', () => {
         setSurcoinched,
         setNewPli,
         setPlayerStartingId,
-        addScoreToTeam,
         biddings_pli,
         addbiddingToPli,
         deck,

@@ -16,10 +16,20 @@
         Atout : {{ storeAbout.atout }}
         <br />
         Cards in hands : {{ storeAbout.hand.length }}
+        <br />
+        Card playable : {{ storeAbout.hand.some(card => cardCanBePlayed(card, {
+            current_player_id: storeGame.current_player_id,
+            myId: storeAbout.myId,
+            current_pli: storeGame.current_pli,
+            colorAsked: storeAbout.colorAsked,
+            atout: storeAbout.atout,
+            hand: storeAbout.hand,
+        })) }}
     </div>
 </template>
 
 <script setup lang="ts">
+    import { cardCanBePlayed } from '@/shared/utils/cardRules';
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
 </script>

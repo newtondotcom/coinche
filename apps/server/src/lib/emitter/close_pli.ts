@@ -8,9 +8,6 @@ import { genIdCuid } from '@coinche/shared';
 import type { EventInsert, IPlay, IPlayer } from "@coinche/shared";
 import { emitStartTrick } from "./start_trick";
 import { emitEndTrick } from "./end_trick";
-import { eq, and, desc} from "drizzle-orm";
-import { db } from "@/db";
-import { events } from "@/db/schema/coinche";
 
 let scoreToReach: number;
 if (dev) {
@@ -78,6 +75,7 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
       await emitStartTrick(gameId, playerId, publish);
     }
   } else {
+    console.log(game.deck.length);  
     // next pli
     controller.getInstance(gameId).addPli(winnerPlayerId);
     await startPli(gameId, publish);

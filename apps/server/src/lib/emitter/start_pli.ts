@@ -19,6 +19,7 @@ export async function startPli(gameId: string, publish: (payload: any) => void) 
     value: playerIdStarting,
     timestamp : new Date().toISOString(),
   }
+  await new Promise(resolve => setTimeout(resolve, 500));
   publish(event)
   logger.info(`Starting pli for ${playerIdStarting}`);
   await emitCanPlay(playerIdStarting, gameId, publish);

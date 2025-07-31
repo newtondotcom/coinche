@@ -44,7 +44,7 @@ export function handleWSEvent(event: any) {
     case "start_game":
       return translateStart(event);
     case "start_pli":
-      return translateStartPli(event);
+      return translateStartPli();
     case "leave":
       return translateLeave(event);
     case "join":
