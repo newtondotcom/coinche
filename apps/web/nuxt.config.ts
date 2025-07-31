@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     public: {
-      serverURL: process.env.NUXT_PUBLIC_SERVER_URL,
+      serverURL: process.env.NUXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
     }
   },
   shadcn: {

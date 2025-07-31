@@ -3,8 +3,8 @@ import { startPli } from '@/lib/emitter/start_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { setNextPlayerTurn } from '@/lib/utils';
-import type { EventInsert } from '@/lib/types';
-import { deformatBidding } from '@/lib/utils/format';
+import type { EventInsert } from '@coinche/shared';
+import { deformatBidding } from '@coinche/shared';
 import { emitBid } from '@/lib/emitter/bid';
 
 export default async function translateBidding(event: EventInsert, publish: (payload: any) => void) {
@@ -23,7 +23,9 @@ export default async function translateBidding(event: EventInsert, publish: (pay
     }
     
     controller.getInstance(event.gameId).addbidding(bid);
+
     await emitBid(bid,event.gameId,publish);
+
     const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
     await emitCanBid(nextPlayerId, event.gameId, publish);
     

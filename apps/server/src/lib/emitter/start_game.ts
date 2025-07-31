@@ -1,4 +1,4 @@
-import genIdCuid from "@/lib/utils/gen_id";
+import { genIdCuid } from '@coinche/shared';
 import { emitStartTrick } from "./start_trick";
 
 /**

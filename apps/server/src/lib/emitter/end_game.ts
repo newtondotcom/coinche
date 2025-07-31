@@ -1,7 +1,7 @@
 import logger from "@/lib/logger";
-import { formatTeam } from "@/lib/utils/format";
-import genIdCuid from "@/lib/utils/gen_id";
-import type { EventInsert, IPlayer } from "@/lib/types";
+import { formatTeam } from "@coinche/shared";
+import { genIdCuid } from '@coinche/shared';
+import type { EventInsert, IPlayer } from "@coinche/shared";
 import {events, game, playerStats} from "@/db/schema/coinche";
 import { eq, or } from "drizzle-orm";
 

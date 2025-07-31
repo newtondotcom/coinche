@@ -1,10 +1,5 @@
 import { usePlayersStore } from "@/stores/players";
-import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
-// Handles player_list event from the server on the client
-// Usage: translatePlayerList(event, storePlayers)
-
-import type { IPlayer } from "@/shared/types";
+import type { IPlayer } from "@coinche/shared";
 import { toast } from "vue-sonner";
 
 /**

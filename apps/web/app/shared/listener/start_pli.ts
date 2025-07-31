@@ -1,8 +1,7 @@
 import { usePlayersStore } from "@/stores/players";
-import { useGameStore } from "@/stores/game";
 import { useAboutStore } from "@/stores/about";
 import { setValueAccordingToAtout } from "@/shared/utils/deck";
-import type { EventInsert } from "@/shared/types";
+import type { EventInsert } from "@coinche/shared";
 
 export async function translateStartPli(event: EventInsert) {
   const storeAbout = useAboutStore();

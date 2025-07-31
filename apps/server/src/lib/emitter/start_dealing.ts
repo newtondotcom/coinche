@@ -1,9 +1,9 @@
 import emitDealing from "@/lib/emitter/dealing";
 import controller from "@/lib/game";
 import { generateDeckCards } from "@/lib/utils";
-import genIdCuid from "@/lib/utils/gen_id";
+import { genIdCuid } from '@coinche/shared';
 import logger from "@/lib/logger";
-import type { EventInsert } from "@/lib/types";
+import type { EventInsert } from "@coinche/shared";
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))

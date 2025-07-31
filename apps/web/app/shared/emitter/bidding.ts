@@ -1,9 +1,7 @@
-import { useGameStore } from "@/stores/game";
 import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
-import { formatbidding } from '@/shared/utils/format';
-import genIdCuid from '@/shared/utils/gen_id';
-import type { Ibidding } from '@/shared/types';
+import { formatbidding, genIdCuid } from '@coinche/shared';
+import type { Ibidding } from '@coinche/shared';
 
 export default async function emitbidding(bidding: Ibidding) {
     const storeAbout = useAboutStore();

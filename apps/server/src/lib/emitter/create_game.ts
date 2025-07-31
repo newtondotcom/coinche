@@ -1,6 +1,6 @@
-import genIdCuid from "@/lib/utils/gen_id";
-import { formatPoints } from "@/lib/utils/format";
-import type { EventInsert } from "@/lib/types";
+import { genIdCuid } from '@coinche/shared';
+import { formatPoints } from "@coinche/shared";
+import type { EventInsert } from "@coinche/shared";
 import { events } from "@/db/schema/coinche";
 import { and, desc, eq} from "drizzle-orm";
 import { db } from "@/db";

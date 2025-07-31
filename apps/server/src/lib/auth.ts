@@ -1,13 +1,13 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import * as schema from "@coinche/shared/db/schema";
+import * as authSchema from "@/db/schema/auth";
 import { genericOAuth } from "better-auth/plugins";
 import { db } from "@/db";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema: schema,
+    schema: authSchema,
   }),
 
   user: {

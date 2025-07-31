@@ -1,4 +1,4 @@
-import type { PlayerId } from '@/lib/types';
+import type { PlayerId } from '@coinche/shared';
 import { playerStats } from '@/db/schema/coinche';
 import { eq} from "drizzle-orm";
 import { db } from '@/db';

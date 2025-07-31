@@ -1,8 +1,9 @@
 import { emitGameStarting } from "@/lib/emitter/start_game";
 import logger from "@/lib/logger";
-import genIdCuid from "@/lib/utils/gen_id";
+import { genIdCuid } from '@coinche/shared';
+
 import controller from "@/lib/game";
-import type { IPlayer } from '@/lib/types';
+import type { IPlayer } from '@coinche/shared';
 
 /**
  * Handles player join/leave events for a game room.

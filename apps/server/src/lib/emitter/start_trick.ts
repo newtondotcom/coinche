@@ -1,5 +1,5 @@
 import logger from '@/lib/logger';
-import genIdCuid from '@/lib/utils/gen_id';
+import { genIdCuid } from '@coinche/shared';
 import controller from '@/lib/game';
 import { emitStartDealing } from './start_dealing';
 

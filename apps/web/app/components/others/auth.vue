@@ -6,21 +6,19 @@
                 />
                 Connexion avec INP-net
             </Button>
-        <Button v-else @click="SignOut">Déconnexion</Button>
+            <OthersUserDropdown v-else />
     </div>
 </template>
 
 <script setup lang="ts">
-    const {signIn, loggedIn, signOut } = useAuth()
+    const { signIn, loggedIn } = useAuth();
 
-    async function SignIn(){
+    async function SignIn() {
+        console.log("SignIn");  
         await signIn.social({
             provider: "churros",
             callbackURL :"/regles"
         });
-    }
-
-    async function SignOut(){
-        await signOut();
+        console.log("SignIn");  
     }
 </script>

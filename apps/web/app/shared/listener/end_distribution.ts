@@ -1,7 +1,5 @@
-import { usePlayersStore } from "@/stores/players";
-import { useGameStore } from "@/stores/game";
 import { useAboutStore } from "@/stores/about";
-import type { EventInsert } from '@/shared/types';
+import type { EventInsert } from '@coinche/shared';
 
 export async function translateEndDistribution(event: EventInsert) {
     console.log('end distribution', event);

@@ -1,5 +1,5 @@
 import { formatPoints } from "@/lib/utils/format";
-import genIdCuid from "@/lib/utils/gen_id";
+import { genIdCuid } from '@coinche/shared';
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))

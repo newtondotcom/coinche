@@ -3,11 +3,15 @@
 
 let ws: WebSocket | null = null;
 const listeners = new Set<(msg: any) => void>();
+const config = useRuntimeConfig();
 
 export function getWS() {
   if (!ws || ws.readyState === WebSocket.CLOSED) {
-    // TODO: Replace with your actual server address/port
-    ws = new WebSocket(`ws://${window.location.hostname}:3001`);
+    // Construct WebSocket URL from server URL
+    const serverURL = config.public.serverURL || 'http://localhost:3000';
+    const wsURL = serverURL.replace(/^http(s)?:\/\//, 'ws$1://') + '/ws';
+    console.log('Connecting to WebSocket:', wsURL);
+    ws = new WebSocket(wsURL);
     
     ws.onopen = () => {
       console.log('WebSocket connected');

@@ -1,4 +1,4 @@
-import type { ICard } from '@/shared/types';
+import type { ICard } from '@coinche/shared';
 import { useAboutStore } from '@/stores/about';
 
 export function setValueAccordingToAtout(deck: ICard[]): ICard[] {

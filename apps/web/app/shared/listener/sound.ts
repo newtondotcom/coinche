@@ -1,8 +1,5 @@
-import { usePlayersStore } from "@/stores/players";
-import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
 import { Howl } from 'howler';
-import type { EventInsert } from '@/shared/types';
+import type { EventInsert } from '@coinche/shared';
 
 export async function translateSound(event: EventInsert) {
     const soundName: string = event.value as string;

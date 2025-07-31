@@ -1,6 +1,6 @@
 import { deleteRows } from '@/lib/emitter/end_game';
 import logger from '@/lib/logger';
-import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound } from '@/lib/types';
+import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
 
 export default class controller {
     private static _instances: Map<string, controller> = new Map();
@@ -65,6 +65,7 @@ export default class controller {
         lastRound.biddings.push(bidding);
         if (bidding.bidding !== 0) {
             this.getLastRound().last_bidding = bidding;
+            console.log(this.getLastRound().last_bidding);
         }
         logger.info(`Player ${bidding.playerId} announced ${bidding.suite}`);
     }

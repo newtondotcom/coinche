@@ -1,7 +1,6 @@
-import { useGameStore } from "@/stores/game";
 import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
-import genIdCuid from '@/shared/utils/gen_id';
+import { genIdCuid } from '@coinche/shared';
 
 export async function join() {
     const storeAbout = useAboutStore();

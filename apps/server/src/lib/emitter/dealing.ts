@@ -1,9 +1,10 @@
 import { emitCanBid } from "@/lib/emitter/can";
 import controller from "@/lib/game";
 import logger from "@/lib/logger";
-import { formatCarteToDistribute } from "@/lib/utils/format";
-import genIdCuid from "@/lib/utils/gen_id";
-import type { ICard, PlayerId } from "@/lib/types";
+import { formatCarteToDistribute } from "@coinche/shared";
+import { genIdCuid } from '@coinche/shared';
+
+import type { ICard, PlayerId } from "@coinche/shared";
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))

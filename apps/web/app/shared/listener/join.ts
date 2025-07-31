@@ -1,7 +1,5 @@
 import { usePlayersStore } from "@/stores/players";
-import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
-import type { EventInsert, IPlayer, PlayerPosition } from '@/shared/types';
+import type { EventInsert, IPlayer, PlayerPosition } from '@coinche/shared';
 
 export async function translateJoin(event: EventInsert) {
     const storePlayers = usePlayersStore();

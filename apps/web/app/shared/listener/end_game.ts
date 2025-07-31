@@ -1,9 +1,5 @@
-import { usePlayersStore } from "@/stores/players";
-import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
-import { deformatTeam } from '@/shared/utils/format';
+import { deformatTeam, type EventInsert } from '@coinche/shared';
 import { toast } from 'vue-sonner';
-import type { EventInsert } from '@/shared/types';
 
 export function translateEndGame(event: EventInsert) {
     console.log('end_game', event);

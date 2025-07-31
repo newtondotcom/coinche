@@ -1,8 +1,6 @@
-import { usePlayersStore } from "@/stores/players";
 import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
 import { toast } from 'vue-sonner';
-import type { EventInsert } from '@/shared/types';
+import type { EventInsert } from '@coinche/shared';
 
 export async function translateStart(event: EventInsert) {
     const storeGame = useGameStore();

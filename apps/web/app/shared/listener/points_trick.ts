@@ -1,8 +1,5 @@
-import { usePlayersStore } from "@/stores/players";
 import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
-import { unformatPoints } from '@/shared/utils/format';
-import type { EventInsert } from '@/shared/types';
+import { unformatPoints, type EventInsert } from '@coinche/shared';
 
 export async function translatePointsRound(event: EventInsert) {
     console.log('points_trick', event);

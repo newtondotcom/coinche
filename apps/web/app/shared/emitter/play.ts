@@ -1,9 +1,8 @@
 import { useGameStore } from "@/stores/game";
 import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
-import { formatCarteToPlay } from '@/shared/utils/format';
-import genIdCuid from '@/shared/utils/gen_id';
-import type { CardSuite, CardValue, ICard } from '@/shared/types';
+import { formatCarteToPlay, genIdCuid } from '@coinche/shared';
+import type { CardSuite, CardValue, ICard } from '@coinche/shared';
 
 export async function emitCardPlay(card: ICard) {
     const storeAbout = useAboutStore();

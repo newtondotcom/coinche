@@ -8,7 +8,7 @@ import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
 import logger from "./lib/logger";
 import { serve, type ServerWebSocket } from "bun";
-import type { EventInsert } from "./lib/types";
+import type { EventInsert } from "@coinche/shared";
 import { translateEvent } from "./lib/listener";
 
 async function getUsernameFromCookies(cookie: string | null) {
@@ -65,7 +65,7 @@ app.get("/ws", async (c) => {
 
 const wsHandler = {
   open(ws: ServerWebSocket) {
-    const data = ws.data as { username: string, gameId: string };
+    const data = ws.data as unknown as { username: string, gameId: string };
     const gameId = data.gameId;
     // On connect, no room joined yet
     userRooms.set(ws, new Set());
@@ -75,7 +75,7 @@ const wsHandler = {
   },
   async message(ws: ServerWebSocket, raw : string | ArrayBuffer | Uint8Array) {
     // ws.data is typed as unknown, so we need to assert its shape
-    const data = ws.data as { username: string, gameId: string };
+    const data = ws.data as unknown as { username: string, gameId: string };
     const gameId = data.gameId;
     let msg: EventInsert;
     // Ensure raw is a string
@@ -87,20 +87,18 @@ const wsHandler = {
       return;
     }
     if (msg.type && msg.gameId) {
-      const data = ws.data as { username: string, gameId: string };
+      const data = ws.data as unknown as { username: string, gameId: string };
       // Fill missing fields for EventInsert
       const event: EventInsert = {
         ...msg, // spread first so explicit fields below take precedence
         gameId: msg.gameId || data.gameId,
         id: (msg as any).id || crypto.randomUUID(),
-        playerId: (msg as any
-      // Use ws.data for userId and gameId).playerId || data.username,
+        playerId: (msg as any).playerId || data.username,
         type: msg.type,
         value: (msg as any).value || '',
         timestamp: (msg as any).timestamp || new Date().toISOString(),
       };
       const publish = (payload: any) => {
-        console.log("sending ws event", gameId, payload);
         server.publish(data.gameId,JSON.stringify(payload));
       };
       logger.info(event);

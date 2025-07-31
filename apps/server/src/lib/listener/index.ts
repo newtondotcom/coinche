@@ -1,6 +1,6 @@
 import translateBidding from '@/lib/listener/bidding';
 import translatePlay from '@/lib/listener/play';
-import type { EventInsert } from '@/lib/types';
+import type { EventInsert } from '@coinche/shared';
 import { handlePlayerJoinLeave } from './join_leave';
 
 /**

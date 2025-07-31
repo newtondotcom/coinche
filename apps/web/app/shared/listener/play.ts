@@ -1,9 +1,7 @@
-import { usePlayersStore } from "@/stores/players";
 import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
 import { assertPliNumber } from "@/shared/utils/miscs";
-import { deformatCarteToPlay } from '@/shared/utils/format';
-import type { EventInsert } from "@/shared/types";
+import { deformatCarteToPlay } from '@coinche/shared';
+import type { EventInsert } from "@coinche/shared";
 
 export default function translatePlay(event: EventInsert) {
   const storeGame = useGameStore();

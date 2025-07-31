@@ -1,5 +1,5 @@
 import controller from '@/lib/game';
-import type { CardSuite, CardValue, ICard, IPlayer } from '@/lib/types';
+import type { CardSuite, CardValue, ICard, IPlayer } from '@coinche/shared';
 import logger from './logger';
 
 export const dev = process.env.NODE_ENV !== 'production';
