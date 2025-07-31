@@ -10,6 +10,7 @@ import logger from "./lib/logger";
 import { serve, type ServerWebSocket } from "bun";
 import type { EventInsert } from "@coinche/shared";
 import { translateEvent } from "./lib/listener";
+import controller from "./lib/game";
 
 async function getUsernameFromCookies(cookie: string | null) {
   return "test";
@@ -117,6 +118,11 @@ const wsHandler = {
     }
     userRooms.delete(ws);
     // Optionally broadcast disconnect
+    
+    // for now, we are cleaning everything
+    userRooms.delete(ws);
+    gamePlayers.delete(gameId);
+    controller.clearGames();
   },
 };
 

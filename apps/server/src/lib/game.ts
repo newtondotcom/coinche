@@ -3,6 +3,9 @@ import logger from '@/lib/logger';
 import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
 
 export default class controller {
+    static clearGames() {
+        this._instances.clear();
+    }
     private static _instances: Map<string, controller> = new Map();
 
     public game: IGame;
