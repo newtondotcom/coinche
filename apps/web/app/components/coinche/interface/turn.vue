@@ -57,7 +57,7 @@
                 </div>
 
                 <div />
-                <div class="flex justify-center items-center">
+                <div class="flex justify-center items-center relative">
                     <Badge
                         :variant="
                             playerIdTurn === storePlayers.players[indexPlayers].id
@@ -71,6 +71,11 @@
                     <span class="font-semibold mx-1">
                         {{ storePlayers.players[indexPlayers].id }}
                     </span>
+                    <div
+                        v-if="playerIdTurn === storePlayers.players[indexPlayers].id"
+                        class="text-green-500 w-full font-bold"
+                    > A TWA !
+                    </div>
                 </div>
                 <div />
             </div>
@@ -86,7 +91,7 @@
 
     const playerIdTurn = computed<string>(() => storeGame.current_player_id);
     const indexPlayers = computed<number>(() =>
-        storePlayers.players.findIndex((p) => p.id == storeAbout.myId),
+        storePlayers.players.findIndex((p: any) => p.id == storeAbout.myId),
     );
     const lengthPlayers = computed<number>(() => storePlayers.players.length);
 </script>
