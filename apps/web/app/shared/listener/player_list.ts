@@ -10,7 +10,7 @@ import { toast } from "vue-sonner";
 export function translatePlayerList(event: any) {
   if (Array.isArray(event.value)) {
     const storePlayers = usePlayersStore();
-    handlePlayerListNotification(event.value,storePlayers.players)
+    handlePlayerListNotification(event.value, storePlayers.players);
     const buildPlayers = event.value.map((player: IPlayer, index: number) => ({
       id: player.id,
       position: player.position,
@@ -18,22 +18,27 @@ export function translatePlayerList(event: any) {
       classement: player.classement,
     }));
     storePlayers.setPlayers(buildPlayers);
-    console.log("There are now : " + event.value.size + "size")
+    console.log("There are now : " + event.value.length + " players");
   } else {
-      console.error("error in translatePlayerList",event.value)
+      console.error("error in translatePlayerList", event.value);
   }
 }
 
 /**
  * Compares the new player list to the previous one and triggers notifications for joins/leaves.
- * @param newPlayers The new array of player IDs
- * @param prevPlayers The previous array of player IDs
+ * @param newPlayers The new array of player objects
+ * @param prevPlayers The previous array of player objects
  */
-export function handlePlayerListNotification(newPlayers: string[], prevPlayers: IPlayer[]) {
+export function handlePlayerListNotification(newPlayers: IPlayer[], prevPlayers: IPlayer[]) {
+  // Extract player IDs for comparison
+  const newPlayerIds = newPlayers.map(p => p.id);
+  const prevPlayerIds = prevPlayers.map(p => p.id);
+  
   // Find joined players
-  const joined = newPlayers.filter(p => !prevPlayers.includes(p));
+  const joined = newPlayerIds.filter(id => !prevPlayerIds.includes(id));
   // Find left players
-  const left = prevPlayers.filter(p => !newPlayers.includes(p));
+  const left = prevPlayerIds.filter(id => !newPlayerIds.includes(id));
+  
   joined.forEach(playerId => toast(`${playerId} joined the game!`));
   left.forEach(playerId => toast(`${playerId} left the game!`));
 } 

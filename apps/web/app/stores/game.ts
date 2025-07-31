@@ -1,4 +1,4 @@
-import type { Ibidding, ICard, IPlay, PlayerId } from '@/shared/types';
+import type { Ibidding, ICard, IPlay, PlayerId } from '@coinche/shared';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { usePlayersStore } from './players';

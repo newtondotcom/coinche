@@ -1,4 +1,4 @@
-import type { Ibidding, ICard, IPlayer, PlayerPosition } from '@/shared/types';
+import type { Ibidding, ICard, IPlayer, PlayerPosition } from '@coinche/shared';
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
@@ -7,10 +7,10 @@ export const usePlayersStore = defineStore('players', () => {
     const isLoadingPlayerList = ref<boolean>(true);
 
     function removeCard(card: ICard, playerId: string) {
-        const player = players.value.find((player) => player.id === playerId);
+        const player : IPlayer | undefined = players.value.find((player : IPlayer) => player.id === playerId);
         if (player) {
             player.hands = player.hands.filter(
-                (c) =>
+                (c : ICard) =>
                     !(
                         c.suite === card.suite &&
                         c.value === card.value &&

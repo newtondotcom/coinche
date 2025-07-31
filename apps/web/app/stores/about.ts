@@ -1,4 +1,4 @@
-import type { CardSuite, ICard } from '@/shared/types';
+import type { CardSuite, ICard } from '@coinche/shared';
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { useGameStore } from './game';
