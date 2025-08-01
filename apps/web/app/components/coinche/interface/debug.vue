@@ -9,7 +9,7 @@
         <br />
         Announcing : {{ storeAbout.timeTobidding }}
         <br />
-        Player starting : {{ storeGame.player_starting_id }}
+        Player starting : {{ storeGame.playerStartingId }}
         <br />
         Current player id : {{ storeGame.currentPlayerId }}
         <br />

@@ -1,5 +1,6 @@
 import { formatPoints } from '@coinche/shared';
 import { genIdCuid } from '@coinche/shared';
+import controller from '@/lib/game';
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
@@ -18,5 +19,5 @@ export async function emitPointsTrick(
     value: formatPoints(scoreTeam1, scoreTeam2),
     timestamp: new Date().toISOString(),
   };
-  publish(event);
+  controller.getInstance(gameId).sendState();
 }

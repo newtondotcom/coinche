@@ -1,5 +1,6 @@
 import logger from '@/lib/logger';
 import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound, IGameState, CardSuite, bidding, PlayerId } from '@coinche/shared';
+import server from '..';
 
 export default class controller {
     static clearGames() {
@@ -53,6 +54,15 @@ export default class controller {
         } else {
             logger.warn(`Game with id ${gameId} does not exist`);
         }
+    }
+
+    public sendState() {
+        const payload = JSON.stringify({
+            changeType: 'changeTypeState',
+            state: this.state,
+        });
+        server.publish(this.state.gameId, payload);
+        logger.info(`State sent for gameId: ${this.state.gameId}`); 
     }
 
     public getPlayers(): IPlayer[] {

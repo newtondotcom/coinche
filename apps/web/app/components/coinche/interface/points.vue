@@ -9,7 +9,7 @@
                     <div class="flex items-center space-x-4">
                         <Avatar>
                             <AvatarFallback>
-                                {{ storeGame.team1_point_current_game }}
+                                {{ storeGame.team1PointsCurrentGame }}
                             </AvatarFallback>
                         </Avatar>
                         <div>
@@ -28,7 +28,7 @@
                     <div class="flex items-center space-x-4">
                         <Avatar>
                             <AvatarFallback>
-                                {{ storeGame.team2_point_current_game }}
+                                {{ storeGame.team2PointsCurrentGame }}
                             </AvatarFallback>
                         </Avatar>
                         <div>

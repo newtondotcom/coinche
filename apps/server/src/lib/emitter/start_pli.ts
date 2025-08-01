@@ -10,7 +10,7 @@ export async function startPli(gameId: string, publish: (payload: any) => void) 
   // launch pli
   const playerIdStarting = controller
     .getInstance(gameId)
-    .getLastPli().player_starting_id;
+    .getLastPli().playerStartingId;
   const event = {
     id: await genIdCuid(),
     type: "start_pli",

@@ -133,5 +133,7 @@ const server = serve({
   websocket: wsHandler,
 });
 
+export default server;
+
 console.log(`Listening on ${server.hostname}:${server.port}`);
 

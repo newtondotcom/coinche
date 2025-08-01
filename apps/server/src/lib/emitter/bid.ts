@@ -1,18 +1,10 @@
-import { formatbidding, genIdCuid } from '@coinche/shared';
-import type { EventInsert, Ibidding } from '@coinche/shared';
+import type { Ibidding } from '@coinche/shared';
+import controller from '@/lib/game';
 
 export async function emitBid(
   bid: Ibidding,
-  gameId : string,
-  publish: (payload: any) => void
+  gameId : string
 ) {
-  const event: EventInsert = {
-    id: await genIdCuid(),
-    type: 'bid',
-    playerId: bid.playerId,
-    gameId: gameId,
-    value: formatbidding(bid),
-    timestamp: new Date().toISOString(),
-  };
-  publish(event);
+  controller.getInstance(gameId).state.currentRound.biddings.push(bid);
+  controller.getInstance(gameId).sendState();
 }

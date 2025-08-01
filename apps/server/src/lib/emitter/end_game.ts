@@ -7,6 +7,7 @@ import { eq, or } from "drizzle-orm";
 
 import { addPointsTo } from "../points";
 import { db } from "@/db";
+import controller from "../game";
 
 /**
  * Calculate expected score for a player against another team
@@ -52,7 +53,7 @@ export async function emitEndGame(
     gameId: gameId,
     value: formatTeam(winnerPlayerId, teamMatePlayerId),
   };
-  publish(event);
+  controller.getInstance(gameId).sendState();
 }
 
 /**

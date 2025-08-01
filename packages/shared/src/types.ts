@@ -40,8 +40,8 @@ export interface IPlayer {
 export interface IRound {
     plis: IPli[];
     biddings: Ibidding[];
-    team1_point_current_game: number;
-    team2_point_current_game: number;
+    team1PointsCurrentGame: number;
+    team2PointsCurrentGame: number;
     biddingElected: Ibidding;
     coinched: boolean;
     surcoinched: boolean;
@@ -50,7 +50,7 @@ export interface IRound {
 export interface IPli {
     plays: IPlay[];
     currentPlayerId: PlayerId;
-    player_starting_id: PlayerId;
+    playerStartingId: PlayerId;
 }
 
 export interface IGame {

@@ -2,14 +2,15 @@ import { findWinner } from '@/lib/emitter/close_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { emitPointsTrick } from './points_trick';
+
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitEndTrick(gameId: string, publish: (payload: any) => void) {
     const controllerInstance = controller.getInstance(gameId);
-    const lastRound = controllerInstance.getLastRound();
+    const lastRound = controllerInstance.getCurrentRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
-    const seuilbidding = lastRound.last_bidding;
+    const seuilbidding = lastRound.biddingElected;
     const teamAnnounced = controllerInstance.isTeam1(seuilbidding.playerId) ? 1 : 2;
 
     const calculateSpecialBidScore = (bidding: number) => {
@@ -35,14 +36,15 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     };
 
     const calculateDefaultScore = () => {
+        const lastPli = lastRound.plis[lastRound.plis.length - 1];
         const biddingValue =
             typeof seuilbidding.bidding === 'number'
                 ? seuilbidding.bidding
                 : parseInt(seuilbidding.bidding, 10);
 
         if (
-            (teamAnnounced === 1 && lastRound.team1_point_current_game >= biddingValue) ||
-            (teamAnnounced === 2 && lastRound.team2_point_current_game >= biddingValue)
+            (teamAnnounced === 1 && lastPli.team1Score >= biddingValue) ||
+            (teamAnnounced === 2 && lastPli.team2Score >= biddingValue)
         ) {
             // bidding validée
             return biddingValue * pointMultiplier;
@@ -82,7 +84,7 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     }
 
     logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
-    controllerInstance.game.team1_score += scoreTeam1;
-    controllerInstance.game.team2_score += scoreTeam2;
+    controllerInstance.state.team1PointsCurrentGame += scoreTeam1;
+    controllerInstance.state.team2PointsCurrentGame += scoreTeam2;
     await emitPointsTrick(scoreTeam1, scoreTeam2, gameId, publish);
 }

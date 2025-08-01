@@ -1,115 +1,78 @@
-import type { CardSuite, ICard } from '@coinche/shared';
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { useGameStore } from './game';
 import { usePlayersStore } from './players';
+import { useGameStore } from './game';
 
 export const useAboutStore = defineStore('about', () => {
-    const storeGame = useGameStore();
-    const storePlayers = usePlayersStore();
+    const playersStore = usePlayersStore();
+    const gameStore = useGameStore();
+
     const myId = ref<string>('0');
     const gameId = ref<string>('0');
     const isCreator = ref<boolean>(false);
-    const timeTobidding = ref<boolean>(false);
+    const timeToBidding = ref<boolean>(false);
     const timeDistrib = ref<boolean>(false);
     const turnToPlay = ref<boolean>(false);
-    const turnTobidding = ref<boolean>(false);
+    const turnToBidding = ref<boolean>(false);
+    const authenticated = ref<boolean>(false);
 
-    const authentificated = ref<boolean>(false);
+    const atout = computed(() => gameStore.biddingElected.suite);
 
-    const setTurnToPlay = (value: boolean) => {
-        turnToPlay.value = value;
-    };
-
-    const setTurnTobidding = (value: boolean) => {
-        turnTobidding.value = value;
-    };
-
-    const atout: ComputedRef<CardSuite> = computed(() => storeGame.biddingElected.suite);
-
-    const hand: ComputedRef<ICard[]> = computed(
-        () => storePlayers.players.find((p) => p.id === myId.value)?.hands || [],
+    const hand = computed(() =>
+        playersStore.players.find((p) => p.id === myId.value)?.hands || [],
     );
 
-    const colorAsked: ComputedRef<CardSuite | undefined> = computed(() =>
-        storeGame.current_pli.length > 0 && storeGame.current_pli[0]?.card
-            ? storeGame.current_pli[0].card.suite
-            : undefined,
-    );
-
-    const hasAtout: ComputedRef<boolean> = computed(
-        () =>
-            storePlayers.players
-                .find((player) => player.id == myId.value)
-                ?.hands.some((card: ICard) => card.suite === storeGame.biddingElected.suite) || false,
-    );
-
-    const hasAskedColor: ComputedRef<boolean> = computed(
-        () =>
-            storePlayers.players
-                .find((player) => player.id == myId.value)
-                ?.hands.some((card: ICard) => card.suite === colorAsked.value) || false,
-    );
-
-    const highestAtoutInPli: ComputedRef<number> = computed(() => {
-        const atoutsInPli = storeGame.current_pli.filter(
-            (c) => c.card.suite === storeGame.biddingElected.suite,
-        );
-        if (atoutsInPli.length === 0) return NaN;
-        // Fix: Check if orderedAtouts[0] is defined before accessing valueNum
-        const orderedAtouts = atoutsInPli.sort((a, b) => b.card.valueNum - a.card.valueNum);
-        return orderedAtouts[0]?.card.valueNum ?? NaN;
+    const colorAsked = computed(() => {
+        if (Array.isArray(gameStore.currentPli) && gameStore.currentPli.length > 0) {
+            return gameStore.currentPli[0].card.suite;
+        }
+        if (
+            typeof gameStore.currentPli === 'object' &&
+            gameStore.currentPli !== null &&
+            !Array.isArray(gameStore.currentPli) &&
+            Array.isArray(gameStore.currentPli.plays) &&
+            gameStore.currentPli.plays.length > 0
+        ) {
+            return gameStore.currentPli.plays[0].card.suite;
+        }
+        return undefined;
     });
 
-    const atoutIsAsked = computed(() => colorAsked.value !== undefined && atout.value !== undefined && colorAsked.value === atout.value);
+    const hasAtout = computed(() =>
+        hand.value.some((card) => card.suite === atout.value),
+    );
 
-    function setMyId(id: string) {
-        myId.value = id;
-    }
+    const hasAskedColor = computed(() =>
+        hand.value.some((card) => card.suite === colorAsked.value),
+    );
 
-    function setCreator(creator: boolean) {
-        isCreator.value = creator;
-    }
+    const highestAtoutInPli = computed(() => {
+        const currentPli = Array.isArray(gameStore.currentPli) ? gameStore.currentPli : [];
+        const atouts = currentPli.filter(
+            (play) => play.card.suite === atout.value,
+        );
+        return atouts.length > 0
+            ? Math.max(...atouts.map((p) => p.card.valueNum))
+            : NaN;
+    });
 
-    function setGameId(id: string) {
-        gameId.value = id;
-    }
-
-    function setTimeTobidding(time: boolean) {
-        timeTobidding.value = time;
-    }
-
-    function setTimeDistrib(time: boolean) {
-        timeDistrib.value = time;
-    }
-
-    function setAuthentificated(value: boolean) {
-        authentificated.value = value;
-    }
+    const atoutIsAsked = computed(() => colorAsked.value === atout.value);
 
     return {
         myId,
-        setMyId,
-        setCreator,
-        hasAskedColor,
-        hasAtout,
-        highestAtoutInPli,
-        atoutIsAsked,
-        colorAsked,
-        atout,
-        hand,
-        setGameId,
         gameId,
         isCreator,
-        setTimeTobidding,
-        timeTobidding,
+        timeToBidding,
         timeDistrib,
-        setTimeDistrib,
         turnToPlay,
-        turnTobidding,
-        setTurnTobidding,
-        setTurnToPlay,
-        authentificated,
-        setAuthentificated,
+        turnToBidding,
+        authenticated,
+        atout,
+        hand,
+        colorAsked,
+        hasAtout,
+        hasAskedColor,
+        highestAtoutInPli,
+        atoutIsAsked,
     };
 });

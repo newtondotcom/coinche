@@ -19,7 +19,7 @@ export async function emitStartTrick(gameId: string,playerId :string, publish: (
     timestamp: new Date().toISOString(),
   };
   logger.info(`[start_trick] Starting trick for player ${playerId} in game ${gameId}`);
-  publish(event);
+  controller.getInstance(gameId).sendState();
   controller.getInstance(gameId).addRound(playerId);
   controller.getInstance(gameId).addPli(playerId);
   await emitStartDealing(gameId,publish);

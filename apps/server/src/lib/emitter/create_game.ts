@@ -4,6 +4,7 @@ import type { EventInsert } from "@coinche/shared";
 import { events } from "@/db/schema/coinche";
 import { and, desc, eq} from "drizzle-orm";
 import { db } from "@/db";
+import controller from '@/lib/game';
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
@@ -43,7 +44,7 @@ export async function emitGameCreation(gameId: string, publish: (payload: any) =
         gameId: gameId,
         value: formatPoints(0, 0),
       };
-      publish(event);
+      controller.getInstance(gameId).sendState();
     }
   }
 }

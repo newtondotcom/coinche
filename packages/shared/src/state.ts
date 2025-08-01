@@ -29,8 +29,6 @@ export interface IGameState {
     // État global du jeu
     team1PointsCurrentGame: number;
     team2PointsCurrentGame: number;
-    team1Score: number;
-    team2Score: number;
     deck: ICard[];
     
     // États de phase

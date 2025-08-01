@@ -16,7 +16,7 @@ export default async function emitDealing(
 ) {
   cutDeck(gameId);
   // distribute cards 3 per person, then 2, then 3
-  const playersMap = controller.getInstance(gameId).game.playersMap;
+  const playersMap = controller.getInstance(gameId).getPlayers();
   const players = Array.from(playersMap.values());
   const startIndex = players.findIndex(
     (player) => player.id === id_player_starting,
@@ -31,10 +31,10 @@ export default async function emitDealing(
   ];
 
   if (
-    controller.getInstance(gameId).game.deck.length !== 32 ||
+    controller.getInstance(gameId).state.deck.length !== 32 ||
     shiftedPlayers.length !== 4
   ) {
-    logger.error(`deck not cut or players not 4 ${controller.getInstance(gameId).game.deck.length},${shiftedPlayers.length}`);
+    logger.error(`deck not cut or players not 4 ${controller.getInstance(gameId).state.deck.length},${shiftedPlayers.length}`);
   }
 
   for (let i = 0; i < 3; i++) {
@@ -56,11 +56,11 @@ export default async function emitDealing(
     id: await genIdCuid(),
     type: "start_bidding",
     playerId: "controller",
-    gameId: controller.getInstance(gameId).game.gameId,
+    gameId: controller.getInstance(gameId).state.gameId,
     value: id_player_starting,
     timestamp: new Date().toISOString(),
   };
-  publish(event);
+  controller.getInstance(gameId).sendState();
   await emitCanBid(id_player_starting, gameId, publish);
 }
 
@@ -68,25 +68,25 @@ export default async function emitDealing(
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 async function distributeCard(player_id: string, gameId: string, publish: (payload: any) => void) {
-  const card: ICard = controller.getInstance(gameId).game.deck.pop() as ICard;
+  const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;
   const event = {
     id: await genIdCuid(),
     type: "dealing",
     playerId: player_id,
     gameId: gameId,
-    value: formatCarteToDistribute(card, controller.getInstance(gameId).game.rounds.length),
+    value: formatCarteToDistribute(card, controller.getInstance(gameId).getLastPli().number),
     timestamp: new Date().toISOString(),
   };
-  publish(event);
+  controller.getInstance(gameId).sendState();
 }
 export function cutDeck(gameId: string) {
   // cut the paquet at a certain index
   const indexCut = Math.floor(Math.random() * 32);
-  const deck = controller.getInstance(gameId).game.deck;
+  const deck = controller.getInstance(gameId).state.deck;
   // const shuffledDeck = deck
   const deck1 = deck.slice(0, indexCut);
   const deck2 = deck.slice(indexCut);
   const newDeck = [...deck2, ...deck1];
-  controller.getInstance(gameId).game.deck = newDeck;
+  controller.getInstance(gameId).state.deck = newDeck;
   logger.info("Deck cut at index", indexCut);
 }

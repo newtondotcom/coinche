@@ -16,14 +16,14 @@ export async function emitStartDealing(gameId: string, publish: (payload: any) =
     gameId: gameId,
     value: "idPlayerStarting",
   };
-  publish(event);
-  if (controller.getInstance(gameId).game.rounds.length === 1) {
-    controller.getInstance(gameId).game.deck = generateDeckCards();
+  controller.getInstance(gameId).sendState();
+  if (controller.getInstance(gameId).getLastPli().number === 0) {
+    controller.getInstance(gameId).state.deck = generateDeckCards();
   } else {
-    logger.error("start_dealing - deck was not generated" + controller.getInstance(gameId).game.rounds.length)
+    logger.error("start_dealing - deck was not generated" + controller.getInstance(gameId).getLastPli().number )
   }
   await emitDealing(
-    controller.getInstance(gameId).getLastPli().player_starting_id,
+    controller.getInstance(gameId).getLastPli().playerStartingId,
     gameId,
     publish
   );
