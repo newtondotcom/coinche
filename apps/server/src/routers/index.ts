@@ -1,3 +1,4 @@
+import { leaderboardProcedure } from "@/procedures/leaderboard";
 import { protectedProcedure, publicProcedure } from "../lib/orpc";
 
 export const appRouter = {
@@ -10,5 +11,6 @@ export const appRouter = {
       user: context.session?.user,
     };
   }),
+  leaderboard: leaderboardProcedure, 
 };
 export type AppRouter = typeof appRouter;

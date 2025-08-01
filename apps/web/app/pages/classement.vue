@@ -13,7 +13,7 @@
                 <div class="text-lg font-bold w-[80px] text-center">Points</div>
             </div>
             <!-- Skeletons while loading -->
-            <template v-if="!classement">
+            <template v-if="isLoading">
                 <div v-for="i in 8" :key="i" class="flex flex-row space-x-6 justify-center items-center border px-4 py-3 rounded-lg my-2 w-full animate-pulse bg-primary/5">
                     <div class="h-7 w-[50px] rounded bg-primary/20" />
                     <div class="h-7 w-[300px] rounded bg-primary/20" />
@@ -38,16 +38,10 @@
 </template>
 
 <script setup lang="ts">
+    import { useQuery } from '@tanstack/vue-query';
+
     const { user } = useAuth();
-    const classement = ref();
+    const { $orpc } = useNuxtApp();
 
-    async function fetchClassement() {
-        const { data } = await $fetch('/api/classement');
-        classement.value = data;
-        console.log(data)
-    }
-
-    onMounted(() => {
-        fetchClassement();
-    });
+    const { data: classement, isLoading } = useQuery($orpc.leaderboard.get.queryOptions());
 </script>
