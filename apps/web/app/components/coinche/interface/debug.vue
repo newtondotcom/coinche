@@ -11,14 +11,14 @@
         <br />
         Player starting : {{ storeGame.player_starting_id }}
         <br />
-        Current player id : {{ storeGame.current_player_id }}
+        Current player id : {{ storeGame.currentPlayerId }}
         <br />
         Atout : {{ storeAbout.atout }}
         <br />
         Cards in hands : {{ storeAbout.hand.length }}
         <br />
         Card playable : {{ storeAbout.hand.some(card => cardCanBePlayed(card, {
-            current_player_id: storeGame.current_player_id,
+            currentPlayerId: storeGame.currentPlayerId,
             myId: storeAbout.myId,
             current_pli: storeGame.current_pli,
             colorAsked: storeAbout.colorAsked,

@@ -1,7 +1,7 @@
 import type { ICard, IPlay, IPlayer } from '@coinche/shared';
 
 interface CardRulesContext {
-    current_player_id: string;
+    currentPlayerId: string;
     myId: string;
     current_pli: IPlay[];
     colorAsked?: string;
@@ -16,10 +16,10 @@ interface CardRulesContext {
  * @returns true if the card can be played, false otherwise
  */
 export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean {
-    const { current_player_id, myId, current_pli, colorAsked, atout, hand } = context;
+    const { currentPlayerId, myId, current_pli, colorAsked, atout, hand } = context;
     
     // If it's not the player's turn, they can't play
-    if (current_player_id !== myId) {
+    if (currentPlayerId !== myId) {
         return false;
     }
 
@@ -193,7 +193,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
     const { hand } = context;
     
     // If it's not the player's turn, they can't play anything
-    if (context.current_player_id !== context.myId) {
+    if (context.currentPlayerId !== context.myId) {
         return false;
     }
     
@@ -214,7 +214,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
 export function getPlayableCards(context: CardRulesContext): ICard[] {
     const { hand } = context;
     
-    if (context.current_player_id !== context.myId) {
+    if (context.currentPlayerId !== context.myId) {
         return [];
     }
     
@@ -267,7 +267,7 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
     }
     
     // Check if this is a valid turn
-    if (context.current_player_id !== context.myId) {
+    if (context.currentPlayerId !== context.myId) {
         return false;
     }
     
@@ -301,9 +301,9 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
  */
 export function debugCardPlayability(card: ICard, context: CardRulesContext): string[] {
     const issues: string[] = [];
-    const { current_player_id, myId, current_pli, colorAsked, atout, hand } = context;
+    const { currentPlayerId, myId, current_pli, colorAsked, atout, hand } = context;
     
-    if (current_player_id !== myId) {
+    if (currentPlayerId !== myId) {
         issues.push("Not player's turn");
         return issues;
     }

@@ -22,7 +22,7 @@
 
     const canBePlayed = computed(() => {
         return cardCanBePlayed(props.card, {
-            current_player_id: storeGame.current_player_id,
+            currentPlayerId: storeGame.currentPlayerId,
             myId: storeAbout.myId,
             current_pli: storeGame.current_pli,
             colorAsked: storeAbout.colorAsked,

@@ -25,7 +25,7 @@ export const useAboutStore = defineStore('about', () => {
         turnTobidding.value = value;
     };
 
-    const atout: ComputedRef<CardSuite> = computed(() => storeGame.last_bidding.suite);
+    const atout: ComputedRef<CardSuite> = computed(() => storeGame.biddingElected.suite);
 
     const hand: ComputedRef<ICard[]> = computed(
         () => storePlayers.players.find((p) => p.id === myId.value)?.hands || [],
@@ -41,7 +41,7 @@ export const useAboutStore = defineStore('about', () => {
         () =>
             storePlayers.players
                 .find((player) => player.id == myId.value)
-                ?.hands.some((card: ICard) => card.suite === storeGame.last_bidding.suite) || false,
+                ?.hands.some((card: ICard) => card.suite === storeGame.biddingElected.suite) || false,
     );
 
     const hasAskedColor: ComputedRef<boolean> = computed(
@@ -53,7 +53,7 @@ export const useAboutStore = defineStore('about', () => {
 
     const highestAtoutInPli: ComputedRef<number> = computed(() => {
         const atoutsInPli = storeGame.current_pli.filter(
-            (c) => c.card.suite === storeGame.last_bidding.suite,
+            (c) => c.card.suite === storeGame.biddingElected.suite,
         );
         if (atoutsInPli.length === 0) return NaN;
         // Fix: Check if orderedAtouts[0] is defined before accessing valueNum

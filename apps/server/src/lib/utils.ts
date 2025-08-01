@@ -27,7 +27,7 @@ export function setNextPlayerTurn(playerId: string, gameId: string) {
     // Update the current player in the last pli
     const lastPli = gameController.getLastPli();
     if (lastPli) {
-      lastPli.current_player_id = nextPlayerId;
+      lastPli.currentPlayerId = nextPlayerId;
     }
   
     logger.info(`Turn changed from player ${playerId} to player ${nextPlayerId}`);
@@ -37,7 +37,7 @@ export function setNextPlayerTurn(playerId: string, gameId: string) {
 
 
 export function setNextPlayerPli(playerId: string, gameId: string) {
-    controller.getInstance(gameId).getLastPli().current_player_id = playerId;
+    controller.getInstance(gameId).getLastPli().currentPlayerId = playerId;
 }
 
 const values: CardValue[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];

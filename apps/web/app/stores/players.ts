@@ -36,7 +36,7 @@ export const usePlayersStore = defineStore('players', () => {
     function setLastbidding(bidding: Ibidding, playerId: string) {
         const player = players.value.find((player) => player.id === playerId);
         if (player) {
-            player.last_bidding = bidding;
+            player.biddingElected = bidding;
         }
     }
 

@@ -34,7 +34,7 @@ export interface IPlayer {
     position: PlayerPosition;
     hands: ICard[];
     classement: number;
-    last_bidding?: Ibidding;
+    biddingElected?: Ibidding;
 }
 
 export interface IRound {
@@ -42,14 +42,14 @@ export interface IRound {
     biddings: Ibidding[];
     team1_point_current_game: number;
     team2_point_current_game: number;
-    last_bidding: Ibidding;
+    biddingElected: Ibidding;
     coinched: boolean;
     surcoinched: boolean;
 }
 
 export interface IPli {
     plays: IPlay[];
-    current_player_id: PlayerId;
+    currentPlayerId: PlayerId;
     player_starting_id: PlayerId;
 }
 

@@ -3,7 +3,7 @@
         <h2
             class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-7xl cursor-pointer"
         >
-            {{ storeGame.last_bidding.bidding }}
+            {{ storeGame.biddingElected.bidding }}
 
             {{ storeAbout.atout == 'clubs' ? '♣' : '' }}
             {{ storeAbout.atout == 'diamonds' ? '♦' : '' }}
@@ -16,7 +16,7 @@
             class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-5xl cursor-pointer"
         >
             par
-            {{ storeGame.last_bidding.playerId }}
+            {{ storeGame.biddingElected.playerId }}
         </h3>
         <h4
             class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-4xl cursor-pointer"

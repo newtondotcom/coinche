@@ -17,7 +17,7 @@
       <CoincheInterfaceTurn />
     </div>
 
-    <CoincheInterfaceSavedBidding v-if="storeGame.last_bidding.suite != 'NA'" />
+    <CoincheInterfaceSavedBidding v-if="storeGame.biddingElected.suite != 'NA'" />
 
     <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
     
@@ -28,12 +28,12 @@
 import { useAuth } from "@/composables/useAuth";
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
-import { handleWSEvent } from "@/shared/utils/listener";
 import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
 import { useAboutStore } from "@/stores/about";
 import { useGameStore } from "@/stores/game";
 import { usePlayersStore } from "@/stores/players";
+import { CHANGE_TYPE_STATE, WSPayload } from "@coinche/shared";
 
 const { loggedIn } = useAuth();
 const storeGame = useGameStore();
@@ -66,14 +66,14 @@ onMounted(async () => {
   getWS();
   
   // Set up message listener with cleanup function
-  cleanupListener = onWSMessage((event) => {
+  cleanupListener = onWSMessage((event : WSPayload) => {
     console.log('Received WebSocket event:', event.type);
-    
-    handleWSEvent(event);
-    if (event.gameId === gameId) {
-      //
+
+    if (event.changeType === CHANGE_TYPE_STATE) {
+      // Update game state
+      storeGame.updateGameState(event.gameState);
     } else {
-      //console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
+      console.warn('Unhandled WebSocket event type:', event.changeType);
     }
   });
 

@@ -1,6 +1,5 @@
-import { deleteRows } from '@/lib/emitter/end_game';
 import logger from '@/lib/logger';
-import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
+import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound, IGameState, CardSuite, bidding, PlayerId } from '@coinche/shared';
 
 export default class controller {
     static clearGames() {
@@ -8,17 +7,35 @@ export default class controller {
     }
     private static _instances: Map<string, controller> = new Map();
 
-    public game: IGame;
+    public state: IGameState;
 
     private constructor(gameId: string) {
-        this.game = {
-            rounds: [],
+        this.state = {
+            gameId,
+            players : [],
+            team1: [],
+            team2: [],
+            currentRound: {
+                plis: [],
+                biddings: [],
+                biddingElected: { suite: 'NA', bidding: 0, playerId: '0' },
+                coinched: false,
+                surcoinched: false,
+            },
+            team1PointsCurrentGame: 0,
+            team2PointsCurrentGame: 0,
+            team1Score: 0,
+            team2Score: 0,
             deck: [],
-            gameId: gameId,
-            team1_score: 0,
-            team2_score: 0,
-            playersMap: new Map(),
+            phases: {
+                timeToBid: '',
+                timeDistrib: '',
+                timeToPlay: '',
+            },
+            createdAt: new Date(),
+            updatedAt: new Date(),  
         };
+        logger.info(`Game controller initialized for gameId: ${gameId}`);
     }
 
     public static getInstance(gameId: string): controller {
@@ -32,75 +49,92 @@ export default class controller {
     public static async deleteInstance(gameId: string): Promise<void> {
         if (this._instances.has(gameId)) {
             this._instances.delete(gameId);
-            await deleteRows(gameId, () => {}); // Pass a no-op function for publish
             logger.info(`Game with id ${gameId} has been deleted from db and memory`);
         } else {
             logger.warn(`Game with id ${gameId} does not exist`);
         }
     }
 
-    // --- Player management (now instance, using this.game.playersMap) ---
-    public getPlayers(): Set<IPlayer> {
-        return new Set(this.game.playersMap.values());
+    public getPlayers(): IPlayer[] {
+        return Array.from(this.state.players);
     }
+
     public addPlayer(player: IPlayer) {
-        this.game.playersMap.set(player.id, player);
+        if (this.state.players.length >= 4) {
+            throw new Error('Cannot add more than 4 players to the game');
+        }
+        this.state.players.push(player);
+        if (this.state.team1.length < 2) {
+            this.state.team1.push(player.id);
+        } else {
+            this.state.team2.push(player.id);
+        }
+        logger.info(`Player ${player.id} added to the game`);
     }
+
     public removePlayer(playerId: string) {
-        this.game.playersMap.delete(playerId);
+        this.state.players = this.state.players.filter(p => p.id !== playerId);
+        this.state.team1 = this.state.team1.filter(id => id !== playerId);
+        this.state.team2 = this.state.team2.filter(id => id !== playerId);
+        logger.info(`Player ${playerId} removed from the game`);
+    }
+
+    public getCurrentRound() {
+        if (!this.state.currentRound) {
+            throw new Error('No current round exists.');
+        }
+        return this.state.currentRound;
     }
 
     public addPlay(card: ICard, playerId: string): void {
-        const lastRound = this.game.rounds[this.game.rounds.length - 1];
-        const lastPli = lastRound.plis[lastRound.plis.length - 1];
-        if (!lastRound) {
-            throw new Error('No round exists. Add a round first.');
-        }
-        lastPli.plays.push({ card, playerId });
-        this.game.deck.push(card);
+        const currentRound = this.getCurrentRound();
+        const currentPli = currentRound.plis[currentRound.plis.length - 1]; 
+        currentPli.plays.push({ card, playerId });
+        this.state.deck.push(card);
         logger.info(`Player ${playerId} played ${card.suite} of ${card.value}`);
     }
     public addbidding(bidding: Ibidding): void {
-        const lastRound = this.game.rounds[this.game.rounds.length - 1];
-        if (!lastRound) {
-            throw new Error('No round exists. Add a round first.');
-        }
-        lastRound.biddings.push(bidding);
+        const currentRound = this.getCurrentRound();
+        currentRound.biddings.push(bidding);
         if (bidding.bidding !== 0) {
-            this.getLastRound().last_bidding = bidding;
-            console.log(this.getLastRound().last_bidding);
+            currentRound.biddingElected = bidding;
+            console.log(currentRound.biddingElected);
         }
         logger.info(`Player ${bidding.playerId} announced ${bidding.suite}`);
     }
     public addRound(playerStartingId: string): void {
-        const roundInit: IRound = {
+        const roundInit = {
             plis: [],
             biddings: [],
-            team1_point_current_game: 0,
-            team2_point_current_game: 0,
-            last_bidding: { suite: 'NA', bidding: 0, playerId: 'NA' },
+            biddingElected: { suite: 'NA' as CardSuite, bidding: 0 as bidding, playerId: 'NA' as PlayerId },
             coinched: false,
             surcoinched: false,
         };
-        this.game.rounds.push(roundInit);
+        this.state.currentRound = roundInit;
         logger.info('New round created');
     }
     public async addPli(playerStartingId: string): Promise<void> {
-        const lastRound = this.game.rounds[this.game.rounds.length - 1];
-        const pliInit: IPli = {
+        const currentRound = this.getCurrentRound();
+        const pliInit = {
+            number: currentRound.plis.length + 1,
             plays: [],
-            current_player_id: playerStartingId,
-            player_starting_id: playerStartingId,
+            currentPlayerId: playerStartingId,
+            playerStartingId: playerStartingId,
+            team1Score: 0,
+            team2Score: 0,
+            isActive: true,
         };
-        lastRound.plis.push(pliInit);
+        currentRound.plis.push(pliInit);
         logger.info('New pli created');
     }
-    public getLastRound() {
-        return this.game.rounds[this.game.rounds.length - 1];
-    }
     public getLastPli() {
-        return this.getLastRound().plis[this.getLastRound().plis.length - 1];
+        return this.getCurrentRound().plis[this.getCurrentRound().plis.length - 1];
     }    
+    public getLastXPlis(n: number) {
+        const plis = this.getCurrentRound().plis;
+        return plis.slice(Math.max(plis.length - n, 0));
+    }
+
     public isTeam1(playerId: string) {
         const players = Array.from(this.getPlayers());
         return players[0].id === playerId || players[2].id === playerId;

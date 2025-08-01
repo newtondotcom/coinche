@@ -6,16 +6,16 @@
                 <CardDescription>
                     Annonce actuelle
                     <Badge variant="secondary">
-                        {{ storeGame.last_bidding.bidding }}
-                        {{ storeGame.last_bidding.suite == 'diamonds' ? '♦️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'hearts' ? '♥️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'clubs' ? '♣️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'spades' ? '♠️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'tout-atout' ? 'TA' : '' }}
-                        {{ storeGame.last_bidding.suite == 'sans-atout' ? 'SA' : '' }}
+                        {{ storeGame.biddingElected.bidding }}
+                        {{ storeGame.biddingElected.suite == 'diamonds' ? '♦️' : '' }}
+                        {{ storeGame.biddingElected.suite == 'hearts' ? '♥️' : '' }}
+                        {{ storeGame.biddingElected.suite == 'clubs' ? '♣️' : '' }}
+                        {{ storeGame.biddingElected.suite == 'spades' ? '♠️' : '' }}
+                        {{ storeGame.biddingElected.suite == 'tout-atout' ? 'TA' : '' }}
+                        {{ storeGame.biddingElected.suite == 'sans-atout' ? 'SA' : '' }}
                     </Badge>
                     par
-                    {{ storeGame.last_bidding.playerId }}
+                    {{ storeGame.biddingElected.playerId }}
                     <Badge v-if="storeGame.coinched">Coinché</Badge>
                     <Badge v-if="storeGame.surcoinched">Surcoinché</Badge>
                 </CardDescription>
@@ -126,7 +126,7 @@
     const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeGame.biddings_pli));
 
     const canbiddingr = computed<boolean>(
-        () => storeAbout.turnTobidding && storeGame.current_player_id === storeAbout.myId,
+        () => storeAbout.turnTobidding && storeGame.currentPlayerId === storeAbout.myId,
     );
     const canPasser = computed<boolean>(
         () =>
@@ -213,7 +213,7 @@
     }
 
     function canbiddingNumber(bidding: bidding) {
-        return !(storeGame.last_bidding.bidding < bidding);
+        return !(storeGame.biddingElected.bidding < bidding);
     }
 
     async function passer() {
@@ -222,7 +222,7 @@
 
     async function coincher() {
         // For capot/générale bids, convert to coinché equivalent
-        const lastBid = storeGame.last_bidding.bidding;
+        const lastBid = storeGame.biddingElected.bidding;
         let coinchedBid: bidding;
         
         if (lastBid === 250) {
@@ -241,7 +241,7 @@
 
         await emitbidding({ 
             bidding: coinchedBid, 
-            suite: storeGame.last_bidding.suite, 
+            suite: storeGame.biddingElected.suite, 
             playerId: storeAbout.myId 
         });
         storeGame.setCoinched(true);
@@ -249,7 +249,7 @@
 
     async function surcoincher() {
         // For capot/générale bids, convert to surcoinché equivalent
-        const lastBid = storeGame.last_bidding.bidding;
+        const lastBid = storeGame.biddingElected.bidding;
         let surcoincheBid: bidding;
         
         if (lastBid === 251) {
@@ -266,7 +266,7 @@
 
         await emitbidding({ 
             bidding: surcoincheBid, 
-            suite: storeGame.last_bidding.suite, 
+            suite: storeGame.biddingElected.suite, 
             playerId: storeAbout.myId 
         });
         storeGame.setSurcoinched(true);

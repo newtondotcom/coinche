@@ -7,12 +7,12 @@ export const useGameStore = defineStore('game', () => {
     const storePlayers = usePlayersStore();
     const current_pli = ref<IPlay[]>([]);
     const pli_number = ref<number>(0);
-    const last_bidding = ref<Ibidding>({ suite: 'NA', bidding: 0, playerId: '0' });
+    const biddingElected = ref<Ibidding>({ suite: 'NA', bidding: 0, playerId: '0' });
     const coinched = ref<boolean>(false);
     const surcoinched = ref<boolean>(false);
     const deck = ref<ICard[]>([]);
     const biddings_pli = ref<Ibidding[]>([]);
-    const current_player_id = ref<PlayerId>('');
+    const currentPlayerId = ref<PlayerId>('');
     const player_starting_id = ref<PlayerId>('0');
 
     const team1_score = ref<number>(0);
@@ -27,11 +27,11 @@ export const useGameStore = defineStore('game', () => {
     }
 
     function setCurrentPlayerId(playerId: PlayerId) {
-        current_player_id.value = playerId;
+        currentPlayerId.value = playerId;
     }
 
     function setLastbidding(bidding: Ibidding) {
-        last_bidding.value = bidding;
+        biddingElected.value = bidding;
     }
 
     function setCoinched(newCoinched: boolean) {
@@ -51,7 +51,7 @@ export const useGameStore = defineStore('game', () => {
         coinched.value = false;
         surcoinched.value = false;
         biddings_pli.value = [];
-        last_bidding.value = { suite: 'NA', bidding: 0, playerId: '0' };
+        biddingElected.value = { suite: 'NA', bidding: 0, playerId: '0' };
         current_pli.value = [];
         pli_number.value += 0;
         team1_point_current_game.value = 0;
@@ -89,11 +89,11 @@ export const useGameStore = defineStore('game', () => {
 
     return {
         current_pli,
-        current_player_id,
+        currentPlayerId,
         pli_number,
         team1_point_current_game,
         team2_point_current_game,
-        last_bidding,
+        biddingElected,
         coinched,
         surcoinched,
         player_starting_id,

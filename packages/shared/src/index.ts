@@ -32,3 +32,5 @@ export {
 } from './format'; 
 
 export { genIdCuid } from './gen_id';
+
+export {IGameState, ChangeCallback, WSPayload, CHANGE_TYPE_STATE} from './state';

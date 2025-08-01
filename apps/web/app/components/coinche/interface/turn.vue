@@ -89,7 +89,7 @@
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
 
-    const playerIdTurn = computed<string>(() => storeGame.current_player_id);
+    const playerIdTurn = computed<string>(() => storeGame.currentPlayerId);
     const indexPlayers = computed<number>(() =>
         storePlayers.players.findIndex((p: any) => p.id == storeAbout.myId),
     );

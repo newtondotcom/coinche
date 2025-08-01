@@ -15,7 +15,7 @@ export function useTurnNotifications() {
   
   // Watch for turn to play changes
   watchEffect(() => {
-    const isMyTurn = storeGame.current_player_id === storeAbout.myId
+    const isMyTurn = storeGame.currentPlayerId === storeAbout.myId
     const turnToPlay = storeAbout.turnToPlay
     
     // Check if it's now my turn to play (and it wasn't before)
@@ -24,7 +24,7 @@ export function useTurnNotifications() {
     }
     
     // Update previous states
-    previousCurrentPlayerId.value = storeGame.current_player_id
+    previousCurrentPlayerId.value = storeGame.currentPlayerId
     previousTurnToPlay.value = turnToPlay
   })
   
