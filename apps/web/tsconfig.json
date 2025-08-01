@@ -3,5 +3,8 @@
   "extends": "./.nuxt/tsconfig.json",
   "references": [{
     "path": "../server"
-  }]
+  }],
+  "compilerOptions": {
+    "lib": [ "es2015" ]
+  }
 }

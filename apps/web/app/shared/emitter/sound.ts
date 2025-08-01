@@ -2,7 +2,7 @@ import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
 import { genIdCuid } from '@coinche/shared';
 
-export async function emitSound(name: string): Promise<void> {
+export async function emitSound(name: string) {
     const storeAbout = useAboutStore();
     const gameId = storeAbout.gameId;
     sendWS({

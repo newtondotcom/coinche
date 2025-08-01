@@ -14,7 +14,5 @@ export default async function emitbidding(bidding: Ibidding) {
         value: formatbidding(bidding),
         timestamp: new Date().toISOString(),
     });
-    storeAbout.setTimeTobidding(true);
-    storeAbout.setTurnTobidding(false);
 }
 

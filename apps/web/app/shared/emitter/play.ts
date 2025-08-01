@@ -15,7 +15,6 @@ export async function emitCardPlay(card: ICard) {
         value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
         timestamp: new Date().toISOString(),
     });
-    storeAbout.setTurnToPlay(false);
 }
 
 export async function cardPressed(suite: CardSuite, value: CardValue) {
@@ -26,5 +25,7 @@ export async function cardPressed(suite: CardSuite, value: CardValue) {
     if (selectedCardIndex !== -1) {
         const [selectedCard] = storeAbout.hand.splice(selectedCardIndex, 1);
         await emitCardPlay(selectedCard);
+    } else {
+        console.warn(`Card with suite ${suite} and value ${value} not found in hand.`);
     }
 }
