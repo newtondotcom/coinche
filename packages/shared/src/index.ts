@@ -13,8 +13,7 @@ export type {
   IPli,
   IGame,
   Event,
-  EventInsert,
-  Database
+  EventInsert
 } from './types';
 
 // Export format utilities
@@ -32,3 +31,5 @@ export {
 } from './format'; 
 
 export { genIdCuid } from './gen_id';
+
+export {IGameState, ChangeCallback} from './state';
