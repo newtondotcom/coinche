@@ -28,17 +28,12 @@
 import { useAuth } from "@/composables/useAuth";
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
-import { handleWSEvent } from "@/shared/utils/listener";
 import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
-import { useAboutStore } from "@/stores/about";
 import { useGameStore } from "@/stores/game";
-import { usePlayersStore } from "@/stores/players";
+import { CHANGE_TYPE_STATE, WSPayload } from "@coinche/shared";
 
 const { loggedIn } = useAuth();
-const storeGame = useGameStore();
-const storePlayers = usePlayersStore();
-const storeAbout = useAboutStore();
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -66,12 +61,12 @@ onMounted(async () => {
   getWS();
   
   // Set up message listener with cleanup function
-  cleanupListener = onWSMessage((event) => {
-    console.log('Received WebSocket event:', event.type);
+  cleanupListener = onWSMessage((payload : WSPayload) => {
+    console.log('Received WebSocket payload:', payload);
     
-    handleWSEvent(event);
-    if (event.gameId === gameId) {
-      //
+    if (payload.changeType === CHANGE_TYPE_STATE) {
+      const gameStore = useGameStore();
+      gameStore.setGameState(payload.state);
     } else {
       //console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
     }

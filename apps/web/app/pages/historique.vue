@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAboutStore } from "@/stores/about";
+
 import {formatDistanceToNow} from "date-fns";
 import {fr} from "date-fns/locale";
 const historique = ref();

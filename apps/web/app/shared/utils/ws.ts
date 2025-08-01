@@ -1,8 +1,9 @@
+import type {WSPayload} from '@coinche/shared';
 // WebSocket client utility for Bun server
 // Usage: import { getWS, sendWS, onWSMessage, offWSMessage } from '@/lib/utils/ws';
 
 let ws: WebSocket | null = null;
-const listeners = new Set<(msg: any) => void>();
+const listeners = new Set<(msg: WSPayload) => void>();
 const config = useRuntimeConfig();
 
 export function getWS() {
@@ -23,7 +24,7 @@ export function getWS() {
         data = JSON.parse(event.data);
       } catch (e) {
         console.warn('Failed to parse WebSocket message as JSON:', e);
-        data = event.data;
+        data = event.data as WSPayload;
       }
       
       // Notify all listeners

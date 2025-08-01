@@ -1,6 +1,7 @@
 import { deleteRows } from '@/lib/emitter/end_game';
 import logger from '@/lib/logger';
-import type { Ibidding, ICard, IGame, IPlayer, IPli, IPlay, IGameState, CardSuite, ChangeCallback, PlayerId } from '@coinche/shared';
+import type { Ibidding, ICard, IGame, IPlayer, IPli, IPlay, IGameState, CardSuite, ChangeCallback, PlayerId, WSPayload } from '@coinche/shared';
+import { CHANGE_TYPE_STATE } from '@coinche/shared';
 
 export default class GameStateManager {
     private state: IGameState;
@@ -44,20 +45,19 @@ export default class GameStateManager {
     
     // Méthode privée pour notifier les changements
     private notifyChange(changeType: string, data: any): void {
-        // Les changements sont déjà appliqués à this.state
-        this.changeCallbacks.forEach(callback => {
-            try {
-                callback(changeType, data, this.state);
-            } catch (error) {
-                console.error('Error in change callback:', error);
-            }
-        });
+        const wsPayload : WSPayload = {
+            changeType : CHANGE_TYPE_STATE,
+            state: this.getFullState(),
+        };
+        server.publish(this.state.gameId, wsPayload);
     }
     
     private initializeGameState(gameId: string, players: IPlayer[]): IGameState {
         const initialState: IGameState = {
             gameId,
             players,
+            team1: [players[0]?.id || '', players[2]?.id || ''],
+            team2: [players[1]?.id || '', players[3]?.id || ''],
             currentRound: {
                 plis: [{
                     number: 0,

@@ -1,4 +1,4 @@
-import { useAboutStore } from "@/stores/about";
+
 import { sendWS } from '@/shared/utils/ws';
 import { genIdCuid } from '@coinche/shared';
 

@@ -1,4 +1,4 @@
-import { useAboutStore } from "@/stores/about";
+
 import { sendWS } from '@/shared/utils/ws';
 import { formatbidding, genIdCuid } from '@coinche/shared';
 import type { Ibidding } from '@coinche/shared';

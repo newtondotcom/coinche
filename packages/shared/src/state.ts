@@ -45,4 +45,11 @@ export interface IGameState {
     updatedAt?: Date;
 }
 
-export type ChangeCallback = (changeType: string, data: any, oldState: IGameState, newState: IGameState) => void;
+export type ChangeCallback = (changeType: string, data: any, state: IGameState) => void;
+
+export interface WSPayload {
+    changeType: string;
+    state : IGameState;
+}
+
+export const CHANGE_TYPE_STATE = 'changeTypeState';

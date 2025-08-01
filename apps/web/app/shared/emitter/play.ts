@@ -1,5 +1,5 @@
 import { useGameStore } from "@/stores/game";
-import { useAboutStore } from "@/stores/about";
+
 import { sendWS } from '@/shared/utils/ws';
 import { formatCarteToPlay, genIdCuid } from '@coinche/shared';
 import type { CardSuite, CardValue, ICard } from '@coinche/shared';
