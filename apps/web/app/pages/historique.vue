@@ -14,7 +14,7 @@
                 <div class="text-lg font-bold w-[100px] text-center">Score</div>
             </div>
             <!-- Skeletons while loading -->
-            <template v-if="!historique">
+            <template v-if="isLoading">
                 <div v-for="i in 6" :key="i" class="flex flex-row space-x-6 justify-center items-center border px-4 py-3 rounded-lg my-2 w-full animate-pulse bg-primary/5">
                     <div class="h-7 w-[120px] rounded bg-primary/20" />
                     <div class="h-7 w-[120px] rounded bg-primary/20" />
@@ -45,18 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAboutStore } from "@/stores/about";
 import {formatDistanceToNow} from "date-fns";
 import {fr} from "date-fns/locale";
-const historique = ref();
-const storeAbout = useAboutStore();
+import { useQuery } from '@tanstack/vue-query'
 
-async function fetchHistorique() {
-    const { data } = await $fetch('/api/historique?playerId=' + encodeURIComponent(storeAbout.myId));
-    historique.value = data;
-}
+const { $orpc } = useNuxtApp();
 
-onMounted(() => {
-    fetchHistorique();
-});
+const { data: historique, isLoading } = useQuery($orpc.historique.queryOptions());
 </script>
