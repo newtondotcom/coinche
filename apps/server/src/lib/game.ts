@@ -149,4 +149,12 @@ export default class controller {
         const players = Array.from(this.getPlayers());
         return players[0].id === playerId || players[2].id === playerId;
     }
+
+    public static gameExists(gameId: string): { exists: boolean, playerCount: number } {
+        const instance = this._instances.get(gameId);
+        return {
+            exists: !!instance,
+            playerCount: instance ? instance.state.players.length : 0
+        };
+    }
 }

@@ -1,5 +1,6 @@
 import { leaderboardProcedure } from "@/procedures/leaderboard";
 import { historiqueProcedure } from "@/procedures/historique";
+import { checkGameExistsProcedure } from "@/procedures/checkGameExists";
 import { protectedProcedure, publicProcedure } from "../lib/orpc";
 
 export const appRouter = {
@@ -14,5 +15,6 @@ export const appRouter = {
   }),
   leaderboard: leaderboardProcedure,
   historique: historiqueProcedure,
+  checkGameExists: checkGameExistsProcedure,
 };
 export type AppRouter = typeof appRouter;
