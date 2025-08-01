@@ -66,7 +66,7 @@ onMounted(async () => {
     
     if (payload.changeType === CHANGE_TYPE_STATE) {
       const gameStore = useGameStore();
-      gameStore.setGameState(payload.state);
+      gameStore.setState(payload.state);
     } else {
       //console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
     }

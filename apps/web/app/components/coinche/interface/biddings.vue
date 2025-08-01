@@ -29,9 +29,9 @@
                             v-for="bidding in regularBiddings"
                             :key="bidding.toLocaleString() + Math.random()"
                             :disabled="canbiddingNumber(bidding) || !canbiddingr"
-                            :variant="biddingEnCours.bidding === bidding ? 'outline' : 'ghost'"
+                            :variant="'ghost'"
                             aria-label="Valeur de {{ bidding }}"
-                            @click="biddingEnCours = { ...biddingEnCours, bidding }"
+                            @click="selectBidding(bidding)"
                         >
                             {{ bidding }}
                         </Button>
@@ -44,9 +44,9 @@
                             v-for="bidding in specialBiddings"
                             :key="bidding.toLocaleString() + Math.random()"
                             :disabled="canbiddingNumber(bidding) || !canbiddingr"
-                            :variant="biddingEnCours.bidding === bidding ? 'outline' : 'ghost'"
+                            :variant="'ghost'"
                             aria-label="Valeur de {{ bidding }}"
-                            @click="biddingEnCours = { ...biddingEnCours, bidding }"
+                            @click="selectBidding(bidding)"
                             size="sm"
                         >
                             {{ bidding }}
@@ -65,10 +65,10 @@
                         <Button
                             v-for="suite in suites"
                             :key="suite + Math.random()"
-                            :variant="biddingEnCours.suite === suite ? 'outline' : 'ghost'"
+                            :variant="'ghost'"
                             :disabled="!canbiddingr"
                             aria-label="Suite de {{ suite }}"
-                            @click="biddingEnCours = { ...biddingEnCours, suite }"
+                            @click="selectSuite(suite)"
                         >
                             {{ suite == 'diamonds' ? '♦️' : '' }}
                             {{ suite == 'hearts' ? '♥️' : '' }}
@@ -134,18 +134,6 @@
             storeGame.biddings_pli.length > 3 &&
             storeGame.biddings_pli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
     );
-
-    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeAbout.myId });
-
-    watch(biddingEnCours, async () => {
-        if (biddingEnCours.value.bidding !== 0 && biddingEnCours.value.suite !== 'NA') {
-            await emitbidding(biddingEnCours.value);
-            biddingEnCours.value = { bidding: 0, suite: 'NA', playerId: 'NA' };
-        }
-        if (biddingEnCours.value.bidding == 160) {
-            // Check if announce is not above 160
-        }
-    });
 
     function canCoincherbidding(biddings: Ibidding[]) {
         // If no bidding has been made, we can't coinche
@@ -230,11 +218,13 @@
         } else if (lastBid === 500) {
             coinchedBid = 501; // Générale coinchée
         } else if (typeof lastBid === 'number' && lastBid >= 80 && lastBid <= 160) {
-            // For regular bids, we can double the value to represent coinche
-            // But since our type only allows specific values, we'll track coinche state
-            // and let the scoring logic handle the multiplier
-            storeGame.setCoinched(true);
-            return; // Don't emit a new bid, just track the state
+            // For regular bids, emit coinche - server will handle state
+            await emitbidding({ 
+                bidding: lastBid, 
+                suite: storeGame.last_bidding.suite, 
+                playerId: storeAbout.myId 
+            });
+            return;
         } else {
             return;
         }
@@ -244,7 +234,6 @@
             suite: storeGame.last_bidding.suite, 
             playerId: storeAbout.myId 
         });
-        storeGame.setCoinched(true);
     }
 
     async function surcoincher() {
@@ -257,9 +246,13 @@
         } else if (lastBid === 501) {
             surcoincheBid = 502; // Générale surcoinchée
         } else if (typeof lastBid === 'number' && lastBid >= 80 && lastBid <= 160) {
-            // For regular bids, track surcoinche state and let scoring logic handle the multiplier
-            storeGame.setSurcoinched(true);
-            return; // Don't emit a new bid, just track the state
+            // For regular bids, emit surcoinche - server will handle state
+            await emitbidding({ 
+                bidding: lastBid, 
+                suite: storeGame.last_bidding.suite, 
+                playerId: storeAbout.myId 
+            });
+            return;
         } else {
             return;
         }
@@ -269,6 +262,13 @@
             suite: storeGame.last_bidding.suite, 
             playerId: storeAbout.myId 
         });
-        storeGame.setSurcoinched(true);
+    }
+
+    async function selectBidding(bidding: bidding) {
+        await emitbidding({ bidding, suite: storeGame.last_bidding.suite, playerId: storeAbout.myId });
+    }
+
+    async function selectSuite(suite: CardSuite) {
+        await emitbidding({ bidding: 0, suite, playerId: storeAbout.myId });
     }
 </script>
