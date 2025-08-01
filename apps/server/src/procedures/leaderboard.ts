@@ -1,8 +1,10 @@
+import { db } from "@/db";
 import { protectedProcedure } from "../lib/orpc";
-import { getLeaderboard } from '../lib/leaderboard';
+import { desc } from 'drizzle-orm';
+import { playerStats } from "@/db/schema/coinche";
 
-export const leaderboardProcedure = protectedProcedure.handler(({ context }) => {
-    const leaderboard = getLeaderboard();
+export const leaderboardProcedure = protectedProcedure.handler(async ({ context }) => {
+    const leaderboard = await db.select().from(playerStats).orderBy(desc(playerStats.totalPoints)).limit(100);
     return {
         leaderboard,
         user: context.session?.user,
