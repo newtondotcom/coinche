@@ -76,14 +76,15 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/useAuth';
 import { useAboutStore } from '@/stores/about';
+import { useNuxtApp } from '#app';
 
 const { loggedIn } = useAuth();
 const storeAbout = useAboutStore();
 const gameId = ref<string>('');
-
 const loading = ref(false);
 const gameExists = ref(false);
 const playerCount = ref(0);
+const { $orpc } = useNuxtApp();
 
 async function confirmJoin() {
     if (!loggedIn.value) {
@@ -92,14 +93,11 @@ async function confirmJoin() {
     }
     loading.value = true;
     try {
-        const res = await $fetch('/api/game/players', { params: { gameId: gameId.value } }) as { exists: boolean, playerCount?: number };
+        const res = await $orpc.checkGameExists.mutate({ gameId: gameId.value });
         gameExists.value = res.exists;
         playerCount.value = res.playerCount ?? 0;
-        // If not loading, then actually join/redirect
-        if (res.exists || !res.exists) {
-            loading.value = false;
-            navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
-        }
+        loading.value = false;
+        navigateTo(`/partie?id=${storeAbout.myId}&gameId=${gameId.value}`);
     } catch (e) {
         gameExists.value = false;
         playerCount.value = 0;
