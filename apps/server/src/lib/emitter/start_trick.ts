@@ -9,7 +9,7 @@ import { emitStartDealing } from './start_dealing';
  * @param playerId The player Id starting
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitStartTrick(gameId: string,playerId :string, publish: (payload: any) => void) {
+export async function emitStartTrick(gameId: string,playerId :string) {
   const event = {
     id: await genIdCuid(),
     type: 'start_trick',
@@ -19,8 +19,9 @@ export async function emitStartTrick(gameId: string,playerId :string, publish: (
     timestamp: new Date().toISOString(),
   };
   logger.info(`[start_trick] Starting trick for player ${playerId} in game ${gameId}`);
-  controller.getInstance(gameId).sendState();
   controller.getInstance(gameId).addRound(playerId);
   controller.getInstance(gameId).addPli(playerId);
-  await emitStartDealing(gameId,publish);
+  controller.getInstance(gameId).state.phases.timeToPlay = playerId;
+  controller.getInstance(gameId).sendState();
+  await emitStartDealing(gameId);
 } 

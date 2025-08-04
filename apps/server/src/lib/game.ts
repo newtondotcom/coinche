@@ -25,8 +25,6 @@ export default class controller {
             },
             team1PointsCurrentGame: 0,
             team2PointsCurrentGame: 0,
-            team1Score: 0,
-            team2Score: 0,
             deck: [],
             phases: {
                 timeToBid: '',
@@ -61,7 +59,7 @@ export default class controller {
             changeType: 'changeTypeState',
             state: this.state,
         });
-        server.publish(this.state.gameId, payload);
+        // server.publish(this.state.gameId, payload);
         logger.info(`State sent for gameId: ${this.state.gameId}`); 
     }
 

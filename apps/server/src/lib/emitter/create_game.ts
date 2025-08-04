@@ -9,7 +9,7 @@ import controller from '@/lib/game';
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitGameCreation(gameId: string, publish: (payload: any) => void) {
+export async function emitGameCreation(gameId: string) {
   // Check if there are any events for this gameId
   const datas = await db
     .select()

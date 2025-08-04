@@ -1,16 +1,16 @@
 import "dotenv/config";
 import { RPCHandler } from "@orpc/server/fetch";
-import { createContext } from "./lib/context";
+import { createContext } from "@/lib/context";
 import { appRouter } from "./routers/index";
-import { auth } from "./lib/auth";
+import { auth } from "@/lib/auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
-import logger from "./lib/logger";
+import logger from "@/lib/logger";
 import { serve, type ServerWebSocket } from "bun";
 import type { EventInsert } from "@coinche/shared";
-import { translateEvent } from "./lib/listener";
-import controller from "./lib/game";
+import { translateEvent } from "@/lib/listener";
+import controller from "@/lib/game";
 
 async function getUsernameFromCookies(cookie: string | null) {
   return "test";
@@ -100,10 +100,10 @@ const wsHandler = {
         timestamp: (msg as any).timestamp || new Date().toISOString(),
       };
       const publish = (payload: any) => {
-        server.publish(data.gameId,JSON.stringify(payload));
+        // server.publish(data.gameId,JSON.stringify(payload));
       };
       logger.info(event);
-      await translateEvent(event, publish);
+      await translateEvent(event);
       await new Promise(resolve => setTimeout(resolve, 500));
       return;
     }

@@ -6,7 +6,7 @@ import { emitPointsTrick } from './points_trick';
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitEndTrick(gameId: string, publish: (payload: any) => void) {
+export async function emitEndTrick(gameId: string) {
     const controllerInstance = controller.getInstance(gameId);
     const lastRound = controllerInstance.getCurrentRound();
     const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
@@ -86,5 +86,5 @@ export async function emitEndTrick(gameId: string, publish: (payload: any) => vo
     logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
     controllerInstance.state.team1PointsCurrentGame += scoreTeam1;
     controllerInstance.state.team2PointsCurrentGame += scoreTeam2;
-    await emitPointsTrick(scoreTeam1, scoreTeam2, gameId, publish);
+    await emitPointsTrick(scoreTeam1, scoreTeam2, gameId);
 }

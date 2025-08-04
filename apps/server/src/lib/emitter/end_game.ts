@@ -43,8 +43,7 @@ function calculateNewRating(
 export async function emitEndGame(
   winnerPlayerId: string,
   teamMatePlayerId: string,
-  gameId: string,
-  publish: (payload: any) => void
+  gameId: string
 ) {
   const event: EventInsert = {
     id: await genIdCuid(),
@@ -63,8 +62,7 @@ export async function distributeRankingPoints(
   players: IPlayer[],
   gameId: string,
   team1Score: number,
-  team2Score: number,
-  publish: (payload: any) => void
+  team2Score: number
 ) {
   const playersIds = players.map((player) => player.id);
   
@@ -151,6 +149,6 @@ export async function distributeRankingPoints(
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function deleteRows(gameId: string, publish: (payload: any) => void) {
+export async function deleteRows(gameId: string) {
   await db.delete(events).where(eq(game.id, gameId));
 }

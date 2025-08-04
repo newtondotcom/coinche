@@ -8,7 +8,7 @@ import type { EventInsert } from "@coinche/shared";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitStartDealing(gameId: string, publish: (payload: any) => void) {
+export async function emitStartDealing(gameId: string) {
   const event: EventInsert = {
     id: await genIdCuid(),
     type: "start_distribution",
@@ -24,7 +24,6 @@ export async function emitStartDealing(gameId: string, publish: (payload: any) =
   }
   await emitDealing(
     controller.getInstance(gameId).getLastPli().playerStartingId,
-    gameId,
-    publish
+    gameId
   );
 }

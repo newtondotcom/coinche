@@ -8,8 +8,7 @@ import controller from '@/lib/game';
 export async function emitPointsTrick(
   scoreTeam1: number,
   scoreTeam2: number,
-  gameId: string,
-  publish: (payload: any) => void
+  gameId: string
 ) {
   const event = {
     id: await genIdCuid(),

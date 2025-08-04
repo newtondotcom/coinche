@@ -10,13 +10,13 @@ import type { IPlayer } from '@coinche/shared';
  * - On join/leave: updates gamePlayers and broadcasts the full player list to the room
  * @param ws WebSocket connection
  */
-export async function handlePlayerJoinLeave(event: any, publish: (payload: any) => void) {
+export async function handlePlayerJoinLeave(event: any) {
   const gameId = event.gameId;
   const playerId = event.playerId;
   const gameController = controller.getInstance(gameId);
   const playersSetOld = gameController.getPlayers();
   if (event.type === 'join') {
-    const player: IPlayer = { id: playerId, position: playersSetOld.size as any, hands: [], classement: 0 };
+    const player: IPlayer = { id: playerId, position: playersSetOld.length as any, hands: [], classement: 0 };
     gameController.addPlayer(player);
   } else if (event.type === 'leave') {
     gameController.removePlayer(playerId);
@@ -31,15 +31,15 @@ export async function handlePlayerJoinLeave(event: any, publish: (payload: any) 
     value: Array.from(playersSet),
     timestamp: new Date().toISOString(),
   }
-  publish(event2);
+  //publish(event2);
   if (event.type === 'join') {
     // If there are now 4 players, emit start_game
-    if (playersSet.size === 4) {
+    if (playersSet.length === 4) {
       // Get the first playerId from the Set
       const firstPlayer = Array.from(playersSet)[0];
-      await emitGameStarting(firstPlayer.id, gameId, publish);
+      await emitGameStarting(firstPlayer.id, gameId);
     } else {
-      logger.info(playersSet.size)
+      logger.info(playersSet.length)
     }
   }
 } 

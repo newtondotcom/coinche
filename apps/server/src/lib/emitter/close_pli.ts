@@ -19,7 +19,7 @@ if (dev) {
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function closePli(gameId: string, publish: (payload: any) => void) {
+export async function closePli(gameId: string) {
   const game = controller.getInstance(gameId).state;
   const currentPli = controller.getInstance(gameId).getLastPli();
   // find the winner
@@ -50,20 +50,19 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
     scoreTeam1;
   controller.getInstance(gameId).state.team2PointsCurrentGame+=
     scoreTeam2;
-  await emitPoints(scoreTeam1, scoreTeam2, gameId, publish);
+  await emitPoints(scoreTeam1, scoreTeam2, gameId);
 
   // end of the round
   if (game.deck.length === 32) {
-    await emitEndTrick(gameId, publish);
+    await emitEndTrick(gameId);
     // end of the game
     if (game.team1PointsCurrentGame >= scoreToReach || game.team2PointsCurrentGame >= scoreToReach) {
-      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId, publish);
+      await emitEndGame(winnerPlayerId, teamMatePlayerId, gameId);
       await distributeRankingPoints(
         Array.from(controller.getInstance(gameId).getPlayers()),
         gameId,
         game.team1PointsCurrentGame,
-        game.team2PointsCurrentGame,
-        publish
+        game.team2PointsCurrentGame
       );
       controller.deleteInstance(gameId);
     } else {
@@ -72,13 +71,13 @@ export async function closePli(gameId: string, publish: (payload: any) => void) 
       // fetch the last player starting id
       const playerId = await fetchcurrentPliPlayerWinningId(gameId);
       // emit the game starting event
-      await emitStartTrick(gameId, playerId, publish);
+      await emitStartTrick(gameId, playerId);
     }
   } else {
     console.log(game.deck.length);  
     // next pli
     controller.getInstance(gameId).addPli(winnerPlayerId);
-    await startPli(gameId, publish);
+    await startPli(gameId);
   }
 
   return;

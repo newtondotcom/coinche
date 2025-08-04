@@ -5,7 +5,7 @@ import controller from '@/lib/game';
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitGameStarting(playerId: string, gameId: string, publish: (payload: any) => void) {
+export async function emitGameStarting(playerId: string, gameId: string) {
   const event = {
     id: await genIdCuid(),
     type: "start_game",
@@ -15,5 +15,5 @@ export async function emitGameStarting(playerId: string, gameId: string, publish
     timestamp: new Date().toISOString(),
   };
   controller.getInstance(gameId).sendState();
-  await emitStartTrick(gameId,playerId,publish);
+  await emitStartTrick(gameId,playerId);
 }

@@ -6,7 +6,7 @@ import { genIdCuid } from '@coinche/shared';
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function startPli(gameId: string, publish: (payload: any) => void) {
+export async function startPli(gameId: string) {
   // launch pli
   const playerIdStarting = controller
     .getInstance(gameId)
@@ -20,7 +20,7 @@ export async function startPli(gameId: string, publish: (payload: any) => void) 
     timestamp : new Date().toISOString(),
   }
   await new Promise(resolve => setTimeout(resolve, 500));
-  publish(event)
+  ////publish(event)
   logger.info(`Starting pli for ${playerIdStarting}`);
-  await emitCanPlay(playerIdStarting, gameId, publish);
+  await emitCanPlay(playerIdStarting, gameId);
 }

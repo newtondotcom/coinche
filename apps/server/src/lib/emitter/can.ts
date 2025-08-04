@@ -5,7 +5,7 @@ import controller from "../game";
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitCanPlay(playerId: string, gameId: string, publish: (payload: any) => void) {
+export async function emitCanPlay(playerId: string, gameId: string) {
   controller.getInstance(gameId).sendState();
   logger.info(`${playerId} can play`);
 }
@@ -13,7 +13,7 @@ export async function emitCanPlay(playerId: string, gameId: string, publish: (pa
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitCanBid(playerId: string, gameId: string, publish: (payload: any) => void) {
+export async function emitCanBid(playerId: string, gameId: string) {
   controller.getInstance(gameId).sendState();
   logger.info(`${playerId} can bidding`);
 }

@@ -11,8 +11,7 @@ import type { ICard, PlayerId } from "@coinche/shared";
  */
 export default async function emitDealing(
   id_player_starting: PlayerId,
-  gameId: string,
-  publish: (payload: any) => void
+  gameId: string
 ) {
   cutDeck(gameId);
   // distribute cards 3 per person, then 2, then 3
@@ -39,17 +38,17 @@ export default async function emitDealing(
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId, publish);
+      await distributeCard(shiftedPlayers[j].id, gameId);
     }
   }
   for (let i = 0; i < 2; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId, publish);
+      await distributeCard(shiftedPlayers[j].id, gameId);
     }
   }
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId, publish);
+      await distributeCard(shiftedPlayers[j].id, gameId);
     }
   }
   const event = {
@@ -61,13 +60,13 @@ export default async function emitDealing(
     timestamp: new Date().toISOString(),
   };
   controller.getInstance(gameId).sendState();
-  await emitCanBid(id_player_starting, gameId, publish);
+  await emitCanBid(id_player_starting, gameId);
 }
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-async function distributeCard(player_id: string, gameId: string, publish: (payload: any) => void) {
+async function distributeCard(player_id: string, gameId: string) {
   const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;
   const event = {
     id: await genIdCuid(),
