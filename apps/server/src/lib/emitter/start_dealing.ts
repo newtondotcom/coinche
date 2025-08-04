@@ -16,8 +16,7 @@ export async function emitStartDealing(gameId: string) {
     gameId: gameId,
     value: "idPlayerStarting",
   };
-  controller.getInstance(gameId).sendState();
-  if (controller.getInstance(gameId).getLastPli().number === 0) {
+  if (controller.getInstance(gameId).getCurrentRound().plis.length === 0) {
     controller.getInstance(gameId).state.deck = generateDeckCards();
   } else {
     logger.error("start_dealing - deck was not generated" + controller.getInstance(gameId).getLastPli().number )

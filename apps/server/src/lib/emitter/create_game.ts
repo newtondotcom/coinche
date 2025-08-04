@@ -37,13 +37,7 @@ export async function emitGameCreation(gameId: string) {
       .orderBy(desc(events.createdAt))
       .limit(1);
     if (datas?.length === 0) {
-      const event: EventInsert = {
-        id: await genIdCuid(),
-        type: "bidding",
-        playerId: "controller",
-        gameId: gameId,
-        value: formatPoints(0, 0),
-      };
+      controller.getInstance(gameId).state.status = 'waiting';
       controller.getInstance(gameId).sendState();
     }
   }

@@ -10,13 +10,9 @@ export async function emitPointsTrick(
   scoreTeam2: number,
   gameId: string
 ) {
-  const event = {
-    id: await genIdCuid(),
-    type: "score_trick",
-    playerId: "controller",
-    gameId: gameId,
-    value: formatPoints(scoreTeam1, scoreTeam2),
-    timestamp: new Date().toISOString(),
-  };
+  controller.getInstance(gameId).getLastPli().team1Score +=
+    scoreTeam1;
+  controller.getInstance(gameId).getLastPli().team1Score +=
+    scoreTeam2;
   controller.getInstance(gameId).sendState();
 }

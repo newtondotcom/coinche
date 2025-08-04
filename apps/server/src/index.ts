@@ -99,9 +99,6 @@ const wsHandler = {
         value: (msg as any).value || '',
         timestamp: (msg as any).timestamp || new Date().toISOString(),
       };
-      const publish = (payload: any) => {
-        // server.publish(data.gameId,JSON.stringify(payload));
-      };
       logger.info(event);
       await translateEvent(event);
       await new Promise(resolve => setTimeout(resolve, 500));

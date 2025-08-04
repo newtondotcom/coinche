@@ -2,7 +2,7 @@ import { emitCanPlay } from '@/lib/emitter/can';
 import { closePli } from '@/lib/emitter/close_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
-import { setNextPlayerTurn } from '@/lib/utils';
+import { getNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatCarteToPlay } from '@coinche/shared';
 import { genIdCuid } from '@coinche/shared';
@@ -27,7 +27,7 @@ export default async function translatePlay(event: EventInsert) {
         logger.info('End of pli');
         await closePli(event.gameId);
     } else {
-        const nextPlayerId = setNextPlayerTurn(playerId, event.gameId);
+        const nextPlayerId = getNextPlayerTurn(playerId, event.gameId);
         await emitCanPlay(nextPlayerId, event.gameId);
     }
     return;

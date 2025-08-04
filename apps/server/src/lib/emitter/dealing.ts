@@ -51,15 +51,10 @@ export default async function emitDealing(
       await distributeCard(shiftedPlayers[j].id, gameId);
     }
   }
-  const event = {
-    id: await genIdCuid(),
-    type: "start_bidding",
-    playerId: "controller",
-    gameId: controller.getInstance(gameId).state.gameId,
-    value: id_player_starting,
-    timestamp: new Date().toISOString(),
-  };
+  
+  // update the state of the game with the distributed cards
   controller.getInstance(gameId).sendState();
+
   await emitCanBid(id_player_starting, gameId);
 }
 
@@ -68,16 +63,11 @@ export default async function emitDealing(
  */
 async function distributeCard(player_id: string, gameId: string) {
   const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;
-  const event = {
-    id: await genIdCuid(),
-    type: "dealing",
-    playerId: player_id,
-    gameId: gameId,
-    value: formatCarteToDistribute(card, controller.getInstance(gameId).getLastPli().number),
-    timestamp: new Date().toISOString(),
-  };
-  controller.getInstance(gameId).sendState();
+  controller.getInstance(gameId).getPlayers().find((player) => player.id === player_id)!.hands.push(card);
+  // we will update the state once all cards are distributed
+  //controller.getInstance(gameId).sendState();
 }
+
 export function cutDeck(gameId: string) {
   // cut the paquet at a certain index
   const indexCut = Math.floor(Math.random() * 32);

@@ -1,6 +1,5 @@
 import logger from '@/lib/logger';
-import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound, IGameState, CardSuite, bidding, PlayerId } from '@coinche/shared';
-import server from '..';
+import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound, IGameState, ICardSuite, bidding, PlayerId } from '@coinche/shared';
 
 export default class controller {
     static clearGames() {
@@ -13,6 +12,7 @@ export default class controller {
     private constructor(gameId: string) {
         this.state = {
             gameId,
+            status: 'waiting',
             players : [],
             team1: [],
             team2: [],
@@ -114,7 +114,7 @@ export default class controller {
         const roundInit = {
             plis: [],
             biddings: [],
-            biddingElected: { suite: 'NA' as CardSuite, bidding: 0 as bidding, playerId: 'NA' as PlayerId },
+            biddingElected: { suite: 'NA' as ICardSuite, bidding: 0 as bidding, playerId: 'NA' as PlayerId },
             coinched: false,
             surcoinched: false,
         };
@@ -126,7 +126,6 @@ export default class controller {
         const pliInit = {
             number: currentRound.plis.length + 1,
             plays: [],
-            currentPlayerId: playerStartingId,
             playerStartingId: playerStartingId,
             team1Score: 0,
             team2Score: 0,
@@ -146,6 +145,21 @@ export default class controller {
     public isTeam1(playerId: string) {
         const players = Array.from(this.getPlayers());
         return players[0].id === playerId || players[2].id === playerId;
+    }
+
+    public setPlayerIdToPlay(playerId: string) {
+        this.state.phases.timeToPlay = playerId;
+        logger.info(`Player ${playerId} is set to play in game ${this.state.gameId}`);
+    }
+
+    public setPlayerIdToBid(playerId: string) {
+        this.state.phases.timeToBid = playerId;
+        logger.info(`Player ${playerId} is set to bid in game ${this.state.gameId}`);
+    }
+
+    public setPlayerIdToDistrib(playerId: string) {
+        this.state.phases.timeDistrib = playerId;
+        logger.info(`Player ${playerId} is set to distribute in game ${this.state.gameId}`);
     }
 
     public static gameExists(gameId: string): { exists: boolean, playerCount: number } {

@@ -2,7 +2,7 @@ import { emitCanBid } from '@/lib/emitter/can';
 import { startPli } from '@/lib/emitter/start_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
-import { setNextPlayerTurn } from '@/lib/utils';
+import { getNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatBidding } from '@coinche/shared';
 import { emitBid } from '@/lib/emitter/bid';
@@ -21,12 +21,10 @@ export default async function translateBidding(event: EventInsert) {
         // Surcoinché bid
         lastRound.surcoinched = true;
     }
-    
-    controller.getInstance(event.gameId).addbidding(bid);
 
     await emitBid(bid,event.gameId);
 
-    const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
+    const nextPlayerId = getNextPlayerTurn(event.playerId, event.gameId);
     await emitCanBid(nextPlayerId, event.gameId);
     
     if (bid.bidding === 0) {

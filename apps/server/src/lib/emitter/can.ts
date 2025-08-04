@@ -1,11 +1,12 @@
 import logger from "@/lib/logger";
-import { genIdCuid } from '@coinche/shared';
-import controller from "../game";
+import controller from "@/lib/game";
 
 /**
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
-export async function emitCanPlay(playerId: string, gameId: string) {
+export async function emitCanPlay(playerId: string, gameId: string) {    
+  // Update the current player 
+  controller.getInstance(gameId).setPlayerIdToPlay(playerId);
   controller.getInstance(gameId).sendState();
   logger.info(`${playerId} can play`);
 }
@@ -14,6 +15,7 @@ export async function emitCanPlay(playerId: string, gameId: string) {
  * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitCanBid(playerId: string, gameId: string) {
+  controller.getInstance(gameId).setPlayerIdToBid(playerId);
   controller.getInstance(gameId).sendState();
   logger.info(`${playerId} can bidding`);
 }

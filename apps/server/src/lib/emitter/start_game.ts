@@ -14,6 +14,7 @@ export async function emitGameStarting(playerId: string, gameId: string) {
     value: playerId,
     timestamp: new Date().toISOString(),
   };
+  controller.getInstance(gameId).state.status = 'playing';
   controller.getInstance(gameId).sendState();
   await emitStartTrick(gameId,playerId);
 }

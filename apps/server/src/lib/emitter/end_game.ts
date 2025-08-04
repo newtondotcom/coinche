@@ -52,6 +52,7 @@ export async function emitEndGame(
     gameId: gameId,
     value: formatTeam(winnerPlayerId, teamMatePlayerId),
   };
+  controller.getInstance(gameId).state.status = 'finished';
   controller.getInstance(gameId).sendState();
 }
 

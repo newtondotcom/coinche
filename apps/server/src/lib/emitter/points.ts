@@ -10,13 +10,9 @@ export async function emitPoints(
   scoreTeam2: number,
   gameId: string
 ) {
-  const event = {
-    id: await genIdCuid(),
-    type: "score",
-    playerId: "controller",
-    gameId: gameId,
-    value: formatPoints(scoreTeam1, scoreTeam2),
-    timestamp: new Date().toISOString(),
-  };
+  controller.getInstance(gameId).state.team1PointsCurrentGame +=
+      scoreTeam1;
+    controller.getInstance(gameId).state.team2PointsCurrentGame+=
+      scoreTeam2;
   controller.getInstance(gameId).sendState();
 }

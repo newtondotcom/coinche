@@ -46,10 +46,6 @@ export async function closePli(gameId: string) {
     ? score
     : 0;
   const scoreTeam2 = scoreTeam1 === 0 ? score : 0;
-  controller.getInstance(gameId).state.team1PointsCurrentGame +=
-    scoreTeam1;
-  controller.getInstance(gameId).state.team2PointsCurrentGame+=
-    scoreTeam2;
   await emitPoints(scoreTeam1, scoreTeam2, gameId);
 
   // end of the round
