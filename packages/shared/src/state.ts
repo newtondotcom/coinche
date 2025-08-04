@@ -3,6 +3,8 @@ import { Ibidding, ICard, IPlay, IPlayer, PlayerId } from "./types";
 export interface IGameState {
     // Identifiants de base
     gameId: string;
+
+    status : 'waiting' | 'playing' | 'finished';
     
     // Joueurs
     players: IPlayer[];
@@ -14,11 +16,10 @@ export interface IGameState {
         plis: Array<{
             number: number;
             plays: IPlay[];
-            currentPlayerId: PlayerId;
             playerStartingId: PlayerId;
             team1Score: number;
             team2Score: number;
-            isActive: boolean; // Pour marquer le pli actuel
+            isActive: boolean;
         }>;
         biddings: Ibidding[];
         biddingElected: Ibidding;

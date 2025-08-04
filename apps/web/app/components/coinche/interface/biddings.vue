@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
     import emitbidding from '@/shared/emitter/bidding';
-    import type { IPlayer, bidding, CardSuite, Ibidding } from "@coinche/shared";
+    import type { IPlayer, bidding, ICardSuite, Ibidding } from "@coinche/shared";
 
     const storeGame = useGameStore();
     const storeAbout = useAboutStore();
@@ -113,7 +113,7 @@
     // All biddings combined for compatibility
     const biddings: bidding[] = [...regularBiddings, ...specialBiddings];
     
-    const suites: CardSuite[] = [
+    const suites: ICardSuite[] = [
         'diamonds',
         'clubs',
         'hearts',
@@ -135,7 +135,7 @@
             storeGame.biddings_pli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
     );
 
-    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeAbout.myId });
+    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeAbout.myId.value });
 
     watch(biddingEnCours, async () => {
         if (biddingEnCours.value.bidding !== 0 && biddingEnCours.value.suite !== 'NA') {

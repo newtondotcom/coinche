@@ -4,6 +4,7 @@ import type { IGameState } from '@coinche/shared';
 export const useStateStore = defineStore('state', {
   state: (): IGameState => ({
     gameId: '',
+    status: 'waiting', // 'waiting' | 'playing' | 'finished'
     players: [],
     team1: [],
     team2: [],

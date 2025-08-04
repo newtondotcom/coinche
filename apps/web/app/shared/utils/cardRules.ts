@@ -28,15 +28,15 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         return true;
     }
 
-    const currentCardSuite = card.suite;
-    const currentCardValue = card.valueNum;
+    const currentICardSuite = card.suite;
+    const currentICardValue = card.valueNum;
 
     // Special cases for Sans Atout and Tout Atout variants
     if (atout === 'sans-atout') {
         // No trump exists, only need to follow suit if possible
         const hasColorAsked = hand.some((c: ICard) => c.suite === colorAsked);
         if (hasColorAsked) {
-            return currentCardSuite === colorAsked;
+            return currentICardSuite === colorAsked;
         }
         return true; // Can play any card if don't have the color asked
     }
@@ -45,7 +45,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         // All colors are trump, must always try to go higher when possible
         const hasColorAsked = hand.some((c: ICard) => c.suite === colorAsked);
         if (hasColorAsked) {
-            if (currentCardSuite === colorAsked) {
+            if (currentICardSuite === colorAsked) {
                 // Must play higher if possible
                 const highestInPli = Math.max(...currentPli
                     .filter(p => p.card.suite === colorAsked)
@@ -55,7 +55,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
                     c.suite === colorAsked && c.valueNum > highestInPli);
                 
                 if (hasHigher) {
-                    return currentCardValue > highestInPli;
+                    return currentICardValue > highestInPli;
                 }
                 // If no higher card available, can play any card of the asked color
                 return true;
@@ -71,7 +71,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
 
     // Rule 1: Must always follow suit if possible
     if (hasColorAsked) {
-        if (currentCardSuite !== colorAsked) {
+        if (currentICardSuite !== colorAsked) {
             return false;
         }
 
@@ -84,10 +84,10 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
                     c.suite === atout && c.valueNum > highestAtout);
                 
                 if (hasHigherAtout) {
-                    return currentCardValue > highestAtout;
+                    return currentICardValue > highestAtout;
                 }
                 // FIXED: Allow playing lower trump if no higher trump available
-                return currentCardSuite === atout;
+                return currentICardSuite === atout;
             }
         }
         return true;
@@ -136,7 +136,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
     }
 
     // Rule 4: If partner is not winning and we have trump, must play trump
-    if (hasAtout && currentCardSuite === atout) {
+    if (hasAtout && currentICardSuite === atout) {
         // Check if opponent has already played trump
         const storePlayers = usePlayersStore();
         const getTeamMateId = (playerId: string): string => {
@@ -163,7 +163,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
             
             // Must play higher trump if available, otherwise any trump is allowed
             if (hasHigherAtout) {
-                return currentCardValue > highestOpponentAtout;
+                return currentICardValue > highestOpponentAtout;
             }
             // Can play any trump even if lower (forcing to "pisser")
             return true;
@@ -176,7 +176,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
     // Rule 5: If no trump available and partner not winning, must discard
     // FIXED: Allow any non-trump card when player has no trump
     if (!hasAtout) {
-        return currentCardSuite !== atout; // Can play any non-trump card
+        return currentICardSuite !== atout; // Can play any non-trump card
     }
 
     // FIXED: If we have trump but trying to play non-trump while partner not winning

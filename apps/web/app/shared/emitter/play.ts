@@ -2,7 +2,7 @@ import { useGameStore } from "@/stores/game";
 import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
 import { formatCarteToPlay, genIdCuid } from '@coinche/shared';
-import type { CardSuite, CardValue, ICard } from '@coinche/shared';
+import type { ICardSuite, ICardValue, ICard } from '@coinche/shared';
 
 export async function emitCardPlay(card: ICard) {
     const storeAbout = useAboutStore();
@@ -17,7 +17,7 @@ export async function emitCardPlay(card: ICard) {
     });
 }
 
-export async function cardPressed(suite: CardSuite, value: CardValue) {
+export async function cardPressed(suite: ICardSuite, value: ICardValue) {
     const storeAbout = useAboutStore();
     const selectedCardIndex = storeAbout.hand.findIndex(
         (card) => card.suite === suite && card.value === value,

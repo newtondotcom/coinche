@@ -1,7 +1,7 @@
 // Export types
 export type { 
-  CardSuite,
-  CardValue,
+  ICardSuite,
+  ICardValue,
   bidding,
   PlayerPosition,
   PlayerId,
@@ -16,6 +16,11 @@ export type {
   EventInsert,
   Database
 } from './types';
+
+export {
+  cardSuites,
+  cardValues,
+} from './constants';
 
 // Export format utilities
 export {

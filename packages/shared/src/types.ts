@@ -1,4 +1,4 @@
-export type CardSuite =
+export type ICardSuite =
     | 'diamonds'
     | 'clubs'
     | 'hearts'
@@ -7,19 +7,19 @@ export type CardSuite =
     | 'sans-atout'
     | 'NA';
 
-export type CardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
+export type ICardValue = '7' | '8' | '9' | 'J' | 'Q' | 'K' | '10' | 'A';
 export type bidding = 0 | 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 | 160 | 0 | 250 | 251 | 252 | 500 | 501 | 502;
 export type PlayerPosition = 0 | 1 | 2 | 3;
 export type PlayerId = string;
 
 export interface ICard {
-    suite: CardSuite;
-    value: CardValue;
+    suite: ICardSuite;
+    value: ICardValue;
     valueNum: number;
 }
 
 export interface Ibidding {
-    suite: CardSuite;
+    suite: ICardSuite;
     bidding: bidding;
     playerId: PlayerId;
 }
