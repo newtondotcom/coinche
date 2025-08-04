@@ -3,7 +3,7 @@ import {  cardSuites, cardValues, type ICard, type IPlayer, type PlayerId } from
 import { playerStats } from '@/db/schema/coinche';
 import { eq} from "drizzle-orm";
 import { db } from '@/db';
-import logger from './logger';
+import logger from '@/lib/logger';
 
 export const dev = process.env.NODE_ENV !== 'production';
 

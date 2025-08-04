@@ -27,6 +27,7 @@ const gameId = "0";
 const app = new Hono();
 
 app.use(honoLogger());
+
 app.use("/*", cors({
   origin: process.env.CORS_ORIGIN || "",
   allowMethods: ["GET", "POST", "OPTIONS"],
@@ -38,6 +39,7 @@ app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 const handler = new RPCHandler(appRouter);
 app.use("/rpc/*", async (c, next) => {
+  console.log("ws3");
   const context = await createContext({ context: c });
   const { matched, response } = await handler.handle(c.req.raw, {
     prefix: "/rpc",
@@ -51,10 +53,12 @@ app.use("/rpc/*", async (c, next) => {
 });
 
 app.get("/", (c) => {
+  console.log("ws");
   return c.text("OK");
 });
 
 app.get("/ws", async (c) => {
+  console.log("ws2");
   const context = await createContext({ context: c });
   // get user
   const username = "test";
@@ -71,13 +75,11 @@ const wsHandler = {
     // On connect, no room joined yet
     userRooms.set(ws, new Set());
     ws.subscribe(gameId);
-    console.log("cleint suscribed to room")
-    // ws.data already contains username and gameId from upgrade
+    console.log("client suscribed to room");
   },
   async message(ws: ServerWebSocket, raw : string | ArrayBuffer | Uint8Array) {
-    // ws.data is typed as unknown, so we need to assert its shape
-    const data = ws.data as unknown as { username: string, gameId: string };
-    const gameId = data.gameId;
+    //const data = ws.data as unknown as { username: string, gameId: string };
+    //const gameId = data.gameId;
     let msg: EventInsert;
     // Ensure raw is a string
     let rawStr: string = typeof raw === "string" ? raw : raw.toString();
@@ -89,7 +91,6 @@ const wsHandler = {
     }
     if (msg.type && msg.gameId) {
       const data = ws.data as unknown as { username: string, gameId: string };
-      // Fill missing fields for EventInsert
       const event: EventInsert = {
         ...msg, // spread first so explicit fields below take precedence
         gameId: msg.gameId || data.gameId,
@@ -100,8 +101,12 @@ const wsHandler = {
         timestamp: (msg as any).timestamp || new Date().toISOString(),
       };
       logger.info(event);
-      await translateEvent(event);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      try {
+        await translateEvent(event);
+      } catch (error) {
+        console.error("Translate event error:", error);
+        ws.send(JSON.stringify({ type: "system", message: "Event processing error." }));
+      }
       return;
     }
     ws.send(JSON.stringify({ type: "system", message: "Unknown event type or missing gameId." }));
@@ -126,11 +131,14 @@ const wsHandler = {
 
 const server = serve({
   port: 3000,
-  fetch: app.fetch,
+  fetch: async (req, server) => {
+    console.log(">>> Received request:", req.method, req.url);
+    return app.fetch(req, server); // 💥 infinite recursion risk
+  },
   websocket: wsHandler,
+  development: true,
 });
-
-export default server;
 
 console.log(`Listening on ${server.hostname}:${server.port}`);
 
+export default server;

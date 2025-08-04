@@ -1,6 +1,6 @@
-import { distributeRankingPoints, emitEndGame } from @/lib/actions/end_game";
-import { emitPoints } from @/lib/actions/points";
-import { startPli } from @/lib/actions/start_pli";
+import { distributeRankingPoints, emitEndGame } from "@/lib/actions/end_game";
+import { emitPoints } from "@/lib/actions/points";
+import { startPli } from "@/lib/actions/start_pli";
 import controller from "@/lib/game";
 import { dev } from "@/lib/utils";
 import { formatTeam } from "@coinche/shared";

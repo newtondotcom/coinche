@@ -5,9 +5,9 @@ import type { EventInsert, IPlayer } from "@coinche/shared";
 import {events, game, playerStats} from "@/db/schema/coinche";
 import { eq, or } from "drizzle-orm";
 
-import { addPointsTo } from "../points";
 import { db } from "@/db";
 import controller from "@/lib/game";
+import { addPointsTo } from "../utils";
 
 /**
  * Calculate expected score for a player against another team
@@ -122,7 +122,7 @@ export async function distributeRankingPoints(
   const kFactor = 32;
   
   // Calculate new ratings for each player individually
-  team1Players.forEach((playerIndex) => {
+  team1Players.forEach(async (playerIndex) => {
     const currentRating = playerRatings[playerIndex];
     const expectedScore = calculateExpectedScore(currentRating, team2AvgRating);
     const actualScore = team1Won ? 1 : 0;
@@ -130,10 +130,10 @@ export async function distributeRankingPoints(
     const ratingChange = newRating - currentRating;
     
     // Apply the rating change
-    addPointsTo(ratingChange, playersIds[playerIndex]);
+    await addPointsTo(ratingChange, playersIds[playerIndex]);
   });
   
-  team2Players.forEach((playerIndex) => {
+  team2Players.forEach(async (playerIndex) => {
     const currentRating = playerRatings[playerIndex];
     const expectedScore = calculateExpectedScore(currentRating, team1AvgRating);
     const actualScore = team1Won ? 0 : 1;
@@ -141,7 +141,7 @@ export async function distributeRankingPoints(
     const ratingChange = newRating - currentRating;
     
     // Apply the rating change
-    addPointsTo(ratingChange, playersIds[playerIndex]);
+    await addPointsTo(ratingChange, playersIds[playerIndex]);
   });
 }
 

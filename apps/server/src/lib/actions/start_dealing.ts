@@ -1,4 +1,4 @@
-import emitDealing from @/lib/actions/dealing";
+import emitDealing from "@/lib/actions/dealing";
 import controller from "@/lib/game";
 import { generateDeckCards } from "@/lib/utils";
 import { genIdCuid } from '@coinche/shared';

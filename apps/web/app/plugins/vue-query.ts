@@ -8,21 +8,17 @@ import {
   QueryCache,
   QueryClient,
   VueQueryPlugin,
-} from '@tanstack/vue-query'
+} from '@tanstack/vue-query';
+import { toast } from 'vue-sonner';
 
 export default defineNuxtPlugin((nuxt) => {
   const vueQueryState = useState<DehydratedState | null>('vue-query')
-
-  const toast = useToast()
 
   const queryClient = new QueryClient({
     queryCache: new QueryCache({
       onError: (error) => {
         console.log(error)
-        toast.add({
-          title: 'Error',
-          description: error?.message || 'An unexpected error occurred.',
-        })
+        toast.error(error?.message || 'An unexpected error occurred.')
       },
     }),
   })

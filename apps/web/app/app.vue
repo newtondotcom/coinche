@@ -9,19 +9,16 @@
     </div>
   
     <NuxtLoadingIndicator />
-    <ClientOnly>
-      <Toaster />
-    </ClientOnly>
+    <Toaster />
   </template>
   
   <script setup lang="ts">
   import { Toaster } from "@/components/ui/sonner";
   import { isDevEnv } from "@/shared/utils/miscs";
+  import 'vue-sonner/style.css' 
   
   const config = useRuntimeConfig();
   const route = useRoute();
-  
-  const {loggedIn} = useAuth();
   
   // Check if current page is the game page
   const isGamePage = computed(() => route.path === '/partie');
