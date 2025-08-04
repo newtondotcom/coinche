@@ -1,4 +1,4 @@
-import { emitCanPlay } from "@/lib/emitter/can";
+import { emitCanPlay } from "@/lib/actions/can";
 import controller from "@/lib/game";
 import logger from "@/lib/logger";
 import { genIdCuid } from '@coinche/shared';

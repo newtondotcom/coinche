@@ -1,5 +1,5 @@
-import { emitCanPlay } from '@/lib/emitter/can';
-import { closePli } from '@/lib/emitter/close_pli';
+import { emitCanPlay } from '@/lib/actions/can';
+import { closePli } from '@/lib/actions/close_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { getNextPlayerTurn } from '@/lib/utils';

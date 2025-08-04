@@ -1,4 +1,4 @@
-import { emitCanBid } from "@/lib/emitter/can";
+import { emitCanBid } from "@/lib/actions/can";
 import controller from "@/lib/game";
 import logger from "@/lib/logger";
 import { formatCarteToDistribute } from "@coinche/shared";

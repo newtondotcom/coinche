@@ -1,4 +1,4 @@
-import { findWinner } from '@/lib/emitter/close_pli';
+import { findWinner } from '@/lib/actions/close_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { emitPointsTrick } from './points_trick';

@@ -1,4 +1,4 @@
-import { emitGameStarting } from "@/lib/emitter/start_game";
+import { emitGameStarting } from "@/lib/actions/start_game";
 import logger from "@/lib/logger";
 import { genIdCuid } from '@coinche/shared';
 

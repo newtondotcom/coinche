@@ -1,11 +1,11 @@
-import { emitCanBid } from '@/lib/emitter/can';
-import { startPli } from '@/lib/emitter/start_pli';
+import { emitCanBid } from '@/lib/actions/can';
+import { startPli } from '@/lib/actions/start_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { getNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatBidding } from '@coinche/shared';
-import { emitBid } from '@/lib/emitter/bid';
+import { emitBid } from '@/lib/actions/bid';
 
 export default async function translateBidding(event: EventInsert) {
     const bid = deformatBidding(event.value as string, event.playerId);
