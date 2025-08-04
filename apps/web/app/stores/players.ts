@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed } from 'vue';
-import { useStateStore } from './state';
+import { useStateStore } from '@/stores/state';
 
 export const usePlayersStore = defineStore('players', () => {
     const state = useStateStore();
