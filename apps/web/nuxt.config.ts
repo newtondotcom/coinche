@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   compatibilityDate: 'latest',
   devtools: { enabled: false },
-  modules: ['@nuxt/ui', 'shadcn-nuxt', '@pinia/nuxt'],
+  modules: ['shadcn-nuxt', '@pinia/nuxt'],
   css: ['@/assets/css/main.css'],
   devServer: {
     port: 3001
@@ -23,5 +23,5 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
-  },
+  }
 })

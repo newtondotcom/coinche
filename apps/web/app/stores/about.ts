@@ -58,6 +58,14 @@ export const useAboutStore = defineStore('about', () => {
 
     const atoutIsAsked = computed(() => colorAsked.value === atout.value);
 
+    function setMyId(id: string) {
+        myId.value = id;
+    }
+
+    function setGameId(id: string) {
+        gameId.value = id;
+    }
+
     return {
         myId,
         gameId,
@@ -74,5 +82,7 @@ export const useAboutStore = defineStore('about', () => {
         hasAskedColor,
         highestAtoutInPli,
         atoutIsAsked,
+        setMyId,
+        setGameId,
     };
 });

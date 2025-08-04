@@ -21,10 +21,13 @@
     }
 
     const canBePlayed = computed(() => {
+        const currentPliObj = Array.isArray(storeGame.currentPli)
+            ? undefined
+            : storeGame.currentPli;
         return cardCanBePlayed(props.card, {
             currentPlayerId: storeGame.currentPlayerId,
-            myId: storeAbout.myId,
-            current_pli: storeGame.current_pli,
+            myId: storeAbout.myId.value,
+            currentPli: currentPliObj?.plays ?? [],
             colorAsked: storeAbout.colorAsked,
             atout: storeAbout.atout,
             hand: storeAbout.hand,
@@ -38,7 +41,7 @@
         `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
     );
 
-    watch(storeGame.current_pli, () => {
+    watch(storeGame.currentPli, () => {
         canBePlayed.value;
     });
 </script>

@@ -229,22 +229,15 @@
             coinchedBid = 251; // Capot coinché
         } else if (lastBid === 500) {
             coinchedBid = 501; // Générale coinchée
-        } else if (typeof lastBid === 'number' && lastBid >= 80 && lastBid <= 160) {
-            // For regular bids, we can double the value to represent coinche
-            // But since our type only allows specific values, we'll track coinche state
-            // and let the scoring logic handle the multiplier
-            storeGame.setCoinched(true);
-            return; // Don't emit a new bid, just track the state
         } else {
             return;
         }
 
-        await emitbidding({ 
+        await emitbidding({
             bidding: coinchedBid, 
             suite: storeGame.biddingElected.suite, 
             playerId: storeAbout.myId 
         });
-        storeGame.setCoinched(true);
     }
 
     async function surcoincher() {
@@ -256,10 +249,6 @@
             surcoincheBid = 252; // Capot surcoinché
         } else if (lastBid === 501) {
             surcoincheBid = 502; // Générale surcoinchée
-        } else if (typeof lastBid === 'number' && lastBid >= 80 && lastBid <= 160) {
-            // For regular bids, track surcoinche state and let scoring logic handle the multiplier
-            storeGame.setSurcoinched(true);
-            return; // Don't emit a new bid, just track the state
         } else {
             return;
         }
@@ -269,6 +258,5 @@
             suite: storeGame.biddingElected.suite, 
             playerId: storeAbout.myId 
         });
-        storeGame.setSurcoinched(true);
     }
 </script>

@@ -12,7 +12,7 @@ export async function emitCardPlay(card: ICard) {
         type: 'play',
         playerId: storeAbout.myId,
         gameId: storeAbout.gameId,
-        value: formatCarteToPlay(card, storeGame.pli_number, storeGame.current_pli.length),
+        value: formatCarteToPlay(card, storeGame.pli_number, storeGame.currentPli.length),
         timestamp: new Date().toISOString(),
     });
 }

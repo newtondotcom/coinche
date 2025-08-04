@@ -7,7 +7,7 @@
 
     <CoincheRiver />
 
-    <CoincheInterfaceBiddings v-if="storeAbout.timeTobidding" />
+    <CoincheInterfaceBiddings v-if="storeAbout.timeToBidding" />
 
     <div
       v-if="storePlayers.players.length == 4"
@@ -33,12 +33,14 @@ import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
 import { useAboutStore } from "@/stores/about";
 import { useGameStore } from "@/stores/game";
 import { usePlayersStore } from "@/stores/players";
-import { CHANGE_TYPE_STATE, WSPayload } from "@coinche/shared";
+import { CHANGE_TYPE_STATE} from "@coinche/shared";
+import type { WSPayload } from "@coinche/shared";
 
 const { loggedIn } = useAuth();
 const storeGame = useGameStore();
 const storePlayers = usePlayersStore();
 const storeAbout = useAboutStore();
+const stateStore = useStateStore();
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -67,11 +69,11 @@ onMounted(async () => {
   
   // Set up message listener with cleanup function
   cleanupListener = onWSMessage((event : WSPayload) => {
-    console.log('Received WebSocket event:', event.type);
+    console.log('Received WebSocket event:', event.changeType);
 
     if (event.changeType === CHANGE_TYPE_STATE) {
       // Update game state
-      storeGame.updateGameState(event.gameState);
+      stateStore.setState(event.state);
     } else {
       console.warn('Unhandled WebSocket event type:', event.changeType);
     }

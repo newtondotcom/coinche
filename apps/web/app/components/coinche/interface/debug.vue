@@ -20,7 +20,7 @@
         Card playable : {{ storeAbout.hand.some(card => cardCanBePlayed(card, {
             currentPlayerId: storeGame.currentPlayerId,
             myId: storeAbout.myId,
-            current_pli: storeGame.current_pli,
+            currentPli: storeGame.currentPli,
             colorAsked: storeAbout.colorAsked,
             atout: storeAbout.atout,
             hand: storeAbout.hand,

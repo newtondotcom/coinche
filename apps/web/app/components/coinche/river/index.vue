@@ -11,8 +11,8 @@
                 :class="cn(`min-w-[${maxCardWidth}]`, `min-h-[${maxCardHeight}]`)"
             >
                 <CoincheCard
-                    v-if="storeGame.current_pli.length >= i"
-                    :card="storeGame.current_pli[i - 1].card"
+                    v-if="storeGame.currentPli.length >= i"
+                    :card="storeGame.currentPli[i - 1].card"
                     class-str="my-1"
                     :in-deck="false"
                 />

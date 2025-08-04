@@ -22,8 +22,6 @@ export const useStateStore = defineStore('state', {
 
     team1PointsCurrentGame: 0,
     team2PointsCurrentGame: 0,
-    team1Score: 0,
-    team2Score: 0,
     deck: [],
 
     phases: {
