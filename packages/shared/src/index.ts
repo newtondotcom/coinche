@@ -14,7 +14,7 @@ export type {
   IGame,
   Event,
   EventInsert,
-  Database
+  IGameStatus
 } from './types';
 
 export {

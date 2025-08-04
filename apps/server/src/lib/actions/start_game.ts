@@ -3,7 +3,6 @@ import { emitStartTrick } from "./start_trick";
 import controller from '@/lib/game';
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitGameStarting(playerId: string, gameId: string) {
   const event = {

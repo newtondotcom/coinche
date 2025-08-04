@@ -7,7 +7,6 @@ import { db } from "@/db";
 import controller from '@/lib/game';
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitGameCreation(gameId: string) {
   // Check if there are any events for this gameId
@@ -37,7 +36,6 @@ export async function emitGameCreation(gameId: string) {
       .orderBy(desc(events.createdAt))
       .limit(1);
     if (datas?.length === 0) {
-      controller.getInstance(gameId).state.status = 'waiting';
       controller.getInstance(gameId).sendState();
     }
   }

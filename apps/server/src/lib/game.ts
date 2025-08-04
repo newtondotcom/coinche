@@ -1,5 +1,5 @@
 import logger from '@/lib/logger';
-import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound, IGameState, ICardSuite, bidding, PlayerId } from '@coinche/shared';
+import type { IPlayer, IGameState } from '@coinche/shared';
 
 export default class controller {
     static clearGames() {
@@ -63,28 +63,16 @@ export default class controller {
         logger.info(`State sent for gameId: ${this.state.gameId}`); 
     }
 
+    /*
+    GAME MANAGEMENT METHODS
+
+    SET methods will be store in the `src/lib/actions/` folder
+
+    GET methods will be below
+
+    */
     public getPlayers(): IPlayer[] {
         return Array.from(this.state.players);
-    }
-
-    public addPlayer(player: IPlayer) {
-        if (this.state.players.length >= 4) {
-            throw new Error('Cannot add more than 4 players to the game');
-        }
-        this.state.players.push(player);
-        if (this.state.team1.length < 2) {
-            this.state.team1.push(player.id);
-        } else {
-            this.state.team2.push(player.id);
-        }
-        logger.info(`Player ${player.id} added to the game`);
-    }
-
-    public removePlayer(playerId: string) {
-        this.state.players = this.state.players.filter(p => p.id !== playerId);
-        this.state.team1 = this.state.team1.filter(id => id !== playerId);
-        this.state.team2 = this.state.team2.filter(id => id !== playerId);
-        logger.info(`Player ${playerId} removed from the game`);
     }
 
     public getCurrentRound() {
@@ -94,79 +82,20 @@ export default class controller {
         return this.state.currentRound;
     }
 
-    public addPlay(card: ICard, playerId: string): void {
-        const currentRound = this.getCurrentRound();
-        const currentPli = currentRound.plis[currentRound.plis.length - 1]; 
-        currentPli.plays.push({ card, playerId });
-        this.state.deck.push(card);
-        logger.info(`Player ${playerId} played ${card.suite} of ${card.value}`);
-    }
-    public addbidding(bidding: Ibidding): void {
-        const currentRound = this.getCurrentRound();
-        currentRound.biddings.push(bidding);
-        if (bidding.bidding !== 0) {
-            currentRound.biddingElected = bidding;
-            console.log(currentRound.biddingElected);
-        }
-        logger.info(`Player ${bidding.playerId} announced ${bidding.suite}`);
-    }
-    public addRound(playerStartingId: string): void {
-        const roundInit = {
-            plis: [],
-            biddings: [],
-            biddingElected: { suite: 'NA' as ICardSuite, bidding: 0 as bidding, playerId: 'NA' as PlayerId },
-            coinched: false,
-            surcoinched: false,
-        };
-        this.state.currentRound = roundInit;
-        logger.info('New round created');
-    }
-    public async addPli(playerStartingId: string): Promise<void> {
-        const currentRound = this.getCurrentRound();
-        const pliInit = {
-            number: currentRound.plis.length + 1,
-            plays: [],
-            playerStartingId: playerStartingId,
-            team1Score: 0,
-            team2Score: 0,
-            isActive: true,
-        };
-        currentRound.plis.push(pliInit);
-        logger.info('New pli created');
-    }
-    public getLastPli() {
-        return this.getCurrentRound().plis[this.getCurrentRound().plis.length - 1];
-    }    
-    public getLastXPlis(n: number) {
-        const plis = this.getCurrentRound().plis;
-        return plis.slice(Math.max(plis.length - n, 0));
-    }
-
-    public isTeam1(playerId: string) {
-        const players = Array.from(this.getPlayers());
-        return players[0].id === playerId || players[2].id === playerId;
-    }
-
-    public setPlayerIdToPlay(playerId: string) {
-        this.state.phases.timeToPlay = playerId;
-        logger.info(`Player ${playerId} is set to play in game ${this.state.gameId}`);
-    }
-
-    public setPlayerIdToBid(playerId: string) {
-        this.state.phases.timeToBid = playerId;
-        logger.info(`Player ${playerId} is set to bid in game ${this.state.gameId}`);
-    }
-
-    public setPlayerIdToDistrib(playerId: string) {
-        this.state.phases.timeDistrib = playerId;
-        logger.info(`Player ${playerId} is set to distribute in game ${this.state.gameId}`);
-    }
-
     public static gameExists(gameId: string): { exists: boolean, playerCount: number } {
         const instance = this._instances.get(gameId);
         return {
             exists: !!instance,
             playerCount: instance ? instance.state.players.length : 0
         };
+    }
+
+    public getLastPli() {
+        return this.getCurrentRound().plis[this.getCurrentRound().plis.length - 1];
+    }    
+
+    public isTeam1(playerId: string) {
+        const players = Array.from(this.getPlayers());
+        return players[0].id === playerId || players[2].id === playerId;
     }
 }

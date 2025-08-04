@@ -4,7 +4,6 @@ import type { EventInsert } from '@coinche/shared';
 import { handlePlayerJoinLeave } from './join_leave';
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function translateEvent(event: EventInsert) {
     switch (event.type) {

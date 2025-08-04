@@ -1,7 +1,7 @@
 import type { Ibidding } from '@coinche/shared';
 import controller from '@/lib/game';
 
-export async function emitBid(
+export async function addBidding(
   bid: Ibidding,
   gameId : string
 ) {

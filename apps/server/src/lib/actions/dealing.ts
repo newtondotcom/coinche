@@ -1,13 +1,9 @@
 import { emitCanBid } from "@/lib/actions/can";
 import controller from "@/lib/game";
 import logger from "@/lib/logger";
-import { formatCarteToDistribute } from "@coinche/shared";
-import { genIdCuid } from '@coinche/shared';
-
 import type { ICard, PlayerId } from "@coinche/shared";
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export default async function emitDealing(
   id_player_starting: PlayerId,
@@ -51,15 +47,12 @@ export default async function emitDealing(
       await distributeCard(shiftedPlayers[j].id, gameId);
     }
   }
-  
-  // update the state of the game with the distributed cards
-  controller.getInstance(gameId).sendState();
 
+  // Emit the event to start the pli and display the cards
   await emitCanBid(id_player_starting, gameId);
 }
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 async function distributeCard(player_id: string, gameId: string) {
   const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;

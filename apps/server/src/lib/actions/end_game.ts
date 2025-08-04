@@ -7,7 +7,7 @@ import { eq, or } from "drizzle-orm";
 
 import { addPointsTo } from "../points";
 import { db } from "@/db";
-import controller from "../game";
+import controller from "@/lib/game";
 
 /**
  * Calculate expected score for a player against another team
@@ -38,7 +38,6 @@ function calculateNewRating(
 }
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitEndGame(
   winnerPlayerId: string,
@@ -57,7 +56,6 @@ export async function emitEndGame(
 }
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function distributeRankingPoints(
   players: IPlayer[],
@@ -148,7 +146,6 @@ export async function distributeRankingPoints(
 }
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function deleteRows(gameId: string) {
   await db.delete(events).where(eq(game.id, gameId));

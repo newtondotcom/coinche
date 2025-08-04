@@ -4,7 +4,6 @@ import logger from '@/lib/logger';
 import { emitPointsTrick } from './points_trick';
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitEndTrick(gameId: string) {
     const controllerInstance = controller.getInstance(gameId);

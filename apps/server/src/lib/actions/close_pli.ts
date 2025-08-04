@@ -1,6 +1,6 @@
-import { distributeRankingPoints, emitEndGame } from "@/lib/actions/end_game";
-import { emitPoints } from "@/lib/actions/points";
-import { startPli } from "@/lib/actions/start_pli";
+import { distributeRankingPoints, emitEndGame } from @/lib/actions/end_game";
+import { emitPoints } from @/lib/actions/points";
+import { startPli } from @/lib/actions/start_pli";
 import controller from "@/lib/game";
 import { dev } from "@/lib/utils";
 import { formatTeam } from "@coinche/shared";
@@ -8,6 +8,7 @@ import { genIdCuid } from '@coinche/shared';
 import type { EventInsert, IPlay, IPlayer, PlayerId } from "@coinche/shared";
 import { emitStartTrick } from "./start_trick";
 import { emitEndTrick } from "./end_trick";
+import addPli from "./add_pli";
 
 let scoreToReach: number;
 if (dev) {
@@ -17,7 +18,6 @@ if (dev) {
 }
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function closePli(gameId: string) {
   const game = controller.getInstance(gameId).state;
@@ -72,7 +72,7 @@ export async function closePli(gameId: string) {
   } else {
     console.log(game.deck.length);  
     // next pli
-    controller.getInstance(gameId).addPli(winnerPlayerId);
+    addPli(winnerPlayerId, gameId);
     await startPli(gameId);
   }
 

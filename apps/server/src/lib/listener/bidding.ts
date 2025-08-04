@@ -5,7 +5,7 @@ import logger from '@/lib/logger';
 import { getNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatBidding } from '@coinche/shared';
-import { emitBid } from '@/lib/actions/bid';
+import { addBidding } from '@/lib/actions/bid';
 
 export default async function translateBidding(event: EventInsert) {
     const bid = deformatBidding(event.value as string, event.playerId);
@@ -22,7 +22,7 @@ export default async function translateBidding(event: EventInsert) {
         lastRound.surcoinched = true;
     }
 
-    await emitBid(bid,event.gameId);
+    addBidding(bid, event.gameId);
 
     const nextPlayerId = getNextPlayerTurn(event.playerId, event.gameId);
     await emitCanBid(nextPlayerId, event.gameId);

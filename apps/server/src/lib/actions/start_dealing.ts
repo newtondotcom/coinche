@@ -1,4 +1,4 @@
-import emitDealing from "@/lib/actions/dealing";
+import emitDealing from @/lib/actions/dealing";
 import controller from "@/lib/game";
 import { generateDeckCards } from "@/lib/utils";
 import { genIdCuid } from '@coinche/shared';
@@ -6,7 +6,6 @@ import logger from "@/lib/logger";
 import type { EventInsert } from "@coinche/shared";
 
 /**
- * @param publish A function to publish to the WebSocket room (publish(room, payload))
  */
 export async function emitStartDealing(gameId: string) {
   const event: EventInsert = {
