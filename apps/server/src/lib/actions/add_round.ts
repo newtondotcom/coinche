@@ -10,6 +10,6 @@ export default function addRound(gameId: string): void {
         coinched: false,
         surcoinched: false,
     };
-    controller.getInstance(gameId).state.currentRound = roundInit;
+    Object.assign(controller.getInstance(gameId).state, { currentRound: roundInit });
     logger.info('New round created');
 }

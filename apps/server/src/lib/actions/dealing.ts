@@ -68,6 +68,6 @@ export function cutDeck(gameId: string) {
   const deck1 = deck.slice(0, indexCut);
   const deck2 = deck.slice(indexCut);
   const newDeck = [...deck2, ...deck1];
-  controller.getInstance(gameId).state.deck = newDeck;
+  Object.assign(controller.getInstance(gameId).state, { deck: newDeck });
   logger.info("Deck cut at index", indexCut);
 }
