@@ -1,4 +1,4 @@
-import { Ibidding, ICard, IPlay, IPlayer, PlayerId } from "./types";
+import { Ibidding, ICard, IPlay, IPlayer, IPli, PlayerId } from "./types";
 
 export interface IGameState {
     // Identifiants de base
@@ -13,14 +13,7 @@ export interface IGameState {
     
     // État de la manche courante
     currentRound: {
-        plis: Array<{
-            number: number;
-            plays: IPlay[];
-            playerStartingId: PlayerId;
-            team1Score: number;
-            team2Score: number;
-            isActive: boolean;
-        }>;
+        plis: IPli[];
         biddings: Ibidding[];
         biddingElected: Ibidding;
         coinched: boolean;
@@ -51,4 +44,8 @@ export interface WSPayload {
     state : IGameState;
 }
 
-export const CHANGE_TYPE_STATE = 'changeTypeState';
+export interface IGameStateClient {
+    myId: PlayerId;
+    isLoadingPlayerList: boolean;
+    game : IGameState;
+}

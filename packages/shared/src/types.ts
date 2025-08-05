@@ -51,8 +51,10 @@ export interface IRound {
 
 export interface IPli {
     plays: IPlay[];
-    currentPlayerId: PlayerId;
     playerStartingId: PlayerId;
+    number: number;
+    team1Score: number;
+    team2Score: number;
 }
 
 export interface IGame {

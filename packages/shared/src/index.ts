@@ -20,6 +20,8 @@ export type {
 export {
   cardSuites,
   cardValues,
+  dealingString,
+  CHANGE_TYPE_STATE
 } from './constants';
 
 // Export format utilities
@@ -38,4 +40,4 @@ export {
 
 export { genIdCuid } from './gen_id';
 
-export {IGameState, ChangeCallback, WSPayload, CHANGE_TYPE_STATE} from './state';
+export {IGameState, ChangeCallback, WSPayload, IGameStateClient} from './state';
