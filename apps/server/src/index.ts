@@ -129,16 +129,11 @@ const wsHandler = {
   },
 };
 
-const server = serve({
+export const server = serve({
   port: 3000,
-  fetch: async (req, server) => {
-    console.log(">>> Received request:", req.method, req.url);
-    return app.fetch(req, server); // 💥 infinite recursion risk
-  },
+  fetch: app.fetch,
   websocket: wsHandler,
   development: true,
 });
 
 console.log(`Listening on ${server.hostname}:${server.port}`);
-
-export default server;
