@@ -1,30 +1,29 @@
-import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
 import { genIdCuid } from '@coinche/shared';
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 
 export async function join() {
-    const storeAbout = useAboutStore();
-    const gameId = storeAbout.gameId;
+    const gameId = storeState.gameId;
     // Just send join event via WebSocket
     sendWS({
         id: await genIdCuid(),
         type: 'join',
-        playerId: storeAbout.myId,
+        playerId: storeState.myId,
         gameId: gameId,
-        value: storeAbout.myId,
+        value: storeState.myId,
         timestamp: new Date().toISOString(),
     });
 }
 
 export async function leave() {
-    const storeAbout = useAboutStore();
-    const gameId = storeAbout.gameId;
+    const gameId = storeState.gameId;
     // Just send leave event via WebSocket
     sendWS({
         type: 'leave',
-        playerId: storeAbout.myId,
+        playerId: storeState.myId,
         gameId: gameId,
-        value: storeAbout.myId,
+        value: storeState.myId,
         timestamp: new Date().toISOString(),
     });
 }

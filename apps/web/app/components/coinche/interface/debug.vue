@@ -1,35 +1,33 @@
 <template>
     <div class="absolute bottom-0 right-4 bg-red-500 font-semibold z-20">
-        Pli number : {{ storeGame.pli_number }}
+        Pli number : {{ storeState.curentPli.number }}
         <br />
-        Deck length : {{ storeGame.deck.length }}
+        Deck length : {{ storeState.deck.length }}
         <br />
 
-        Distributing : {{ storeAbout.timeDistrib }}
+        Distributing : {{ storeState.timeDistrib }}
         <br />
-        Announcing : {{ storeAbout.timeTobidding }}
+        Announcing : {{ storeState.timeToBidding }}
         <br />
-        Player starting : {{ storeGame.playerStartingId }}
+        Current player id : {{ storeState.currentPlayerId }}
         <br />
-        Current player id : {{ storeGame.currentPlayerId }}
+        Atout : {{ storeState.atout }}
         <br />
-        Atout : {{ storeAbout.atout }}
+        Cards in hands : {{ storeState.hand.length }}
         <br />
-        Cards in hands : {{ storeAbout.hand.length }}
-        <br />
-        Card playable : {{ storeAbout.hand.some(card => cardCanBePlayed(card, {
-            currentPlayerId: storeGame.currentPlayerId,
-            myId: storeAbout.myId,
-            currentPli: storeGame.currentPli,
-            colorAsked: storeAbout.colorAsked,
-            atout: storeAbout.atout,
-            hand: storeAbout.hand,
+        Card playable : {{ storeState.hand.some(card => cardCanBePlayed(card, {
+            currentPlayerId: storeState.currentPlayerId,
+            myId: storeState.myId,
+            currentPli: storeState.currentPli,
+            colorAsked: storeState.colorAsked,
+            atout: storeState.atout,
+            hand: storeState.hand,
         })) }}
     </div>
 </template>
 
 <script setup lang="ts">
     import { cardCanBePlayed } from '@/shared/utils/cardRules';
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 </script>

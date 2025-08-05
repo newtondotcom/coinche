@@ -22,10 +22,9 @@
         row: HistoriqueRow;
     }
     const props = defineProps<HistoriqueRowProps>();
-    const storeAbout = useAboutStore();
 
     const playerTeam1 = computed(() => {
-        return props.row.p1 === storeAbout.myId || props.row.p3 === storeAbout.myId;
+        return props.row.p1 === storeState.myId || props.row.p3 === storeState.myId;
     });
 
     const team1Win = computed(() => {

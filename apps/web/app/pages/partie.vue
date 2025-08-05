@@ -7,19 +7,19 @@
 
     <CoincheRiver />
 
-    <CoincheInterfaceBiddings v-if="storeAbout.timeToBidding" />
+    <CoincheInterfaceBiddings v-if="storeState.timeToBidding" />
 
     <div
-      v-if="storePlayers.players.length == 4"
+      v-if="storeState.players.length == 4"
       class="flex flex-row justify-between"
     >
       <CoincheInterfacePoints />
       <CoincheInterfaceTurn />
     </div>
 
-    <CoincheInterfaceSavedBidding v-if="storeGame.biddingElected.suite != 'NA'" />
+    <CoincheInterfaceSavedBidding v-if="storeState.biddingElected.suite != 'NA'" />
 
-    <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
+    <CoincheInterfaceJoin v-if="storeState.players.length < 4" />
     
   </div>
 </template>
@@ -30,16 +30,12 @@ import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
 import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
-import { useAboutStore } from "@/stores/about";
-import { useGameStore } from "@/stores/game";
-import { usePlayersStore } from "@/stores/players";
 import { CHANGE_TYPE_STATE} from "@coinche/shared";
 import type { WSPayload } from "@coinche/shared";
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();    
 
 const { loggedIn } = useAuth();
-const storeGame = useGameStore();
-const storePlayers = usePlayersStore();
-const storeAbout = useAboutStore();
 const stateStore = useStateStore();
 const route = useRoute();
 const config = useRuntimeConfig();
@@ -54,8 +50,8 @@ if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
   navigateTo("/404");
 }
 
-storeAbout.setMyId(id);
-storeAbout.setGameId(gameId);
+storeState.setMyId(id);
+storeState.setGameId(gameId);
 
 // Store cleanup function for WebSocket listener
 let cleanupListener: (() => void) | null = null;
@@ -93,7 +89,7 @@ onMounted(async () => {
 
   // Set up beforeunload handler for non-dev environments
   if (!isDevEnv(config)) {
-    window.onbeforeunload = (event: BeforeUnloadEvent) => {
+    window.onbeforeunload = (event) => {
       event.preventDefault();
       return "Are you sure you want to leave this page? Changes you made may not be saved.";
     };

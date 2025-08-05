@@ -1,10 +1,10 @@
 <template>
     <div
-        v-if="storeAbout.hand.length > 0"
+        v-if="storeState.hand.length > 0"
         class="flex flex-row absolute bottom-0 justify-center w-full"
     >
         <Card
-            v-for="card in storeAbout.hand"
+            v-for="card in storeState.hand"
             :key="card.value + card.suite"
             :card="card"
             :in-deck="true"
@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-    import Card from '@/components/coinche/card.vue';
-
-    const storeAbout = useAboutStore();
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 </script>

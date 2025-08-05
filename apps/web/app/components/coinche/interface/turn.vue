@@ -85,13 +85,12 @@
 </template>
 
 <script setup lang="ts">
-    const storePlayers = usePlayersStore();
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
+    import { useStateStore } from '@/stores/state';
+    const storeState = useStateStore();
 
-    const playerIdTurn = computed<string>(() => storeGame.currentPlayerId);
+    const playerIdTurn = computed<string>(() => storeState.currentPlayerId);
     const indexPlayers = computed<number>(() =>
-        storePlayers.players.findIndex((p: any) => p.id == storeAbout.myId),
+        storePlayers.players.findIndex((p: any) => p.id == storeState.myId),
     );
     const lengthPlayers = computed<number>(() => storePlayers.players.length);
 </script>

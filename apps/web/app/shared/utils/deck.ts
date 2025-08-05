@@ -1,9 +1,9 @@
 import type { ICard } from '@coinche/shared';
-import { useAboutStore } from '@/stores/about';
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();    
 
 export function setValueAccordingToAtout(deck: ICard[]): ICard[] {
-    const storeAbout = useAboutStore();
-    const atout = storeAbout.atout;
+    const atout = storeState.atout;
     return deck.map((card) => {
         // Traditional Atout: Set values for the chosen atout suit
         if (atout !== 'tout-atout' && atout !== 'sans-atout') {

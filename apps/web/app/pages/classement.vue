@@ -25,11 +25,11 @@
                 <div v-for="(row, index) in classement" :key="row.id"
                     :class="[
                         'flex flex-row space-x-6 justify-center items-center border px-4 py-3 rounded-lg my-2 w-full transition',
-                        row.playerId === user?.id ? 'ring-2 ring-primary/60 bg-primary/10 font-bold' : 'hover:bg-primary/5'
+                        row.id === user?.id ? 'ring-2 ring-primary/60 bg-primary/10 font-bold' : 'hover:bg-primary/5'
                     ]"
                 >
                     <div class="text-2xl font-semibold w-[50px] text-center">{{ index + 1 }}.</div>
-                    <div class="text-2xl font-semibold w-[300px] text-center truncate">{{ row.playerId }}</div>
+                    <div class="text-2xl font-semibold w-[300px] text-center truncate">{{ row.id }}</div>
                     <div class="text-xl font-semibold w-[80px] text-center">{{ row.points ?? row.totalPoints ?? row.score ?? 0 }}</div>
                 </div>
             </template>
@@ -43,5 +43,5 @@
     const { user } = useAuth();
     const { $orpc } = useNuxtApp();
 
-    const { data: classement, isLoading } = useQuery($orpc.leaderboard.get.queryOptions());
+    const { data: classement, isLoading } = useQuery($orpc.leaderboard.queryOptions());
 </script>

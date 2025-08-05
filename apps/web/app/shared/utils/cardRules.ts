@@ -1,9 +1,11 @@
-import type { ICard, IPlay, IPlayer } from '@coinche/shared';
+import type { ICard, IPlay, IPlayer, IPli } from '@coinche/shared';
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();    
 
 interface CardRulesContext {
     currentPlayerId: string;
     myId: string;
-    currentPli: IPlay[];
+    currentPli: IPli;
     colorAsked?: string;
     atout: string;
     hand: ICard[];
@@ -24,7 +26,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
     }
 
     // If it's the first card of the trick (entame), any card can be played
-    if (currentPli.length === 0) {
+    if (currentPli.plays.length === 0) {
         return true;
     }
 
@@ -47,7 +49,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         if (hasColorAsked) {
             if (currentICardSuite === colorAsked) {
                 // Must play higher if possible
-                const highestInPli = Math.max(...currentPli
+                const highestInPli = Math.max(...currentPli.plays
                     .filter(p => p.card.suite === colorAsked)
                     .map(p => p.card.valueNum));
                 
@@ -77,7 +79,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
 
         // If trump is asked, must go higher when possible
         if (colorAsked === atout) {
-            const atoutsInPli = currentPli.filter(p => p.card.suite === atout);
+            const atoutsInPli = currentPli.plays.filter(p => p.card.suite === atout);
             if (atoutsInPli.length > 0) {
                 const highestAtout = Math.max(...atoutsInPli.map(p => p.card.valueNum));
                 const hasHigherAtout = hand.some((c: ICard) => 
@@ -95,7 +97,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
 
     // Rule 2: If can't follow suit, check if partner is winning
     const isPartnerWinning = (): boolean => {
-        if (currentPli.length === 0) return false;
+        if (currentPli.plays.length === 0) return false;
         
         // IMPROVED: More robust partner detection
         const getTeam = (playerId: string): number => {
@@ -111,8 +113,8 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         const myTeam = getTeam(myId);
         
         // Find the currently winning card
-        let winningPlay = currentPli[0];
-        const atoutsInPli = currentPli.filter(p => p.card.suite === atout);
+        let winningPlay = currentPli.plays[0];
+        const atoutsInPli = currentPli.plays.filter(p => p.card.suite === atout);
         
         if (atoutsInPli.length > 0) {
             // If there are trumps, highest trump wins
@@ -120,7 +122,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
                 current.card.valueNum > highest.card.valueNum ? current : highest);
         } else {
             // Otherwise, highest card of asked color wins
-            const suitCards = currentPli.filter(p => p.card.suite === colorAsked);
+            const suitCards = currentPli.plays.filter(p => p.card.suite === colorAsked);
             if (suitCards.length > 0) {
                 winningPlay = suitCards.reduce((highest, current) => 
                     current.card.valueNum > highest.card.valueNum ? current : highest);
@@ -138,9 +140,8 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
     // Rule 4: If partner is not winning and we have trump, must play trump
     if (hasAtout && currentICardSuite === atout) {
         // Check if opponent has already played trump
-        const storePlayers = usePlayersStore();
         const getTeamMateId = (playerId: string): string => {
-            const players = storePlayers.players;
+            const players = storeState.players;
             const player = players.find((p: IPlayer) => p.id === playerId);
             if (!player || typeof player.position !== 'number') {
                 return '';
@@ -152,7 +153,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         };
         
         const myTeam = getTeamMateId(myId);
-        const opponentAtouts = currentPli
+        const opponentAtouts = currentPli.plays
             .filter(p => p.card.suite === atout)
             .filter(p => p.playerId !== myTeam);
 
@@ -198,7 +199,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
     }
     
     // If it's the first card of the trick, any card can be played
-    if (context.currentPli.length === 0) {
+    if (context.currentPli.plays.length === 0) {
         return hand.length > 0;
     }
     
@@ -234,7 +235,7 @@ export function getBestPlayableCard(context: CardRulesContext): ICard | null {
     }
     
     // If it's the first card of the trick, play the lowest card
-    if (context.currentPli.length === 0) {
+    if (context.currentPli.plays.length === 0) {
         const sortedCards = playableCards.sort((a, b) => a.valueNum - b.valueNum);
         return sortedCards[0] || null;
     }
@@ -308,7 +309,7 @@ export function debugCardPlayability(card: ICard, context: CardRulesContext): st
         return issues;
     }
     
-    if (currentPli.length === 0) {
+    if (currentPli.plays.length === 0) {
         return []; // First card, should be playable
     }
     

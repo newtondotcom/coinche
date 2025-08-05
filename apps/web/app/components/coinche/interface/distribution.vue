@@ -1,6 +1,6 @@
 <template>
     <div
-        v-if="storeAbout.timeDistrib"
+        v-if="storeState.timeDistrib"
         class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
     >
         <Card>
@@ -18,5 +18,6 @@
 </template>
 
 <script setup lang="ts">
-    const storeAbout = useAboutStore();
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 </script>

@@ -1,14 +1,14 @@
-import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
 import { genIdCuid } from '@coinche/shared';
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 
 export async function emitSound(name: string) {
-    const storeAbout = useAboutStore();
-    const gameId = storeAbout.gameId;
+    const gameId = storeState.gameId;
     sendWS({
         id: await genIdCuid(),
         type: 'sound',
-        playerId: storeAbout.myId,
+        playerId: storeState.myId,
         gameId: gameId,
         value: name,
         timestamp: new Date().toISOString(),
