@@ -25,7 +25,7 @@ export default async function translatePlay(event: EventInsert) {
       }
     // //publish(event2)
     // check if end of pli
-    if (controller.getInstance(event.gameId).getLastPli().plays.length === 4) {
+    if (controller.getInstance(event.gameId).getCurrentPli().plays.length === 4) {
         logger.info('End of pli');
         await closePli(event.gameId);
     } else {

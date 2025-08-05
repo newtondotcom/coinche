@@ -3,8 +3,7 @@ import translatePlay from '@/lib/listener/play';
 import type { EventInsert } from '@coinche/shared';
 import { handlePlayerJoinLeave } from './join_leave';
 
-/**
- */
+
 export async function translateEvent(event: EventInsert) {
     switch (event.type) {
         case 'bidding':

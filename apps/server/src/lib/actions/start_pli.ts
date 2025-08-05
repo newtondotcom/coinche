@@ -3,13 +3,12 @@ import logger from "@/lib/logger";
 import { genIdCuid } from '@coinche/shared';
 import { emitCanPlay } from "./can";
 
-/**
- */
+
 export async function startPli(gameId: string) {
   // launch pli
   const playerIdStarting = controller
     .getInstance(gameId)
-    .getLastPli().playerStartingId;
+    .getCurrentPli().playerStartingId;
   const event = {
     id: await genIdCuid(),
     type: "start_pli",

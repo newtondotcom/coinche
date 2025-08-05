@@ -1,5 +1,6 @@
 import logger from '@/lib/logger';
 import type { IPlayer, IGameState } from '@coinche/shared';
+import { server } from '@/index';
 
 export default class controller {
     static clearGames() {
@@ -55,11 +56,12 @@ export default class controller {
     }
 
     public sendState() {
+        this.testState();
         const payload = JSON.stringify({
             changeType: 'changeTypeState',
             state: this.state,
         });
-        // server.publish(this.state.gameId, payload);
+        server.publish(this.state.gameId, payload);
         logger.info(`State sent for gameId: ${this.state.gameId}`); 
     }
 
@@ -90,12 +92,39 @@ export default class controller {
         };
     }
 
-    public getLastPli() {
+    public getCurrentPli() {
         return this.getCurrentRound().plis[this.getCurrentRound().plis.length - 1];
     }    
 
     public isTeam1(playerId: string) {
         const players = Array.from(this.getPlayers());
         return players[0].id === playerId || players[2].id === playerId;
+    }
+
+
+    public testState(){
+        // Test 1 : states.phases cant be both empty or two at the same time not empty
+        const phases = this.state.phases;
+        const filledPhases = Object.values(phases).find(phase => phase);
+        if ((filledPhases && filledPhases.length > 1)) {
+            logger.error(`Invalid phases state for gameId: ${this.state.gameId}`, phases);
+            throw new Error('Invalid phases state: either all phases are empty or all are filled.');
+        }   
+
+        // Test 2 : players must be 4
+        if (this.state.players.length !== 4) {
+            logger.error(`Invalid player count for gameId: ${this.state.gameId}`, this.state.players);
+            throw new Error('Invalid player count: there must be exactly 4 players.');
+        }
+
+        // Test 3 : game status must be set to "started" if something is happening
+        if (this.state.currentRound.plis.length > 0 || this.state.currentRound.biddings.length > 0) {
+            if (this.state.status !== 'playing') {
+                logger.error(`Invalid game status for gameId: ${this.state.gameId}`, this.state.status);
+                throw new Error('Invalid game status: must be "playing" if there are ongoing rounds or biddings.');
+            }
+        }
+
+        logger.warn(`State for gameId: ${this.state.gameId} is valid`, this.state);
     }
 }

@@ -1,13 +1,9 @@
-import { genIdCuid } from '@coinche/shared';
-import { formatPoints } from "@coinche/shared";
-import type { EventInsert } from "@coinche/shared";
 import { events } from "@/db/schema/coinche";
 import { and, desc, eq} from "drizzle-orm";
 import { db } from "@/db";
 import controller from '@/lib/game';
 
-/**
- */
+
 export async function emitGameCreation(gameId: string) {
   // Check if there are any events for this gameId
   const datas = await db

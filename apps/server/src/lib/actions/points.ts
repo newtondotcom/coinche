@@ -1,7 +1,6 @@
 import controller from '@/lib/game';
 
-/**
- */
+
 export async function emitPoints(
   scoreTeam1: number,
   scoreTeam2: number,

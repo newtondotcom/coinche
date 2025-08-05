@@ -17,11 +17,10 @@ if (dev) {
   scoreToReach = 1000;
 }
 
-/**
- */
+
 export async function closePli(gameId: string) {
   const game = controller.getInstance(gameId).state;
-  const currentPli = controller.getInstance(gameId).getLastPli();
+  const currentPli = controller.getInstance(gameId).getCurrentPli();
   // find the winner
   const pastPlis: IPlay[] = currentPli.plays;
   const winnerPlayerId = findWinner(pastPlis, gameId);
@@ -112,7 +111,7 @@ export async function fetchcurrentPliPlayerWinningId(
   gameId: string,
 ): Promise<string> {
   const players: IPlayer[] = Array.from(controller.getInstance(gameId).getPlayers());
-  const oldPlayerStartedId = controller.getInstance(gameId).getLastPli().playerStartingId;
+  const oldPlayerStartedId = controller.getInstance(gameId).getCurrentPli().playerStartingId;
   const playerStartedIndex = players.findIndex((player) => player.id === oldPlayerStartedId);
   if (playerStartedIndex === -1) {
     throw new Error("Starting player not found in players array");

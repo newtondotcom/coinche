@@ -1,27 +1,20 @@
 import emitDealing from "@/lib/actions/dealing";
 import controller from "@/lib/game";
 import { generateDeckCards } from "@/lib/utils";
-import { genIdCuid } from '@coinche/shared';
 import logger from "@/lib/logger";
-import type { EventInsert } from "@coinche/shared";
+import { setPlayerIdToDistrib } from './set_ids';
 
-/**
- */
+
 export async function emitStartDealing(gameId: string) {
-  const event: EventInsert = {
-    id: await genIdCuid(),
-    type: "start_distribution",
-    playerId: "controller",
-    gameId: gameId,
-    value: "idPlayerStarting",
-  };
-  if (controller.getInstance(gameId).getCurrentRound().plis.length === 0) {
+  setPlayerIdToDistrib("", gameId);
+  if (controller.getInstance(gameId).state.deck.length !== 32) {
     controller.getInstance(gameId).state.deck = generateDeckCards();
+    logger.error("start_dealing - deck was not generated" + controller.getInstance(gameId).getCurrentPli().number )
   } else {
-    logger.error("start_dealing - deck was not generated" + controller.getInstance(gameId).getLastPli().number )
+    logger.info("start_dealing - deck was already generated" + controller.getInstance(gameId).getCurrentPli().number )
   }
   await emitDealing(
-    controller.getInstance(gameId).getLastPli().playerStartingId,
+    controller.getInstance(gameId).getCurrentPli().playerStartingId,
     gameId
   );
 }

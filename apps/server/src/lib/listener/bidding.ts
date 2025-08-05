@@ -9,6 +9,8 @@ import { addBidding } from '@/lib/actions/bid';
 
 export default async function translateBidding(event: EventInsert) {
     const bid = deformatBidding(event.value as string, event.playerId);
+
+    logger.info(`[translateBidding] Player ${event.playerId} bidding: ${bid.bidding} in game ${event.gameId}`);
     
     // Update coinche/surcoinche state based on special bid values
     const controllerInstance = controller.getInstance(event.gameId);

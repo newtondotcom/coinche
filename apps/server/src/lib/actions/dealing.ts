@@ -3,13 +3,13 @@ import controller from "@/lib/game";
 import logger from "@/lib/logger";
 import type { ICard, PlayerId } from "@coinche/shared";
 
-/**
- */
+
 export default async function emitDealing(
   id_player_starting: PlayerId,
   gameId: string
 ) {
   cutDeck(gameId);
+  
   // distribute cards 3 per person, then 2, then 3
   const playersMap = controller.getInstance(gameId).getPlayers();
   const players = Array.from(playersMap.values());
@@ -52,8 +52,7 @@ export default async function emitDealing(
   await emitCanBid(id_player_starting, gameId);
 }
 
-/**
- */
+
 async function distributeCard(player_id: string, gameId: string) {
   const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;
   controller.getInstance(gameId).getPlayers().find((player) => player.id === player_id)!.hands.push(card);

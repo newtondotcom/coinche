@@ -1,6 +1,7 @@
 import type { IPlayer } from "@coinche/shared";
 import controller from "@/lib/game";
 import logger from "@/lib/logger";
+import { emitGameStarting } from "./start_game";
 
 export default function addPlayer(player: IPlayer, gameId: string) {
     const controllerInstance = controller.getInstance(gameId);
@@ -15,4 +16,9 @@ export default function addPlayer(player: IPlayer, gameId: string) {
     }
     logger.info(`Player ${player.id} added to the game`);
     controllerInstance.sendState();
+
+    // check if the game is ready to start
+    if (controllerInstance.state.players.length === 4) {
+        emitGameStarting(controllerInstance.state.players[0].id,gameId);
+    }
 }

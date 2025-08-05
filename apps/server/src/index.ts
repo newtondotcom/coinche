@@ -57,20 +57,20 @@ app.get("/", (c) => {
   return c.text("OK");
 });
 
-app.get("/ws", async (c) => {
+app.get("/ws", async (c, next) => {
   console.log("ws2");
   const context = await createContext({ context: c });
   // get user
-  const username = "test";
+  const userId = context.session?.user.id;
   // Attach gameId and userId to ws.data
-  const success = server.upgrade(c.req.raw, { data: { username, gameId } });
-  if (success) return undefined;
-  return new Response("Hello world");
+  const success = server.upgrade(c.req.raw, { data: { userId, gameId } });
+  if (success) return c.newResponse("Hello world");
+  await next();
 });
 
 const wsHandler = {
   open(ws: ServerWebSocket) {
-    const data = ws.data as unknown as { username: string, gameId: string };
+    const data = ws.data as unknown as { userId: string, gameId: string };
     const gameId = data.gameId;
     // On connect, no room joined yet
     userRooms.set(ws, new Set());
@@ -78,10 +78,8 @@ const wsHandler = {
     console.log("client suscribed to room");
   },
   async message(ws: ServerWebSocket, raw : string | ArrayBuffer | Uint8Array) {
-    //const data = ws.data as unknown as { username: string, gameId: string };
-    //const gameId = data.gameId;
+    const data = ws.data as unknown as { userId: string, gameId: string };
     let msg: EventInsert;
-    // Ensure raw is a string
     let rawStr: string = typeof raw === "string" ? raw : raw.toString();
     try {
       msg = JSON.parse(rawStr);
@@ -90,19 +88,19 @@ const wsHandler = {
       return;
     }
     if (msg.type && msg.gameId) {
-      const data = ws.data as unknown as { username: string, gameId: string };
-      const event: EventInsert = {
-        ...msg, // spread first so explicit fields below take precedence
-        gameId: msg.gameId || data.gameId,
-        id: (msg as any).id || crypto.randomUUID(),
-        playerId: (msg as any).playerId || data.username,
-        type: msg.type,
-        value: (msg as any).value || '',
-        timestamp: (msg as any).timestamp || new Date().toISOString(),
-      };
-      logger.info(event);
+      if (msg.gameId !== gameId) {
+        ws.send(JSON.stringify({ type: "system", message: "Invalid gameId." }));
+        logger.error(`Invalid gameId: ${msg.gameId}, expected: ${gameId}`);
+        return;
+      }
+      if (msg.playerId && msg.playerId !== data.userId) {
+        ws.send(JSON.stringify({ type: "system", message: "Invalid playerId." }));
+        logger.error(`Invalid playerId: ${msg.playerId}, expected: ${data.userId}`);
+        return;
+      }
+      logger.warn(msg);
       try {
-        await translateEvent(event);
+        await translateEvent(msg);
       } catch (error) {
         console.error("Translate event error:", error);
         ws.send(JSON.stringify({ type: "system", message: "Event processing error." }));

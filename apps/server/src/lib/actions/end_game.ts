@@ -37,8 +37,7 @@ function calculateNewRating(
   return currentRating + kFactor * (actualScore - expectedScore);
 }
 
-/**
- */
+
 export async function emitEndGame(
   winnerPlayerId: string,
   teamMatePlayerId: string,
@@ -55,8 +54,7 @@ export async function emitEndGame(
   controller.getInstance(gameId).sendState();
 }
 
-/**
- */
+
 export async function distributeRankingPoints(
   players: IPlayer[],
   gameId: string,
@@ -145,8 +143,7 @@ export async function distributeRankingPoints(
   });
 }
 
-/**
- */
+
 export async function deleteRows(gameId: string) {
   await db.delete(events).where(eq(game.id, gameId));
 }

@@ -10,7 +10,6 @@ export default async function addPli(playerStartingId: string, gameId: string) {
         playerStartingId: playerStartingId,
         team1Score: 0,
         team2Score: 0,
-        isActive: true,
     };
     controllerInstance.state.currentRound.plis.push(pliInit);
     logger.info('New pli created');

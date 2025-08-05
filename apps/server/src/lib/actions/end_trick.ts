@@ -3,8 +3,7 @@ import controller from '@/lib/game';
 import logger from '@/lib/logger';
 import { emitPointsTrick } from './points_trick';
 
-/**
- */
+
 export async function emitEndTrick(gameId: string) {
     const controllerInstance = controller.getInstance(gameId);
     const lastRound = controllerInstance.getCurrentRound();

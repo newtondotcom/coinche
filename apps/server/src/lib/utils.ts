@@ -30,6 +30,7 @@ export function getNextPlayerTurn(playerId: string, gameId: string) {
     return nextPlayerId;
   }
 
+
 function shuffle(array: ICard[]): ICard[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -52,7 +53,7 @@ export function generateDeckCards(): ICard[] {
     return shuffle(cards);
 }
 
-export async function addPointsTo(points: number, playerId: PlayerId): Promise<void> {
+export async function addPointsTo(points: number, playerId: PlayerId) {
     // Fetch the current points for the player
     const data = await db
         .select()
