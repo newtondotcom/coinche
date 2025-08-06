@@ -6,5 +6,8 @@ export async function addBidding(
   gameId : string
 ) {
   controller.getInstance(gameId).state.currentRound.biddings.push(bid);
+  if (bid.bidding !== 0) {
+    Object.assign(controller.getInstance(gameId).state.currentRound.biddingElected, bid); 
+  }
   controller.getInstance(gameId).sendState();
 }
