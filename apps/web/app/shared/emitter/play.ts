@@ -2,14 +2,14 @@ import { sendWS } from '@/shared/utils/ws';
 import { formatCarteToPlay, genIdCuid } from '@coinche/shared';
 import type { ICardSuite, ICardValue, ICard } from '@coinche/shared';
 import { useStateStore } from '@/stores/state';
-const storeState = useStateStore();
 
 
 export async function emitCardPlay(card: ICard) {
+    const storeState = useStateStore();
     sendWS({
         id: await genIdCuid(),
         type: 'play',
-        playerId: storeState.myId,
+        playerId: storeState.getMyId,
         gameId: storeState.gameId,
         value: formatCarteToPlay(card, storeState.currentPli.number, storeState.currentPli.plays.length),
         timestamp: new Date().toISOString(),
@@ -17,6 +17,7 @@ export async function emitCardPlay(card: ICard) {
 }
 
 export async function cardPressed(suite: ICardSuite, value: ICardValue) {
+    const storeState = useStateStore();
     const selectedCardIndex = storeState.hand.findIndex(
         (card) => card.suite === suite && card.value === value,
     );

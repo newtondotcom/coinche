@@ -1,6 +1,6 @@
 <template>
     <div class="absolute bottom-0 right-4 bg-red-500 font-semibold z-20">
-        Pli number : {{ storeState.curentPli.number }}
+        Pli number : {{ storeState.currentPli?.number }}
         <br />
         Deck length : {{ storeState.deck.length }}
         <br />
@@ -17,7 +17,7 @@
         <br />
         Card playable : {{ storeState.hand.some(card => cardCanBePlayed(card, {
             currentPlayerId: storeState.currentPlayerId,
-            myId: storeState.myId,
+            myId: storeState.getMyId,
             currentPli: storeState.currentPli,
             colorAsked: storeState.colorAsked,
             atout: storeState.atout,

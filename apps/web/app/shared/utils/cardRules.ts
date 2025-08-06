@@ -1,6 +1,5 @@
 import type { ICard, IPlay, IPlayer, IPli } from '@coinche/shared';
 import { useStateStore } from '@/stores/state';
-const storeState = useStateStore();    
 
 interface CardRulesContext {
     currentPlayerId: string;
@@ -139,6 +138,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
 
     // Rule 4: If partner is not winning and we have trump, must play trump
     if (hasAtout && currentICardSuite === atout) {
+        const storeState = useStateStore();    
         // Check if opponent has already played trump
         const getTeamMateId = (playerId: string): string => {
             const players = storeState.players;
@@ -194,7 +194,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
     const { hand } = context;
     
     // If it's not the player's turn, they can't play anything
-    if (context.currentPlayerId !== context.myId) {
+    if (context.currentPlayerId !== context.getMyId) {
         return false;
     }
     
@@ -215,7 +215,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
 export function getPlayableCards(context: CardRulesContext): ICard[] {
     const { hand } = context;
     
-    if (context.currentPlayerId !== context.myId) {
+    if (context.currentPlayerId !== context.getMyId) {
         return [];
     }
     
@@ -268,7 +268,7 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
     }
     
     // Check if this is a valid turn
-    if (context.currentPlayerId !== context.myId) {
+    if (context.currentPlayerId !== context.getMyId) {
         return false;
     }
     

@@ -13,11 +13,11 @@ const storeState = useStateStore();
   
   // Watch for turn to play changes
   watchEffect(() => {
-    const isMyTurn = storeState.currentPlayerId === storeState.myId
+    const isMyTurn = storeState.currentPlayerId === storeState.getMyId
     const turnToPlay = storeState.turnToPlay
     
     // Check if it's now my turn to play (and it wasn't before)
-    if (isMyTurn && turnToPlay && (!previousTurnToPlay.value || previousCurrentPlayerId.value !== storeState.myId)) {
+    if (isMyTurn && turnToPlay && (!previousTurnToPlay.value || previousCurrentPlayerId.value !== storeState.getMyId)) {
       showTurnNotification('turn-to-play')
     }
     

@@ -134,7 +134,7 @@
             storeState.biddingsPli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
     );
 
-    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeState.myId.value });
+    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeState.getMyId });
 
     watch(biddingEnCours, async () => {
         if (biddingEnCours.value.bidding !== 0 && biddingEnCours.value.suite !== 'NA') {
@@ -168,7 +168,7 @@
         
         // Check if the bidding is from opponents
         const myIndex = storePlayers.players.findIndex(
-            (player: IPlayer) => player.id === storeState.myId,
+            (player: IPlayer) => player.id === storeState.getMyId,
         );
         const adversaries: IPlayer[] = [
             storePlayers.players[(myIndex + 1) % 4],
@@ -204,10 +204,10 @@
         
         // Check if the coinché announce is from the partner
         const myIndex = storePlayers.players.findIndex(
-            (player: IPlayer) => player.id === storeState.myId,
+            (player: IPlayer) => player.id === storeState.getMyId,
         );
         const partner = storePlayers.players[(myIndex + 2) % 4];
-        const team_ids = [storeState.myId, partner.id];
+        const team_ids = [storeState.getMyId, partner.id];
         return team_ids.includes(lastBidding.playerId);
     }
 
@@ -216,7 +216,7 @@
     }
 
     async function passer() {
-        await emitBid({ bidding: 0, suite: 'NA', playerId: storeState.myId});
+        await emitBid({ bidding: 0, suite: 'NA', playerId: storeState.getMyId});
     }
 
     async function coincher() {
@@ -235,7 +235,7 @@
         await emitBid({
             bidding: coinchedBid, 
             suite: storeState.biddingElected.suite, 
-            playerId: storeState.myId
+            playerId: storeState.getMyId
         });
     }
 
@@ -255,7 +255,7 @@
         await emitBid({ 
             bidding: surcoincheBid, 
             suite: storeState.biddingElected.suite, 
-            playerId: storeState.myId
+            playerId: storeState.getMyId
         });
     }
 </script>

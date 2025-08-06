@@ -90,7 +90,7 @@
 
     const playerIdTurn = computed<string>(() => storeState.currentPlayerId);
     const indexPlayers = computed<number>(() =>
-        storePlayers.players.findIndex((p: any) => p.id == storeState.myId),
+        storeState.players.findIndex((p: any) => p.id == storeState.getMyId),
     );
-    const lengthPlayers = computed<number>(() => storePlayers.players.length);
+    const lengthPlayers = computed<number>(() => storeState.players.length);
 </script>

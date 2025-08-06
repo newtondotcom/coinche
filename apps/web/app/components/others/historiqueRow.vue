@@ -17,6 +17,8 @@
 
 <script setup lang="ts">
     import type { HistoriqueRow } from '@coinche/shared';
+    import { useStateStore } from '@/stores/state';
+    const storeState = useStateStore();
 
     interface HistoriqueRowProps {
         row: HistoriqueRow;
@@ -24,7 +26,7 @@
     const props = defineProps<HistoriqueRowProps>();
 
     const playerTeam1 = computed(() => {
-        return props.row.p1 === storeState.myId || props.row.p3 === storeState.myId;
+        return props.row.p1 === storeState.getMyId || props.row.p3 === storeState.getMyId;
     });
 
     const team1Win = computed(() => {

@@ -46,7 +46,7 @@ export const useStateStore = defineStore('state', {
     },
   },
   getters: {
-    myId(state): PlayerId {
+    getMyId(state): PlayerId {
       return state.myId;
     },
     gameId(state): string {
@@ -96,16 +96,16 @@ export const useStateStore = defineStore('state', {
       return state.game.phases.timeDistrib !== '';
     },
     turnToPlay(state) : boolean {
-      return state.game.phases.timeToPlay === state.myId;
+      return state.game.phases.timeToPlay === state.getMyId;
     },
     turnToBidding(state) : boolean {
-      return state.game.phases.timeToBid === state.myId;
+      return state.game.phases.timeToBid === state.getMyId;
     },
     atout(state) : ICardSuite {
       return state.game.currentRound.biddingElected.suite || '';
     },
     hand(state): ICard[] {
-      const player = state.game.players.find((p) => p.id === state.myId);
+      const player = state.game.players.find((p) => p.id === state.getMyId);
       return player && Array.isArray(player.hands) ? player.hands : [];
     },
     colorAsked() : ICardSuite {

@@ -97,7 +97,7 @@ async function confirmJoin() {
         gameExists.value = res.exists;
         playerCount.value = res.playerCount ?? 0;
         loading.value = false;
-        navigateTo(`/partie?id=${stateStore.myId}&gameId=${gameId.value}`);
+        navigateTo(`/partie?id=${stateStore.getMyId}&gameId=${gameId.value}`);
     } catch (e) {
         gameExists.value = false;
         playerCount.value = 0;

@@ -36,7 +36,6 @@ import { useStateStore } from '@/stores/state';
 const storeState = useStateStore();    
 
 const { loggedIn } = useAuth();
-const stateStore = useStateStore();
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -50,15 +49,14 @@ if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
   navigateTo("/404");
 }
 
-storeState.setMyId(id);
-storeState.setGameId(gameId);
 
 // Store cleanup function for WebSocket listener
 let cleanupListener: (() => void) | null = null;
 
 onMounted(async () => {
+  storeState.setMyId(id);
   // Reset loading state for player list
-  storePlayers.resetLoadingState();
+  storeState.resetLoadingState();
   
   // Connect to WebSocket and set up listener
   getWS();

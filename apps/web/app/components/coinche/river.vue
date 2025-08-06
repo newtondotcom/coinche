@@ -11,8 +11,8 @@
                 :class="cn(`min-w-[${maxCardWidth}]`, `min-h-[${maxCardHeight}]`)"
             >
                 <CoincheCard
-                    v-if="storeState.currentPli.length >= i"
-                    :card="storeState.currentPli[i - 1].card"
+                    v-if="storeState.currentPli?.number >= i"
+                    :card="storeState.currentPli?.plays[i - 1]?.card"
                     class-str="my-1"
                     :in-deck="false"
                 />
@@ -25,5 +25,7 @@
 <script setup lang="ts">
     import { maxCardHeight, maxCardWidth } from '@/shared/constants';
     import { cn } from '@/lib/utils';
+    import { useStateStore } from '@/stores/state';
+    const storeState = useStateStore();
 
 </script>

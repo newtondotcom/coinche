@@ -26,8 +26,8 @@
             : storeState.currentPli;
         return cardCanBePlayed(props.card, {
             currentPlayerId: storeState.currentPlayerId,
-            myId: storeState.myId,
-            currentPli: currentPliObj?.plays ?? [],
+            myId: storeState.getMyId,
+            currentPli: currentPliObj as any,
             colorAsked: storeState.colorAsked,
             atout: storeState.atout,
             hand: storeState.hand,
