@@ -54,9 +54,10 @@ if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
 let cleanupListener: (() => void) | null = null;
 
 onMounted(async () => {
-  storeState.setMyId(id);
+  storeState.setMyId(id); 
+  storeState.setGameId(gameId);
   // Reset loading state for player list
-  storeState.resetLoadingState();
+  storeState.setLoadingState(false);
   
   // Connect to WebSocket and set up listener
   getWS();
@@ -67,7 +68,7 @@ onMounted(async () => {
 
     if (event.changeType === CHANGE_TYPE_STATE) {
       // Update game state
-      stateStore.setState(event.state);
+      storeState.setState(event.state);
     } else {
       console.warn('Unhandled WebSocket event type:', event.changeType);
     }

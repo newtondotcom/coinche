@@ -167,12 +167,12 @@
         }
         
         // Check if the bidding is from opponents
-        const myIndex = storePlayers.players.findIndex(
+        const myIndex = storeState.players.findIndex(
             (player: IPlayer) => player.id === storeState.getMyId,
         );
         const adversaries: IPlayer[] = [
-            storePlayers.players[(myIndex + 1) % 4],
-            storePlayers.players[(myIndex + 3) % 4],
+            storeState.players[(myIndex + 1) % 4],
+            storeState.players[(myIndex + 3) % 4],
         ];
         const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
         return adversaries_ids.includes(lastBidding.playerId);
@@ -203,10 +203,10 @@
         }
         
         // Check if the coinché announce is from the partner
-        const myIndex = storePlayers.players.findIndex(
+        const myIndex = storeState.players.findIndex(
             (player: IPlayer) => player.id === storeState.getMyId,
         );
-        const partner = storePlayers.players[(myIndex + 2) % 4];
+        const partner = storeState.players[(myIndex + 2) % 4];
         const team_ids = [storeState.getMyId, partner.id];
         return team_ids.includes(lastBidding.playerId);
     }

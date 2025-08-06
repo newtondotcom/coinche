@@ -8,16 +8,16 @@
                     <Badge
                         :variant="
                             playerIdTurn ===
-                            storePlayers.players[(indexPlayers + 2) % lengthPlayers].id
+                            storeState.players[(indexPlayers + 2) % lengthPlayers].id
                                 ? 'default'
                                 : 'secondary'
                         "
                         class="mx-1"
                     >
-                        {{ storePlayers.players[(indexPlayers + 2) % lengthPlayers].hands.length }}
+                        {{ storeState.players[(indexPlayers + 2) % lengthPlayers].hands.length }}
                     </Badge>
                     <span class="font-semibold mx-1">
-                        {{ storePlayers.players[(indexPlayers + 2) % lengthPlayers].id }}
+                        {{ storeState.players[(indexPlayers + 2) % lengthPlayers].id }}
                     </span>
                 </div>
                 <div />
@@ -26,16 +26,16 @@
                     <Badge
                         :variant="
                             playerIdTurn ===
-                            storePlayers.players[(indexPlayers + 1) % lengthPlayers].id
+                            storeState.players[(indexPlayers + 1) % lengthPlayers].id
                                 ? 'default'
                                 : 'secondary'
                         "
                         class="mx-1"
                     >
-                        {{ storePlayers.players[(indexPlayers + 1) % lengthPlayers].hands.length }}
+                        {{ storeState.players[(indexPlayers + 1) % lengthPlayers].hands.length }}
                     </Badge>
                     <span class="font-semibold mx-1">
-                        {{ storePlayers.players[(indexPlayers + 1) % lengthPlayers].id }}
+                        {{ storeState.players[(indexPlayers + 1) % lengthPlayers].id }}
                     </span>
                 </div>
                 <div />
@@ -43,16 +43,16 @@
                     <Badge
                         :variant="
                             playerIdTurn ===
-                            storePlayers.players[(indexPlayers + 3) % lengthPlayers].id
+                            storeState.players[(indexPlayers + 3) % lengthPlayers].id
                                 ? 'default'
                                 : 'secondary'
                         "
                         class="mx-1"
                     >
-                        {{ storePlayers.players[(indexPlayers + 3) % lengthPlayers].hands.length }}
+                        {{ storeState.players[(indexPlayers + 3) % lengthPlayers].hands.length }}
                     </Badge>
                     <span class="font-semibold mx-1">
-                        {{ storePlayers.players[(indexPlayers + 3) % lengthPlayers].id }}
+                        {{ storeState.players[(indexPlayers + 3) % lengthPlayers].id }}
                     </span>
                 </div>
 
@@ -60,19 +60,19 @@
                 <div class="flex justify-center items-center relative">
                     <Badge
                         :variant="
-                            playerIdTurn === storePlayers.players[indexPlayers].id
+                            playerIdTurn === storeState.players[indexPlayers].id
                                 ? 'default'
                                 : 'secondary'
                         "
                         class="mx-1"
                     >
-                        {{ storePlayers.players[indexPlayers].hands.length }}
+                        {{ storeState.players[indexPlayers].hands.length }}
                     </Badge>
                     <span class="font-semibold mx-1">
-                        {{ storePlayers.players[indexPlayers].id }}
+                        {{ storeState.players[indexPlayers].id }}
                     </span>
                     <div
-                        v-if="playerIdTurn === storePlayers.players[indexPlayers].id"
+                        v-if="playerIdTurn === storeState.players[indexPlayers].id"
                         class="text-green-500 w-full font-bold"
                     > A TWA !
                     </div>

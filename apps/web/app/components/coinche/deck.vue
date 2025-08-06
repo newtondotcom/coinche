@@ -3,7 +3,7 @@
         v-if="storeState.hand.length > 0"
         class="flex flex-row absolute bottom-0 justify-center w-full"
     >
-        <Card
+        <CoincheCard
             v-for="card in storeState.hand"
             :key="card.value + card.suite"
             :card="card"

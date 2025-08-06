@@ -38,11 +38,14 @@ export const useStateStore = defineStore('state', {
     setState(newState: IGameState) {
       Object.assign(this.game, newState);
     },
-    resetLoadingState() {
-      this.isLoadingPlayerList = true;
+    setLoadingState(loading: boolean) {
+      this.isLoadingPlayerList = loading;
     },
     setMyId(id: string) {
       this.myId = id;
+    },
+    setGameId(id: string) {
+      this.game.gameId = id;
     },
   },
   getters: {
@@ -78,10 +81,10 @@ export const useStateStore = defineStore('state', {
       return state.game.phases.timeToPlay;
     },
     team1Score() : number {
-      return this.currentPli.team1Score;
+      return this.currentPli?.team1Score || 0;
     },
     team2Score() : number {
-      return this.currentPli.team2Score;
+      return this.currentPli?.team2Score || 0;
     },
     team1PointsCurrentGame(state) : number {
       return state.game.team1PointsCurrentGame;
@@ -96,16 +99,16 @@ export const useStateStore = defineStore('state', {
       return state.game.phases.timeDistrib !== '';
     },
     turnToPlay(state) : boolean {
-      return state.game.phases.timeToPlay === state.getMyId;
+      return state.game.phases.timeToPlay === state.myId;
     },
     turnToBidding(state) : boolean {
-      return state.game.phases.timeToBid === state.getMyId;
+      return state.game.phases.timeToBid === state.myId;
     },
     atout(state) : ICardSuite {
       return state.game.currentRound.biddingElected.suite || '';
     },
     hand(state): ICard[] {
-      const player = state.game.players.find((p) => p.id === state.getMyId);
+      const player = state.game.players.find((p) => p.id === state.myId);
       return player && Array.isArray(player.hands) ? player.hands : [];
     },
     colorAsked() : ICardSuite {

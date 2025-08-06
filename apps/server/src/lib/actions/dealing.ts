@@ -56,8 +56,6 @@ export default async function emitDealing(
 async function distributeCard(player_id: string, gameId: string) {
   const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;
   controller.getInstance(gameId).getPlayers().find((player) => player.id === player_id)!.hands.push(card);
-  // we will update the state once all cards are distributed
-  //controller.getInstance(gameId).sendState();
 }
 
 export function cutDeck(gameId: string) {

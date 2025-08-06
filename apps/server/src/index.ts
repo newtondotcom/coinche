@@ -93,11 +93,13 @@ const wsHandler = {
         logger.error(`Invalid gameId: ${msg.gameId}, expected: ${gameId}`);
         return;
       }
+      /*
       if (msg.playerId && msg.playerId !== data.userId) {
         ws.send(JSON.stringify({ type: "system", message: "Invalid playerId." }));
         logger.error(`Invalid playerId: ${msg.playerId}, expected: ${data.userId}`);
         return;
       }
+      */
       logger.warn(msg);
       try {
         await translateEvent(msg);
