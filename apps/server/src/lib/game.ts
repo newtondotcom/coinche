@@ -112,7 +112,7 @@ export default class controller {
         }   
 
         // Test 2 : players must be 4
-        if (this.state.players.length !== 4) {
+        if (this.state.status === 'playing' && this.state.players.length !== 4) {
             logger.error(`Invalid player count for gameId: ${this.state.gameId}`, this.state.players);
             throw new Error('Invalid player count: there must be exactly 4 players.');
         }
