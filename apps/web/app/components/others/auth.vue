@@ -1,24 +1,31 @@
 <template>
     <div class="flex flex-row">
-            <Button v-if="!loggedIn" variant="secondary" @click="SignIn">
-                <img
-                    src="https://git.inpt.fr/inp-net/visual-identity/-/raw/main/derivations/auth.svg"
-                />
-                Connexion avec INP-net
-            </Button>
-            <OthersUserDropdown v-else />
+        <OthersUserDropdown v-if="session?.data?.user" />
+        <Button v-else variant="outline" @click="onSignIn">
+            <img
+                src="https://git.inpt.fr/inp-net/visual-identity/-/raw/main/derivations/auth.svg"
+            />
+            Connexion avec INP-net
+        </Button>
     </div>
 </template>
 
 <script setup lang="ts">
-    const { signIn, loggedIn } = useAuth();
+    const {$authClient} = useNuxtApp()
+    const session = $authClient.useSession()
 
-    async function SignIn() {
-        console.log("SignIn");  
-        await signIn.social({
-            provider: "churros",
-            callbackURL :"/regles"
+    async function onSignIn() {
+        await $authClient.signIn.oauth2({
+            providerId: "churros",
+            callbackURL: "/regles"
+        }, {
+            onSuccess: () => {
+                console.log("Success");
+            },
+            onError: (error) => {
+                console.log("Error", error);
+            }
         });
-        console.log("SignIn");  
     }
+
 </script>

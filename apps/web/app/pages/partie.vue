@@ -29,7 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from "@/composables/useAuth";
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
 import { isDevEnv } from "@/shared/utils/miscs";
@@ -37,9 +36,9 @@ import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
 import { CHANGE_TYPE_STATE} from "@coinche/shared";
 import type { WSPayload } from "@coinche/shared";
 import { useStateStore } from '@/stores/state';
-const storeState = useStateStore();    
-
-const { loggedIn } = useAuth();
+const storeState = useStateStore();  
+const { $authClient } = useNuxtApp();
+const session = $authClient.useSession();  
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -49,7 +48,7 @@ const gameId = route.query.gameId as string;
 // Check if loaded in an iframe
 const isIframe = typeof (globalThis as any).window !== 'undefined' && (globalThis as any).window.self !== (globalThis as any).window.top;
 
-if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
+if ((!id || !gameId) || (!isIframe && !session.value)) {
   navigateTo("/404");
 }
 

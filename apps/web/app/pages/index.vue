@@ -74,11 +74,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/composables/useAuth';
 import { useNuxtApp } from '#app';
 import { useStateStore } from '@/stores/state';
 
-const { loggedIn } = useAuth();
+const { $authClient } = useNuxtApp();
+const session = $authClient.useSession();
 const gameId = ref<string>('');
 const loading = ref(false);
 const gameExists = ref(false);
@@ -87,7 +87,7 @@ const { $orpc } = useNuxtApp();
 const stateStore = useStateStore();
 
 async function confirmJoin() {
-    if (!loggedIn.value) {
+    if (!session.value) {
         navigateTo(`/404`);
         return;
     }

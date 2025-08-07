@@ -2,7 +2,7 @@
   <DropdownMenu>
     <DropdownMenuTrigger class="flex items-center gap-2">
         <User class="h-4 w-4" />
-        {{ user?.name || 'Utilisateur' }}
+        {{ session.data?.user?.name || 'Utilisateur' }}
         <ChevronDown class="h-4 w-4" />
     </DropdownMenuTrigger>
     <DropdownMenuContent>
@@ -25,15 +25,9 @@
 
 <script setup lang="ts">
 import { User, ChevronDown, LogOut, Volume2, VolumeX, Bell, BellOff } from 'lucide-vue-next';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
-const { user, signOut } = useAuth();
+const { $authClient } = useNuxtApp();
+const session = $authClient.useSession();
 const { soundMuted, notificationsMuted, toggleSoundMuted, toggleNotificationsMuted } = useSoundSettings();
 
 function toggleMute() {
@@ -45,6 +39,6 @@ function toggleNotifications() {
 }
 
 async function handleSignOut() {
-  await signOut();
+  await $authClient.signOut();
 }
 </script>

@@ -9,11 +9,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   const { $authClient } = useNuxtApp();
   const session = $authClient.useSession();
-  console.log(session.value);
 
   if (!devEnv && !session.value.isPending || !session.value && !allowedPaths.includes(to.path)) {
     return navigateTo("/404")
   } else {
-    console.log(session.value);
+    console.log(session.value.data);
   }
 });

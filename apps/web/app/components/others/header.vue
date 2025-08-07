@@ -9,14 +9,14 @@
         </h1>
       </NuxtLink>
       <div class="flex flex-row space-x-10">
-        <NuxtLink v-if="loggedIn" to="/classement">
+        <NuxtLink v-if="session.data?.user" to="/classement">
           <h2
             class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
           >
             classement
           </h2>
         </NuxtLink>
-        <NuxtLink v-if="loggedIn" to="/historique">
+        <NuxtLink v-if="session.data?.user" to="/historique">
           <h2
             class="text-2xl font-semibold text-neutral-500 dark:text-neutral-200 flex items-center"
           >
@@ -40,7 +40,8 @@
 
 
 <script setup lang="ts">
-const {loggedIn} = useAuth()
+const { $authClient } = useNuxtApp();
+const session = $authClient.useSession();
 import { useRoute } from 'vue-router'
 const route = useRoute()
 </script>

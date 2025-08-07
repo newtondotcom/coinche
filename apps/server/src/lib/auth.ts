@@ -9,7 +9,7 @@ export const auth = betterAuth({
     provider: "pg",
     schema: authSchema,
   }),
-
+  trustedOrigins: [process.env.CORS_ORIGIN || "http://localhost:3001"],
   user: {
     additionalFields: {
       username: {
@@ -30,10 +30,11 @@ export const auth = betterAuth({
           authorizationUrl: process.env.CHURROS_AUTHORIZATION_URL ?? "",
           tokenUrl: process.env.CHURROS_TOKEN_URL ?? "",
           scopes: ['openid', 'profile', 'preferred_username', "email", "churros:profile"],
+          redirectURI: process.env.CORS_ORIGIN || "http://localhost:3001",
           async getUserInfo(tokens) {
-                const userInfoUrl = process.env.CHURROS_USER_INFO;
+                const userInfoUrl = process.env.CHURROS_INFO_URL;
                 if (!userInfoUrl) {
-                  throw new Error("CHURROS_USER_INFO environment variable is not set");
+                  throw new Error("CHURROS_INFO_URL environment variable is not set");
                 }
 
                 const response = await fetch(userInfoUrl, {
