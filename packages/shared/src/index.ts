@@ -1,7 +1,7 @@
 // Export types
 export type { 
-  CardSuite,
-  CardValue,
+  ICardSuite,
+  ICardValue,
   bidding,
   PlayerPosition,
   PlayerId,
@@ -14,8 +14,15 @@ export type {
   IGame,
   Event,
   EventInsert,
-  Database
+  IGameStatus
 } from './types';
+
+export {
+  cardSuites,
+  cardValues,
+  dealingString,
+  CHANGE_TYPE_STATE
+} from './constants';
 
 // Export format utilities
 export {
@@ -32,3 +39,5 @@ export {
 } from './format'; 
 
 export { genIdCuid } from './gen_id';
+
+export {IGameState, ChangeCallback, WSPayload, IGameStateClient} from './state';

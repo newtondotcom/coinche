@@ -1,18 +1,20 @@
-import { emitCanBid } from '@/lib/emitter/can';
-import { startPli } from '@/lib/emitter/start_pli';
+import { emitCanBid } from '@/lib/actions/can';
+import { startPli } from '@/lib/actions/start_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
-import { setNextPlayerTurn } from '@/lib/utils';
+import { getNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatBidding } from '@coinche/shared';
-import { emitBid } from '@/lib/emitter/bid';
+import { addBidding } from '@/lib/actions/bid';
 
-export default async function translateBidding(event: EventInsert, publish: (payload: any) => void) {
+export default async function translateBidding(event: EventInsert) {
     const bid = deformatBidding(event.value as string, event.playerId);
+
+    logger.info(`[translateBidding] Player ${event.playerId} bidding: ${bid.bidding} in game ${event.gameId}`);
     
     // Update coinche/surcoinche state based on special bid values
     const controllerInstance = controller.getInstance(event.gameId);
-    const lastRound = controllerInstance.getLastRound();
+    const lastRound = controllerInstance.getCurrentRound();
     
     if (bid.bidding === 251 || bid.bidding === 501) {
         // Coinché bid
@@ -21,26 +23,24 @@ export default async function translateBidding(event: EventInsert, publish: (pay
         // Surcoinché bid
         lastRound.surcoinched = true;
     }
-    
-    controller.getInstance(event.gameId).addbidding(bid);
 
-    await emitBid(bid,event.gameId,publish);
+    addBidding(bid, event.gameId);
 
-    const nextPlayerId = setNextPlayerTurn(event.playerId, event.gameId);
-    await emitCanBid(nextPlayerId, event.gameId, publish);
+    const nextPlayerId = getNextPlayerTurn(event.playerId, event.gameId);
+    await emitCanBid(nextPlayerId, event.gameId);
     
     if (bid.bidding === 0) {
         // Get the last two biddings to check if they are both passes
         const lastTwobiddings = controller
             .getInstance(event.gameId)
-            .getLastRound()
+            .getCurrentRound()
             .biddings.slice(-3);
         const biddingsPassed = lastTwobiddings.filter((bidding) => bidding.bidding === 0);
 
         // Include the current bidding in the check
         if (biddingsPassed.length === 3) {
             logger.info('Starting pli because of 3 consecutive passes');
-            await startPli(event.gameId, publish);
+            await startPli(event.gameId);
             return;
         } else {
             logger.info(biddingsPassed.length.toString(), 'passes');

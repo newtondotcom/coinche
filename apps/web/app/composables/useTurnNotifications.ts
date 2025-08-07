@@ -1,11 +1,9 @@
-import { ref, watchEffect, readonly } from 'vue'
-import { useGameStore } from '@/stores/game'
-import { useAboutStore } from '@/stores/about'
+import { ref, watchEffect, readonly } from 'vue';
 import { useNotifications } from '@/composables/useNotifications'
+import { useStateStore } from '@/stores/state';
 
 export function useTurnNotifications() {
-  const storeGame = useGameStore()
-  const storeAbout = useAboutStore()
+const storeState = useStateStore();
   const { showTurnNotification } = useNotifications()
   
   // Track previous states to detect changes
@@ -15,22 +13,22 @@ export function useTurnNotifications() {
   
   // Watch for turn to play changes
   watchEffect(() => {
-    const isMyTurn = storeGame.current_player_id === storeAbout.myId
-    const turnToPlay = storeAbout.turnToPlay
+    const isMyTurn = storeState.currentPlayerId === storeState.getMyId
+    const turnToPlay = storeState.turnToPlay
     
     // Check if it's now my turn to play (and it wasn't before)
-    if (isMyTurn && turnToPlay && (!previousTurnToPlay.value || previousCurrentPlayerId.value !== storeAbout.myId)) {
+    if (isMyTurn && turnToPlay && (!previousTurnToPlay.value || previousCurrentPlayerId.value !== storeState.getMyId)) {
       showTurnNotification('turn-to-play')
     }
     
     // Update previous states
-    previousCurrentPlayerId.value = storeGame.current_player_id
+    previousCurrentPlayerId.value = storeState.currentPlayerId
     previousTurnToPlay.value = turnToPlay
   })
   
   // Watch for turn to announce/bid changes
   watchEffect(() => {
-    const turnTobidding = storeAbout.turnTobidding
+    const turnTobidding = storeState.turnTobidding
     
     // Check if it's now my turn to announce (and it wasn't before)
     if (turnTobidding && !previousTurnToAnnonce.value) {

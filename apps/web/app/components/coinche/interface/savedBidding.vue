@@ -3,31 +3,31 @@
         <h2
             class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-7xl cursor-pointer"
         >
-            {{ storeGame.last_bidding.bidding }}
+            {{ storeState.biddingElected.bidding }}
 
-            {{ storeAbout.atout == 'clubs' ? '♣' : '' }}
-            {{ storeAbout.atout == 'diamonds' ? '♦' : '' }}
-            {{ storeAbout.atout == 'hearts' ? '♥' : '' }}
-            {{ storeAbout.atout == 'spades' ? '♠' : '' }}
-            {{ storeAbout.atout == 'sans-atout' ? 'SA' : '' }}
-            {{ storeAbout.atout == 'tout-atout' ? 'TA' : '' }}
+            {{ storeState.atout == 'clubs' ? '♣' : '' }}
+            {{ storeState.atout == 'diamonds' ? '♦' : '' }}
+            {{ storeState.atout == 'hearts' ? '♥' : '' }}
+            {{ storeState.atout == 'spades' ? '♠' : '' }}
+            {{ storeState.atout == 'sans-atout' ? 'SA' : '' }}
+            {{ storeState.atout == 'tout-atout' ? 'TA' : '' }}
         </h2>
         <h3
             class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-5xl cursor-pointer"
         >
             par
-            {{ storeGame.last_bidding.playerId }}
+            {{ storeState.biddingElected.playerId }}
         </h3>
         <h4
             class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-4xl cursor-pointer"
         >
-            <Badge v-if="storeGame.coinched">Coinché</Badge>
-            <Badge v-if="storeGame.surcoinched">Coinché</Badge>
+            <Badge v-if="storeState.coinched">Coinché</Badge>
+            <Badge v-if="storeState.surcoinched">Coinché</Badge>
         </h4>
     </div>
 </template>
 
 <script setup lang="ts">
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 </script>

@@ -1,18 +1,20 @@
-import { emitCanPlay } from '@/lib/emitter/can';
-import { closePli } from '@/lib/emitter/close_pli';
+import { emitCanPlay } from '@/lib/actions/can';
+import { closePli } from '@/lib/actions/close_pli';
 import controller from '@/lib/game';
 import logger from '@/lib/logger';
-import { setNextPlayerTurn } from '@/lib/utils';
+import { getNextPlayerTurn } from '@/lib/utils';
 import type { EventInsert } from '@coinche/shared';
 import { deformatCarteToPlay } from '@coinche/shared';
 import { genIdCuid } from '@coinche/shared';
+import addPlay from '@/lib/actions/add_play';
 
-export default async function translatePlay(event: EventInsert, publish: (payload: any) => void) {
+export default async function translatePlay(event: EventInsert) {
+    const gameId = event.gameId;
     const def = deformatCarteToPlay(event.value as string);
     const card = def.card;
     const pli_number = def.pli_number;
     const playerId = event.playerId;
-    controller.getInstance(event.gameId).addPlay(card, playerId);
+    addPlay(card, playerId, gameId);
     const event2 = {
         id: await genIdCuid(),
         type: "play",
@@ -21,14 +23,13 @@ export default async function translatePlay(event: EventInsert, publish: (payloa
         value: event.value,
         timestamp : new Date().toISOString(),
       }
-    publish(event2)
     // check if end of pli
-    if (controller.getInstance(event.gameId).getLastPli().plays.length === 4) {
+    if (controller.getInstance(event.gameId).getCurrentPli().plays.length === 4) {
         logger.info('End of pli');
-        await closePli(event.gameId, publish);
+        await closePli(event.gameId);
     } else {
-        const nextPlayerId = setNextPlayerTurn(playerId, event.gameId);
-        await emitCanPlay(nextPlayerId, event.gameId, publish);
+        const nextPlayerId = getNextPlayerTurn(playerId, event.gameId);
+        await emitCanPlay(nextPlayerId, event.gameId);
     }
     return;
 }

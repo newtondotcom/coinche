@@ -4,6 +4,8 @@
     import { cn } from '@/lib/utils';
     import { cardCanBePlayed } from '@/shared/utils/cardRules';
     import type { ICard } from '@coinche/shared';
+    import { useStateStore } from '@/stores/state';
+    const storeState = useStateStore();
 
     interface Props {
         card: ICard;
@@ -13,21 +15,22 @@
 
     const props = defineProps<Props>();
 
-    const storeAbout = useAboutStore();
-    const storeGame = useGameStore();
 
     async function onPress() {
         await cardPressed(props.card.suite, props.card.value);
     }
 
     const canBePlayed = computed(() => {
+        const currentPliObj = Array.isArray(storeState.currentPli)
+            ? undefined
+            : storeState.currentPli;
         return cardCanBePlayed(props.card, {
-            current_player_id: storeGame.current_player_id,
-            myId: storeAbout.myId,
-            current_pli: storeGame.current_pli,
-            colorAsked: storeAbout.colorAsked,
-            atout: storeAbout.atout,
-            hand: storeAbout.hand,
+            currentPlayerId: storeState.currentPlayerId,
+            myId: storeState.getMyId,
+            currentPli: currentPliObj as any,
+            colorAsked: storeState.colorAsked,
+            atout: storeState.atout,
+            hand: storeState.hand,
         });
     });
 
@@ -38,7 +41,7 @@
         `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
     );
 
-    watch(storeGame.current_pli, () => {
+    watch(storeState.currentPli, () => {
         canBePlayed.value;
     });
 </script>
@@ -51,10 +54,10 @@
             :style="`max-width:${maxCardWidth}px; height: auto;`"
             :class="
                 cn(
-                    storeAbout.turnToPlay && inDeck && canBePlayed
+                    storeState.turnToPlay && inDeck && canBePlayed
                         ? 'cursor-pointer hover:scale-125 transition-transform'
                         : '',
-                    inDeck && (!canBePlayed || !storeAbout.turnToPlay) ? 'cursor-default' : '',
+                    inDeck && (!canBePlayed || !storeState.turnToPlay) ? 'cursor-default' : '',
                     inDeck ? '' : 'cursor-auto',
                 )
             "

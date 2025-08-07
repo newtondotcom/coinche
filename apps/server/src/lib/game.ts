@@ -1,6 +1,6 @@
-import { deleteRows } from '@/lib/emitter/end_game';
 import logger from '@/lib/logger';
-import type { Ibidding, ICard, IGame, IPlayer, IPli, IRound } from '@coinche/shared';
+import type { IPlayer, IGameState } from '@coinche/shared';
+import { server } from '@/index';
 
 export default class controller {
     static clearGames() {
@@ -8,17 +8,34 @@ export default class controller {
     }
     private static _instances: Map<string, controller> = new Map();
 
-    public game: IGame;
+    public state: IGameState;
 
     private constructor(gameId: string) {
-        this.game = {
-            rounds: [],
+        this.state = {
+            gameId,
+            status: 'waiting',
+            players : [],
+            team1: [],
+            team2: [],
+            currentRound: {
+                plis: [],
+                biddings: [],
+                biddingElected: { suite: 'NA', bidding: 0, playerId: '0' },
+                coinched: false,
+                surcoinched: false,
+            },
+            team1PointsCurrentGame: 0,
+            team2PointsCurrentGame: 0,
             deck: [],
-            gameId: gameId,
-            team1_score: 0,
-            team2_score: 0,
-            playersMap: new Map(),
+            phases: {
+                timeToBid: '',
+                timeDistrib: '',
+                timeToPlay: '',
+            },
+            createdAt: new Date(),
+            updatedAt: new Date(),  
         };
+        logger.info(`Game controller initialized for gameId: ${gameId}`);
     }
 
     public static getInstance(gameId: string): controller {
@@ -32,77 +49,82 @@ export default class controller {
     public static async deleteInstance(gameId: string): Promise<void> {
         if (this._instances.has(gameId)) {
             this._instances.delete(gameId);
-            await deleteRows(gameId, () => {}); // Pass a no-op function for publish
             logger.info(`Game with id ${gameId} has been deleted from db and memory`);
         } else {
             logger.warn(`Game with id ${gameId} does not exist`);
         }
     }
 
-    // --- Player management (now instance, using this.game.playersMap) ---
-    public getPlayers(): Set<IPlayer> {
-        return new Set(this.game.playersMap.values());
-    }
-    public addPlayer(player: IPlayer) {
-        this.game.playersMap.set(player.id, player);
-    }
-    public removePlayer(playerId: string) {
-        this.game.playersMap.delete(playerId);
+    public sendState() {
+        this.testState();
+        const payload = JSON.stringify({
+            changeType: 'changeTypeState',
+            state: this.state,
+        });
+        server.publish(this.state.gameId, payload);
+        logger.info(`State sent for gameId: ${this.state.gameId}`); 
     }
 
-    public addPlay(card: ICard, playerId: string): void {
-        const lastRound = this.game.rounds[this.game.rounds.length - 1];
-        const lastPli = lastRound.plis[lastRound.plis.length - 1];
-        if (!lastRound) {
-            throw new Error('No round exists. Add a round first.');
-        }
-        lastPli.plays.push({ card, playerId });
-        this.game.deck.push(card);
-        logger.info(`Player ${playerId} played ${card.suite} of ${card.value}`);
+    /*
+    GAME MANAGEMENT METHODS
+
+    SET methods will be store in the `src/lib/actions/` folder
+
+    GET methods will be below
+
+    */
+    public getPlayers(): IPlayer[] {
+        return Array.from(this.state.players);
     }
-    public addbidding(bidding: Ibidding): void {
-        const lastRound = this.game.rounds[this.game.rounds.length - 1];
-        if (!lastRound) {
-            throw new Error('No round exists. Add a round first.');
+
+    public getCurrentRound() {
+        if (!this.state.currentRound) {
+            throw new Error('No current round exists.');
         }
-        lastRound.biddings.push(bidding);
-        if (bidding.bidding !== 0) {
-            this.getLastRound().last_bidding = bidding;
-            console.log(this.getLastRound().last_bidding);
-        }
-        logger.info(`Player ${bidding.playerId} announced ${bidding.suite}`);
+        return this.state.currentRound;
     }
-    public addRound(playerStartingId: string): void {
-        const roundInit: IRound = {
-            plis: [],
-            biddings: [],
-            team1_point_current_game: 0,
-            team2_point_current_game: 0,
-            last_bidding: { suite: 'NA', bidding: 0, playerId: 'NA' },
-            coinched: false,
-            surcoinched: false,
+
+    public static gameExists(gameId: string): { exists: boolean, playerCount: number } {
+        const instance = this._instances.get(gameId);
+        return {
+            exists: !!instance,
+            playerCount: instance ? instance.state.players.length : 0
         };
-        this.game.rounds.push(roundInit);
-        logger.info('New round created');
     }
-    public async addPli(playerStartingId: string): Promise<void> {
-        const lastRound = this.game.rounds[this.game.rounds.length - 1];
-        const pliInit: IPli = {
-            plays: [],
-            current_player_id: playerStartingId,
-            player_starting_id: playerStartingId,
-        };
-        lastRound.plis.push(pliInit);
-        logger.info('New pli created');
-    }
-    public getLastRound() {
-        return this.game.rounds[this.game.rounds.length - 1];
-    }
-    public getLastPli() {
-        return this.getLastRound().plis[this.getLastRound().plis.length - 1];
+
+    public getCurrentPli() {
+        return this.getCurrentRound().plis[this.getCurrentRound().plis.length - 1];
     }    
+
     public isTeam1(playerId: string) {
         const players = Array.from(this.getPlayers());
         return players[0].id === playerId || players[2].id === playerId;
+    }
+
+
+    public testState(){
+        // Test 1 : states.phases cant be both empty or two at the same time not empty
+        const phases = this.state.phases;
+        const filledPhases = Object.values(phases).find(phase => phase);
+        if ((filledPhases && filledPhases.length > 1)) {
+            logger.error(`Invalid phases state for gameId: ${this.state.gameId}`, phases);
+            throw new Error('Invalid phases state: either all phases are empty or all are filled.');
+        }   
+
+        // Test 2 : players must be 4
+        if (this.state.status === 'playing' && this.state.players.length !== 4) {
+            logger.error(`Invalid player count for gameId: ${this.state.gameId}`, this.state.players);
+            throw new Error('Invalid player count: there must be exactly 4 players.');
+        }
+
+        // Test 3 : game status must be set to "started" if something is happening
+        if (this.state.currentRound.plis.length > 0 || this.state.currentRound.biddings.length > 0) {
+            if (this.state.status !== 'playing') {
+                logger.error(`Invalid game status for gameId: ${this.state.gameId}`, this.state.status);
+                throw new Error('Invalid game status: must be "playing" if there are ongoing rounds or biddings.');
+            }
+        }
+
+        logger.warn(`State for gameId: ${this.state.gameId} is valid`, this.state);
     }
 }

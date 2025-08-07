@@ -7,19 +7,19 @@
 
     <CoincheRiver />
 
-    <CoincheInterfaceBiddings v-if="storeAbout.timeTobidding" />
+    <CoincheInterfaceBiddings v-if="storeState.timeToBidding" />
 
     <div
-      v-if="storePlayers.players.length == 4"
+      v-if="storeState.players.length == 4"
       class="flex flex-row justify-between"
     >
       <CoincheInterfacePoints />
       <CoincheInterfaceTurn />
     </div>
 
-    <CoincheInterfaceSavedBidding v-if="storeGame.last_bidding.suite != 'NA'" />
+    <CoincheInterfaceSavedBidding v-if="storeState.biddingElected.suite != 'NA'" />
 
-    <CoincheInterfaceJoin v-if="storePlayers.players.length < 4" />
+    <CoincheInterfaceJoin v-if="storeState.players.length < 4" />
     
   </div>
 </template>
@@ -28,17 +28,14 @@
 import { useAuth } from "@/composables/useAuth";
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
-import { handleWSEvent } from "@/shared/utils/listener";
 import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
-import { useAboutStore } from "@/stores/about";
-import { useGameStore } from "@/stores/game";
-import { usePlayersStore } from "@/stores/players";
+import { CHANGE_TYPE_STATE} from "@coinche/shared";
+import type { WSPayload } from "@coinche/shared";
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();    
 
 const { loggedIn } = useAuth();
-const storeGame = useGameStore();
-const storePlayers = usePlayersStore();
-const storeAbout = useAboutStore();
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -52,28 +49,28 @@ if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
   navigateTo("/404");
 }
 
-storeAbout.setMyId(id);
-storeAbout.setGameId(gameId);
 
 // Store cleanup function for WebSocket listener
 let cleanupListener: (() => void) | null = null;
 
 onMounted(async () => {
+  storeState.setMyId(id); 
+  storeState.setGameId(gameId);
   // Reset loading state for player list
-  storePlayers.resetLoadingState();
+  storeState.setLoadingState(false);
   
   // Connect to WebSocket and set up listener
   getWS();
   
   // Set up message listener with cleanup function
-  cleanupListener = onWSMessage((event) => {
-    console.log('Received WebSocket event:', event.type);
-    
-    handleWSEvent(event);
-    if (event.gameId === gameId) {
-      //
+  cleanupListener = onWSMessage((event : WSPayload) => {
+    console.log('Received WebSocket event:', event.changeType);
+
+    if (event.changeType === CHANGE_TYPE_STATE) {
+      // Update game state
+      storeState.setState(event.state);
     } else {
-      //console.warn("Event not for current game room:", event.gameId, "expected:", gameId);
+      console.warn('Unhandled WebSocket event type:', event.changeType);
     }
   });
 
@@ -91,7 +88,7 @@ onMounted(async () => {
 
   // Set up beforeunload handler for non-dev environments
   if (!isDevEnv(config)) {
-    window.onbeforeunload = (event: BeforeUnloadEvent) => {
+    window.onbeforeunload = (event) => {
       event.preventDefault();
       return "Are you sure you want to leave this page? Changes you made may not be saved.";
     };

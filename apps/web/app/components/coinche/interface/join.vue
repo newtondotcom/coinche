@@ -4,52 +4,52 @@
             <CardHeader>
                 <CardTitle>Joueurs</CardTitle>
                 <CardDescription>
-                    <Skeleton v-if="storePlayers.isLoadingPlayerList" class="h-4 w-32" />
-                    <span v-else>{{ storePlayers.players.length }} joueurs présents</span>
+                    <Skeleton v-if="storeState.isLoadingPlayerList" class="h-4 w-32" />
+                    <span v-else>{{ storeState.players.length }} joueurs présents</span>
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <div class="grid grid-cols-3 gap-2">
                     <div />
                     <div>
-                        <Skeleton v-if="storePlayers.isLoadingPlayerList" class="h-6 w-20" />
+                        <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
                         <span v-else>
                             {{
-                                storePlayers.players.length > 0
-                                    ? storePlayers.players[0].id
+                                storeState.players.length > 0
+                                    ? storeState.players[0]?.id
                                     : 'en attente'
                             }}
                         </span>
                     </div>
                     <div />
                     <div>
-                        <Skeleton v-if="storePlayers.isLoadingPlayerList" class="h-6 w-20" />
+                        <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
                         <span v-else>
                             {{
-                                storePlayers.players.length > 3
-                                    ? storePlayers.players[3].id
+                                storeState.players.length > 3
+                                    ? storeState.players[3]?.id
                                     : 'en attente'
                             }}
                         </span>
                     </div>
                     <div />
                     <div>
-                        <Skeleton v-if="storePlayers.isLoadingPlayerList" class="h-6 w-20" />
+                        <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
                         <span v-else>
                             {{
-                                storePlayers.players.length > 1
-                                    ? storePlayers.players[1].id
+                                storeState.players.length > 1
+                                    ? storeState.players[1]?.id
                                     : 'en attente'
                             }}
                         </span>
                     </div>
                     <div />
                     <div>
-                        <Skeleton v-if="storePlayers.isLoadingPlayerList" class="h-6 w-20" />
+                        <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
                         <span v-else>
                             {{
-                                storePlayers.players.length > 2
-                                    ? storePlayers.players[2].id
+                                storeState.players.length > 2
+                                    ? storeState.players[2]?.id
                                     : 'en attente'
                             }}
                         </span>
@@ -62,7 +62,6 @@
 </template>
 
 <script setup lang="ts">
-    import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
-    
-    const storePlayers = usePlayersStore();
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();    
 </script>

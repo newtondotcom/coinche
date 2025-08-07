@@ -6,18 +6,18 @@
                 <CardDescription>
                     Annonce actuelle
                     <Badge variant="secondary">
-                        {{ storeGame.last_bidding.bidding }}
-                        {{ storeGame.last_bidding.suite == 'diamonds' ? '♦️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'hearts' ? '♥️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'clubs' ? '♣️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'spades' ? '♠️' : '' }}
-                        {{ storeGame.last_bidding.suite == 'tout-atout' ? 'TA' : '' }}
-                        {{ storeGame.last_bidding.suite == 'sans-atout' ? 'SA' : '' }}
+                        {{ storeState.biddingElected.bidding }}
+                        {{ storeState.biddingElected.suite == 'diamonds' ? '♦️' : '' }}
+                        {{ storeState.biddingElected.suite == 'hearts' ? '♥️' : '' }}
+                        {{ storeState.biddingElected.suite == 'clubs' ? '♣️' : '' }}
+                        {{ storeState.biddingElected.suite == 'spades' ? '♠️' : '' }}
+                        {{ storeState.biddingElected.suite == 'tout-atout' ? 'TA' : '' }}
+                        {{ storeState.biddingElected.suite == 'sans-atout' ? 'SA' : '' }}
                     </Badge>
                     par
-                    {{ storeGame.last_bidding.playerId }}
-                    <Badge v-if="storeGame.coinched">Coinché</Badge>
-                    <Badge v-if="storeGame.surcoinched">Surcoinché</Badge>
+                    {{ storeState.biddingElected.playerId }}
+                    <Badge v-if="storeState.coinched">Coinché</Badge>
+                    <Badge v-if="storeState.surcoinched">Surcoinché</Badge>
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -95,12 +95,11 @@
 </template>
 
 <script setup lang="ts">
-    import emitbidding from '@/shared/emitter/bidding';
-    import type { IPlayer, bidding, CardSuite, Ibidding } from "@coinche/shared";
+    import emitBid from '@/shared/emitter/bidding';
+    import type { IPlayer, bidding, ICardSuite, Ibidding } from "@coinche/shared";
+    import { useStateStore } from '@/stores/state';
+    const storeState = useStateStore();
 
-    const storeGame = useGameStore();
-    const storeAbout = useAboutStore();
-    const storePlayers = usePlayersStore();
 
     // Regular biddings: 80-160
     const regularBiddings: bidding[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
@@ -113,7 +112,7 @@
     // All biddings combined for compatibility
     const biddings: bidding[] = [...regularBiddings, ...specialBiddings];
     
-    const suites: CardSuite[] = [
+    const suites: ICardSuite[] = [
         'diamonds',
         'clubs',
         'hearts',
@@ -122,24 +121,24 @@
         'sans-atout',
     ];
 
-    const canCoincher = computed<boolean>(() => canCoincherbidding(storeGame.biddings_pli));
-    const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeGame.biddings_pli));
+    const canCoincher = computed<boolean>(() => canCoincherbidding(storeState.biddingsPli));
+    const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeState.biddingsPli));
 
     const canbiddingr = computed<boolean>(
-        () => storeAbout.turnTobidding && storeGame.current_player_id === storeAbout.myId,
+        () => storeState.turnToBidding,
     );
     const canPasser = computed<boolean>(
         () =>
-            storeAbout.turnTobidding &&
-            storeGame.biddings_pli.length > 3 &&
-            storeGame.biddings_pli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
+            storeState.turnToBidding &&
+            storeState.biddingsPli.length > 3 &&
+            storeState.biddingsPli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
     );
 
-    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeAbout.myId });
+    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeState.getMyId });
 
     watch(biddingEnCours, async () => {
         if (biddingEnCours.value.bidding !== 0 && biddingEnCours.value.suite !== 'NA') {
-            await emitbidding(biddingEnCours.value);
+            await emitBid(biddingEnCours.value);
             biddingEnCours.value = { bidding: 0, suite: 'NA', playerId: 'NA' };
         }
         if (biddingEnCours.value.bidding == 160) {
@@ -168,12 +167,12 @@
         }
         
         // Check if the bidding is from opponents
-        const myIndex = storePlayers.players.findIndex(
-            (player: IPlayer) => player.id === storeAbout.myId,
+        const myIndex = storeState.players.findIndex(
+            (player: IPlayer) => player.id === storeState.getMyId,
         );
         const adversaries: IPlayer[] = [
-            storePlayers.players[(myIndex + 1) % 4],
-            storePlayers.players[(myIndex + 3) % 4],
+            storeState.players[(myIndex + 1) % 4],
+            storeState.players[(myIndex + 3) % 4],
         ];
         const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
         return adversaries_ids.includes(lastBidding.playerId);
@@ -196,7 +195,7 @@
         
         // Can only surcoinche coinché bids (251, 501) or regular coinché bids
         const canSurcoinche = (lastBidding.bidding === 251 || lastBidding.bidding === 501) || 
-                             (storeGame.coinched && typeof lastBidding.bidding === 'number' && 
+                             (storeState.coinched && typeof lastBidding.bidding === 'number' && 
                               lastBidding.bidding >= 80 && lastBidding.bidding <= 160);
         
         if (!canSurcoinche) {
@@ -204,71 +203,59 @@
         }
         
         // Check if the coinché announce is from the partner
-        const myIndex = storePlayers.players.findIndex(
-            (player: IPlayer) => player.id === storeAbout.myId,
+        const myIndex = storeState.players.findIndex(
+            (player: IPlayer) => player.id === storeState.getMyId,
         );
-        const partner = storePlayers.players[(myIndex + 2) % 4];
-        const team_ids = [storeAbout.myId, partner.id];
+        const partner = storeState.players[(myIndex + 2) % 4];
+        const team_ids = [storeState.getMyId, partner.id];
         return team_ids.includes(lastBidding.playerId);
     }
 
     function canbiddingNumber(bidding: bidding) {
-        return !(storeGame.last_bidding.bidding < bidding);
+        return !(storeState.biddingElected.bidding < bidding);
     }
 
     async function passer() {
-        await emitbidding({ bidding: 0, suite: 'NA', playerId: storeAbout.myId });
+        await emitBid({ bidding: 0, suite: 'NA', playerId: storeState.getMyId});
     }
 
     async function coincher() {
         // For capot/générale bids, convert to coinché equivalent
-        const lastBid = storeGame.last_bidding.bidding;
+        const lastBid = storeState.biddingElected.bidding;
         let coinchedBid: bidding;
         
         if (lastBid === 250) {
             coinchedBid = 251; // Capot coinché
         } else if (lastBid === 500) {
             coinchedBid = 501; // Générale coinchée
-        } else if (typeof lastBid === 'number' && lastBid >= 80 && lastBid <= 160) {
-            // For regular bids, we can double the value to represent coinche
-            // But since our type only allows specific values, we'll track coinche state
-            // and let the scoring logic handle the multiplier
-            storeGame.setCoinched(true);
-            return; // Don't emit a new bid, just track the state
         } else {
             return;
         }
 
-        await emitbidding({ 
+        await emitBid({
             bidding: coinchedBid, 
-            suite: storeGame.last_bidding.suite, 
-            playerId: storeAbout.myId 
+            suite: storeState.biddingElected.suite, 
+            playerId: storeState.getMyId
         });
-        storeGame.setCoinched(true);
     }
 
     async function surcoincher() {
         // For capot/générale bids, convert to surcoinché equivalent
-        const lastBid = storeGame.last_bidding.bidding;
+        const lastBid = storeState.biddingElected.bidding;
         let surcoincheBid: bidding;
         
         if (lastBid === 251) {
             surcoincheBid = 252; // Capot surcoinché
         } else if (lastBid === 501) {
             surcoincheBid = 502; // Générale surcoinchée
-        } else if (typeof lastBid === 'number' && lastBid >= 80 && lastBid <= 160) {
-            // For regular bids, track surcoinche state and let scoring logic handle the multiplier
-            storeGame.setSurcoinched(true);
-            return; // Don't emit a new bid, just track the state
         } else {
             return;
         }
 
-        await emitbidding({ 
+        await emitBid({ 
             bidding: surcoincheBid, 
-            suite: storeGame.last_bidding.suite, 
-            playerId: storeAbout.myId 
+            suite: storeState.biddingElected.suite, 
+            playerId: storeState.getMyId
         });
-        storeGame.setSurcoinched(true);
     }
 </script>

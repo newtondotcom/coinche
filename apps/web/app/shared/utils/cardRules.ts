@@ -1,9 +1,10 @@
-import type { ICard, IPlay, IPlayer } from '@coinche/shared';
+import type { ICard, IPlay, IPlayer, IPli } from '@coinche/shared';
+import { useStateStore } from '@/stores/state';
 
 interface CardRulesContext {
-    current_player_id: string;
+    currentPlayerId: string;
     myId: string;
-    current_pli: IPlay[];
+    currentPli: IPli;
     colorAsked?: string;
     atout: string;
     hand: ICard[];
@@ -16,27 +17,27 @@ interface CardRulesContext {
  * @returns true if the card can be played, false otherwise
  */
 export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean {
-    const { current_player_id, myId, current_pli, colorAsked, atout, hand } = context;
+    const { currentPlayerId, myId, currentPli, colorAsked, atout, hand } = context;
     
     // If it's not the player's turn, they can't play
-    if (current_player_id !== myId) {
+    if (currentPlayerId !== myId) {
         return false;
     }
 
     // If it's the first card of the trick (entame), any card can be played
-    if (current_pli.length === 0) {
+    if (currentPli.plays.length === 0) {
         return true;
     }
 
-    const currentCardSuite = card.suite;
-    const currentCardValue = card.valueNum;
+    const currentICardSuite = card.suite;
+    const currentICardValue = card.valueNum;
 
     // Special cases for Sans Atout and Tout Atout variants
     if (atout === 'sans-atout') {
         // No trump exists, only need to follow suit if possible
         const hasColorAsked = hand.some((c: ICard) => c.suite === colorAsked);
         if (hasColorAsked) {
-            return currentCardSuite === colorAsked;
+            return currentICardSuite === colorAsked;
         }
         return true; // Can play any card if don't have the color asked
     }
@@ -45,9 +46,9 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         // All colors are trump, must always try to go higher when possible
         const hasColorAsked = hand.some((c: ICard) => c.suite === colorAsked);
         if (hasColorAsked) {
-            if (currentCardSuite === colorAsked) {
+            if (currentICardSuite === colorAsked) {
                 // Must play higher if possible
-                const highestInPli = Math.max(...current_pli
+                const highestInPli = Math.max(...currentPli.plays
                     .filter(p => p.card.suite === colorAsked)
                     .map(p => p.card.valueNum));
                 
@@ -55,7 +56,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
                     c.suite === colorAsked && c.valueNum > highestInPli);
                 
                 if (hasHigher) {
-                    return currentCardValue > highestInPli;
+                    return currentICardValue > highestInPli;
                 }
                 // If no higher card available, can play any card of the asked color
                 return true;
@@ -71,23 +72,23 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
 
     // Rule 1: Must always follow suit if possible
     if (hasColorAsked) {
-        if (currentCardSuite !== colorAsked) {
+        if (currentICardSuite !== colorAsked) {
             return false;
         }
 
         // If trump is asked, must go higher when possible
         if (colorAsked === atout) {
-            const atoutsInPli = current_pli.filter(p => p.card.suite === atout);
+            const atoutsInPli = currentPli.plays.filter(p => p.card.suite === atout);
             if (atoutsInPli.length > 0) {
                 const highestAtout = Math.max(...atoutsInPli.map(p => p.card.valueNum));
                 const hasHigherAtout = hand.some((c: ICard) => 
                     c.suite === atout && c.valueNum > highestAtout);
                 
                 if (hasHigherAtout) {
-                    return currentCardValue > highestAtout;
+                    return currentICardValue > highestAtout;
                 }
                 // FIXED: Allow playing lower trump if no higher trump available
-                return currentCardSuite === atout;
+                return currentICardSuite === atout;
             }
         }
         return true;
@@ -95,7 +96,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
 
     // Rule 2: If can't follow suit, check if partner is winning
     const isPartnerWinning = (): boolean => {
-        if (current_pli.length === 0) return false;
+        if (currentPli.plays.length === 0) return false;
         
         // IMPROVED: More robust partner detection
         const getTeam = (playerId: string): number => {
@@ -111,8 +112,8 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         const myTeam = getTeam(myId);
         
         // Find the currently winning card
-        let winningPlay = current_pli[0];
-        const atoutsInPli = current_pli.filter(p => p.card.suite === atout);
+        let winningPlay = currentPli.plays[0];
+        const atoutsInPli = currentPli.plays.filter(p => p.card.suite === atout);
         
         if (atoutsInPli.length > 0) {
             // If there are trumps, highest trump wins
@@ -120,7 +121,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
                 current.card.valueNum > highest.card.valueNum ? current : highest);
         } else {
             // Otherwise, highest card of asked color wins
-            const suitCards = current_pli.filter(p => p.card.suite === colorAsked);
+            const suitCards = currentPli.plays.filter(p => p.card.suite === colorAsked);
             if (suitCards.length > 0) {
                 winningPlay = suitCards.reduce((highest, current) => 
                     current.card.valueNum > highest.card.valueNum ? current : highest);
@@ -136,11 +137,11 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
     }
 
     // Rule 4: If partner is not winning and we have trump, must play trump
-    if (hasAtout && currentCardSuite === atout) {
+    if (hasAtout && currentICardSuite === atout) {
+        const storeState = useStateStore();    
         // Check if opponent has already played trump
-        const storePlayers = usePlayersStore();
         const getTeamMateId = (playerId: string): string => {
-            const players = storePlayers.players;
+            const players = storeState.players;
             const player = players.find((p: IPlayer) => p.id === playerId);
             if (!player || typeof player.position !== 'number') {
                 return '';
@@ -152,7 +153,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
         };
         
         const myTeam = getTeamMateId(myId);
-        const opponentAtouts = current_pli
+        const opponentAtouts = currentPli.plays
             .filter(p => p.card.suite === atout)
             .filter(p => p.playerId !== myTeam);
 
@@ -163,7 +164,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
             
             // Must play higher trump if available, otherwise any trump is allowed
             if (hasHigherAtout) {
-                return currentCardValue > highestOpponentAtout;
+                return currentICardValue > highestOpponentAtout;
             }
             // Can play any trump even if lower (forcing to "pisser")
             return true;
@@ -176,7 +177,7 @@ export function cardCanBePlayed(card: ICard, context: CardRulesContext): boolean
     // Rule 5: If no trump available and partner not winning, must discard
     // FIXED: Allow any non-trump card when player has no trump
     if (!hasAtout) {
-        return currentCardSuite !== atout; // Can play any non-trump card
+        return currentICardSuite !== atout; // Can play any non-trump card
     }
 
     // FIXED: If we have trump but trying to play non-trump while partner not winning
@@ -193,12 +194,12 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
     const { hand } = context;
     
     // If it's not the player's turn, they can't play anything
-    if (context.current_player_id !== context.myId) {
+    if (context.currentPlayerId !== context.getMyId) {
         return false;
     }
     
     // If it's the first card of the trick, any card can be played
-    if (context.current_pli.length === 0) {
+    if (context.currentPli.plays.length === 0) {
         return hand.length > 0;
     }
     
@@ -214,7 +215,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
 export function getPlayableCards(context: CardRulesContext): ICard[] {
     const { hand } = context;
     
-    if (context.current_player_id !== context.myId) {
+    if (context.currentPlayerId !== context.getMyId) {
         return [];
     }
     
@@ -234,7 +235,7 @@ export function getBestPlayableCard(context: CardRulesContext): ICard | null {
     }
     
     // If it's the first card of the trick, play the lowest card
-    if (context.current_pli.length === 0) {
+    if (context.currentPli.plays.length === 0) {
         const sortedCards = playableCards.sort((a, b) => a.valueNum - b.valueNum);
         return sortedCards[0] || null;
     }
@@ -267,7 +268,7 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
     }
     
     // Check if this is a valid turn
-    if (context.current_player_id !== context.myId) {
+    if (context.currentPlayerId !== context.getMyId) {
         return false;
     }
     
@@ -278,7 +279,7 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
         console.warn('Context:', {
             colorAsked: context.colorAsked,
             atout: context.atout,
-            current_pli: context.current_pli,
+            currentPli: context.currentPli,
             hand_suites: context.hand.map(c => c.suite),
             card_suite: card.suite
         });
@@ -301,14 +302,14 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
  */
 export function debugCardPlayability(card: ICard, context: CardRulesContext): string[] {
     const issues: string[] = [];
-    const { current_player_id, myId, current_pli, colorAsked, atout, hand } = context;
+    const { currentPlayerId, myId, currentPli, colorAsked, atout, hand } = context;
     
-    if (current_player_id !== myId) {
+    if (currentPlayerId !== myId) {
         issues.push("Not player's turn");
         return issues;
     }
     
-    if (current_pli.length === 0) {
+    if (currentPli.plays.length === 0) {
         return []; // First card, should be playable
     }
     

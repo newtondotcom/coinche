@@ -1,10 +1,13 @@
 import controller from '@/lib/game';
-import type { CardSuite, CardValue, ICard, IPlayer } from '@coinche/shared';
-import logger from './logger';
+import {  cardSuites, cardValues, type ICard, type IPlayer, type PlayerId } from '@coinche/shared';
+import { playerStats } from '@/db/schema/coinche';
+import { eq} from "drizzle-orm";
+import { db } from '@/db';
+import logger from '@/lib/logger';
 
 export const dev = process.env.NODE_ENV !== 'production';
 
-export function setNextPlayerTurn(playerId: string, gameId: string) {
+export function getNextPlayerTurn(playerId: string, gameId: string) {
     const gameController = controller.getInstance(gameId);
     
     // Get players from the controller, not the game object
@@ -23,25 +26,10 @@ export function setNextPlayerTurn(playerId: string, gameId: string) {
     // Calculate next player index (circular)
     const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
     const nextPlayerId = players[nextPlayerIndex].id;
-  
-    // Update the current player in the last pli
-    const lastPli = gameController.getLastPli();
-    if (lastPli) {
-      lastPli.current_player_id = nextPlayerId;
-    }
-  
-    logger.info(`Turn changed from player ${playerId} to player ${nextPlayerId}`);
     
     return nextPlayerId;
   }
 
-
-export function setNextPlayerPli(playerId: string, gameId: string) {
-    controller.getInstance(gameId).getLastPli().current_player_id = playerId;
-}
-
-const values: CardValue[] = ['7', '8', '9', 'J', 'Q', 'K', '10', 'A'];
-const suites: CardSuite[] = ['diamonds', 'clubs', 'hearts', 'spades'];
 
 function shuffle(array: ICard[]): ICard[] {
     for (let i = array.length - 1; i > 0; i--) {
@@ -53,8 +41,8 @@ function shuffle(array: ICard[]): ICard[] {
 
 export function generateDeckCards(): ICard[] {
     const cards: ICard[] = [];
-    suites.forEach((s) => {
-        values.forEach((i) => {
+    cardSuites.forEach((s) => {
+        cardValues.forEach((i) => {
             cards.push({
                 value: i,
                 valueNum: 0,
@@ -63,4 +51,24 @@ export function generateDeckCards(): ICard[] {
         });
     });
     return shuffle(cards);
+}
+
+export async function addPointsTo(points: number, playerId: PlayerId) {
+    // Fetch the current points for the player
+    const data = await db
+        .select()
+        .from(playerStats)
+        .where(eq(playerStats.playerId, playerId))
+        .limit(1);
+
+    // Calculate the new points
+    const newPoints = data[0].totalPoints + points;
+
+    // Update the points in the database
+    await db
+        .update(playerStats)
+        .set({ totalPoints: newPoints })
+        .where(eq(playerStats.playerId, playerId)); 
+    
+    logger.log({ level: 'info', message: 'Points updated successfully' });
 }

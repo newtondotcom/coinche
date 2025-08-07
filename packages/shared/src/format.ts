@@ -1,4 +1,4 @@
-import type { Ibidding, ICard, CardSuite, CardValue, bidding } from './types';
+import type { Ibidding, ICard, ICardSuite, ICardValue, bidding } from './types';
 
 export function formatbidding(bidding: Ibidding): string {
   return `${bidding.suite}|${bidding.bidding}`;
@@ -7,7 +7,7 @@ export function formatbidding(bidding: Ibidding): string {
 export function deformatBidding(value: string, playerId: string): Ibidding {
   const [suite, biddingStr] = value.split('|');
   return {
-    suite: suite as CardSuite,
+    suite: suite as ICardSuite,
     bidding: parseInt(biddingStr) as bidding, 
     playerId,
   };
@@ -20,8 +20,8 @@ export function formatCarteToDistribute(card: ICard, pli_number: number): string
 export function deformatCarteToDistribute(carte: string) {
   const [pli_number, value, suite] = carte.split("|");
   const card = {
-    value: value as CardValue,
-    suite: suite as CardSuite,
+    value: value as ICardValue,
+    suite: suite as ICardSuite,
     valueNum: parseInt(value),
   };
   return {
@@ -33,8 +33,8 @@ export function deformatCarteToDistribute(carte: string) {
 export function deformatCarteToPlay(carte: string) {
   const [pli_number, value, suite, valueNum, number_in_pli] = carte.split("|");
   const card = {
-    value: value as CardValue,
-    suite: suite as CardSuite,
+    value: value as ICardValue,
+    suite: suite as ICardSuite,
     valueNum: parseInt(valueNum),
   };
   return {

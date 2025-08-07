@@ -2,7 +2,7 @@
   <footer class="mt-auto py-4 px-6 border-t border-gray-200 dark:border-gray-700 bg-secondary">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="text-sm text-gray-600 dark:text-gray-400">
-        © 2024 Coinche.n7
+        © 2025 Coinche.n7
       </div>
       
       <div class="flex items-center gap-6">

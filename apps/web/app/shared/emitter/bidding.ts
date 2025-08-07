@@ -1,11 +1,11 @@
-import { useAboutStore } from "@/stores/about";
 import { sendWS } from '@/shared/utils/ws';
 import { formatbidding, genIdCuid } from '@coinche/shared';
 import type { Ibidding } from '@coinche/shared';
+import { useStateStore } from '@/stores/state';
 
-export default async function emitbidding(bidding: Ibidding) {
-    const storeAbout = useAboutStore();
-    const gameId = storeAbout.gameId;
+export default async function emitBid(bidding: Ibidding) {
+    const storeState = useStateStore();
+    const gameId = storeState.gameId;
     sendWS({
         id: await genIdCuid(),
         type: 'bidding',
@@ -14,7 +14,5 @@ export default async function emitbidding(bidding: Ibidding) {
         value: formatbidding(bidding),
         timestamp: new Date().toISOString(),
     });
-    storeAbout.setTimeTobidding(true);
-    storeAbout.setTurnTobidding(false);
 }
 
