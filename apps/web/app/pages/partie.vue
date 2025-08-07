@@ -64,13 +64,11 @@ onMounted(async () => {
   
   // Set up message listener with cleanup function
   cleanupListener = onWSMessage((event : WSPayload) => {
-    console.log('Received WebSocket event:', event.changeType);
-
     if (event.changeType === CHANGE_TYPE_STATE) {
       // Update game state
       storeState.setState(event.state);
     } else {
-      console.warn('Unhandled WebSocket event type:', event.changeType);
+      console.warn('Received WebSocket event:', event.changeType);
     }
   });
 

@@ -159,21 +159,25 @@
         
         // Get the last non-pass bidding
         const lastBidding = announceDiffThanPass[announceDiffThanPass.length - 1];
-        
         // Can't coinche already coinché or surcoinché bids
-        if (lastBidding.bidding === 251 || lastBidding.bidding === 252 || 
-            lastBidding.bidding === 501 || lastBidding.bidding === 502) {
+        if (
+            !lastBidding ||
+            lastBidding.bidding === 251 ||
+            lastBidding.bidding === 252 ||
+            lastBidding.bidding === 501 ||
+            lastBidding.bidding === 502
+        ) {
             return false;
         }
-        
         // Check if the bidding is from opponents
         const myIndex = storeState.players.findIndex(
             (player: IPlayer) => player.id === storeState.getMyId,
         );
+        // Defensive: filter out undefined players
         const adversaries: IPlayer[] = [
             storeState.players[(myIndex + 1) % 4],
             storeState.players[(myIndex + 3) % 4],
-        ];
+        ].filter((player): player is IPlayer => player !== undefined);
         const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
         return adversaries_ids.includes(lastBidding.playerId);
     }
@@ -194,10 +198,20 @@
         const lastBidding = announceDiffThanPass[announceDiffThanPass.length - 1];
         
         // Can only surcoinche coinché bids (251, 501) or regular coinché bids
-        const canSurcoinche = (lastBidding.bidding === 251 || lastBidding.bidding === 501) || 
-                             (storeState.coinched && typeof lastBidding.bidding === 'number' && 
-                              lastBidding.bidding >= 80 && lastBidding.bidding <= 160);
-        
+        const canSurcoinche = (
+            lastBidding &&
+            (
+                lastBidding.bidding === 251 ||
+                lastBidding.bidding === 501 ||
+                (
+                    storeState.coinched &&
+                    typeof lastBidding.bidding === 'number' &&
+                    lastBidding.bidding >= 80 &&
+                    lastBidding.bidding <= 160
+                )
+            )
+        );
+
         if (!canSurcoinche) {
             return false;
         }
@@ -207,6 +221,9 @@
             (player: IPlayer) => player.id === storeState.getMyId,
         );
         const partner = storeState.players[(myIndex + 2) % 4];
+        if (!partner) {
+            return false;
+        }
         const team_ids = [storeState.getMyId, partner.id];
         return team_ids.includes(lastBidding.playerId);
     }
