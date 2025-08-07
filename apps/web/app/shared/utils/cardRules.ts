@@ -1,4 +1,4 @@
-import type { ICard, IPlay, IPlayer, IPli } from '@coinche/shared';
+import type { ICard, IPlayer, IPli } from '@coinche/shared';
 import { useStateStore } from '@/stores/state';
 
 interface CardRulesContext {
@@ -194,7 +194,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
     const { hand } = context;
     
     // If it's not the player's turn, they can't play anything
-    if (context.currentPlayerId !== context.getMyId) {
+    if (context.currentPlayerId !== context.myId) {
         return false;
     }
     
@@ -215,7 +215,7 @@ export function hasPlayableCards(context: CardRulesContext): boolean {
 export function getPlayableCards(context: CardRulesContext): ICard[] {
     const { hand } = context;
     
-    if (context.currentPlayerId !== context.getMyId) {
+    if (context.currentPlayerId !== context.myId) {
         return [];
     }
     
@@ -268,7 +268,7 @@ export function cardCanBePlayedWithFallback(card: ICard, context: CardRulesConte
     }
     
     // Check if this is a valid turn
-    if (context.currentPlayerId !== context.getMyId) {
+    if (context.currentPlayerId !== context.myId) {
         return false;
     }
     
