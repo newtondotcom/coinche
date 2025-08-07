@@ -1,6 +1,10 @@
 <template>
   <div>
+    <OthersConnectionIndicator />
+
+    <!-- Debug 
     <CoincheInterfaceDebug />
+    -->
     <CoincheDeck />
 
     <OthersSoundboard />
@@ -43,7 +47,7 @@ const id = route.query.id as string;
 const gameId = route.query.gameId as string;
 
 // Check if loaded in an iframe
-const isIframe = typeof window !== 'undefined' && window.self !== window.top;
+const isIframe = typeof (globalThis as any).window !== 'undefined' && (globalThis as any).window.self !== (globalThis as any).window.top;
 
 if ((!id || !gameId) || (!isIframe && !loggedIn.value)) {
   navigateTo("/404");
@@ -86,7 +90,7 @@ onMounted(async () => {
 
   // Set up beforeunload handler for non-dev environments
   if (!isDevEnv(config)) {
-    window.onbeforeunload = (event) => {
+    (globalThis as any).window.onbeforeunload = (event: any) => {
       event.preventDefault();
       return "Are you sure you want to leave this page? Changes you made may not be saved.";
     };
@@ -110,7 +114,7 @@ onBeforeUnmount(async () => {
   
   // Remove beforeunload handler
   if (!isDevEnv(config)) {
-    window.onbeforeunload = null;
+    (globalThis as any).window.onbeforeunload = null;
   }
 });
 

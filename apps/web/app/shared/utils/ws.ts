@@ -3,7 +3,11 @@
 
 let ws: WebSocket | null = null;
 const listeners = new Set<(msg: any) => void>();
+const connectionListeners = new Set<(connected: boolean) => void>();
 const config = useRuntimeConfig();
+
+// Track connection status
+let isConnected = false;
 
 export function getWS() {
   if (!ws || ws.readyState === WebSocket.CLOSED) {
@@ -15,6 +19,15 @@ export function getWS() {
     
     ws.onopen = () => {
       console.log('WebSocket connected');
+      isConnected = true;
+      // Notify all connection listeners
+      connectionListeners.forEach((cb) => {
+        try {
+          cb(true);
+        } catch (error) {
+          console.error('Error in connection listener:', error);
+        }
+      });
     };
     
     ws.onmessage = (event) => {
@@ -42,7 +55,16 @@ export function getWS() {
     
     ws.onclose = (event) => {
       console.log('WebSocket closed:', event.code, event.reason);
+      isConnected = false;
       ws = null;
+      // Notify all connection listeners
+      connectionListeners.forEach((cb) => {
+        try {
+          cb(false);
+        } catch (error) {
+          console.error('Error in connection listener:', error);
+        }
+      });
     };
   }
   return ws;
@@ -80,10 +102,28 @@ export function clearAllListeners() {
   listeners.clear();
 }
 
+export function onConnectionChange(cb: (connected: boolean) => void) {
+  connectionListeners.add(cb);
+  
+  // Return cleanup function
+  return () => {
+    connectionListeners.delete(cb);
+  };
+}
+
+export function offConnectionChange(cb: (connected: boolean) => void) {
+  connectionListeners.delete(cb);
+}
+
+export function getConnectionStatus(): boolean {
+  return isConnected;
+}
+
 export function closeWS() {
   if (ws) {
     ws.close();
     ws = null;
   }
   listeners.clear();
+  connectionListeners.clear();
 }
