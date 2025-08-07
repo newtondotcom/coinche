@@ -23,5 +23,16 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+  },
+  app: {
+    head: {
+      title: 'Coinche',
+      meta: [
+        { name: 'description', content: 'Coinche' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/carro.png' }
+      ]
+    }
   }
 })
