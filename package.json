@@ -1,7 +1,7 @@
 {
   "name": "coinche",
   "devDependencies": {
-    "turbo": "^2.5.5"
+    "turbo": "^2.6.0"
   },
   "packageManager": "bun@1.2.19",
   "private": true,
@@ -9,8 +9,8 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "dev:native": "turbo -F native dev",
-    "dev:web": "turbo -F web dev",
+    "dev:native": "turbo -F web dev",
+    "dev:web": "turbo -F web desktop:dev",
     "dev:server": "turbo -F server dev",
     "db:push": "turbo -F server db:push",
     "db:studio": "turbo -F server db:studio",
