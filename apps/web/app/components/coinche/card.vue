@@ -35,6 +35,9 @@
     });
 
     const classStr = ref(props.classStr || '');
+    const isPlayableCard = computed(
+        () => props.inDeck && storeState.turnToPlay && canBePlayed.value,
+    );
     const svgFolder = '/cards';
 
     const cardSvgPath = ref(
@@ -47,28 +50,43 @@
 </script>
 
 <template>
-    <div :class="cn(['card', classStr])">
+    <div :class="cn(['card', classStr, isPlayableCard ? 'card--playable' : ''])">
         <img
             :src="cardSvgPath"
             :alt="`${card.value} of ${card.suite} card.`"
             :style="`max-width:${maxCardWidth}px; height: auto;`"
             :class="
                 cn(
-                    storeState.turnToPlay && inDeck && canBePlayed
+                    isPlayableCard
                         ? 'cursor-pointer hover:scale-125 transition-transform'
                         : '',
-                    inDeck && (!canBePlayed || !storeState.turnToPlay) ? 'cursor-default' : '',
+                    inDeck && !isPlayableCard ? 'cursor-default' : '',
                     inDeck ? '' : 'cursor-auto',
                 )
             "
-            @click="canBePlayed ? onPress() : () => {}"
+            @click="isPlayableCard ? onPress() : () => {}"
         />
     </div>
 </template>
 
 <style scoped>
-    .grayscale {
-        filter: grayscale(100%);
-        opacity: 0.6;
+    .card {
+        display: inline-flex;
+        border-radius: 12px;
+        padding: 0;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .card img {
+        display: block;
+        border-radius: 10px;
+    }
+
+    .card--playable {
+        border-image-source: linear-gradient(135deg, #39ff14, #00ffa3);
+        border-image-slice: 1;
+        box-shadow: 0 0 12px rgba(57, 255, 20, 0.45);
     }
 </style>
