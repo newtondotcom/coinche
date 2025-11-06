@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   modules: ['shadcn-nuxt', '@pinia/nuxt'],
   css: ['@/assets/css/main.css'],
   devServer: {
+    host: '172.20.10.11',
     port: 3001
   },
   ssr: false,
