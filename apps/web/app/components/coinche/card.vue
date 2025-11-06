@@ -47,15 +47,16 @@
 </script>
 
 <template>
-    <div :class="cn(['card', classStr])">
+    <div :class="cn(['', classStr])">
         <img
             :src="cardSvgPath"
             :alt="`${card.value} of ${card.suite} card.`"
             :style="`max-width:${maxCardWidth}px; height: auto;`"
             :class="
                 cn(
+                    `backdrop-blur-md bg-white/10`,
                     storeState.turnToPlay && inDeck && canBePlayed
-                        ? 'cursor-pointer hover:scale-125 transition-transform'
+                        ? 'cursor-pointer hover:scale-110 transition-transform playable'
                         : '',
                     inDeck && (!canBePlayed || !storeState.turnToPlay) ? 'cursor-default' : '',
                     inDeck ? '' : 'cursor-auto',
@@ -67,8 +68,9 @@
 </template>
 
 <style scoped>
-    .grayscale {
-        filter: grayscale(100%);
-        opacity: 0.6;
+    .playable {
+        border-image-source: linear-gradient(135deg, #39ff14, #00ffa3);
+        border-image-slice: 1;
+        box-shadow: 0 0 12px rgba(57, 255, 20, 0.45);
     }
 </style>
