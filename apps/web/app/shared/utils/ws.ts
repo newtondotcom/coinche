@@ -1,6 +1,8 @@
 // WebSocket client utility for Bun server
 // Usage: import { getWS, sendWS, onWSMessage, offWSMessage } from '@/lib/utils/ws';
 
+import { toast } from "vue-sonner";
+
 let ws: WebSocket | null = null;
 const listeners = new Set<(msg: any) => void>();
 const connectionListeners = new Set<(connected: boolean) => void>();
@@ -51,6 +53,7 @@ export function getWS() {
     
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
+      toast.error("Wesocket Connection failed");
     };
     
     ws.onclose = (event) => {
