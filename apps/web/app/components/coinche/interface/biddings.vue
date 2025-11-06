@@ -49,13 +49,8 @@
                             @click="biddingEnCours = { ...biddingEnCours, bidding }"
                             size="sm"
                         >
-                            {{ bidding }}
-                            <span v-if="bidding === 250" class="text-xs">(Capot)</span>
-                            <span v-if="bidding === 251" class="text-xs">(Capot+)</span>
-                            <span v-if="bidding === 252" class="text-xs">(Capot++)</span>
-                            <span v-if="bidding === 500" class="text-xs">(Générale)</span>
-                            <span v-if="bidding === 501" class="text-xs">(Générale+)</span>
-                            <span v-if="bidding === 502" class="text-xs">(Générale++)</span>
+                            <span v-if="bidding === 250" class="text-xs">Capot</span>
+                            <span v-if="bidding === 500" class="text-xs">Générale</span>
                         </Button>
                     </div>
 
