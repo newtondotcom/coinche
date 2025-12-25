@@ -5,7 +5,19 @@
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": ["dist/**",".output/**"]
+			"outputs": ["dist/**",".output/**"],
+			"env": [
+				"BETTER_AUTH_SECRET",
+				"BETTER_AUTH_URL",
+				"CORS_ORIGIN",
+				"DATABASE_URL",
+				"CHURROS_CLIENT_ID",
+				"CHURROS_CLIENT_SECRET",
+				"CHURROS_AUTHORIZATION_URL",
+				"CHURROS_TOKEN_URL",
+				"CHURROS_INFO_URL",
+				"CHURROS_LOGOUT_URL"			
+			]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
@@ -48,6 +60,11 @@
 		"db:down": {
 			"cache": false,
 			"persistent": true
+		},
+		"compile": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["server"]
 		}
 	}
 }
