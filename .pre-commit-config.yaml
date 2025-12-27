@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+  - repo: local
+    hooks:
+      - id: bun-check
+        name: bun check
+        entry: bun check
+        language: system
+        pass_filenames: false
+        always_run: true
+      #- id: bun-check-types
+      #  name: bun check-types
+      #  entry: bun check-types
+      #  language: system
+      #  pass_filenames: false
+      #  always_run: true
+      - id: bun-build
+        name: bun run build
+        entry: bun run build
+        language: system
+        pass_filenames: false
+        always_run: true
