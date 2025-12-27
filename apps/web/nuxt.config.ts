@@ -10,6 +10,11 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  nitro: {
+    output: {
+      dir: "dist",
+    },
+  },
   devServer: {
     port: 3001,
   },
