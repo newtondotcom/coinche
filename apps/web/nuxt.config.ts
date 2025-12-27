@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "latest",
   devtools: { enabled: false },
-  modules: ["shadcn-nuxt", "@pinia/nuxt", "@nuxtjs/color-mode",'@nuxt/content'],
+  modules: ["shadcn-nuxt", "@pinia/nuxt", "@nuxtjs/color-mode", "@nuxt/content"],
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],

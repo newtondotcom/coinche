@@ -9,8 +9,8 @@ Ce document a pour fonction d’établir les règles officielles propres à l’
 
 Sources :
 
-* [Règles officielles de la Belote Contrée — Fédération Française de Belote](http://www.ffbelote.org/wp-content/uploads/2015/11/REGLES-DE-LA-BELOTE-CONTREE.pdf)
-* [Règles rédigées par Valentin REVERSAT](https://github.com/vareversat/carg/blob/dev/assets/rules/contree_belote_rules.md)
+- [Règles officielles de la Belote Contrée — Fédération Française de Belote](http://www.ffbelote.org/wp-content/uploads/2015/11/REGLES-DE-LA-BELOTE-CONTREE.pdf)
+- [Règles rédigées par Valentin REVERSAT](https://github.com/vareversat/carg/blob/dev/assets/rules/contree_belote_rules.md)
 
 ---
 
@@ -25,10 +25,10 @@ La partie se déroule en plusieurs donnes (ou « mènes ») et se termine lorsqu
 
 Une donne comprend :
 
-* la distribution,
-* les enchères,
-* le jeu de la carte,
-* le calcul du score.
+- la distribution,
+- les enchères,
+- le jeu de la carte,
+- le calcul du score.
 
 ---
 
@@ -53,9 +53,9 @@ Le donneur referme ensuite la coupe.
 
 Le donneur distribue **8 cartes par joueur**, **dans le sens inverse des aiguilles d’une montre**, en commençant par son voisin de droite, selon l’une des répartitions suivantes :
 
-* 3 – 2 – 3
-* 3 – 3 – 2
-* 2 – 3 – 3
+- 3 – 2 – 3
+- 3 – 3 – 2
+- 2 – 3 – 3
 
 ---
 
@@ -67,7 +67,7 @@ Les joueurs parlent chacun leur tour, en commençant par le joueur à droite du 
 
 À son tour, un joueur peut :
 
-### *Passer*
+### _Passer_
 
 Il dit clairement « je passe ». Toute autre formulation est déconseillée sauf accord explicite avant la partie.
 
@@ -78,18 +78,18 @@ Le donneur rassemble les cartes, puis elles passent au joueur situé à sa droit
 
 ---
 
-### *Enchérir*
+### _Enchérir_
 
 Un joueur annonce un contrat en indiquant :
 
-* un nombre de points,
-* la couleur d’atout.
+- un nombre de points,
+- la couleur d’atout.
 
 Règles :
 
-* L’enchère minimale est **80**.
-* Elle doit être **un multiple de 10**.
-* Elle doit être **strictement supérieure à la précédente**.
+- L’enchère minimale est **80**.
+- Elle doit être **un multiple de 10**.
+- Elle doit être **strictement supérieure à la précédente**.
 
 Il est possible **à tout moment** d’annoncer un **capot**, engageant l’équipe à remporter les 8 plis.
 Il n’existe pas d’enchère supérieure au capot : l’adversaire ne peut que passer ou contrer.
@@ -105,7 +105,7 @@ Le tour d’enchères se termine lorsqu’après une enchère (ou un contre), le
 
 ---
 
-### *Coincher*
+### _Coincher_
 
 Un joueur peut **contrer une enchère adverse** s’il estime que l’équipe preneuse ne réalisera pas son contrat, en disant :
 
@@ -119,7 +119,7 @@ Le coinche**fige définitivement l’enchère**, il devient impossible de surenc
 
 ---
 
-### *Surcoincher*
+### _Surcoincher_
 
 Si une équipe a contré, l’équipe preneuse peut **surcoincher**, en déclarant :
 
@@ -135,14 +135,14 @@ Le tour d’enchères s’arrête alors immédiatement.
 
 En prenant, un joueur engage son équipe à :
 
-* atteindre ou dépasser le contrat annoncé (ou réaliser 8 plis en cas de capot demandé),
-* marquer plus de points que l’équipe adverse.
+- atteindre ou dépasser le contrat annoncé (ou réaliser 8 plis en cas de capot demandé),
+- marquer plus de points que l’équipe adverse.
 
 Le total comprend :
 
-* les points des plis,
-* les 20 points de belote éventuelle,
-* les annonces éventuelles (si autorisées — par défaut non utilisées).
+- les points des plis,
+- les 20 points de belote éventuelle,
+- les annonces éventuelles (si autorisées — par défaut non utilisées).
 
 ---
 
@@ -158,8 +158,8 @@ Les autres joueurs jouent ensuite chacun leur tour (sens inverse des aiguilles d
 
 Le pli est remporté par :
 
-* la plus forte carte d’atout jouée,
-* sinon, la plus forte carte de la couleur demandée.
+- la plus forte carte d’atout jouée,
+- sinon, la plus forte carte de la couleur demandée.
 
 Le vainqueur du pli entame le suivant.
 
@@ -172,19 +172,19 @@ Le dernier pli peut être consulté tant que le suivant n’est pas ramassé.
 
 ## 5.2. Règles de jeu
 
-* On doit **toujours fournir la couleur demandée** si possible.
+- On doit **toujours fournir la couleur demandée** si possible.
   Si la couleur demandée est l’atout, on doit en plus monter si possible.
 
-* Si l’on n’a pas la couleur demandée et que notre partenaire **est maître** :
+- Si l’on n’a pas la couleur demandée et que notre partenaire **est maître** :
   on peut se défausser librement (ou atout si souhaité).
 
-* Si l’on n’a pas la couleur demandée et que notre partenaire **n’est pas maître / n’a pas encore joué** :
+- Si l’on n’a pas la couleur demandée et que notre partenaire **n’est pas maître / n’a pas encore joué** :
   on doit couper si possible, sinon on se défausse.
 
-* Dès qu’on joue atout, on doit **monter** si possible.
+- Dès qu’on joue atout, on doit **monter** si possible.
   Si impossible, on peut jouer un atout plus faible.
 
-* Cas particulier rare : si notre partenaire maître a déjà coupé et que nous n’avons plus que de l’atout, nous ne sommes pas obligés de monter.
+- Cas particulier rare : si notre partenaire maître a déjà coupé et que nous n’avons plus que de l’atout, nous ne sommes pas obligés de monter.
 
 ---
 
@@ -207,12 +207,12 @@ Les cartes n’ont pas le même ordre ni la même valeur selon qu’elles sont �
 
 # Belote & Rebelote
 
-Un joueur possédant **Roi + Dame d’atout** possède la *belote*, donnant **20 points** à son équipe.
+Un joueur possédant **Roi + Dame d’atout** possède la _belote_, donnant **20 points** à son équipe.
 
 Pour être valable :
 
-* « belote » doit être annoncé lors de la première des deux cartes,
-* « rebelote » lors de la seconde.
+- « belote » doit être annoncé lors de la première des deux cartes,
+- « rebelote » lors de la seconde.
 
 Sans l’annonce correcte, la belote n’est pas comptabilisée.
 
@@ -237,8 +237,8 @@ Le total des points du jeu est donc **162 points**.
 
 Si une équipe remporte les 8 plis :
 
-* le « dix de der » vaut **100 points**
-* total de la donne = **252 points**
+- le « dix de der » vaut **100 points**
+- total de la donne = **252 points**
 
 ## 9.3. Générale
 
@@ -253,9 +253,9 @@ total = **500 points**.
 
 Chaque équipe totalise :
 
-* les points des plis,
-* le dix de der,
-* la belote éventuelle.
+- les points des plis,
+- le dix de der,
+- la belote éventuelle.
 
 ### 10.1.1. Contrat réussi
 
@@ -266,12 +266,12 @@ Le contrat est réussi si :
 
 **Preneurs marquent :**
 
-* leurs points
-* * la valeur du contrat spécial (capot ou générale éventuels)
+- leurs points
+- - la valeur du contrat spécial (capot ou générale éventuels)
 
 **Défense marque :**
 
-* ses points
+- ses points
 
 Cas particulier :
 Si les preneurs réalisent un capot, les annonces / bonus de la défense changent de camp.
@@ -284,16 +284,16 @@ En cas de coinche/ surcoinche, les règles de multiplication s’appliquent.
 
 Le contrat est chuté si :
 
-* la défense marque autant ou plus que les preneurs,
-* ou si le contrat n’est pas atteint.
+- la défense marque autant ou plus que les preneurs,
+- ou si le contrat n’est pas atteint.
 
 **Preneurs :** 0 point (hors belote imprenable)
 **Défense :**
 
-* 160 points de chute
-* * belote éventuelle
-* * contrat spécial éventuel
-* * annonces éventuellement transférées
+- 160 points de chute
+- - belote éventuelle
+- - contrat spécial éventuel
+- - annonces éventuellement transférées
 
 En cas de coinche/ surcoinche → **×2** / **×4**
 
@@ -303,8 +303,8 @@ En cas de coinche/ surcoinche → **×2** / **×4**
 
 S’il y a égalité (81–81 ou 91–91), il y a **litige** :
 
-* les points du preneur sont remis en jeu,
-* ils seront attribués à l’équipe qui réussira le contrat suivant.
+- les points du preneur sont remis en jeu,
+- ils seront attribués à l’équipe qui réussira le contrat suivant.
 
 Application de la règle du litige dépend des tournois.
 
@@ -314,9 +314,9 @@ Application de la règle du litige dépend des tournois.
 
 La partie s’arrête lorsque :
 
-* une équipe atteint le score fixé,
-* ou dépasse ce score (équipe la plus haute l’emporte),
-* en cas d’égalité → donne décisive.
+- une équipe atteint le score fixé,
+- ou dépasse ce score (équipe la plus haute l’emporte),
+- en cas d’égalité → donne décisive.
 
 Cas particulier :
 Si l’équipe gagne uniquement grâce à la belote, elle doit encore réaliser au moins un pli.
@@ -327,8 +327,8 @@ Si l’équipe gagne uniquement grâce à la belote, elle doit encore réaliser 
 
 Cette variante permet deux contrats supplémentaires :
 
-* **Sans Atout**
-* **Tout Atout**
+- **Sans Atout**
+- **Tout Atout**
 
 et entraîne des adaptations spécifiques.
 
@@ -340,6 +340,6 @@ On peut enchérir comme d’habitude, mais en choisissant également « Sans Ato
 
 En contrat Sans Atout :
 
-* aucune couleur n’est atout,
-* il est impossible de couper,
-* aucune belote possible.
+- aucune couleur n’est atout,
+- il est impossible de couper,
+- aucune belote possible.
