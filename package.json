@@ -36,7 +36,8 @@
     "db:start": "turbo -F @coinche-reborn/db db:start",
     "db:watch": "turbo -F @coinche-reborn/db db:watch",
     "db:stop": "turbo -F @coinche-reborn/db db:stop",
-    "db:down": "turbo -F @coinche-reborn/db db:down"
+    "db:down": "turbo -F @coinche-reborn/db db:down",
+    "compile:server": "turbo -F server compile"
   },
   "dependencies": {
     "@coinche-reborn/env": "workspace:*",
