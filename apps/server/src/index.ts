@@ -1,20 +1,19 @@
-import "dotenv/config";
+import { createContext } from "@coinche-reborn/api/context";
+import { appRouter } from "@coinche-reborn/api/routers/index";
+import { auth } from "@coinche-reborn/auth";
+import { env } from "@coinche-reborn/env/server";
+import { OpenAPIHandler } from "@orpc/openapi/fetch";
+import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
+import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import { createContext } from "@/lib/context";
-import { appRouter } from "./routers/index";
-import { auth } from "@/lib/auth";
+import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { serve, type ServerWebSocket } from "bun";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { logger as honoLogger } from "hono/logger";
-import logger from "@/lib/logger";
-import { serve, type ServerWebSocket } from "bun";
-import type { EventInsert } from "@coinche/shared";
-import { translateEvent } from "@/lib/listener";
-import controller from "@/lib/game";
-
-async function getUsernameFromCookies(cookie: string | null) {
-  return "test";
-}
+import controller from "@coinche-reborn/api/lib/game";
+import type { EventInsert } from "@coinche-reborn/api/others/types";
+import logger from "@coinche-reborn/api/lib/logger";
+import { translateEvent } from "@coinche-reborn/api/lib/listener/index";
 
 // --- Room Management ---
 export const userRooms = new Map<any, Set<string>>(); // ws -> Set<room>
@@ -26,36 +25,69 @@ const gameId = "0";
 
 const app = new Hono();
 
-app.use(honoLogger());
+app.use(
+  "/*",
+  cors({
+    origin: env.CORS_ORIGIN,
+    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
 
-app.use("/*", cors({
-  origin: process.env.CORS_ORIGIN || "",
-  allowMethods: ["GET", "POST", "OPTIONS"],
-  allowHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-}));
+app.on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+export const apiHandler = new OpenAPIHandler(appRouter, {
+  plugins: [
+    new OpenAPIReferencePlugin({
+      schemaConverters: [new ZodToJsonSchemaConverter()],
+    }),
+  ],
+  interceptors: [
+    onError((error) => {
+      console.error(error);
+    }),
+  ],
+});
 
-const handler = new RPCHandler(appRouter);
-app.use("/rpc/*", async (c, next) => {
-  console.log("ws3");
+export const rpcHandler = new RPCHandler(appRouter, {
+  interceptors: [
+    onError((error) => {
+      console.error(error);
+    }),
+  ],
+});
+
+app.use("/*", async (c, next) => {
   const context = await createContext({ context: c });
-  const { matched, response } = await handler.handle(c.req.raw, {
+
+  const rpcResult = await rpcHandler.handle(c.req.raw, {
     prefix: "/rpc",
     context: context,
   });
 
-  if (matched) {
-    return c.newResponse(response.body, response);
+  if (rpcResult.matched) {
+    return c.newResponse(rpcResult.response.body, rpcResult.response);
   }
+
+  const apiResult = await apiHandler.handle(c.req.raw, {
+    prefix: "/api-reference",
+    context: context,
+  });
+
+  if (apiResult.matched) {
+    return c.newResponse(apiResult.response.body, apiResult.response);
+  }
+
   await next();
 });
 
 app.get("/", (c) => {
-  console.log("ws");
   return c.text("OK");
 });
+
+// Declare server variable before it's used
+let server: ReturnType<typeof serve> | null = null;
 
 app.get("/ws", async (c, next) => {
   console.log("ws2");
@@ -63,6 +95,9 @@ app.get("/ws", async (c, next) => {
   // get user
   const userId = context.session?.user.id;
   // Attach gameId and userId to ws.data
+  if (!server) {
+    return c.newResponse("Server not ready", 503);
+  }
   const success = server.upgrade(c.req.raw, { data: { userId, gameId } });
   if (success) return c.newResponse("Hello world");
   await next();
@@ -70,15 +105,15 @@ app.get("/ws", async (c, next) => {
 
 const wsHandler = {
   open(ws: ServerWebSocket) {
-    const data = ws.data as unknown as { userId: string, gameId: string };
+    const data = ws.data as unknown as { userId: string; gameId: string };
     const gameId = data.gameId;
     // On connect, no room joined yet
     userRooms.set(ws, new Set());
     ws.subscribe(gameId);
     console.log("client suscribed to room");
   },
-  async message(ws: ServerWebSocket, raw : string | ArrayBuffer | Uint8Array) {
-    const data = ws.data as unknown as { userId: string, gameId: string };
+  async message(ws: ServerWebSocket, raw: string | ArrayBuffer | Uint8Array) {
+    const data = ws.data as unknown as { userId: string; gameId: string };
     let msg: EventInsert;
     let rawStr: string = typeof raw === "string" ? raw : raw.toString();
     try {
@@ -129,11 +164,15 @@ const wsHandler = {
   },
 };
 
-export const server = serve({
+server = serve({
   port: 3000,
   fetch: app.fetch,
   websocket: wsHandler,
   development: true,
 });
 
-console.log(`Listening on ${server.hostname}:${server.port}`);
+// Inject server instance into the game controller
+controller.setServer(server);
+
+// Export server for external use
+export { server };

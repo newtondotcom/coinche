@@ -1,13 +1,22 @@
-import { defineStore } from 'pinia';
-import type { IGameState, IGameStateClient, ICard, IPlayer, IPli, Ibidding, PlayerId, ICardSuite } from '@coinche/shared';
+import { defineStore } from "pinia";
+import type {
+  IGameState,
+  IGameStateClient,
+  ICard,
+  IPlayer,
+  IPli,
+  Ibidding,
+  PlayerId,
+  ICardSuite,
+} from "@coinche-reborn/api";
 
-export const useStateStore = defineStore('state', {
+export const useStateStore = defineStore("state", {
   state: (): IGameStateClient => ({
-    myId: '',
+    myId: "",
     isLoadingPlayerList: false,
     game: {
-      gameId: '',
-      status: 'waiting',
+      gameId: "",
+      status: "waiting",
       players: [],
       team1: [],
       team2: [],
@@ -15,9 +24,9 @@ export const useStateStore = defineStore('state', {
         plis: [],
         biddings: [],
         biddingElected: {
-          playerId: '',
+          playerId: "",
           bidding: 80,
-          suite: 'NA',
+          suite: "NA",
         },
         coinched: false,
         surcoinched: false,
@@ -26,9 +35,9 @@ export const useStateStore = defineStore('state', {
       team2PointsCurrentGame: 0,
       deck: [],
       phases: {
-        timeToBid: '',
-        timeDistrib: '',
-        timeToPlay: '',
+        timeToBid: "",
+        timeDistrib: "",
+        timeToPlay: "",
       },
       createdAt: undefined,
       updatedAt: undefined,
@@ -55,94 +64,96 @@ export const useStateStore = defineStore('state', {
     gameId(state): string {
       return state.game.gameId;
     },
-    players(state) : IPlayer[] {
+    players(state): IPlayer[] {
       return state.game.players;
     },
-    currentPli(state) : IPli {
+    currentPli(state): IPli {
       const plis = state.game.currentRound.plis;
       return plis[plis.length - 1];
     },
-    biddingElected(state) : Ibidding {
+    biddingElected(state): Ibidding {
       return state.game.currentRound.biddingElected;
     },
-    coinched(state) : boolean {
+    coinched(state): boolean {
       return state.game.currentRound.coinched;
     },
-    surcoinched(state)  : boolean {
+    surcoinched(state): boolean {
       return state.game.currentRound.surcoinched;
     },
-    deck(state)  : ICard[] {
+    deck(state): ICard[] {
       return state.game.deck;
     },
-    biddingsPli(state) : Ibidding[] {
+    biddingsPli(state): Ibidding[] {
       return state.game.currentRound.biddings;
     },
-    currentPlayerId(state) : PlayerId {
+    currentPlayerId(state): PlayerId {
       return state.game.phases.timeToPlay;
     },
-    team1Score() : number {
+    team1Score(): number {
       return this.currentPli?.team1Score || 0;
     },
-    team2Score() : number {
+    team2Score(): number {
       return this.currentPli?.team2Score || 0;
     },
-    team1PointsCurrentGame(state) : number {
+    team1PointsCurrentGame(state): number {
       return state.game.team1PointsCurrentGame;
     },
-    team2PointsCurrentGame(state) : number {
+    team2PointsCurrentGame(state): number {
       return state.game.team2PointsCurrentGame;
     },
-    timeToBidding(state) : boolean {
-      return state.game.phases.timeToBid !== '';
+    timeToBidding(state): boolean {
+      return state.game.phases.timeToBid !== "";
     },
-    timeDistrib(state) : boolean {
-      return state.game.phases.timeDistrib !== '';
+    timeDistrib(state): boolean {
+      return state.game.phases.timeDistrib !== "";
     },
-    turnToPlay(state) : boolean {
+    turnToPlay(state): boolean {
       return state.game.phases.timeToPlay === state.myId;
     },
-    turnToBidding(state) : boolean {
+    turnToBidding(state): boolean {
       return state.game.phases.timeToBid === state.myId;
     },
-    atout(state) : ICardSuite {
-      return state.game.currentRound.biddingElected.suite || '';
+    atout(state): ICardSuite {
+      return state.game.currentRound.biddingElected.suite || "";
     },
     hand(state): ICard[] {
       const player = state.game.players.find((p) => p.id === state.myId);
       return player && Array.isArray(player.hands) ? player.hands : [];
     },
-    colorAsked() : ICardSuite {
+    colorAsked(): ICardSuite {
       const pli = this.currentPli;
       if (Array.isArray(pli) && pli.length > 0 && pli[0] && pli[0].card) {
         return pli[0].card.suite;
       }
       if (
-        typeof pli === 'object' && pli !== null &&
-        !Array.isArray(pli) && Array.isArray((pli as any).plays) &&
-        (pli as any).plays.length > 0 && (pli as any).plays[0] && (pli as any).plays[0].card
+        typeof pli === "object" &&
+        pli !== null &&
+        !Array.isArray(pli) &&
+        Array.isArray((pli as any).plays) &&
+        (pli as any).plays.length > 0 &&
+        (pli as any).plays[0] &&
+        (pli as any).plays[0].card
       ) {
         return (pli as any).plays[0].card.suite;
       }
       return "NA";
     },
-    hasAtout() : boolean {
+    hasAtout(): boolean {
       const hand = this.hand as ICard[];
       return Array.isArray(hand) && hand.some((card) => card.suite === this.atout);
     },
-    hasAskedColor() : boolean {
+    hasAskedColor(): boolean {
       const hand = this.hand as ICard[];
       return Array.isArray(hand) && hand.some((card) => card.suite === this.colorAsked);
     },
-    highestAtoutInPli() : number {
+    highestAtoutInPli(): number {
       const pli = this.currentPli;
       const atout = this.atout;
       let currentPliArr: any[] = Array.isArray(pli) ? pli : [];
       const atouts = currentPliArr.filter((play) => play.card && play.card.suite === atout);
-      return atouts.length > 0
-        ? Math.max(...atouts.map((p) => p.card.valueNum))
-        : NaN;
+      return atouts.length > 0 ? Math.max(...atouts.map((p) => p.card.valueNum)) : NaN;
     },
-    atoutIsAsked() : boolean {
+    atoutIsAsked(): boolean {
       return this.colorAsked === this.atout;
     },
   },

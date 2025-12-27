@@ -1,21 +1,22 @@
 <template>
-    <div class="absolute bottom-0 right-4 bg-red-500 font-semibold z-20">
-        Pli number : {{ storeState.currentPli?.number }}
-        <br />
-        Deck length : {{ storeState.deck.length }}
-        <br />
+  <div class="absolute bottom-0 right-4 bg-red-500 font-semibold z-20">
+    Pli number : {{ storeState.currentPli?.number }}
+    <br />
+    Deck length : {{ storeState.deck.length }}
+    <br />
 
-        Distributing : {{ storeState.timeDistrib }}
-        <br />
-        Announcing : {{ storeState.timeToBidding }}
-        <br />
-        Current player id : {{ storeState.currentPlayerId }}
-        <br />
-        Atout : {{ storeState.atout }}
-        <br />
-        Cards in hands : {{ storeState.hand.length }}
-        <br />
-        Card playable : {{ storeState.hand.some(card => cardCanBePlayed(card, {
+    Distributing : {{ storeState.timeDistrib }}
+    <br />
+    Announcing : {{ storeState.timeToBidding }}
+    <br />
+    Current player id : {{ storeState.currentPlayerId }}
+    <br />
+    Atout : {{ storeState.atout }}
+    <br />
+    Cards in hands : {{ storeState.hand.length }}
+    <br />
+    Card playable :
+    {{ storeState.hand.some(card => cardCanBePlayed(card, {
             currentPlayerId: storeState.currentPlayerId,
             myId: storeState.getMyId,
             currentPli: storeState.currentPli,
@@ -23,7 +24,7 @@
             atout: storeState.atout,
             hand: storeState.hand,
         })) }}
-    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

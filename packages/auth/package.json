@@ -1,0 +1,24 @@
+{
+  "name": "@coinche-reborn/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@coinche-reborn/db": "workspace:*",
+    "@coinche-reborn/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@coinche-reborn/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

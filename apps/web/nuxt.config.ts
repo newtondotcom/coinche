@@ -1,38 +1,26 @@
-import tailwindcss from '@tailwindcss/vite'
+import "@coinche-reborn/env/web";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: 'latest',
+  compatibilityDate: "latest",
   devtools: { enabled: false },
-  modules: ['shadcn-nuxt', '@pinia/nuxt'],
-  css: ['@/assets/css/main.css'],
+  modules: ["shadcn-nuxt", "@pinia/nuxt", "@nuxtjs/color-mode"],
+  css: ["~/assets/css/main.css"],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   devServer: {
-    port: 3001
+    port: 3001,
   },
   ssr: false,
   runtimeConfig: {
     public: {
-      serverURL: process.env.NUXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
-    }
+      serverUrl: process.env.NUXT_PUBLIC_SERVER_URL,
+    },
   },
   shadcn: {
     prefix: '',
-    componentDir: './app/components/ui'
-  },
-  vite: {
-    plugins: [
-      tailwindcss(),
-    ],
-  },
-  app: {
-    head: {
-      title: 'Coinche',
-      meta: [
-        { name: 'description', content: 'Coinche' }
-      ],
-      link: [
-        { rel: 'icon', type: 'image/png', href: '/carro.png' }
-      ]
-    }
+    componentDir: '@/components/ui'
   }
-})
+});

@@ -1,0 +1,3 @@
+{
+  "extends": "@coinche-reborn/config/tsconfig.base.json"
+}

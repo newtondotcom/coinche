@@ -1,273 +1,271 @@
 <template>
-    <div class="fixed inset-0 z-50 flex items-center justify-center">
-        <Card class="shadow-2xl">
-            <CardHeader>
-                <CardTitle>Annonces</CardTitle>
-                <CardDescription>
-                    Annonce actuelle
-                    <Badge variant="secondary">
-                        {{ storeState.biddingElected.bidding }}
-                        {{ storeState.biddingElected.suite == 'diamonds' ? '♦️' : '' }}
-                        {{ storeState.biddingElected.suite == 'hearts' ? '♥️' : '' }}
-                        {{ storeState.biddingElected.suite == 'clubs' ? '♣️' : '' }}
-                        {{ storeState.biddingElected.suite == 'spades' ? '♠️' : '' }}
-                        {{ storeState.biddingElected.suite == 'tout-atout' ? 'TA' : '' }}
-                        {{ storeState.biddingElected.suite == 'sans-atout' ? 'SA' : '' }}
-                    </Badge>
-                    par
-                    {{ storeState.biddingElected.playerId }}
-                    <Badge v-if="storeState.coinched">Coinché</Badge>
-                    <Badge v-if="storeState.surcoinched">Surcoinché</Badge>
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div class="flex flex-col gap-4">
-                    <!-- Regular bids -->
-                    <div class="text-sm font-medium text-center">Enchères régulières</div>
-                    <div class="grid grid-cols-9 gap-2 border-2 border-neutral-200 rounded-lg p-2">
-                        <Button
-                            v-for="bidding in regularBiddings"
-                            :key="bidding.toLocaleString() + Math.random()"
-                            :disabled="canbiddingNumber(bidding) || !canbiddingr"
-                            :variant="biddingEnCours.bidding === bidding ? 'outline' : 'ghost'"
-                            aria-label="Valeur de {{ bidding }}"
-                            @click="biddingEnCours = { ...biddingEnCours, bidding }"
-                        >
-                            {{ bidding }}
-                        </Button>
-                    </div>
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <Card class="shadow-2xl">
+      <CardHeader>
+        <CardTitle>Annonces</CardTitle>
+        <CardDescription>
+          Annonce actuelle
+          <Badge variant="secondary">
+            {{ storeState.biddingElected.bidding }}
+            {{ storeState.biddingElected.suite == 'diamonds' ? '♦️' : '' }}
+            {{ storeState.biddingElected.suite == 'hearts' ? '♥️' : '' }}
+            {{ storeState.biddingElected.suite == 'clubs' ? '♣️' : '' }}
+            {{ storeState.biddingElected.suite == 'spades' ? '♠️' : '' }}
+            {{ storeState.biddingElected.suite == 'tout-atout' ? 'TA' : '' }}
+            {{ storeState.biddingElected.suite == 'sans-atout' ? 'SA' : '' }}
+          </Badge>
+          par
+          {{ storeState.biddingElected.playerId }}
+          <Badge v-if="storeState.coinched">Coinché</Badge>
+          <Badge v-if="storeState.surcoinched">Surcoinché</Badge>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div class="flex flex-col gap-4">
+          <!-- Regular bids -->
+          <div class="text-sm font-medium text-center">Enchères régulières</div>
+          <div class="grid grid-cols-9 gap-2 border-2 border-neutral-200 rounded-lg p-2">
+            <Button
+              v-for="bidding in regularBiddings"
+              :key="bidding.toLocaleString() + Math.random()"
+              :disabled="canbiddingNumber(bidding) || !canbiddingr"
+              :variant="biddingEnCours.bidding === bidding ? 'outline' : 'ghost'"
+              aria-label="Valeur de {{ bidding }}"
+              @click="biddingEnCours = { ...biddingEnCours, bidding }"
+            >
+              {{ bidding }}
+            </Button>
+          </div>
 
-                    <!-- Special bids -->
-                    <div class="text-sm font-medium text-center">Enchères spéciales</div>
-                    <div class="grid grid-cols-6 gap-2 border-2 border-neutral-200 rounded-lg p-2">
-                        <Button
-                            v-for="bidding in specialBiddings"
-                            :key="bidding.toLocaleString() + Math.random()"
-                            :disabled="canbiddingNumber(bidding) || !canbiddingr"
-                            :variant="biddingEnCours.bidding === bidding ? 'outline' : 'ghost'"
-                            aria-label="Valeur de {{ bidding }}"
-                            @click="biddingEnCours = { ...biddingEnCours, bidding }"
-                            size="sm"
-                        >
-                            <span v-if="bidding === 250" class="text-xs">Capot</span>
-                            <span v-if="bidding === 500" class="text-xs">Générale</span>
-                        </Button>
-                    </div>
+          <!-- Special bids -->
+          <div class="text-sm font-medium text-center">Enchères spéciales</div>
+          <div class="grid grid-cols-6 gap-2 border-2 border-neutral-200 rounded-lg p-2">
+            <Button
+              v-for="bidding in specialBiddings"
+              :key="bidding.toLocaleString() + Math.random()"
+              :disabled="canbiddingNumber(bidding) || !canbiddingr"
+              :variant="biddingEnCours.bidding === bidding ? 'outline' : 'ghost'"
+              aria-label="Valeur de {{ bidding }}"
+              @click="biddingEnCours = { ...biddingEnCours, bidding }"
+              size="sm"
+            >
+              <span v-if="bidding === 250" class="text-xs">Capot</span>
+              <span v-if="bidding === 500" class="text-xs">Générale</span>
+            </Button>
+          </div>
 
-                    <!-- Suites -->
-                    <div class="text-sm font-medium text-center">Couleurs</div>
-                    <div class="grid grid-cols-6 gap-2 border-2 border-neutral-200 rounded-lg p-2">
-                        <Button
-                            v-for="suite in suites"
-                            :key="suite + Math.random()"
-                            :variant="biddingEnCours.suite === suite ? 'outline' : 'ghost'"
-                            :disabled="!canbiddingr"
-                            aria-label="Suite de {{ suite }}"
-                            @click="biddingEnCours = { ...biddingEnCours, suite }"
-                        >
-                            {{ suite == 'diamonds' ? '♦️' : '' }}
-                            {{ suite == 'hearts' ? '♥️' : '' }}
-                            {{ suite == 'clubs' ? '♣️' : '' }}
-                            {{ suite == 'spades' ? '♠️' : '' }}
-                            {{ suite == 'tout-atout' ? 'TA' : '' }}
-                            {{ suite == 'sans-atout' ? 'SA' : '' }}
-                        </Button>
-                    </div>
+          <!-- Suites -->
+          <div class="text-sm font-medium text-center">Couleurs</div>
+          <div class="grid grid-cols-6 gap-2 border-2 border-neutral-200 rounded-lg p-2">
+            <Button
+              v-for="suite in suites"
+              :key="suite + Math.random()"
+              :variant="biddingEnCours.suite === suite ? 'outline' : 'ghost'"
+              :disabled="!canbiddingr"
+              aria-label="Suite de {{ suite }}"
+              @click="biddingEnCours = { ...biddingEnCours, suite }"
+            >
+              {{ suite == 'diamonds' ? '♦️' : '' }}
+              {{ suite == 'hearts' ? '♥️' : '' }}
+              {{ suite == 'clubs' ? '♣️' : '' }}
+              {{ suite == 'spades' ? '♠️' : '' }}
+              {{ suite == 'tout-atout' ? 'TA' : '' }}
+              {{ suite == 'sans-atout' ? 'SA' : '' }}
+            </Button>
+          </div>
 
-                    <!-- Actions -->
-                    <div class="flex flex-row justify-center gap-2">
-                        <Button :disabled="!canbiddingr && !canPasser" @click="passer">
-                            Passer
-                        </Button>
-                        <Button :disabled="!canCoincher" @click="coincher">Coincher</Button>
-                        <Button :disabled="!canSurcoincher" @click="surcoincher">Surcoincher</Button>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-        cla
-    </div>
+          <!-- Actions -->
+          <div class="flex flex-row justify-center gap-2">
+            <Button :disabled="!canbiddingr && !canPasser" @click="passer"> Passer </Button>
+            <Button :disabled="!canCoincher" @click="coincher">Coincher</Button>
+            <Button :disabled="!canSurcoincher" @click="surcoincher">Surcoincher</Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+    cla
+  </div>
 </template>
 
 <script setup lang="ts">
-    import emitBid from '@/shared/emitter/bidding';
-    import type { IPlayer, bidding, ICardSuite, Ibidding } from "@coinche/shared";
-    import { useStateStore } from '@/stores/state';
-    const storeState = useStateStore();
+import emitBid from '@/shared/emitter/bidding';
+import type { IPlayer, bidding, ICardSuite, Ibidding } from "@coinche-reborn/api";
+import { useStateStore } from '@/stores/state';
+const storeState = useStateStore();
 
 
-    // Regular biddings: 80-160
-    const regularBiddings: bidding[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
-    
-    // Special biddings:
-    // Capot: 250 (non coinché), 251 (coinché), 252 (surcoinché) 
-    // Générale: 500 (non coinchée), 501 (coinchée), 502 (surcoinchée)
-    const specialBiddings: bidding[] = [250, 251, 252, 500, 501, 502];
-    
-    // All biddings combined for compatibility
-    const biddings: bidding[] = [...regularBiddings, ...specialBiddings];
-    
-    const suites: ICardSuite[] = [
-        'diamonds',
-        'clubs',
-        'hearts',
-        'spades',
-        'tout-atout',
-        'sans-atout',
-    ];
+// Regular biddings: 80-160
+const regularBiddings: bidding[] = [80, 90, 100, 110, 120, 130, 140, 150, 160];
 
-    const canCoincher = computed<boolean>(() => canCoincherbidding(storeState.biddingsPli));
-    const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeState.biddingsPli));
+// Special biddings:
+// Capot: 250 (non coinché), 251 (coinché), 252 (surcoinché)
+// Générale: 500 (non coinchée), 501 (coinchée), 502 (surcoinchée)
+const specialBiddings: bidding[] = [250, 251, 252, 500, 501, 502];
 
-    const canbiddingr = computed<boolean>(
-        () => storeState.turnToBidding,
+// All biddings combined for compatibility
+const biddings: bidding[] = [...regularBiddings, ...specialBiddings];
+
+const suites: ICardSuite[] = [
+    'diamonds',
+    'clubs',
+    'hearts',
+    'spades',
+    'tout-atout',
+    'sans-atout',
+];
+
+const canCoincher = computed<boolean>(() => canCoincherbidding(storeState.biddingsPli));
+const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeState.biddingsPli));
+
+const canbiddingr = computed<boolean>(
+    () => storeState.turnToBidding,
+);
+const canPasser = computed<boolean>(
+    () =>
+        storeState.turnToBidding &&
+        storeState.biddingsPli.length > 3 &&
+        storeState.biddingsPli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
+);
+
+const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeState.getMyId });
+
+watch(biddingEnCours, async () => {
+    if (biddingEnCours.value.bidding !== 0 && biddingEnCours.value.suite !== 'NA') {
+        await emitBid(biddingEnCours.value);
+        biddingEnCours.value = { bidding: 0, suite: 'NA', playerId: 'NA' };
+    }
+    if (biddingEnCours.value.bidding == 160) {
+        // Check if announce is not above 160
+    }
+});
+
+function canCoincherbidding(biddings: Ibidding[]) {
+    // If no bidding has been made, we can't coinche
+    if (biddings.length === 0) {
+        return false;
+    }
+    // If no announce have been made other than pass, we can't coinche
+    const announceDiffThanPass = biddings.filter((bidding: Ibidding) => bidding.bidding !== 0);
+    if (announceDiffThanPass.length === 0) {
+        return false;
+    }
+
+    // Get the last non-pass bidding
+    const lastBidding = announceDiffThanPass[announceDiffThanPass.length - 1];
+    // Can't coinche already coinché or surcoinché bids
+    if (
+        !lastBidding ||
+        lastBidding.bidding === 251 ||
+        lastBidding.bidding === 252 ||
+        lastBidding.bidding === 501 ||
+        lastBidding.bidding === 502
+    ) {
+        return false;
+    }
+    // Check if the bidding is from opponents
+    const myIndex = storeState.players.findIndex(
+        (player: IPlayer) => player.id === storeState.getMyId,
     );
-    const canPasser = computed<boolean>(
-        () =>
-            storeState.turnToBidding &&
-            storeState.biddingsPli.length > 3 &&
-            storeState.biddingsPli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
-    );
+    // Defensive: filter out undefined players
+    const adversaries: IPlayer[] = [
+        storeState.players[(myIndex + 1) % 4],
+        storeState.players[(myIndex + 3) % 4],
+    ].filter((player): player is IPlayer => player !== undefined);
+    const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
+    return adversaries_ids.includes(lastBidding.playerId);
+}
 
-    const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeState.getMyId });
+function canSurcoincherbidding(biddings: Ibidding[]) {
+    // If no bidding has been made, we can't surcoinche
+    if (biddings.length === 0) {
+        return false;
+    }
 
-    watch(biddingEnCours, async () => {
-        if (biddingEnCours.value.bidding !== 0 && biddingEnCours.value.suite !== 'NA') {
-            await emitBid(biddingEnCours.value);
-            biddingEnCours.value = { bidding: 0, suite: 'NA', playerId: 'NA' };
-        }
-        if (biddingEnCours.value.bidding == 160) {
-            // Check if announce is not above 160
-        }
-    });
+    // If no announce have been made other than pass, we can't surcoinche
+    const announceDiffThanPass = biddings.filter((bidding: Ibidding) => bidding.bidding !== 0);
+    if (announceDiffThanPass.length === 0) {
+        return false;
+    }
 
-    function canCoincherbidding(biddings: Ibidding[]) {
-        // If no bidding has been made, we can't coinche
-        if (biddings.length === 0) {
-            return false;
-        }
-        // If no announce have been made other than pass, we can't coinche
-        const announceDiffThanPass = biddings.filter((bidding: Ibidding) => bidding.bidding !== 0);
-        if (announceDiffThanPass.length === 0) {
-            return false;
-        }
-        
-        // Get the last non-pass bidding
-        const lastBidding = announceDiffThanPass[announceDiffThanPass.length - 1];
-        // Can't coinche already coinché or surcoinché bids
-        if (
-            !lastBidding ||
+    // Get the last non-pass bidding
+    const lastBidding = announceDiffThanPass[announceDiffThanPass.length - 1];
+
+    // Can only surcoinche coinché bids (251, 501) or regular coinché bids
+    const canSurcoinche = (
+        lastBidding &&
+        (
             lastBidding.bidding === 251 ||
-            lastBidding.bidding === 252 ||
             lastBidding.bidding === 501 ||
-            lastBidding.bidding === 502
-        ) {
-            return false;
-        }
-        // Check if the bidding is from opponents
-        const myIndex = storeState.players.findIndex(
-            (player: IPlayer) => player.id === storeState.getMyId,
-        );
-        // Defensive: filter out undefined players
-        const adversaries: IPlayer[] = [
-            storeState.players[(myIndex + 1) % 4],
-            storeState.players[(myIndex + 3) % 4],
-        ].filter((player): player is IPlayer => player !== undefined);
-        const adversaries_ids = adversaries.map((player: IPlayer) => player.id);
-        return adversaries_ids.includes(lastBidding.playerId);
-    }
-
-    function canSurcoincherbidding(biddings: Ibidding[]) {
-        // If no bidding has been made, we can't surcoinche
-        if (biddings.length === 0) {
-            return false;
-        }
-        
-        // If no announce have been made other than pass, we can't surcoinche
-        const announceDiffThanPass = biddings.filter((bidding: Ibidding) => bidding.bidding !== 0);
-        if (announceDiffThanPass.length === 0) {
-            return false;
-        }
-        
-        // Get the last non-pass bidding
-        const lastBidding = announceDiffThanPass[announceDiffThanPass.length - 1];
-        
-        // Can only surcoinche coinché bids (251, 501) or regular coinché bids
-        const canSurcoinche = (
-            lastBidding &&
             (
-                lastBidding.bidding === 251 ||
-                lastBidding.bidding === 501 ||
-                (
-                    storeState.coinched &&
-                    typeof lastBidding.bidding === 'number' &&
-                    lastBidding.bidding >= 80 &&
-                    lastBidding.bidding <= 160
-                )
+                storeState.coinched &&
+                typeof lastBidding.bidding === 'number' &&
+                lastBidding.bidding >= 80 &&
+                lastBidding.bidding <= 160
             )
-        );
+        )
+    );
 
-        if (!canSurcoinche) {
-            return false;
-        }
-        
-        // Check if the coinché announce is from the partner
-        const myIndex = storeState.players.findIndex(
-            (player: IPlayer) => player.id === storeState.getMyId,
-        );
-        const partner = storeState.players[(myIndex + 2) % 4];
-        if (!partner) {
-            return false;
-        }
-        const team_ids = [storeState.getMyId, partner.id];
-        return team_ids.includes(lastBidding.playerId);
+    if (!canSurcoinche) {
+        return false;
     }
 
-    function canbiddingNumber(bidding: bidding) {
-        return !(storeState.biddingElected.bidding < bidding);
+    // Check if the coinché announce is from the partner
+    const myIndex = storeState.players.findIndex(
+        (player: IPlayer) => player.id === storeState.getMyId,
+    );
+    const partner = storeState.players[(myIndex + 2) % 4];
+    if (!partner) {
+        return false;
+    }
+    const team_ids = [storeState.getMyId, partner.id];
+    return team_ids.includes(lastBidding.playerId);
+}
+
+function canbiddingNumber(bidding: bidding) {
+    return !(storeState.biddingElected.bidding < bidding);
+}
+
+async function passer() {
+    await emitBid({ bidding: 0, suite: 'NA', playerId: storeState.getMyId});
+}
+
+async function coincher() {
+    // For capot/générale bids, convert to coinché equivalent
+    const lastBid = storeState.biddingElected.bidding;
+    let coinchedBid: bidding;
+
+    if (lastBid === 250) {
+        coinchedBid = 251; // Capot coinché
+    } else if (lastBid === 500) {
+        coinchedBid = 501; // Générale coinchée
+    } else {
+        return;
     }
 
-    async function passer() {
-        await emitBid({ bidding: 0, suite: 'NA', playerId: storeState.getMyId});
+    await emitBid({
+        bidding: coinchedBid,
+        suite: storeState.biddingElected.suite,
+        playerId: storeState.getMyId
+    });
+}
+
+async function surcoincher() {
+    // For capot/générale bids, convert to surcoinché equivalent
+    const lastBid = storeState.biddingElected.bidding;
+    let surcoincheBid: bidding;
+
+    if (lastBid === 251) {
+        surcoincheBid = 252; // Capot surcoinché
+    } else if (lastBid === 501) {
+        surcoincheBid = 502; // Générale surcoinchée
+    } else {
+        return;
     }
 
-    async function coincher() {
-        // For capot/générale bids, convert to coinché equivalent
-        const lastBid = storeState.biddingElected.bidding;
-        let coinchedBid: bidding;
-        
-        if (lastBid === 250) {
-            coinchedBid = 251; // Capot coinché
-        } else if (lastBid === 500) {
-            coinchedBid = 501; // Générale coinchée
-        } else {
-            return;
-        }
-
-        await emitBid({
-            bidding: coinchedBid, 
-            suite: storeState.biddingElected.suite, 
-            playerId: storeState.getMyId
-        });
-    }
-
-    async function surcoincher() {
-        // For capot/générale bids, convert to surcoinché equivalent
-        const lastBid = storeState.biddingElected.bidding;
-        let surcoincheBid: bidding;
-        
-        if (lastBid === 251) {
-            surcoincheBid = 252; // Capot surcoinché
-        } else if (lastBid === 501) {
-            surcoincheBid = 502; // Générale surcoinchée
-        } else {
-            return;
-        }
-
-        await emitBid({ 
-            bidding: surcoincheBid, 
-            suite: storeState.biddingElected.suite, 
-            playerId: storeState.getMyId
-        });
-    }
+    await emitBid({
+        bidding: surcoincheBid,
+        suite: storeState.biddingElected.suite,
+        playerId: storeState.getMyId
+    });
+}
 </script>

@@ -30,7 +30,7 @@ let cleanupConnectionListener: (() => void) | null = null;
 onMounted(() => {
   // Initial check
   isConnected.value = getConnectionStatus();
-  
+
   // Set up connection change listener
   cleanupConnectionListener = onConnectionChange((connected) => {
     isConnected.value = connected;

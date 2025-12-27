@@ -1,9 +1,9 @@
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger class="flex items-center gap-2">
-        <User class="h-4 w-4" />
-        {{ session.data?.user?.name || 'Utilisateur' }}
-        <ChevronDown class="h-4 w-4" />
+      <User class="h-4 w-4" />
+      {{ session.data?.user?.name || 'Utilisateur' }}
+      <ChevronDown class="h-4 w-4" />
     </DropdownMenuTrigger>
     <DropdownMenuContent>
       <DropdownMenuItem @click="toggleMute" class="flex items-center gap-2">

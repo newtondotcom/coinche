@@ -13,10 +13,7 @@
 
     <CoincheInterfaceBiddings v-if="storeState.timeToBidding" />
 
-    <div
-      v-if="storeState.players.length == 4"
-      class="flex flex-row justify-between"
-    >
+    <div v-if="storeState.players.length == 4" class="flex flex-row justify-between">
       <CoincheInterfacePoints />
       <CoincheInterfaceTurn />
     </div>
@@ -24,7 +21,6 @@
     <CoincheInterfaceSavedBidding v-if="storeState.biddingElected.suite != 'NA'" />
 
     <CoincheInterfaceJoin v-if="storeState.players.length < 4" />
-    
   </div>
 </template>
 
@@ -33,12 +29,12 @@ import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
 import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
-import { CHANGE_TYPE_STATE} from "@coinche/shared";
-import type { WSPayload } from "@coinche/shared";
+import { CHANGE_TYPE_STATE} from "@coinche-reborn/api";
+import type { WSPayload } from "@coinche-reborn/api";
 import { useStateStore } from '@/stores/state';
-const storeState = useStateStore();  
+const storeState = useStateStore();
 const { $authClient } = useNuxtApp();
-const session = $authClient.useSession();  
+const session = $authClient.useSession();
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -57,14 +53,14 @@ if ((!id || !gameId) || (!isIframe && !session.value)) {
 let cleanupListener: (() => void) | null = null;
 
 onMounted(async () => {
-  storeState.setMyId(id); 
+  storeState.setMyId(id);
   storeState.setGameId(gameId);
   // Reset loading state for player list
   storeState.setLoadingState(false);
-  
+
   // Connect to WebSocket and set up listener
   getWS();
-  
+
   // Set up message listener with cleanup function
   cleanupListener = onWSMessage((event : WSPayload) => {
     if (event.changeType === CHANGE_TYPE_STATE) {
@@ -81,7 +77,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to join game:', error);
   }
-  
+
   // Initialize turn notifications for logged in users
   // if (loggedIn.value) {
   useTurnNotifications();
@@ -104,13 +100,13 @@ onBeforeUnmount(async () => {
   } catch (error) {
     console.error('Failed to send leave event:', error);
   }
-  
+
   // Clean up WebSocket listener
   if (cleanupListener) {
     cleanupListener();
     cleanupListener = null;
   }
-  
+
   // Remove beforeunload handler
   if (!isDevEnv(config)) {
     (globalThis as any).window.onbeforeunload = null;

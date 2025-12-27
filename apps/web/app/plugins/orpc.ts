@@ -1,33 +1,30 @@
-import { defineNuxtPlugin, useRuntimeConfig } from '#app'
-import type { RouterClient } from '@orpc/server'
-import type { appRouter } from "../../../server/src/routers/index";
-import { createORPCClient } from '@orpc/client'
-import { RPCLink } from '@orpc/client/fetch'
+import type { AppRouterClient } from "@coinche-reborn/api/routers/index";
+
+import { defineNuxtPlugin } from "#app";
+import { createORPCClient } from "@orpc/client";
+import { RPCLink } from "@orpc/client/fetch";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig()
-  const serverUrl = config.public.serverURL
-
-  const rpcUrl = `${serverUrl}/rpc`;
+  const config = useRuntimeConfig();
+  const rpcUrl = `${config.public.serverUrl}/rpc`;
 
   const rpcLink = new RPCLink({
     url: rpcUrl,
     fetch(url, options) {
-        return fetch(url, {
+      return fetch(url, {
         ...options,
         credentials: "include",
-        });
+      });
     },
-  })
+  });
 
-
-  const client: RouterClient<typeof appRouter> = createORPCClient(rpcLink)
-  const orpcUtils = createTanstackQueryUtils(client)
+  const client: AppRouterClient = createORPCClient(rpcLink);
+  const orpcUtils = createTanstackQueryUtils(client);
 
   return {
     provide: {
-      orpc: orpcUtils
-    }
-  }
-})
+      orpc: orpcUtils,
+    },
+  };
+});

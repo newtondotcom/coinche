@@ -1,20 +1,15 @@
 import { createAuthClient } from "better-auth/vue";
-import { genericOAuthClient } from "better-auth/client/plugins"
 
-export default defineNuxtPlugin(nuxtApp => {
-  const config = useRuntimeConfig()
-  const serverUrl = config.public.serverURL
+export default defineNuxtPlugin(() => {
+  const config = useRuntimeConfig();
 
   const authClient = createAuthClient({
-    baseURL: serverUrl,
-    plugins: [
-      genericOAuthClient()
-    ]
-  })
+    baseURL: config.public.serverUrl,
+  });
 
   return {
     provide: {
-      authClient: authClient
-    }
-  }
-})
+      authClient: authClient,
+    },
+  };
+});
