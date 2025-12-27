@@ -1,5 +1,5 @@
 import type { DehydratedState, VueQueryPluginOptions } from "@tanstack/vue-query";
-import { toast } from 'vue-sonner';
+import { toast } from "vue-sonner";
 import { dehydrate, hydrate, QueryCache, QueryClient, VueQueryPlugin } from "@tanstack/vue-query";
 
 export default defineNuxtPlugin((nuxt) => {

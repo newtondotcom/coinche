@@ -1,5 +1,15 @@
 <template>
   <div class="flex flex-col items-center justify-center align-middle min-h-screen">
+    <ClientOnly>
+      <BlurReveal :delay="0.2" :duration="0.75" class="p-8">
+        <span class="text-pretty text-xl tracking-tighter xl:text-4xl/none sm:text-3xl">
+          Elu meilleur
+        </span>
+        <h2 class="text-3xl font-bold tracking-tighter xl:text-6xl/none sm:text-5xl">
+          Jeu de coinche de l'n7 👋
+        </h2>
+      </BlurReveal>
+    </ClientOnly>
     <Card class="w-[500px] shadow-2xl">
       <CardHeader>
         <CardTitle>créer / rejoindre</CardTitle>
@@ -57,22 +67,13 @@
         </AlertDialog>
       </CardFooter>
     </Card>
-    <div
-      class="my-20 mx-20 inset-0 flex items-center px-4 pointer-events-none justify-center font-bold text-3xl text-neutral-800 dark:text-neutral-100 text-center md:text-4xl lg:text-7xl"
-    >
-      Élu meilleur jeu de coinche de l'
-      <span
-        class="bg-clip-text text-transparent drop-shadow-2xl bg-linear-to-b from-primary to-primary/40"
-      >
-        n7
-      </span>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useNuxtApp } from '#app';
 import { useStateStore } from '@/stores/state';
+import { BlurReveal } from '@/components/ui/blur-reveal';
 
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();

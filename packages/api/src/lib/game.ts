@@ -8,7 +8,7 @@ export default class controller {
   static clearGames() {
     this._instances.clear();
   }
-  
+
   /**
    * Set the server instance for WebSocket publishing
    * This should be called from the server app after server is created
@@ -16,7 +16,7 @@ export default class controller {
   static setServer(serverInstance: any) {
     server = serverInstance;
   }
-  
+
   private static _instances: Map<string, controller> = new Map();
 
   public state: IGameState;
@@ -113,7 +113,7 @@ export default class controller {
 
   public isTeam1(playerId: string) {
     const players = Array.from(this.getPlayers());
-    return (players[0]?.id === playerId) || (players[2]?.id === playerId);
+    return players[0]?.id === playerId || players[2]?.id === playerId;
   }
 
   public testState() {
