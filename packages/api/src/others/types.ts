@@ -57,7 +57,7 @@ export interface IPlayer {
 }
 
 export interface IRound {
-  plis: IPli[];
+  tricks: ITrick[];
   biddings: Ibidding[];
   team1PointsCurrentGame: number;
   team2PointsCurrentGame: number;
@@ -66,7 +66,7 @@ export interface IRound {
   surcoinched: boolean;
 }
 
-export interface IPli {
+export interface ITrick {
   plays: IPlay[];
   playerStartingId: PlayerId;
   number: number;
@@ -89,12 +89,12 @@ export type Event =
   | "can_bid"
   | "start_game"
   | "end_game"
+  | "start_round"
+  | "end_round"
   | "start_trick"
-  | "end_trick"
-  | "start_pli"
-  | "win_pli"
+  | "win_trick"
   | "score"
-  | "score_trick"
+  | "score_round"
   | "start_distribution"
   | "distribution"
   | "start_bidding"

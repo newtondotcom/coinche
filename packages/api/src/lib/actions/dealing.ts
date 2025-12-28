@@ -6,9 +6,14 @@ import type { ICard, PlayerId } from "@coinche-reborn/api";
 export default async function emitDealing(idPlayerStarting: PlayerId, gameId: string) {
   cutDeck(gameId);
 
-  // distribute cards 3 per person, then 2, then 3
+  // Clear all players' hands before distributing new cards
   const playersMap = controller.getInstance(gameId).getPlayers();
   const players = Array.from(playersMap.values());
+  players.forEach((player) => {
+    player.hands = [];
+  });
+
+  // distribute cards 3 per person, then 2, then 3
   const startIndex = players.findIndex((player) => player.id === idPlayerStarting);
   if (startIndex === -1) {
     logger.info(idPlayerStarting);
@@ -38,7 +43,10 @@ export default async function emitDealing(idPlayerStarting: PlayerId, gameId: st
     }
   }
 
-  // Emit the event to start the pli and display the cards
+  // Send state to clients so they can see their cards before bidding starts
+  controller.getInstance(gameId).sendState();
+
+  // Emit the event to start bidding and display the cards
   await emitCanBid(idPlayerStarting, gameId);
 }
 

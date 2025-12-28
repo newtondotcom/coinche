@@ -21,15 +21,15 @@ async function onPress() {
 }
 
 const canBePlayed = computed(() => {
-    const currentPliObj = Array.isArray(storeState.currentPli)
+    const currentTrickObj = Array.isArray(storeState.currentTrick)
         ? undefined
-        : storeState.currentPli;
+        : storeState.currentTrick;
     return cardCanBePlayed(props.card, {
         currentPlayerId: storeState.currentPlayerId,
         myId: storeState.getMyId,
-        currentPli: currentPliObj as any,
+        currentTrick: currentTrickObj as any,
         colorAsked: storeState.colorAsked,
-        atout: storeState.atout,
+        trump: storeState.trump,
         hand: storeState.hand,
     });
 });
@@ -41,7 +41,7 @@ const cardSvgPath = ref(
     `${svgFolder}/${props.card.value === '10' ? 'T' : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
 );
 
-watch(storeState.currentPli, () => {
+watch(storeState.currentTrick, () => {
     canBePlayed.value;
 });
 </script>

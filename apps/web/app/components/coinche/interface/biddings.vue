@@ -114,8 +114,8 @@ const suites: ICardSuite[] = [
     'sans-atout',
 ];
 
-const canCoincher = computed<boolean>(() => canCoincherbidding(storeState.biddingsPli));
-const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeState.biddingsPli));
+const canCoincher = computed<boolean>(() => canCoincherbidding(storeState.biddings));
+const canSurcoincher = computed<boolean>(() => canSurcoincherbidding(storeState.biddings));
 
 const canbiddingr = computed<boolean>(
     () => storeState.turnToBidding,
@@ -123,8 +123,8 @@ const canbiddingr = computed<boolean>(
 const canPasser = computed<boolean>(
     () =>
         storeState.turnToBidding &&
-        storeState.biddingsPli.length > 3 &&
-        storeState.biddingsPli.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
+        storeState.biddings.length > 3 &&
+        storeState.biddings.slice(0, 3).every((bidding: Ibidding) => bidding.bidding === 0),
 );
 
 const biddingEnCours = ref<Ibidding>({ bidding: 0, suite: 'NA', playerId: storeState.getMyId });

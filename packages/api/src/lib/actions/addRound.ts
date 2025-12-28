@@ -4,7 +4,7 @@ import logger from "../logger";
 
 export default function addRound(gameId: string): void {
   const roundInit = {
-    plis: [],
+    tricks: [],
     biddings: [],
     biddingElected: {
       suite: "NA" as ICardSuite,

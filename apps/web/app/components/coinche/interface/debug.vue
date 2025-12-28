@@ -1,6 +1,6 @@
 <template>
   <div class="absolute bottom-0 right-4 bg-red-500 font-semibold z-20">
-    Pli number : {{ storeState.currentPli?.number }}
+    Trick number : {{ storeState.currentTrick?.number }}
     <br />
     Deck length : {{ storeState.deck.length }}
     <br />
@@ -11,7 +11,7 @@
     <br />
     Current player id : {{ storeState.currentPlayerId }}
     <br />
-    Atout : {{ storeState.atout }}
+    Trump : {{ storeState.trump }}
     <br />
     Cards in hands : {{ storeState.hand.length }}
     <br />
@@ -19,9 +19,9 @@
     {{ storeState.hand.some(card => cardCanBePlayed(card, {
             currentPlayerId: storeState.currentPlayerId,
             myId: storeState.getMyId,
-            currentPli: storeState.currentPli,
+            currentTrick: storeState.currentTrick,
             colorAsked: storeState.colorAsked,
-            atout: storeState.atout,
+            trump: storeState.trump,
             hand: storeState.hand,
         })) }}
   </div>

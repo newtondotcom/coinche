@@ -5,6 +5,15 @@ import { useStateStore } from "@/stores/state";
 
 export async function emitCardPlay(card: ICard) {
   const storeState = useStateStore();
+
+  // Check if trump is defined
+  if (!storeState.trump || storeState.trump === "NA") {
+    console.warn(`Trump not defined when playing card ${card.suite}-${card.value}`);
+  }
+
+  // Log the calculated valueNum for debugging
+  console.log(`Playing card ${card.suite}-${card.value} with valueNum=${card.valueNum}`);
+
   sendWS({
     id: await genIdCuid(),
     type: "play",
@@ -12,8 +21,8 @@ export async function emitCardPlay(card: ICard) {
     gameId: storeState.gameId,
     value: formatCarteToPlay(
       card,
-      storeState.currentPli.number,
-      storeState.currentPli.plays.length,
+      storeState.currentTrick?.number || 0,
+      storeState.currentTrick?.plays.length || 0,
     ),
     timestamp: new Date().toISOString(),
   });

@@ -1,9 +1,9 @@
-import { findWinner } from "./closePli";
+import { findWinner } from "./closeTrick";
 import controller from "../game";
 import logger from "../logger";
-import { emitPointsTrick } from "./pointsTrick";
+import { emitPointsRound } from "./pointsRound";
 
-export async function emitEndTrick(gameId: string) {
+export async function emitEndRound(gameId: string) {
   const controllerInstance = controller.getInstance(gameId);
   const lastRound = controllerInstance.getCurrentRound();
   const pointMultiplier = lastRound.coinched ? 2 : lastRound.surcoinched ? 4 : 1;
@@ -11,15 +11,15 @@ export async function emitEndTrick(gameId: string) {
   const teamAnnounced = controllerInstance.isTeam1(seuilbidding.playerId) ? 1 : 2;
 
   const calculateSpecialBidScore = (bidding: number) => {
-    const plis = lastRound.plis;
+    const tricks = lastRound.tricks;
     let isSuccessful = true;
 
     // For special bids (250+ or 500+), check if all tricks are won by the same team
-    plis.forEach((pli) => {
-      const winnerPli = findWinner(pli.plays, gameId);
+    tricks.forEach((trick) => {
+      const winnerTrick = findWinner(trick.plays, gameId);
       if (
-        (teamAnnounced === 1 && !controllerInstance.isTeam1(winnerPli)) ||
-        (teamAnnounced === 2 && controllerInstance.isTeam1(winnerPli))
+        (teamAnnounced === 1 && !controllerInstance.isTeam1(winnerTrick)) ||
+        (teamAnnounced === 2 && controllerInstance.isTeam1(winnerTrick))
       ) {
         isSuccessful = false;
       }
@@ -33,15 +33,24 @@ export async function emitEndTrick(gameId: string) {
   };
 
   const calculateDefaultScore = () => {
-    const lastPli = lastRound.plis[lastRound.plis.length - 1];
+    // Calculate total round points from all tricks
+    const totalRoundPointsTeam1 = lastRound.tricks.reduce(
+      (sum, trick) => sum + trick.team1Score,
+      0,
+    );
+    const totalRoundPointsTeam2 = lastRound.tricks.reduce(
+      (sum, trick) => sum + trick.team2Score,
+      0,
+    );
+
     const biddingValue =
       typeof seuilbidding.bidding === "number"
         ? seuilbidding.bidding
         : parseInt(seuilbidding.bidding, 10);
 
     if (
-      (teamAnnounced === 1 && lastPli.team1Score >= biddingValue) ||
-      (teamAnnounced === 2 && lastPli.team2Score >= biddingValue)
+      (teamAnnounced === 1 && totalRoundPointsTeam1 >= biddingValue) ||
+      (teamAnnounced === 2 && totalRoundPointsTeam2 >= biddingValue)
     ) {
       // bidding validée
       return biddingValue * pointMultiplier;
@@ -83,5 +92,5 @@ export async function emitEndTrick(gameId: string) {
   logger.info(`Score de ${scoreTeam1} à ${scoreTeam2}`);
   controllerInstance.state.team1PointsCurrentGame += scoreTeam1;
   controllerInstance.state.team2PointsCurrentGame += scoreTeam2;
-  await emitPointsTrick(scoreTeam1, scoreTeam2, gameId);
+  await emitPointsRound(scoreTeam1, scoreTeam2, gameId);
 }

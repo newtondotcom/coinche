@@ -1,8 +1,8 @@
-import { emitStartTrick } from "./startTrick";
+import { emitStartRound } from "./startRound";
 import controller from "../game";
 
 export async function emitGameStarting(playerId: string, gameId: string) {
   Object.assign(controller.getInstance(gameId).state, { status: "playing" });
   controller.getInstance(gameId).sendState();
-  await emitStartTrick(gameId, playerId);
+  await emitStartRound(gameId, playerId);
 }

@@ -53,9 +53,9 @@ const riverCardMotion = {
 };
 
 const centerSlots = computed<CenterSlot[]>(() => {
-    const plays = Array.isArray(storeState.currentPli)
+    const plays = Array.isArray(storeState.currentTrick)
         ? []
-        : storeState.currentPli?.plays ?? [];
+        : storeState.currentTrick?.plays ?? [];
 
     return Array.from({ length: 4 }, (_, index) => {
         const play = plays[index];

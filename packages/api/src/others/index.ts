@@ -10,7 +10,7 @@ export type {
   IPlay,
   IPlayer,
   IRound,
-  IPli,
+  ITrick,
   IGame,
   Event,
   EventInsert,

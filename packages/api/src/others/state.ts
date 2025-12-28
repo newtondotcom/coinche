@@ -1,4 +1,4 @@
-import type { Ibidding, ICard, IPlayer, IPli, PlayerId } from "./types";
+import type { Ibidding, ICard, IPlayer, ITrick, PlayerId } from "./types";
 
 export interface IGameState {
   // Identifiants de base
@@ -11,9 +11,9 @@ export interface IGameState {
   team1: PlayerId[];
   team2: PlayerId[];
 
-  // État de la manche courante
+  // Current round state
   currentRound: {
-    plis: IPli[];
+    tricks: ITrick[];
     biddings: Ibidding[];
     biddingElected: Ibidding;
     coinched: boolean;

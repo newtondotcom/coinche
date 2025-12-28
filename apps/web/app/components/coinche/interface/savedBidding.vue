@@ -5,12 +5,12 @@
     >
       {{ storeState.biddingElected.bidding }}
 
-      {{ storeState.atout == 'clubs' ? '♣' : '' }}
-      {{ storeState.atout == 'diamonds' ? '♦' : '' }}
-      {{ storeState.atout == 'hearts' ? '♥' : '' }}
-      {{ storeState.atout == 'spades' ? '♠' : '' }}
-      {{ storeState.atout == 'sans-atout' ? 'SA' : '' }}
-      {{ storeState.atout == 'tout-atout' ? 'TA' : '' }}
+      {{ storeState.trump == 'clubs' ? '♣' : '' }}
+      {{ storeState.trump == 'diamonds' ? '♦' : '' }}
+      {{ storeState.trump == 'hearts' ? '♥' : '' }}
+      {{ storeState.trump == 'spades' ? '♠' : '' }}
+      {{ storeState.trump == 'sans-atout' ? 'SA' : '' }}
+      {{ storeState.trump == 'tout-atout' ? 'TA' : '' }}
     </h2>
     <h3
       class="bg-opacity-50 bg-linear-to-b from-neutral-200 to-neutral-400 bg-clip-text text-center text-3xl font-bold text-transparent dark:from-neutral-50 dark:to-neutral-400 md:text-5xl cursor-pointer"

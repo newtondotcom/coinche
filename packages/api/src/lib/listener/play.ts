@@ -1,5 +1,5 @@
 import { emitCanPlay } from "../actions/can";
-import { closePli } from "../actions/closePli";
+import { closeTrick } from "../actions/closeTrick";
 import controller from "../game";
 import logger from "../logger";
 import { getNextPlayerTurn } from "../utils";
@@ -11,13 +11,13 @@ export default async function translatePlay(event: EventInsert) {
   const gameId = event.gameId;
   const def = deformatCarteToPlay(event.value as string);
   const card = def.card;
-  // const pli_number = def.pli_number;
+  // const trick_number = def.trick_number;
   const playerId = event.playerId;
   addPlay(card, playerId, gameId);
-  // check if end of pli
-  if (controller.getInstance(event.gameId).getCurrentPli().plays.length === 4) {
-    logger.info("End of pli");
-    await closePli(event.gameId);
+  // check if end of trick
+  if (controller.getInstance(event.gameId).getCurrentTrick().plays.length === 4) {
+    logger.info("End of trick");
+    await closeTrick(event.gameId);
   } else {
     const nextPlayerId = getNextPlayerTurn(playerId, event.gameId);
     await emitCanPlay(nextPlayerId, event.gameId);

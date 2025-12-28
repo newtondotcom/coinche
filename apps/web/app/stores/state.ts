@@ -4,7 +4,7 @@ import type {
   IGameStateClient,
   ICard,
   IPlayer,
-  IPli,
+  ITrick,
   Ibidding,
   PlayerId,
   ICardSuite,
@@ -21,7 +21,7 @@ export const useStateStore = defineStore("state", {
       team1: [],
       team2: [],
       currentRound: {
-        plis: [],
+        tricks: [],
         biddings: [],
         biddingElected: {
           playerId: "",
@@ -67,9 +67,9 @@ export const useStateStore = defineStore("state", {
     players(state): IPlayer[] {
       return state.game.players;
     },
-    currentPli(state): IPli {
-      const plis = state.game.currentRound.plis;
-      return plis[plis.length - 1];
+    currentTrick(state): ITrick | undefined {
+      const tricks = state.game.currentRound?.tricks || [];
+      return tricks[tricks.length - 1];
     },
     biddingElected(state): Ibidding {
       return state.game.currentRound.biddingElected;
@@ -83,17 +83,21 @@ export const useStateStore = defineStore("state", {
     deck(state): ICard[] {
       return state.game.deck;
     },
-    biddingsPli(state): Ibidding[] {
-      return state.game.currentRound.biddings;
+    biddings(state): Ibidding[] {
+      return state.game.currentRound?.biddings || [];
     },
     currentPlayerId(state): PlayerId {
       return state.game.phases.timeToPlay;
     },
-    team1Score(): number {
-      return this.currentPli?.team1Score || 0;
+    team1Score(state): number {
+      // Sum of all tricks' team1Score in the current round
+      const tricks = state.game.currentRound?.tricks || [];
+      return tricks.reduce((sum, trick) => sum + (trick.team1Score || 0), 0);
     },
-    team2Score(): number {
-      return this.currentPli?.team2Score || 0;
+    team2Score(state): number {
+      // Sum of all tricks' team2Score in the current round
+      const tricks = state.game.currentRound?.tricks || [];
+      return tricks.reduce((sum, trick) => sum + (trick.team2Score || 0), 0);
     },
     team1PointsCurrentGame(state): number {
       return state.game.team1PointsCurrentGame;
@@ -113,7 +117,7 @@ export const useStateStore = defineStore("state", {
     turnToBidding(state): boolean {
       return state.game.phases.timeToBid === state.myId;
     },
-    atout(state): ICardSuite {
+    trump(state): ICardSuite {
       return state.game.currentRound.biddingElected.suite || "";
     },
     hand(state): ICard[] {
@@ -121,40 +125,40 @@ export const useStateStore = defineStore("state", {
       return player && Array.isArray(player.hands) ? player.hands : [];
     },
     colorAsked(): ICardSuite {
-      const pli = this.currentPli;
-      if (Array.isArray(pli) && pli.length > 0 && pli[0] && pli[0].card) {
-        return pli[0].card.suite;
+      const trick = this.currentTrick;
+      if (Array.isArray(trick) && trick.length > 0 && trick[0] && trick[0].card) {
+        return trick[0].card.suite;
       }
       if (
-        typeof pli === "object" &&
-        pli !== null &&
-        !Array.isArray(pli) &&
-        Array.isArray((pli as any).plays) &&
-        (pli as any).plays.length > 0 &&
-        (pli as any).plays[0] &&
-        (pli as any).plays[0].card
+        typeof trick === "object" &&
+        trick !== null &&
+        !Array.isArray(trick) &&
+        Array.isArray((trick as any).plays) &&
+        (trick as any).plays.length > 0 &&
+        (trick as any).plays[0] &&
+        (trick as any).plays[0].card
       ) {
-        return (pli as any).plays[0].card.suite;
+        return (trick as any).plays[0].card.suite;
       }
       return "NA";
     },
-    hasAtout(): boolean {
+    hasTrump(): boolean {
       const hand = this.hand as ICard[];
-      return Array.isArray(hand) && hand.some((card) => card.suite === this.atout);
+      return Array.isArray(hand) && hand.some((card) => card.suite === this.trump);
     },
     hasAskedColor(): boolean {
       const hand = this.hand as ICard[];
       return Array.isArray(hand) && hand.some((card) => card.suite === this.colorAsked);
     },
-    highestAtoutInPli(): number {
-      const pli = this.currentPli;
-      const atout = this.atout;
-      let currentPliArr: any[] = Array.isArray(pli) ? pli : [];
-      const atouts = currentPliArr.filter((play) => play.card && play.card.suite === atout);
-      return atouts.length > 0 ? Math.max(...atouts.map((p) => p.card.valueNum)) : NaN;
+    highestTrumpInTrick(): number {
+      const trick = this.currentTrick;
+      const trump = this.trump;
+      let currentTrickArr: any[] = Array.isArray(trick) ? trick : [];
+      const trumps = currentTrickArr.filter((play) => play.card && play.card.suite === trump);
+      return trumps.length > 0 ? Math.max(...trumps.map((p) => p.card.valueNum)) : NaN;
     },
-    atoutIsAsked(): boolean {
-      return this.colorAsked === this.atout;
+    trumpIsAsked(): boolean {
+      return this.colorAsked === this.trump;
     },
   },
 });

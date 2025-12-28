@@ -2,7 +2,7 @@
   <div class="flex flex-col">
     <Card class="w-[250px] mx-2 my-2">
       <CardHeader>
-        <CardTitle>Points de la partie</CardTitle>
+        <CardTitle>Points de la partie (cumulés)</CardTitle>
       </CardHeader>
       <CardContent class="grid gap-6">
         <div class="flex items-center justify-between space-x-4">
@@ -48,7 +48,7 @@
 
     <Card class="w-[250px] mx-2 my-2">
       <CardHeader>
-        <CardTitle>Points globaux</CardTitle>
+        <CardTitle>Points du round (cartes)</CardTitle>
       </CardHeader>
       <CardContent class="grid gap-6">
         <div class="flex items-center justify-between space-x-4">

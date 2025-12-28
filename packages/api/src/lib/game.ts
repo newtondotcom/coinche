@@ -29,7 +29,7 @@ export default class controller {
       team1: [],
       team2: [],
       currentRound: {
-        plis: [],
+        tricks: [],
         biddings: [],
         biddingElected: { suite: "NA", bidding: 0, playerId: "0" },
         coinched: false,
@@ -107,8 +107,8 @@ export default class controller {
     };
   }
 
-  public getCurrentPli() {
-    return this.getCurrentRound().plis[this.getCurrentRound().plis.length - 1];
+  public getCurrentTrick() {
+    return this.getCurrentRound().tricks[this.getCurrentRound().tricks.length - 1];
   }
 
   public isTeam1(playerId: string) {
@@ -132,7 +132,7 @@ export default class controller {
     }
 
     // Test 3 : game status must be set to "started" if something is happening
-    if (this.state.currentRound.plis.length > 0 || this.state.currentRound.biddings.length > 0) {
+    if (this.state.currentRound.tricks.length > 0 || this.state.currentRound.biddings.length > 0) {
       if (this.state.status !== "playing") {
         logger.error(`Invalid game status for gameId: ${this.state.gameId}`, this.state.status);
         throw new Error(
