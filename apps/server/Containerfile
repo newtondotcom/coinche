@@ -30,10 +30,14 @@ WORKDIR /app
 
 # Copy compiled binary from builder
 COPY --from=builder /usr/src/app/apps/server/server ./server
-COPY --from=builder /usr/src/app/packages/db/src/migrations /packages/db/src/migrations
+# Copy migrations to where import.meta.dir expects them (/usr/src/app/packages/db/src/migrations)
+# import.meta.dir resolves to /usr/src/app/packages/db/src/ in compiled binary
+RUN mkdir -p /usr/src/app/packages/db/src
+COPY --from=builder /usr/src/app/packages/db/src/migrations /usr/src/app/packages/db/src/migrations
 
 # Ensure permissions
 RUN chown appuser:appuser ./server && chmod +x ./server
+RUN chown -R appuser:appuser /usr/src/app/packages/db/src
 
 RUN mkdir -p logs && chown -R appuser:appuser /app
 
