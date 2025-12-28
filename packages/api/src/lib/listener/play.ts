@@ -1,11 +1,11 @@
 import { emitCanPlay } from "../actions/can";
-import { closePli } from "../actions/close_pli";
+import { closePli } from "../actions/closePli";
 import controller from "../game";
 import logger from "../logger";
 import { getNextPlayerTurn } from "../utils";
 import type { EventInsert } from "@coinche-reborn/api";
 import { deformatCarteToPlay } from "@coinche-reborn/api";
-import addPlay from "../actions/add_play";
+import addPlay from "../actions/addPlay";
 
 export default async function translatePlay(event: EventInsert) {
   const gameId = event.gameId;

@@ -1,5 +1,5 @@
 import logger from "../logger";
-import { setPlayerIdToBid, setPlayerIdToPlay } from "./set_ids";
+import { setPlayerIdToBid, setPlayerIdToPlay } from "./setIds";
 
 export async function emitCanPlay(playerId: string, gameId: string) {
   // Update the current player

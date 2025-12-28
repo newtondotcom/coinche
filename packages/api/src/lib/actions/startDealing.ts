@@ -2,7 +2,7 @@ import emitDealing from "./dealing";
 import controller from "../game";
 import { generateDeckCards } from "../utils";
 import logger from "../logger";
-import { setPlayerIdToDistrib } from "./set_ids";
+import { setPlayerIdToDistrib } from "./setIds";
 
 export async function emitStartDealing(gameId: string) {
   setPlayerIdToDistrib("", gameId);

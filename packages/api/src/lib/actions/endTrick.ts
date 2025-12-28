@@ -1,7 +1,7 @@
-import { findWinner } from "./close_pli";
+import { findWinner } from "./closePli";
 import controller from "../game";
 import logger from "../logger";
-import { emitPointsTrick } from "./points_trick";
+import { emitPointsTrick } from "./pointsTrick";
 
 export async function emitEndTrick(gameId: string) {
   const controllerInstance = controller.getInstance(gameId);

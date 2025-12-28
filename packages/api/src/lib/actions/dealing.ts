@@ -3,16 +3,16 @@ import controller from "../game";
 import logger from "../logger";
 import type { ICard, PlayerId } from "@coinche-reborn/api";
 
-export default async function emitDealing(id_player_starting: PlayerId, gameId: string) {
+export default async function emitDealing(idPlayerStarting: PlayerId, gameId: string) {
   cutDeck(gameId);
 
   // distribute cards 3 per person, then 2, then 3
   const playersMap = controller.getInstance(gameId).getPlayers();
   const players = Array.from(playersMap.values());
-  const startIndex = players.findIndex((player) => player.id === id_player_starting);
+  const startIndex = players.findIndex((player) => player.id === idPlayerStarting);
   if (startIndex === -1) {
-    logger.info(id_player_starting);
-    logger.error("Player with the given id_player_starting not found");
+    logger.info(idPlayerStarting);
+    logger.error("Player with the given idPlayerStarting not found");
   }
   const shiftedPlayers = [...players.slice(startIndex), ...players.slice(0, startIndex)];
 
@@ -39,15 +39,15 @@ export default async function emitDealing(id_player_starting: PlayerId, gameId: 
   }
 
   // Emit the event to start the pli and display the cards
-  await emitCanBid(id_player_starting, gameId);
+  await emitCanBid(idPlayerStarting, gameId);
 }
 
-async function distributeCard(player_id: string, gameId: string) {
+async function distributeCard(playerId: string, gameId: string) {
   const card: ICard = controller.getInstance(gameId).state.deck.pop() as ICard;
   controller
     .getInstance(gameId)
     .getPlayers()
-    .find((player) => player.id === player_id)!
+    .find((player) => player.id === playerId)!
     .hands.push(card);
 }
 

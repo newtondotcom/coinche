@@ -1,7 +1,7 @@
 import logger from "../logger";
-import { emitStartDealing } from "./start_dealing";
-import addRound from "./add_round";
-import addPli from "./add_pli";
+import { emitStartDealing } from "./startDealing";
+import addRound from "./addRound";
+import addPli from "./addPli";
 
 /**
  * Emits a 'start_trick' event to the game room, indicating which player starts the trick.

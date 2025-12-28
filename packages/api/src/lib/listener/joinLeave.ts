@@ -1,7 +1,7 @@
 import controller from "../game";
 import type { IPlayer } from "@coinche-reborn/api";
-import addPlayer from "../actions/add_player";
-import removePlayer from "../actions/remove_player";
+import addPlayer from "../actions/addPlayer";
+import removePlayer from "../actions/removePlayer";
 
 /**
  * Handles player join/leave events for a game room.

@@ -1,5 +1,5 @@
 import { emitCanBid } from "../actions/can";
-import { startPli } from "../actions/start_pli";
+import { startPli } from "../actions/startPli";
 import controller from "../game";
 import logger from "../logger";
 import { getNextPlayerTurn } from "../utils";

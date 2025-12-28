@@ -4,6 +4,8 @@
     "**/dist/": true,
     "**/.turbo/": true,
     "**/.nuxt/": true,
-    "**/.output/": true
+    "**/.output/": true,
+    "**/.vercel/": true,
+    "**/.data/": true
   }
 }

@@ -1,14 +1,14 @@
-import { distributeRankingPoints, emitEndGame } from "./end_game";
+import { distributeRankingPoints, emitEndGame } from "./endGame";
 import { emitPoints } from "./points";
-import { startPli } from "./start_pli";
+import { startPli } from "./startPli";
 import controller from "../game";
 import { dev } from "../utils";
 import { formatTeam } from "@coinche-reborn/api";
 import { genIdCuid } from "@coinche-reborn/api";
 import type { EventInsert, IPlay, IPlayer } from "@coinche-reborn/api";
-import { emitStartTrick } from "./start_trick";
-import { emitEndTrick } from "./end_trick";
-import addPli from "./add_pli";
+import { emitStartTrick } from "./startTrick";
+import { emitEndTrick } from "./endTrick";
+import addPli from "./addPli";
 
 let scoreToReach: number;
 if (dev) {
@@ -62,7 +62,7 @@ export async function closePli(gameId: string) {
       // next round if not goal score is reached
       // update the db :
       // fetch the last player starting id
-      const playerId = await fetchcurrentPliPlayerWinningId(gameId);
+      const playerId = await fetchCurrentPliPlayerWinningId(gameId);
       // emit the game starting event
       await emitStartTrick(gameId, playerId);
     }
@@ -102,7 +102,7 @@ export function findWinner(currentPliEvents: IPlay[], gameId: string) {
   }
 }
 
-export async function fetchcurrentPliPlayerWinningId(gameId: string): Promise<string> {
+export async function fetchCurrentPliPlayerWinningId(gameId: string): Promise<string> {
   const players: IPlayer[] = Array.from(controller.getInstance(gameId).getPlayers());
   const oldPlayerStartedId = controller.getInstance(gameId).getCurrentPli().playerStartingId;
   const playerStartedIndex = players.findIndex((player) => player.id === oldPlayerStartedId);

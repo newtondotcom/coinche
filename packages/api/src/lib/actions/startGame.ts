@@ -1,4 +1,4 @@
-import { emitStartTrick } from "./start_trick";
+import { emitStartTrick } from "./startTrick";
 import controller from "../game";
 
 export async function emitGameStarting(playerId: string, gameId: string) {

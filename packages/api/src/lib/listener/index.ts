@@ -1,7 +1,7 @@
 import translateBidding from "../listener/bidding";
 import translatePlay from "../listener/play";
 import type { EventInsert } from "@coinche-reborn/api";
-import { handlePlayerJoinLeave } from "./join_leave";
+import { handlePlayerJoinLeave } from "./joinLeave";
 
 export async function translateEvent(event: EventInsert) {
   switch (event.type) {

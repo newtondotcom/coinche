@@ -1,7 +1,7 @@
 import type { IPlayer } from "@coinche-reborn/api";
 import controller from "../game";
 import logger from "../logger";
-import { emitGameStarting } from "./start_game";
+import { emitGameStarting } from "./startGame";
 
 export default function addPlayer(player: IPlayer, gameId: string) {
   const controllerInstance = controller.getInstance(gameId);
