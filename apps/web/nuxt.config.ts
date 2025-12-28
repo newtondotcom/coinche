@@ -11,9 +11,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   nitro: {
-    output: {
-      dir: "dist",
-    },
+    preset: "vercel",
   },
   devServer: {
     port: 3001,
