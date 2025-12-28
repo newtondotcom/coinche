@@ -3,15 +3,15 @@ name: coinche-reborn
 services:
   postgres:
     image: postgres
-    container_name: coinche-reborn-postgres
+    container_name: coinche-postgres
     environment:
-      POSTGRES_DB: coinche-reborn
+      POSTGRES_DB: coinche
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
-      - coinche-reborn_postgres_data:/var/lib/postgresql
+      - coinche_postgres_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -20,4 +20,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  coinche-reborn_postgres_data:
+  coinche_postgres_data:
