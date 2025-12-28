@@ -30,7 +30,7 @@ WORKDIR /app
 
 # Copy compiled binary from builder
 COPY --from=builder /usr/src/app/apps/server/server ./server
-COPY --from=builder /usr/src/app/packages/db/src/migrations ./migrations
+COPY --from=builder /usr/src/app/packages/db/src/migrations /packages/db/src/migrations
 
 # Ensure permissions
 RUN chown appuser:appuser ./server && chmod +x ./server
