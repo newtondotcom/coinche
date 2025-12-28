@@ -165,26 +165,36 @@ const wsHandler = {
   },
 };
 
-// Run database migrations before starting the server
-// This ensures the schema is up to date before accepting connections
-await runMigrations().catch((error) => {
-  logger.error("Failed to run migrations:", error);
-  // In production, you might want to exit here
-  // For development, we continue so the server can start even if DB is not available
-  if (process.env.NODE_ENV === "production") {
-    process.exit(1);
+// Initialize server with migrations
+async function initializeServer() {
+  // Run database migrations before starting the server
+  // This ensures the schema is up to date before accepting connections
+  try {
+    await runMigrations();
+  } catch (error) {
+    logger.error("Failed to run migrations:", error);
+    // In production, you might want to exit here
+    // For development, we continue so the server can start even if DB is not available
+    if (process.env.NODE_ENV === "production") {
+      process.exit(1);
+    }
   }
-});
 
-server = serve({
-  port: 3000,
-  fetch: app.fetch,
-  websocket: wsHandler,
-  development: true,
-});
+  server = serve({
+    port: 3000,
+    fetch: app.fetch,
+    websocket: wsHandler,
+    development: true,
+  });
 
-// Inject server instance into the game controller
-controller.setServer(server);
+  // Inject server instance into the game controller
+  controller.setServer(server);
+
+  return server;
+}
+
+// Start the server
+initializeServer();
 
 // Export server for external use
 export { server };
