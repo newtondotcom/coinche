@@ -19,7 +19,7 @@ export async function runMigrations(): Promise<void> {
   const migrationsFolder = `${import.meta.dir}/migrations`;
 
   try {
-    console.log("Checking for pending migrations...");
+    console.log(`Checking for pending migrations at ${migrationsFolder}...`);
     await migrate(db, { migrationsFolder });
     console.log("✓ Database migrations are up to date");
   } catch (error) {
