@@ -30,7 +30,6 @@ export const auth = betterAuth({
           authorizationUrl: process.env.CHURROS_AUTHORIZATION_URL ?? "",
           tokenUrl: process.env.CHURROS_TOKEN_URL ?? "",
           scopes: ["openid", "profile", "preferred_username", "email", "churros:profile"],
-          redirectURI: process.env.CORS_ORIGIN || "http://localhost:3001",
           async getUserInfo(tokens) {
             const userInfoUrl = process.env.CHURROS_INFO_URL;
             if (!userInfoUrl) {

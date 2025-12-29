@@ -20,6 +20,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       serverUrl: process.env.NUXT_PUBLIC_SERVER_URL,
+      clientUrl: process.env.NUXT_PUBLIC_CLIENT_URL,
     },
   },
   shadcn: {

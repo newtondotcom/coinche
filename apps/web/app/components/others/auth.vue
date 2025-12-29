@@ -11,11 +11,12 @@
 <script setup lang="ts">
 const {$authClient} = useNuxtApp()
 const session = $authClient.useSession()
+const config = useRuntimeConfig()
 
 async function onSignIn() {
     await $authClient.signIn.oauth2({
         providerId: "churros",
-        callbackURL: "/regles"
+        callbackURL: config.public.clientUrl
     }, {
         onSuccess: () => {
             console.log("Success");
