@@ -8,7 +8,7 @@ export function useSoundSettings() {
 
   // Initialize from localStorage on client side
   onMounted(() => {
-    if (process.client) {
+    if (import.meta.client) {
       const stored = localStorage.getItem(SOUND_MUTED_KEY);
       soundMuted.value = stored === "true";
 
@@ -19,13 +19,13 @@ export function useSoundSettings() {
 
   // Watch for changes and update localStorage
   watch(soundMuted, (newValue) => {
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem(SOUND_MUTED_KEY, String(newValue));
     }
   });
 
   watch(notificationsMuted, (newValue) => {
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem(NOTIFICATIONS_MUTED_KEY, String(newValue));
     }
   });

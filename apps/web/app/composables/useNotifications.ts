@@ -9,7 +9,7 @@ export function useNotifications() {
 
   // Initialize focus tracking on client side
   onMounted(() => {
-    if (process.client) {
+    if (import.meta.client) {
       originalTitle.value = document.title;
 
       // Window focus/blur event listeners
@@ -40,7 +40,7 @@ export function useNotifications() {
   // Play notification sound
   const playNotificationSound = (soundType: "turn-to-play" | "turn-to-bid") => {
     if (
-      process.client &&
+      import.meta.client &&
       !soundMuted.value &&
       !notificationsMuted.value &&
       !isWindowFocused.value
@@ -69,14 +69,14 @@ export function useNotifications() {
 
   // Show notification badge in document title
   const showNotificationBadge = (message: string) => {
-    if (process.client && !notificationsMuted.value && !isWindowFocused.value) {
+    if (import.meta.client && !notificationsMuted.value && !isWindowFocused.value) {
       document.title = `🔔 ${message} - ${originalTitle.value}`;
     }
   };
 
   // Clear notification badge from document title
   const clearNotificationBadge = () => {
-    if (process.client && originalTitle.value) {
+    if (import.meta.client && originalTitle.value) {
       document.title = originalTitle.value;
     }
   };
@@ -96,7 +96,7 @@ export function useNotifications() {
 
   // Request notification permission (for future browser notifications)
   const requestNotificationPermission = async () => {
-    if (process.client && "Notification" in window) {
+    if (import.meta.client && "Notification" in window) {
       try {
         const permission = await Notification.requestPermission();
         return permission === "granted";
