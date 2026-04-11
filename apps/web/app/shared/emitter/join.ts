@@ -1,5 +1,4 @@
 import { sendWS } from "@/shared/utils/ws";
-import { genIdCuid } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";
 
 export async function join() {
@@ -7,7 +6,7 @@ export async function join() {
   const gameId = storeState.gameId;
   // Just send join event via WebSocket
   sendWS({
-    id: await genIdCuid(),
+    id: Bun.randomUUIDv7(),
     type: "join",
     playerId: storeState.getMyId,
     gameId: gameId,

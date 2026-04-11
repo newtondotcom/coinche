@@ -1,13 +1,12 @@
 import controller from "../game";
 import logger from "../logger";
-import { genIdCuid } from "@coinche-reborn/api";
 import { emitCanPlay } from "./can";
 
 export async function startTrick(gameId: string) {
   // launch trick
   const playerIdStarting = controller.getInstance(gameId).getCurrentTrick().playerStartingId;
   const event = {
-    id: await genIdCuid(),
+    id: Bun.randomUUIDv7(),
     type: "start_trick",
     playerId: "controller",
     gameId: gameId,

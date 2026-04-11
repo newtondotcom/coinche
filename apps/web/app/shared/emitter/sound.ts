@@ -1,12 +1,11 @@
 import { sendWS } from "@/shared/utils/ws";
-import { genIdCuid } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";
 
 export async function emitSound(name: string) {
   const storeState = useStateStore();
   const gameId = storeState.gameId;
   sendWS({
-    id: await genIdCuid(),
+    id: Bun.randomUUIDv7(),
     type: "sound",
     playerId: storeState.getMyId,
     gameId: gameId,

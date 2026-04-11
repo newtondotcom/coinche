@@ -33,6 +33,4 @@ export {
   unformatPoints,
 } from "./format";
 
-export { genIdCuid } from "./genId";
-
 export type { IGameState, ChangeCallback, WSPayload, IGameStateClient } from "./state";

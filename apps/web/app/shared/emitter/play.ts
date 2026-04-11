@@ -1,5 +1,5 @@
 import { sendWS } from "@/shared/utils/ws";
-import { formatCarteToPlay, genIdCuid } from "@coinche-reborn/api";
+import { formatCarteToPlay} from "@coinche-reborn/api";
 import type { ICardSuite, ICardValue, ICard } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";
 
@@ -15,7 +15,7 @@ export async function emitCardPlay(card: ICard) {
   console.log(`Playing card ${card.suite}-${card.value} with valueNum=${card.valueNum}`);
 
   sendWS({
-    id: await genIdCuid(),
+    id: Bun.randomUUIDv7(),
     type: "play",
     playerId: storeState.getMyId,
     gameId: storeState.gameId,

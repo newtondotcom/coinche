@@ -1,6 +1,5 @@
 import logger from "../logger";
 import { formatTeam } from "@coinche-reborn/api";
-import { genIdCuid } from "@coinche-reborn/api";
 import type { EventInsert, IPlayer } from "@coinche-reborn/api";
 import { events, game, playerStats } from "@coinche-reborn/db/schema/index";
 import { eq, or } from "drizzle-orm";
@@ -43,7 +42,7 @@ export async function emitEndGame(
   gameId: string,
 ) {
   const event: EventInsert = {
-    id: await genIdCuid(),
+    id: Bun.randomUUIDv7(),
     type: "end_game",
     playerId: "controller",
     gameId: gameId,
