@@ -1,16 +1,38 @@
-name: Build and Deploy Server
+name: Build and Deploy Images
 on:
   push:
     branches:
       - main
     paths:
       - "apps/server/**"
-      - "packages/**"
+      - "apps/web/**"
+      - "packages/db/**"
+      - "packages/auth/**"
+      - "packages/env/**"
+      - "packages/api/**"
+      - "packages/config/**"
+      - ".github/workflows/docker.yml"
   workflow_dispatch:
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: server
+            file: apps/server/Containerfile
+            image_suffix: "-server"
+          - name: migrate
+            file: packages/db/migrate.Containerfile
+            image_suffix: "-migrate"
+          - name: web
+            file: apps/web/Containerfile
+            image_suffix: "-web"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,11 +49,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push (${{ matrix.name }})
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_IMAGE }}:${{ secrets.DOCKER_TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_IMAGE }}${{ matrix.image_suffix }}:${{ secrets.DOCKER_TAG }}
           platforms: linux/arm64/v8
-          file: apps/server/Containerfile
+          file: ${{ matrix.file }}
           context: .
