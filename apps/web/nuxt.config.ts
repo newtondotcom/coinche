@@ -1,4 +1,3 @@
-import "@coinche-reborn/env/web";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
