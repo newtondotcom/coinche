@@ -19,6 +19,8 @@ COPY . .
 
 # Bake production mode into the static client bundle
 ENV NODE_ENV=production
+ENV NUXT_PUBLIC_API_URL="https://b.coinche.rob1.cloud"
+ENV NUXT_PUBLIC_URL="https://coinche.rob1.cloud"
 
 # Static SPA output for nginx (override vercel preset from nuxt.config)
 RUN cd apps/web && bun run generate && ls -la .output/public
