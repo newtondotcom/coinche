@@ -5,7 +5,7 @@
     <NuxtPage />
     <OthersFooter v-if="!isGamePage" />
 
-    <OthersDevEnv v-if="isDevEnv(config)" />
+    <OthersDevEnv v-if="isDevEnv" />
   </div>
 
   <NuxtLoadingIndicator />
@@ -14,10 +14,8 @@
 
 <script setup lang="ts">
 import { Toaster } from "@/components/ui/sonner";
-import { isDevEnv } from "@/shared/utils/miscs";
 import "vue-sonner/style.css";
 
-const config = useRuntimeConfig();
 const route = useRoute();
 
 // Check if current page is the game page

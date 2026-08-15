@@ -9,15 +9,15 @@
 </template>
 
 <script setup lang="ts">
+import { env } from "@coinche-reborn/env/web";
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();
-const config = useRuntimeConfig();
 
 async function onSignIn() {
   await $authClient.signIn.oauth2(
     {
       providerId: "churros",
-      callbackURL: config.public.clientUrl,
+      callbackURL: env.NUXT_PUBLIC_URL,
     },
     {
       onSuccess: () => {

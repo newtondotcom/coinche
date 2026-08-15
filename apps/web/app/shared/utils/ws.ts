@@ -1,12 +1,12 @@
-// WebSocket client utility for Bun server
+// WebSocket client utility to communicate with the Bun server
 // Usage: import { getWS, sendWS, onWSMessage, offWSMessage } from '@/lib/utils/ws';
 
 import { toast } from "vue-sonner";
+import { env } from "@coinche-reborn/env/web";
 
 let ws: WebSocket | null = null;
 const listeners = new Set<(msg: any) => void>();
 const connectionListeners = new Set<(connected: boolean) => void>();
-const config = useRuntimeConfig();
 
 // Track connection status
 let isConnected = false;
@@ -14,7 +14,7 @@ let isConnected = false;
 export function getWS() {
   if (!ws || ws.readyState === WebSocket.CLOSED) {
     // Construct WebSocket URL from server URL
-    const serverURL = config.public.serverURL || "http://localhost:3000";
+    const serverURL = env.NUXT_PUBLIC_API_URL;
     const wsURL = serverURL.replace(/^http(s)?:\/\//, "ws$1://") + "/ws";
     console.log("Connecting to WebSocket:", wsURL);
     ws = new WebSocket(wsURL);

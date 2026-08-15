@@ -1,12 +1,11 @@
 import { createAuthClient } from "better-auth/vue";
 import { genericOAuthClient, inferAdditionalFields } from "better-auth/client/plugins";
 import type { Auth } from "@coinche-reborn/auth/type";
+import { env } from "@coinche-reborn/env/web";
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig();
-
   const authClient = createAuthClient({
-    baseURL: config.public.serverUrl,
+    baseURL: env.NUXT_PUBLIC_API_URL,
     plugins: [genericOAuthClient(), inferAdditionalFields<Auth>()],
   });
 

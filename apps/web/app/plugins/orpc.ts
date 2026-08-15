@@ -4,10 +4,10 @@ import { defineNuxtPlugin } from "#app";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+import { env } from "@coinche-reborn/env/web";
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig();
-  const rpcUrl = `${config.public.serverUrl}/rpc`;
+  const rpcUrl = `${env.NUXT_PUBLIC_API_URL}/rpc`;
 
   const rpcLink = new RPCLink({
     url: rpcUrl,

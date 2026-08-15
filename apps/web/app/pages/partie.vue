@@ -27,7 +27,6 @@
 <script setup lang="ts">
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
-import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
 import { CHANGE_TYPE_STATE } from "@coinche-reborn/api";
 import type { WSPayload } from "@coinche-reborn/api";
@@ -36,7 +35,6 @@ const storeState = useStateStore();
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();
 const route = useRoute();
-const config = useRuntimeConfig();
 
 const id = route.query.id as string;
 const gameId = route.query.gameId as string;
@@ -85,7 +83,7 @@ onMounted(async () => {
   // }
 
   // Set up beforeunload handler for non-dev environments
-  if (!isDevEnv(config)) {
+  if (!isDevEnv) {
     (globalThis as any).window.onbeforeunload = (event: any) => {
       event.preventDefault();
       return "Are you sure you want to leave this page? Changes you made may not be saved.";
@@ -109,7 +107,7 @@ onBeforeUnmount(async () => {
   }
 
   // Remove beforeunload handler
-  if (!isDevEnv(config)) {
+  if (!isDevEnv) {
     (globalThis as any).window.onbeforeunload = null;
   }
 });
