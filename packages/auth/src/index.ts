@@ -3,13 +3,14 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import * as authSchema from "@coinche-reborn/db/schema/auth";
 import { genericOAuth } from "better-auth/plugins";
 import { db } from "@coinche-reborn/db";
+import { env } from "@coinche-reborn/env/server";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: authSchema,
   }),
-  trustedOrigins: [process.env.CORS_ORIGIN || "http://localhost:3001"],
+  trustedOrigins: [env.CORS_ORIGIN || "http://localhost:3001"],
   user: {
     additionalFields: {
       username: {
@@ -25,13 +26,13 @@ export const auth = betterAuth({
       config: [
         {
           providerId: "churros",
-          clientId: process.env.CHURROS_CLIENT_ID ?? "",
-          clientSecret: process.env.CHURROS_CLIENT_SECRET ?? "",
-          authorizationUrl: process.env.CHURROS_AUTHORIZATION_URL ?? "",
-          tokenUrl: process.env.CHURROS_TOKEN_URL ?? "",
+          clientId: env.CHURROS_CLIENT_ID ?? "",
+          clientSecret: env.CHURROS_CLIENT_SECRET ?? "",
+          authorizationUrl: env.CHURROS_AUTHORIZATION_URL ?? "",
+          tokenUrl: env.CHURROS_TOKEN_URL ?? "",
           scopes: ["openid", "profile", "preferred_username", "email", "churros:profile"],
           async getUserInfo(tokens) {
-            const userInfoUrl = process.env.CHURROS_INFO_URL;
+            const userInfoUrl = env.CHURROS_INFO_URL;
             if (!userInfoUrl) {
               throw new Error("CHURROS_INFO_URL environment variable is not set");
             }
@@ -49,7 +50,15 @@ export const auth = betterAuth({
               );
             }
 
-            const userInfo = await response.json();
+            const userInfo = (await response.json()) as {
+              sub: string;
+              fullName: string;
+              uid: string;
+              nickname: string;
+              pictureURL: string;
+              email: string;
+              email_verified: boolean;
+            };
 
             console.info("User info received", { userInfo });
 

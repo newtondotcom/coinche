@@ -10,8 +10,9 @@ import { playerStats } from "@coinche-reborn/db/schema/index";
 import { eq } from "drizzle-orm";
 import { db } from "@coinche-reborn/db";
 import logger from "./logger";
+import { env } from "@coinche-reborn/env/server";
 
-export const dev = process.env.NODE_ENV !== "production";
+export const dev = env.NODE_ENV !== "production";
 
 export function getNextPlayerTurn(playerId: string, gameId: string) {
   const gameController = controller.getInstance(gameId);
@@ -31,7 +32,7 @@ export function getNextPlayerTurn(playerId: string, gameId: string) {
 
   // Calculate next player index (circular)
   const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
-  const nextPlayerId = players[nextPlayerIndex].id;
+  const nextPlayerId = players[nextPlayerIndex]?.id;
 
   return nextPlayerId;
 }
@@ -39,7 +40,7 @@ export function getNextPlayerTurn(playerId: string, gameId: string) {
 function shuffle(array: ICard[]): ICard[] {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [array[i], array[j]!] = [array[j]!, array[i]!];
   }
   return array;
 }
@@ -67,7 +68,7 @@ export async function addPointsTo(points: number, playerId: PlayerId) {
     .limit(1);
 
   // Calculate the new points
-  const newPoints = data[0].totalPoints + points;
+  const newPoints = (data[0]?.totalPoints ?? 0) + points;
 
   // Update the points in the database
   await db
