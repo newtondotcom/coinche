@@ -19,7 +19,7 @@
     "@orpc/server": "catalog:",
     "@orpc/zod": "catalog:",
     "dotenv": "catalog:",
-    "drizzle-orm": "^0.45.1",
+    "drizzle-orm": "^0.45.2",
     "hono": "catalog:",
     "winston": "^3.19.0",
     "zod": "catalog:"
