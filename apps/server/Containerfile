@@ -33,7 +33,6 @@ COPY --from=builder /usr/src/app/apps/server/server ./server
 
 # Ensure permissions
 RUN chown appuser:appuser ./server && chmod +x ./server
-RUN chown -R appuser:appuser /usr/src/app/packages/db/src
 
 RUN mkdir -p logs && chown -R appuser:appuser /app
 
