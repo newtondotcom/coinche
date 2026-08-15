@@ -164,7 +164,7 @@ const wsHandler = {
   },
 };
 
-// Initialize server with migrations
+// Initialize server
 async function initializeServer() {
   server = Bun.serve({
     port: 3000,
