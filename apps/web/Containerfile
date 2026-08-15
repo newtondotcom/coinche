@@ -17,6 +17,9 @@ RUN bun install | tee /tmp/bun-install.log;
 # Copy full repo (needed for build)
 COPY . .
 
+# Bake production mode into the static client bundle
+ENV NODE_ENV=production
+
 # Static SPA output for nginx (override vercel preset from nuxt.config)
 RUN cd apps/web && bun run generate && ls -la .output/public
 
