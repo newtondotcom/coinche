@@ -114,13 +114,13 @@ const wsHandler = {
     console.log("client suscribed to room");
   },
   async message(ws: ServerWebSocket, raw: string | ArrayBuffer | Uint8Array) {
-    const data = ws.data as unknown as { userId: string; gameId: string };
     let msg: EventInsert;
     let rawStr: string = typeof raw === "string" ? raw : raw.toString();
     try {
       msg = JSON.parse(rawStr);
     } catch (e) {
       ws.send(JSON.stringify({ type: "system", message: "Invalid message format." }));
+      console.error("Invalid message format:", e);
       return;
     }
     if (msg.type && msg.gameId) {

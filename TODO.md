@@ -1,0 +1,1 @@
+- [ ] Add zod schema for ws message

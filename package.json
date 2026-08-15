@@ -37,7 +37,11 @@
     "db:watch": "turbo -F @coinche-reborn/db db:watch",
     "db:stop": "turbo -F @coinche-reborn/db db:stop",
     "db:down": "turbo -F @coinche-reborn/db db:down",
-    "compile:server": "turbo -F server compile"
+    "compile:server": "turbo -F server compile",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "dependencies": {
     "@coinche-reborn/env": "workspace:*",
