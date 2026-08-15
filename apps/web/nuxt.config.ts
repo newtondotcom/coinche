@@ -14,12 +14,6 @@ export default defineNuxtConfig({
     port: 3001,
   },
   ssr: false,
-  runtimeConfig: {
-    public: {
-      serverUrl: process.env.NUXT_PUBLIC_SERVER_URL,
-      clientUrl: process.env.NUXT_PUBLIC_CLIENT_URL,
-    },
-  },
   shadcn: {
     prefix: "",
     componentDir: "@/components/ui",
