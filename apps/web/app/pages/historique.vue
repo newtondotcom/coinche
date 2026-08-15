@@ -41,10 +41,14 @@
             {{ row.id || row.gameId }}
           </div>
           <div class="text-lg w-[120px] text-center">
-            {{ row.createdAt || row.startedAt ? formatDistanceToNow(row.createdAt || row.startedAt, {locale: fr}) : '' }}
+            {{
+              row.createdAt || row.startedAt
+                ? formatDistanceToNow(row.createdAt || row.startedAt, { locale: fr })
+                : ""
+            }}
           </div>
           <div class="text-lg w-[200px] text-center truncate">
-            {{ [row.p1, row.p2, row.p3, row.p4].filter(Boolean).join(', ') }}
+            {{ [row.p1, row.p2, row.p3, row.p4].filter(Boolean).join(", ") }}
           </div>
           <div class="text-lg w-[100px] text-center">
             {{ row.team1_score ?? row.team1Score ?? 0 }} -
@@ -60,9 +64,9 @@
 </template>
 
 <script setup lang="ts">
-import {formatDistanceToNow} from "date-fns";
-import {fr} from "date-fns/locale";
-import { useQuery } from '@tanstack/vue-query'
+import { formatDistanceToNow } from "date-fns";
+import { fr } from "date-fns/locale";
+import { useQuery } from "@tanstack/vue-query";
 
 const { $orpc } = useNuxtApp();
 

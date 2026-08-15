@@ -16,24 +16,24 @@
 </template>
 
 <script setup lang="ts">
-import type { HistoriqueRow } from '@coinche-reborn/api';
-import { useStateStore } from '@/stores/state';
+import type { HistoriqueRow } from "@coinche-reborn/api";
+import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 
 interface HistoriqueRowProps {
-    row: HistoriqueRow;
+  row: HistoriqueRow;
 }
 const props = defineProps<HistoriqueRowProps>();
 
 const playerTeam1 = computed(() => {
-    return props.row.p1 === storeState.getMyId || props.row.p3 === storeState.getMyId;
+  return props.row.p1 === storeState.getMyId || props.row.p3 === storeState.getMyId;
 });
 
 const team1Win = computed(() => {
-    return props.row.team1_score > props.row.team2_score;
+  return props.row.team1_score > props.row.team2_score;
 });
 
 const playerWin = computed(() => {
-    return (playerTeam1.value && team1Win.value) || (!playerTeam1.value && !team1Win.value);
+  return (playerTeam1.value && team1Win.value) || (!playerTeam1.value && !team1Win.value);
 });
 </script>

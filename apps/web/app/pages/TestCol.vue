@@ -32,15 +32,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 
-const visibleFrames = ref([false, false, false, false])
+const visibleFrames = ref([false, false, false, false]);
 
 onMounted(() => {
   visibleFrames.value.forEach((_, index) => {
     setTimeout(() => {
-      visibleFrames.value[index] = true
-    }, 1000 * index)
-  })
-})
+      visibleFrames.value[index] = true;
+    }, 1000 * index);
+  });
+});
 </script>

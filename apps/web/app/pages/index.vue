@@ -32,7 +32,7 @@
                   <Skeleton class="h-6 w-48" />
                 </template>
                 <template v-else>
-                  {{ gameExists ? 'Partie trouvée' : 'Créer une nouvelle partie ?' }}
+                  {{ gameExists ? "Partie trouvée" : "Créer une nouvelle partie ?" }}
                 </template>
               </AlertDialogTitle>
               <AlertDialogDescription>
@@ -41,7 +41,9 @@
                 </template>
                 <template v-else>
                   <span v-if="gameExists">
-                    Il y a actuellement {{ playerCount }} joueur{{ playerCount > 1 ? 's' : '' }}
+                    Il y a actuellement {{ playerCount }} joueur{{
+                      playerCount > 1 ? "s" : ""
+                    }}
                     dans la partie.<br />
                     Voulez-vous rejoindre ?
                   </span>
@@ -58,7 +60,7 @@
               </template>
               <template v-else>
                 <AlertDialogAction @click="confirmJoin">
-                  {{ gameExists ? 'Rejoindre' : 'Créer' }}
+                  {{ gameExists ? "Rejoindre" : "Créer" }}
                 </AlertDialogAction>
                 <AlertDialogCancel>Annuler</AlertDialogCancel>
               </template>
@@ -71,13 +73,13 @@
 </template>
 
 <script setup lang="ts">
-import { useNuxtApp } from '#app';
-import { useStateStore } from '@/stores/state';
-import { BlurReveal } from '@/components/ui/blur-reveal';
+import { useNuxtApp } from "#app";
+import { useStateStore } from "@/stores/state";
+import { BlurReveal } from "@/components/ui/blur-reveal";
 
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();
-const gameId = ref<string>('');
+const gameId = ref<string>("");
 const loading = ref(false);
 const gameExists = ref(false);
 const playerCount = ref(0);
@@ -85,21 +87,21 @@ const { $orpc } = useNuxtApp();
 const stateStore = useStateStore();
 
 async function confirmJoin() {
-    if (!session.value) {
-        navigateTo(`/404`);
-        return;
-    }
-    loading.value = true;
-    try {
-        const res = await $orpc.checkGameExists.call({ gameId: gameId.value });
-        gameExists.value = res.exists;
-        playerCount.value = res.playerCount ?? 0;
-        loading.value = false;
-        navigateTo(`/partie?id=${stateStore.getMyId}&gameId=${gameId.value}`);
-    } catch (e) {
-        gameExists.value = false;
-        playerCount.value = 0;
-        loading.value = false;
-    }
+  if (!session.value) {
+    navigateTo(`/404`);
+    return;
+  }
+  loading.value = true;
+  try {
+    const res = await $orpc.checkGameExists.call({ gameId: gameId.value });
+    gameExists.value = res.exists;
+    playerCount.value = res.playerCount ?? 0;
+    loading.value = false;
+    navigateTo(`/partie?id=${stateStore.getMyId}&gameId=${gameId.value}`);
+  } catch (e) {
+    gameExists.value = false;
+    playerCount.value = 0;
+    loading.value = false;
+  }
 }
 </script>

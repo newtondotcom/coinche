@@ -16,19 +16,23 @@
     Cards in hands : {{ storeState.hand.length }}
     <br />
     Card playable :
-    {{ storeState.hand.some(card => cardCanBePlayed(card, {
-            currentPlayerId: storeState.currentPlayerId,
-            myId: storeState.getMyId,
-            currentTrick: storeState.currentTrick,
-            colorAsked: storeState.colorAsked,
-            trump: storeState.trump,
-            hand: storeState.hand,
-        })) }}
+    {{
+      storeState.hand.some((card) =>
+        cardCanBePlayed(card, {
+          currentPlayerId: storeState.currentPlayerId,
+          myId: storeState.getMyId,
+          currentTrick: storeState.currentTrick,
+          colorAsked: storeState.colorAsked,
+          trump: storeState.trump,
+          hand: storeState.hand,
+        }),
+      )
+    }}
   </div>
 </template>
 
 <script setup lang="ts">
-    import { cardCanBePlayed } from '@/shared/utils/cardRules';
-import { useStateStore } from '@/stores/state';
+import { cardCanBePlayed } from "@/shared/utils/cardRules";
+import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 </script>

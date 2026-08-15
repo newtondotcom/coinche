@@ -23,18 +23,18 @@
 </template>
 
 <script setup lang="ts">
-import { emitSound } from '@/shared/emitter/sound';
-import { triggerSound } from '@/shared/listener/sound';
-import { AudioLines } from 'lucide-vue-next';
+import { emitSound } from "@/shared/emitter/sound";
+import { triggerSound } from "@/shared/listener/sound";
+import { AudioLines } from "lucide-vue-next";
 
 const mapSound = {
-    mario: 'Waaaaaa',
-    combien: 'Combien',
-    porte: 'Porte',
+  mario: "Waaaaaa",
+  combien: "Combien",
+  porte: "Porte",
 };
 
 async function emitAndPlaySound(name: string) {
-    triggerSound(name);
-    await emitSound(name);
+  triggerSound(name);
+  await emitSound(name);
 }
 </script>

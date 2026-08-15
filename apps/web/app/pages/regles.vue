@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-const { data: rules } = await useAsyncData(() => queryCollection('content').path('/rules').first())
+const { data: rules } = await useAsyncData(() => queryCollection("content").path("/rules").first());
 
 useSeoMeta({
   title: rules.value?.title,
-  description: rules.value?.description
-})
+  description: rules.value?.description,
+});
 </script>

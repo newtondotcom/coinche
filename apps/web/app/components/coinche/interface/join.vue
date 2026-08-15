@@ -14,44 +14,28 @@
           <div>
             <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
             <span v-else>
-              {{
-                                storeState.players.length > 0
-                                    ? storeState.players[0]?.id
-                                    : 'en attente'
-              }}
+              {{ storeState.players.length > 0 ? storeState.players[0]?.id : "en attente" }}
             </span>
           </div>
           <div />
           <div>
             <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
             <span v-else>
-              {{
-                                storeState.players.length > 3
-                                    ? storeState.players[3]?.id
-                                    : 'en attente'
-              }}
+              {{ storeState.players.length > 3 ? storeState.players[3]?.id : "en attente" }}
             </span>
           </div>
           <div />
           <div>
             <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
             <span v-else>
-              {{
-                                storeState.players.length > 1
-                                    ? storeState.players[1]?.id
-                                    : 'en attente'
-              }}
+              {{ storeState.players.length > 1 ? storeState.players[1]?.id : "en attente" }}
             </span>
           </div>
           <div />
           <div>
             <Skeleton v-if="storeState.isLoadingPlayerList" class="h-6 w-20" />
             <span v-else>
-              {{
-                                storeState.players.length > 2
-                                    ? storeState.players[2]?.id
-                                    : 'en attente'
-              }}
+              {{ storeState.players.length > 2 ? storeState.players[2]?.id : "en attente" }}
             </span>
           </div>
           <div />
@@ -62,6 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import { useStateStore } from '@/stores/state';
+import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 </script>

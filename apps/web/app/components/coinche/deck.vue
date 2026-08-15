@@ -23,14 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { Motion, AnimatePresence } from 'motion-v';
-import { useStateStore } from '@/stores/state';
+import { Motion, AnimatePresence } from "motion-v";
+import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 
 const deckCardMotion = {
-    initial: { opacity: 0, y: 24, scale: 0.95 },
-    animate: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, y: -24, scale: 0.95 },
-    transition: { type: 'spring', stiffness: 260, damping: 24, mass: 0.6 },
+  initial: { opacity: 0, y: 24, scale: 0.95 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -24, scale: 0.95 },
+  transition: { type: "spring", stiffness: 260, damping: 24, mass: 0.6 },
 };
 </script>

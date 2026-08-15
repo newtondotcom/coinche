@@ -34,9 +34,11 @@
           v-for="(row, index) in classement"
           :key="row.id"
           :class="[
-                        'flex flex-row space-x-6 justify-center items-center border px-4 py-3 rounded-lg my-2 w-full transition',
-                        row.id === session?.data?.user?.id ? 'ring-2 ring-primary/60 bg-primary/10 font-bold' : 'hover:bg-primary/5'
-                    ]"
+            'flex flex-row space-x-6 justify-center items-center border px-4 py-3 rounded-lg my-2 w-full transition',
+            row.id === session?.data?.user?.id
+              ? 'ring-2 ring-primary/60 bg-primary/10 font-bold'
+              : 'hover:bg-primary/5',
+          ]"
         >
           <div class="text-2xl font-semibold w-[50px] text-center">{{ index + 1 }}.</div>
           <div class="text-2xl font-semibold w-[300px] text-center truncate">{{ row.id }}</div>
@@ -50,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
+import { useQuery } from "@tanstack/vue-query";
 
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();

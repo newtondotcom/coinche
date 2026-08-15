@@ -19,8 +19,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { getConnectionStatus, onConnectionChange } from '@/shared/utils/ws';
+import { ref, onMounted, onUnmounted } from "vue";
+import { getConnectionStatus, onConnectionChange } from "@/shared/utils/ws";
 
 const isConnected = ref(false);
 

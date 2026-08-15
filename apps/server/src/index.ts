@@ -7,7 +7,7 @@ import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import { serve, type ServerWebSocket } from "bun";
+import { type ServerWebSocket } from "bun";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import controller from "@coinche-reborn/api/lib/game";
@@ -88,7 +88,7 @@ app.get("/", (c) => {
 });
 
 // Declare server variable before it's used
-let server: ReturnType<typeof serve> | null = null;
+let server: ReturnType<typeof Bun.serve> | null = null;
 
 app.get("/ws", async (c, next) => {
   console.log("ws2");
@@ -180,7 +180,7 @@ async function initializeServer() {
     }
   }
 
-  server = serve({
+  server = Bun.serve({
     port: 3000,
     fetch: app.fetch,
     websocket: wsHandler,

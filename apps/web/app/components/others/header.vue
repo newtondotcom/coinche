@@ -35,6 +35,6 @@
 <script setup lang="ts">
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();
-import { useRoute } from 'vue-router'
-const route = useRoute()
+import { useRoute } from "vue-router";
+const route = useRoute();
 </script>

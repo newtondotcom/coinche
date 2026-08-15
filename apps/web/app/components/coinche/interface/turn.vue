@@ -7,11 +7,10 @@
         <div class="flex justify-center items-center">
           <Badge
             :variant="
-                            playerIdTurn ===
-                            storeState.players[(indexPlayers + 2) % lengthPlayers].id
-                                ? 'default'
-                                : 'secondary'
-                        "
+              playerIdTurn === storeState.players[(indexPlayers + 2) % lengthPlayers].id
+                ? 'default'
+                : 'secondary'
+            "
             class="mx-1"
           >
             {{ storeState.players[(indexPlayers + 2) % lengthPlayers].hands.length }}
@@ -25,11 +24,10 @@
         <div class="flex justify-center items-center">
           <Badge
             :variant="
-                            playerIdTurn ===
-                            storeState.players[(indexPlayers + 1) % lengthPlayers].id
-                                ? 'default'
-                                : 'secondary'
-                        "
+              playerIdTurn === storeState.players[(indexPlayers + 1) % lengthPlayers].id
+                ? 'default'
+                : 'secondary'
+            "
             class="mx-1"
           >
             {{ storeState.players[(indexPlayers + 1) % lengthPlayers].hands.length }}
@@ -42,11 +40,10 @@
         <div class="flex justify-center items-center">
           <Badge
             :variant="
-                            playerIdTurn ===
-                            storeState.players[(indexPlayers + 3) % lengthPlayers].id
-                                ? 'default'
-                                : 'secondary'
-                        "
+              playerIdTurn === storeState.players[(indexPlayers + 3) % lengthPlayers].id
+                ? 'default'
+                : 'secondary'
+            "
             class="mx-1"
           >
             {{ storeState.players[(indexPlayers + 3) % lengthPlayers].hands.length }}
@@ -60,10 +57,8 @@
         <div class="flex justify-center items-center relative">
           <Badge
             :variant="
-                            playerIdTurn === storeState.players[indexPlayers].id
-                                ? 'default'
-                                : 'secondary'
-                        "
+              playerIdTurn === storeState.players[indexPlayers].id ? 'default' : 'secondary'
+            "
             class="mx-1"
           >
             {{ storeState.players[indexPlayers].hands.length }}
@@ -86,12 +81,12 @@
 </template>
 
 <script setup lang="ts">
-import { useStateStore } from '@/stores/state';
+import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 
 const playerIdTurn = computed<string>(() => storeState.currentPlayerId);
 const indexPlayers = computed<number>(() =>
-    storeState.players.findIndex((p: any) => p.id == storeState.getMyId),
+  storeState.players.findIndex((p: any) => p.id == storeState.getMyId),
 );
 const lengthPlayers = computed<number>(() => storeState.players.length);
 </script>

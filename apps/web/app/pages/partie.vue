@@ -29,9 +29,9 @@ import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
 import { isDevEnv } from "@/shared/utils/miscs";
 import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
-import { CHANGE_TYPE_STATE} from "@coinche-reborn/api";
+import { CHANGE_TYPE_STATE } from "@coinche-reborn/api";
 import type { WSPayload } from "@coinche-reborn/api";
-import { useStateStore } from '@/stores/state';
+import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 const { $authClient } = useNuxtApp();
 const session = $authClient.useSession();
@@ -42,12 +42,13 @@ const id = route.query.id as string;
 const gameId = route.query.gameId as string;
 
 // Check if loaded in an iframe
-const isIframe = typeof (globalThis as any).window !== 'undefined' && (globalThis as any).window.self !== (globalThis as any).window.top;
+const isIframe =
+  typeof (globalThis as any).window !== "undefined" &&
+  (globalThis as any).window.self !== (globalThis as any).window.top;
 
-if ((!id || !gameId) || (!isIframe && !session.value)) {
+if (!id || !gameId || (!isIframe && !session.value)) {
   navigateTo("/404");
 }
-
 
 // Store cleanup function for WebSocket listener
 let cleanupListener: (() => void) | null = null;
@@ -62,12 +63,12 @@ onMounted(async () => {
   getWS();
 
   // Set up message listener with cleanup function
-  cleanupListener = onWSMessage((event : WSPayload) => {
+  cleanupListener = onWSMessage((event: WSPayload) => {
     if (event.changeType === CHANGE_TYPE_STATE) {
       // Update game state
       storeState.setState(event.state);
     } else {
-      console.warn('Received WebSocket event:', event.changeType);
+      console.warn("Received WebSocket event:", event.changeType);
     }
   });
 
@@ -75,7 +76,7 @@ onMounted(async () => {
   try {
     join();
   } catch (error) {
-    console.error('Failed to join game:', error);
+    console.error("Failed to join game:", error);
   }
 
   // Initialize turn notifications for logged in users
@@ -98,7 +99,7 @@ onBeforeUnmount(async () => {
     sendWS({ type: "leave_game", gameId });
     leave();
   } catch (error) {
-    console.error('Failed to send leave event:', error);
+    console.error("Failed to send leave event:", error);
   }
 
   // Clean up WebSocket listener
