@@ -3,28 +3,28 @@
     <iframe
       v-if="visibleFrames[0]"
       class="w-full"
-      src="/partie?id=0&surname=robebs&gameId=0"
+      src="/partie/?id=0&surname=robebs&gameId=0"
       width="1080"
       height="420"
     />
     <iframe
       v-if="visibleFrames[1]"
       class="w-full"
-      src="/partie?id=1&surname=robebs1&gameId=0"
+      src="/partie/?id=1&surname=robebs1&gameId=0"
       width="1080"
       height="420"
     />
     <iframe
       v-if="visibleFrames[2]"
       class="w-full"
-      src="/partie?id=2&surname=robebs2&gameId=0"
+      src="/partie/?id=2&surname=robebs2&gameId=0"
       width="1080"
       height="420"
     />
     <iframe
       v-if="visibleFrames[3]"
       class="w-full"
-      src="/partie?id=3&surname=robebs3&gameId=0"
+      src="/partie/?id=3&surname=robebs3&gameId=0"
       width="1080"
       height="420"
     />
