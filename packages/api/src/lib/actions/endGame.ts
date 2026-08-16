@@ -6,6 +6,7 @@ import { eq, or } from "drizzle-orm";
 
 import { db } from "@coinche-reborn/db";
 import controller from "../game";
+import { isBotId } from "../bot";
 import { addPointsTo } from "../utils";
 
 /**
@@ -58,6 +59,11 @@ export async function distributeRankingPoints(
   team1Score: number,
   team2Score: number,
 ) {
+  if (players.some((player) => isBotId(player.id))) {
+    logger.info(`[end_game] Skipping ranking updates for bot game ${gameId}`);
+    return;
+  }
+
   const playersIds = players.map((player) => player.id);
 
   // store in db the finished game
