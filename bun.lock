@@ -63,7 +63,6 @@
         "clsx": "^2.1.1",
         "date-fns": "^4.4.0",
         "dotenv": "catalog:",
-        "howler": "^2.2.4",
         "lucide-vue-next": "^1.0.0",
         "motion-v": "^2.4.0",
         "nuxt": "^4.5.2",
@@ -1499,8 +1498,6 @@
     "hono": ["hono@4.13.3", "", {}, "sha512-r8AO2mYHoLxSHkgafNeC/BXyb2vWRxD3jem4Ts+ptav8oTG5FIRifAjuJEmZI4bSvvc2ns0GxmIYiZnHqN3mMw=="],
 
     "hookable": ["hookable@6.1.1", "", {}, "sha512-U9LYDy1CwhMCnprUfeAZWZGByVbhd54hwepegYTK7Pi5NvqEj63ifz5z+xukznehT7i6NIZRu89Ay1AZmRsLEQ=="],
-
-    "howler": ["howler@2.2.4", "", {}, "sha512-iARIBPgcQrwtEr+tALF+rapJ8qSc+Set2GJQl7xT1MQzWaVkFebdJhR3alVlSiUf5U7nAANKuj3aWpwerocD5w=="],
 
     "html-void-elements": ["html-void-elements@3.0.0", "", {}, "sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg=="],
 

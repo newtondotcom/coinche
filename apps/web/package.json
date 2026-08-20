@@ -31,7 +31,6 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "dotenv": "catalog:",
-    "howler": "^2.2.4",
     "lucide-vue-next": "^1.0.0",
     "motion-v": "^2.4.0",
     "nuxt": "^4.5.2",
