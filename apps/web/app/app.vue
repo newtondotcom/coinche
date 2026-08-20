@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { Toaster } from "@/components/ui/sonner";
+import { isDevEnv } from "@/lib/env";
 import "vue-sonner/style.css";
 
 const route = useRoute();

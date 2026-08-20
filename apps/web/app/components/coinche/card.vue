@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { maxCardWidth } from "@/shared/constants";
-import { cardPressed } from "@/shared/emitter/play";
+import { maxCardWidth } from "@/lib/constants";
+import { cardPressed } from "@/lib/emitter/play";
 import { cn } from "@/lib/utils";
-import { cardCanBePlayed } from "@/shared/utils/cardRules";
+import { cardCanBePlayed } from "@/lib/game/cardRules";
 import type { ICard } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
@@ -40,9 +40,11 @@ const cardSvgPath = ref(
   `${svgFolder}/${props.card.value === "10" ? "T" : props.card.value}${props.card.suite.charAt(0).toUpperCase()}.svg`,
 );
 
-watch(storeState.currentTrick, () => {
-  canBePlayed.value;
-});
+function handleClick() {
+  if (canBePlayed.value) {
+    void onPress();
+  }
+}
 </script>
 
 <template>
@@ -61,7 +63,7 @@ watch(storeState.currentTrick, () => {
           inDeck ? '' : 'cursor-auto',
         )
       "
-      @click="canBePlayed ? onPress() : () => {}"
+      @click="handleClick"
     />
   </div>
 </template>

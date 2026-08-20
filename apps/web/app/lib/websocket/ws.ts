@@ -1,5 +1,5 @@
 // WebSocket client utility to communicate with the Bun server
-// Usage: import { getWS, sendWS, onWSMessage, offWSMessage } from '@/lib/utils/ws';
+// Usage: import { getWS, sendWS, onWSMessage, offWSMessage } from '@/lib/websocket/ws';
 
 import { toast } from "vue-sonner";
 import { env } from "@coinche-reborn/env/web";

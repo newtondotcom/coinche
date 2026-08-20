@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Motion, AnimatePresence } from "motion-v";
-import { maxCardHeight, maxCardWidth } from "@/shared/constants";
+import { maxCardHeight, maxCardWidth } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useStateStore } from "@/stores/state";
 import type { ICard } from "@coinche-reborn/api";

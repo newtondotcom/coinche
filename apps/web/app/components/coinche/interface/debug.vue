@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { cardCanBePlayed } from "@/shared/utils/cardRules";
+import { cardCanBePlayed } from "@/lib/game/cardRules";
 import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();
 </script>

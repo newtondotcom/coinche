@@ -1,4 +1,4 @@
-import { sendWS } from "@/shared/utils/ws";
+import { sendWS } from "@/lib/websocket/ws";
 import { useStateStore } from "@/stores/state";
 
 export async function emitSound(name: string) {

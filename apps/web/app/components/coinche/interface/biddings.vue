@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import emitBid from "@/shared/emitter/bidding";
+import emitBid from "@/lib/emitter/bidding";
 import type { IPlayer, bidding, ICardSuite, Ibidding } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";
 const storeState = useStateStore();

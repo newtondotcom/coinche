@@ -26,8 +26,9 @@
 
 <script setup lang="ts">
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
-import { join, leave } from "@/shared/emitter/join";
-import { getWS, onWSMessage, closeWS } from "@/shared/utils/ws";
+import { join, leave } from "@/lib/emitter/join";
+import { isDevEnv } from "@/lib/env";
+import { getWS, onWSMessage, closeWS } from "@/lib/websocket/ws";
 import { CHANGE_TYPE_STATE } from "@coinche-reborn/api";
 import type { WSPayload } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";

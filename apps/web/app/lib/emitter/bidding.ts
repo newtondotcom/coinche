@@ -1,4 +1,4 @@
-import { sendWS } from "@/shared/utils/ws";
+import { sendWS } from "@/lib/websocket/ws";
 import { formatbidding } from "@coinche-reborn/api";
 import type { Ibidding } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";

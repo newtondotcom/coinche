@@ -1,4 +1,4 @@
-import { sendWS } from "@/shared/utils/ws";
+import { sendWS } from "@/lib/websocket/ws";
 import { formatCarteToPlay } from "@coinche-reborn/api";
 import type { ICardSuite, ICardValue, ICard } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";

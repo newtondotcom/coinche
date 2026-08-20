@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { getConnectionStatus, onConnectionChange } from "@/shared/utils/ws";
+import { getConnectionStatus, onConnectionChange } from "@/lib/websocket/ws";
 
 const isConnected = ref(false);
 
