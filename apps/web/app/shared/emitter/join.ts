@@ -20,6 +20,7 @@ export async function leave() {
   const gameId = storeState.gameId;
   // Just send leave event via WebSocket
   sendWS({
+    id: Bun.randomUUIDv7(),
     type: "leave",
     playerId: storeState.getMyId,
     gameId: gameId,

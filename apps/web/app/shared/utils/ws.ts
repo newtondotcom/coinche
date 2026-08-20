@@ -3,6 +3,8 @@
 
 import { toast } from "vue-sonner";
 import { env } from "@coinche-reborn/env/web";
+import { eventInsertSchema } from "@coinche-reborn/api";
+import type { EventInsert } from "@coinche-reborn/api";
 
 let ws: WebSocket | null = null;
 const listeners = new Set<(msg: any) => void>();
@@ -73,7 +75,13 @@ export function getWS() {
   return ws;
 }
 
-export function sendWS(event: object) {
+export function sendWS(event: EventInsert) {
+  const parsed = eventInsertSchema.safeParse(event);
+  if (!parsed.success) {
+    console.error("Refusing to send invalid WebSocket event:", parsed.error.message, event);
+    return;
+  }
+
   const socket = getWS();
 
   if (socket.readyState === WebSocket.OPEN) {

@@ -17,6 +17,8 @@ export type {
   IGameStatus,
 } from "./types";
 
+export { eventTypes, eventInsertSchema } from "./types";
+
 export { cardSuites, cardValues, dealingString, CHANGE_TYPE_STATE } from "./constants";
 
 // Export format utilities

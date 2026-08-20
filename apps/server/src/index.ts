@@ -11,7 +11,7 @@ import type { ServerWebSocket } from "bun";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import controller from "@coinche-reborn/api/lib/game";
-import type { EventInsert } from "@coinche-reborn/api/others/types";
+import { eventInsertSchema } from "@coinche-reborn/api/others/types";
 import logger from "@coinche-reborn/api/lib/logger";
 import { translateEvent } from "@coinche-reborn/api/lib/listener/index";
 
@@ -113,38 +113,41 @@ const wsHandler = {
     console.log("client suscribed to room");
   },
   async message(ws: ServerWebSocket, raw: string | ArrayBuffer | Uint8Array) {
-    let msg: EventInsert;
-    let rawStr: string = typeof raw === "string" ? raw : raw.toString();
+    const rawStr: string = typeof raw === "string" ? raw : raw.toString();
+    let parsed: unknown;
     try {
-      msg = JSON.parse(rawStr);
+      parsed = JSON.parse(rawStr);
     } catch (e) {
       ws.send(JSON.stringify({ type: "system", message: "Invalid message format." }));
       console.error("Invalid message format:", e);
       return;
     }
-    if (msg.type && msg.gameId) {
-      if (msg.gameId !== gameId) {
-        ws.send(JSON.stringify({ type: "system", message: "Invalid gameId." }));
-        logger.error(`Invalid gameId: ${msg.gameId}, expected: ${gameId}`);
-        return;
-      }
-      /*
-      if (msg.playerId && msg.playerId !== data.userId) {
-        ws.send(JSON.stringify({ type: "system", message: "Invalid playerId." }));
-        logger.error(`Invalid playerId: ${msg.playerId}, expected: ${data.userId}`);
-        return;
-      }
-      */
-      logger.warn(msg);
-      try {
-        await translateEvent(msg);
-      } catch (error) {
-        console.error("Translate event error:", error);
-        ws.send(JSON.stringify({ type: "system", message: "Event processing error." }));
-      }
+    const result = eventInsertSchema.safeParse(parsed);
+    if (!result.success) {
+      ws.send(JSON.stringify({ type: "system", message: "Invalid event." }));
+      logger.error(`Invalid event: ${result.error.message}`);
       return;
     }
-    ws.send(JSON.stringify({ type: "system", message: "Unknown event type or missing gameId." }));
+    const msg = result.data;
+    if (msg.gameId !== gameId) {
+      ws.send(JSON.stringify({ type: "system", message: "Invalid gameId." }));
+      logger.error(`Invalid gameId: ${msg.gameId}, expected: ${gameId}`);
+      return;
+    }
+    /*
+    if (msg.playerId !== data.userId) {
+      ws.send(JSON.stringify({ type: "system", message: "Invalid playerId." }));
+      logger.error(`Invalid playerId: ${msg.playerId}, expected: ${data.userId}`);
+      return;
+    }
+    */
+    logger.warn(msg);
+    try {
+      await translateEvent(msg);
+    } catch (error) {
+      console.error("Translate event error:", error);
+      ws.send(JSON.stringify({ type: "system", message: "Event processing error." }));
+    }
   },
   close(ws: ServerWebSocket) {
     // Unsubscribe from all rooms on disconnect

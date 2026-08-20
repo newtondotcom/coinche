@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type ICardSuite =
   | "diamonds"
   | "clubs"
@@ -83,35 +85,40 @@ export interface IGame {
   team2_score: number;
 }
 
-export type Event =
-  | "join"
-  | "can_play"
-  | "can_bid"
-  | "start_game"
-  | "end_game"
-  | "start_round"
-  | "end_round"
-  | "start_trick"
-  | "win_trick"
-  | "score"
-  | "score_round"
-  | "start_distribution"
-  | "distribution"
-  | "start_bidding"
-  | "bidding"
-  | "play"
-  | "error"
-  | "win_game"
-  | "sound"
-  | "leave";
+export const eventTypes = [
+  "join",
+  "can_play",
+  "can_bid",
+  "start_game",
+  "end_game",
+  "start_round",
+  "end_round",
+  "start_trick",
+  "win_trick",
+  "score",
+  "score_round",
+  "start_distribution",
+  "distribution",
+  "start_bidding",
+  "bidding",
+  "play",
+  "error",
+  "win_game",
+  "sound",
+  "leave",
+] as const;
 
-// Database types for events
-export interface EventInsert {
-  id: string;
-  gameId: string;
-  playerId: string;
-  type: string;
-  value?: string;
-  metadata?: string;
-  timestamp?: string;
-}
+export type Event = (typeof eventTypes)[number];
+
+// Schema for game events exchanged over the WebSocket (and stored in db)
+export const eventInsertSchema = z.object({
+  id: z.string(),
+  gameId: z.string(),
+  playerId: z.string(),
+  type: z.enum(eventTypes),
+  value: z.string().optional(),
+  metadata: z.string().optional(),
+  timestamp: z.string().optional(),
+});
+
+export type EventInsert = z.infer<typeof eventInsertSchema>;

@@ -1,4 +1,4 @@
-- [ ] Add zod schema for ws message
+- [x] Add zod schema for ws message
 
 - [x] Replace howler with Native Web Audio API
 

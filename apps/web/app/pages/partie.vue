@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { useTurnNotifications } from "@/composables/useTurnNotifications";
 import { join, leave } from "@/shared/emitter/join";
-import { getWS, onWSMessage, sendWS, closeWS } from "@/shared/utils/ws";
+import { getWS, onWSMessage, closeWS } from "@/shared/utils/ws";
 import { CHANGE_TYPE_STATE } from "@coinche-reborn/api";
 import type { WSPayload } from "@coinche-reborn/api";
 import { useStateStore } from "@/stores/state";
@@ -94,7 +94,6 @@ onMounted(async () => {
 onBeforeUnmount(async () => {
   try {
     // Send leave event
-    sendWS({ type: "leave_game", gameId });
     leave();
   } catch (error) {
     console.error("Failed to send leave event:", error);
