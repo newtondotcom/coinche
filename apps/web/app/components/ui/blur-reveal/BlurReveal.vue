@@ -1,26 +1,6 @@
-<template>
-  <div ref="container" :class="props.class">
-    <Motion
-      v-for="(child, index) in children"
-      :key="index"
-      ref="childElements"
-      as="div"
-      :initial="getInitial()"
-      :while-in-view="getAnimate()"
-      :transition="{
-        duration: props.duration,
-        easing: 'easeInOut',
-        delay: props.delay * index,
-      }"
-    >
-      <component :is="child" />
-    </Motion>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { Motion } from "motion-v";
-import { ref, onMounted, watchEffect, useSlots } from "vue";
+import { onMounted, ref, useSlots, watchEffect } from "vue";
 
 interface Props {
   duration?: number;
@@ -67,3 +47,23 @@ function getAnimate() {
   };
 }
 </script>
+
+<template>
+  <div ref="container" :class="props.class">
+    <Motion
+      v-for="(child, index) in children"
+      :key="index"
+      ref="childElements"
+      as="div"
+      :initial="getInitial()"
+      :while-in-view="getAnimate()"
+      :transition="{
+        duration: props.duration,
+        easing: 'easeInOut',
+        delay: props.delay * index,
+      }"
+    >
+      <component :is="child" />
+    </Motion>
+  </div>
+</template>
