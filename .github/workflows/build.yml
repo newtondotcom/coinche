@@ -3,22 +3,46 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "apps/server/**"
-      - "apps/web/**"
-      - "packages/db/**"
-      - "packages/auth/**"
-      - "packages/env/**"
-      - "packages/api/**"
-      - "packages/config/**"
-      - ".github/workflows/docker.yml"
   workflow_dispatch:
 
 env:
   TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      server: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.server }}
+      migrate: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.migrate }}
+      web: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.web }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        if: github.event_name != 'workflow_dispatch'
+        with:
+          filters: |
+            server:
+              - "apps/server/**"
+              - "packages/api/**"
+              - "packages/auth/**"
+              - "packages/config/**"
+              - "packages/db/**"
+              - "packages/env/**"
+            migrate:
+              - "packages/db/**"
+              - "packages/config/**"
+              - "packages/env/**"
+            web:
+              - "apps/web/**"
+              - "packages/config/**"
+              - "packages/api/**"
+              - "packages/auth/**"
+              - "packages/db/**"
+              - "packages/env/**"
+
   build-and-push:
+    needs: changes
+    if: needs.changes.outputs[matrix.name] == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
