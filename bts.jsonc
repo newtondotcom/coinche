@@ -10,7 +10,7 @@
   "backend": "hono",
   "runtime": "bun",
   "frontend": ["nuxt"],
-  "addons": ["turborepo", "oxlint", "ruler", "tauri"],
+  "addons": ["turborepo", "oxlint", "tauri"],
   "examples": [],
   "auth": "better-auth",
   "payments": "none",
