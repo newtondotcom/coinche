@@ -68,7 +68,7 @@ export const auth = betterAuth({
               id: userId,
               name: userInfo.fullName || "",
               username: userInfo.uid || userInfo.nickname || "",
-              image: userInfo.pictureURL || null,
+              image: userInfo.pictureURL || undefined,
               createdAt: new Date(),
               updatedAt: new Date(),
               email: userInfo.email,

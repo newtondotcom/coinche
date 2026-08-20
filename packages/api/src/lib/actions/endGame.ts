@@ -1,6 +1,5 @@
 import logger from "../logger";
-import { formatTeam } from "@coinche-reborn/api";
-import type { EventInsert, IPlayer } from "@coinche-reborn/api";
+import type { IPlayer } from "@coinche-reborn/api";
 import { events, game, playerStats } from "@coinche-reborn/db/schema/index";
 import { eq, or } from "drizzle-orm";
 
@@ -37,17 +36,10 @@ function calculateNewRating(
 }
 
 export async function emitEndGame(
-  winnerPlayerId: string,
-  teamMatePlayerId: string,
+  _winnerPlayerId: string,
+  _teamMatePlayerId: string,
   gameId: string,
 ) {
-  const event: EventInsert = {
-    id: Bun.randomUUIDv7(),
-    type: "end_game",
-    playerId: "controller",
-    gameId: gameId,
-    value: formatTeam(winnerPlayerId, teamMatePlayerId),
-  };
   Object.assign(controller.getInstance(gameId).state, { status: "finished" });
   controller.getInstance(gameId).sendState();
 }
@@ -59,14 +51,19 @@ export async function distributeRankingPoints(
   team2Score: number,
 ) {
   const playersIds = players.map((player) => player.id);
+  const [player1Id, player2Id, player3Id, player4Id] = playersIds;
+  if (!player1Id || !player2Id || !player3Id || !player4Id) {
+    logger.error("Cannot distribute ranking points: expected exactly 4 players");
+    return;
+  }
 
   // store in db the finished game
   await db.insert(game).values({
     id: gameId,
-    player1Id: playersIds[0],
-    player2Id: playersIds[1],
-    player3Id: playersIds[2],
-    player4Id: playersIds[3],
+    player1Id: player1Id,
+    player2Id: player2Id,
+    player3Id: player3Id,
+    player4Id: player4Id,
     team1Score: team1Score,
     team2Score: team2Score,
   });
@@ -77,10 +74,10 @@ export async function distributeRankingPoints(
     .from(playerStats)
     .where(
       or(
-        eq(playerStats.playerId, playersIds[0]),
-        eq(playerStats.playerId, playersIds[1]),
-        eq(playerStats.playerId, playersIds[2]),
-        eq(playerStats.playerId, playersIds[3]),
+        eq(playerStats.playerId, player1Id),
+        eq(playerStats.playerId, player2Id),
+        eq(playerStats.playerId, player3Id),
+        eq(playerStats.playerId, player4Id),
       ),
     );
 
@@ -104,8 +101,8 @@ export async function distributeRankingPoints(
   const team2Players = [1, 3];
 
   // Calculate team average ratings
-  const team1AvgRating = (playerRatings[0] + playerRatings[2]) / 2;
-  const team2AvgRating = (playerRatings[1] + playerRatings[3]) / 2;
+  const team1AvgRating = (playerRatings[0]! + playerRatings[2]!) / 2;
+  const team2AvgRating = (playerRatings[1]! + playerRatings[3]!) / 2;
 
   // Determine game outcome
   const team1Won = team1Score > team2Score;
@@ -116,25 +113,25 @@ export async function distributeRankingPoints(
 
   // Calculate new ratings for each player individually
   team1Players.forEach(async (playerIndex) => {
-    const currentRating = playerRatings[playerIndex];
+    const currentRating = playerRatings[playerIndex]!;
     const expectedScore = calculateExpectedScore(currentRating, team2AvgRating);
     const actualScore = team1Won ? 1 : 0;
     const newRating = calculateNewRating(currentRating, actualScore, expectedScore, kFactor);
     const ratingChange = newRating - currentRating;
 
     // Apply the rating change
-    await addPointsTo(ratingChange, playersIds[playerIndex]);
+    await addPointsTo(ratingChange, playersIds[playerIndex]!);
   });
 
   team2Players.forEach(async (playerIndex) => {
-    const currentRating = playerRatings[playerIndex];
+    const currentRating = playerRatings[playerIndex]!;
     const expectedScore = calculateExpectedScore(currentRating, team1AvgRating);
     const actualScore = team1Won ? 0 : 1;
     const newRating = calculateNewRating(currentRating, actualScore, expectedScore, kFactor);
     const ratingChange = newRating - currentRating;
 
     // Apply the rating change
-    await addPointsTo(ratingChange, playersIds[playerIndex]);
+    await addPointsTo(ratingChange, playersIds[playerIndex]!);
   });
 }
 

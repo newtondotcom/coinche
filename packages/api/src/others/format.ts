@@ -8,7 +8,7 @@ export function deformatBidding(value: string, playerId: string): Ibidding {
   const [suite, biddingStr] = value.split("|");
   return {
     suite: suite as ICardSuite,
-    bidding: parseInt(biddingStr) as bidding,
+    bidding: parseInt(biddingStr!) as bidding,
     playerId,
   };
 }
@@ -22,10 +22,10 @@ export function deformatCarteToDistribute(carte: string) {
   const card = {
     value: value as ICardValue,
     suite: suite as ICardSuite,
-    valueNum: parseInt(value),
+    valueNum: parseInt(value!),
   };
   return {
-    pli_number: parseInt(pli_number),
+    pli_number: parseInt(pli_number!),
     card: card,
   };
 }
@@ -35,12 +35,12 @@ export function deformatCarteToPlay(carte: string) {
   const card = {
     value: value as ICardValue,
     suite: suite as ICardSuite,
-    valueNum: parseInt(valueNum),
+    valueNum: parseInt(valueNum!),
   };
   return {
-    pli_number: parseInt(pli_number),
+    pli_number: parseInt(pli_number!),
     card: card,
-    number_in_pli: parseInt(number_in_pli),
+    number_in_pli: parseInt(number_in_pli!),
   };
 }
 

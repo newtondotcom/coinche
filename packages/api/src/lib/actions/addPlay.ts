@@ -4,8 +4,7 @@ import logger from "../logger";
 
 export default function addPlay(card: ICard, playerId: string, gameId: string): void {
   const controllerInstance = controller.getInstance(gameId);
-  const currentRound = controllerInstance.getCurrentRound();
-  const currentTrick = currentRound.tricks[currentRound.tricks.length - 1];
+  const currentTrick = controllerInstance.getCurrentTrick();
   currentTrick.plays.push({ card, playerId });
   controllerInstance.state.deck.push(card);
   const player = controllerInstance.state.players.find((player) => player.id === playerId)!;

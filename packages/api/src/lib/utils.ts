@@ -32,9 +32,12 @@ export function getNextPlayerTurn(playerId: string, gameId: string) {
 
   // Calculate next player index (circular)
   const nextPlayerIndex = (currentPlayerIndex + 1) % players.length;
-  const nextPlayerId = players[nextPlayerIndex]?.id;
+  const nextPlayer = players[nextPlayerIndex];
+  if (!nextPlayer) {
+    throw new Error("Next player not found");
+  }
 
-  return nextPlayerId;
+  return nextPlayer.id;
 }
 
 function shuffle(array: ICard[]): ICard[] {

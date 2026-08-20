@@ -108,7 +108,12 @@ export default class controller {
   }
 
   public getCurrentTrick() {
-    return this.getCurrentRound().tricks[this.getCurrentRound().tricks.length - 1];
+    const tricks = this.getCurrentRound().tricks;
+    const currentTrick = tricks[tricks.length - 1];
+    if (!currentTrick) {
+      throw new Error("No current trick exists.");
+    }
+    return currentTrick;
   }
 
   public isTeam1(playerId: string) {

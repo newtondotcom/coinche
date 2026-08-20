@@ -29,17 +29,17 @@ export default async function emitDealing(idPlayerStarting: PlayerId, gameId: st
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId);
+      await distributeCard(shiftedPlayers[j]!.id, gameId);
     }
   }
   for (let i = 0; i < 2; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId);
+      await distributeCard(shiftedPlayers[j]!.id, gameId);
     }
   }
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < shiftedPlayers.length; j++) {
-      await distributeCard(shiftedPlayers[j].id, gameId);
+      await distributeCard(shiftedPlayers[j]!.id, gameId);
     }
   }
 
