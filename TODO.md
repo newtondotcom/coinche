@@ -7,3 +7,5 @@
 - [ ] Enable Nuxt SSR ?
 
 - [x] Affiner la GH Action pour build que l'image concernée
+
+- [ ] Finally build tauri apps for platforms
