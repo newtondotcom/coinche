@@ -12,10 +12,11 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      server: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.server }}
-      migrate: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.migrate }}
-      web: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.web }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - uses: dorny/paths-filter@v3
         id: filter
         if: github.event_name != 'workflow_dispatch'
@@ -40,23 +41,35 @@ jobs:
               - "packages/db/**"
               - "packages/env/**"
 
+      - name: Compose build matrix
+        id: matrix
+        env:
+          IS_DISPATCH: ${{ github.event_name == 'workflow_dispatch' }}
+          SERVER: ${{ steps.filter.outputs.server }}
+          MIGRATE: ${{ steps.filter.outputs.migrate }}
+          WEB: ${{ steps.filter.outputs.web }}
+        run: |
+          items=()
+          if [ "$IS_DISPATCH" = "true" ] || [ "$SERVER" = "true" ]; then
+            items+=('{"name":"server","file":"apps/server/Containerfile","image_suffix":"-server"}')
+          fi
+          if [ "$IS_DISPATCH" = "true" ] || [ "$MIGRATE" = "true" ]; then
+            items+=('{"name":"migrate","file":"packages/db/migrate.Containerfile","image_suffix":"-migrate"}')
+          fi
+          if [ "$IS_DISPATCH" = "true" ] || [ "$WEB" = "true" ]; then
+            items+=('{"name":"web","file":"apps/web/Containerfile","image_suffix":"-web"}')
+          fi
+          joined=$(IFS=,; echo "${items[*]}")
+          echo "matrix=[${joined}]" >> "$GITHUB_OUTPUT"
+
   build-and-push:
     needs: changes
-    if: needs.changes.outputs[matrix.name] == 'true'
+    if: needs.changes.outputs.matrix != '[]'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: server
-            file: apps/server/Containerfile
-            image_suffix: "-server"
-          - name: migrate
-            file: packages/db/migrate.Containerfile
-            image_suffix: "-migrate"
-          - name: web
-            file: apps/web/Containerfile
-            image_suffix: "-web"
+        include: ${{ fromJSON(needs.changes.outputs.matrix) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
