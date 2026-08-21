@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],
+    envPrefix: ["VITE_", "NUXT_PUBLIC_"],
   },
   devServer: {
     port: 3001,
