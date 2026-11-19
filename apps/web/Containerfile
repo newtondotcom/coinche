@@ -26,7 +26,8 @@ ENV NUXT_PUBLIC_URL="https://coinche.rob1.cloud"
 RUN cd apps/web && bun run generate && ls -la .output/public
 
 # ===== Runtime Stage =====
-FROM nginx:alpine AS runtime
+# 1.31.9 patches nginx2root (CVE-2026-123007 and related)
+FROM nginx:1.31.9-alpine AS runtime
 
 COPY --from=builder /usr/src/app/apps/web/.output/public /usr/share/nginx/html
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
